@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Source\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Nitride\Nitride.csproj" />
   </ItemGroup>
 
