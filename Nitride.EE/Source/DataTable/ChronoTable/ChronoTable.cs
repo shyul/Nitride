@@ -9,11 +9,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Numerics;
 
 namespace Nitride.EE
 {
-    public class ChronoTable : DataTable
+    public class ChronoTable : DataTable, IComplexTable
     {
         public ChronoTable(int numOfPts) 
         {
@@ -57,7 +57,7 @@ namespace Nitride.EE
 
         public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : Rows[i][column];
 
-        public override IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
-
+        //public override IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
+        public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : Rows[i][column];
     }
 }

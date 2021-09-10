@@ -6,16 +6,16 @@
 
 namespace Nitride
 {
-    public class NumericColumn : Column
+    public class ComplexColumn : Column
     {
-        public NumericColumn(string name) => Name = Label = name;
+        public ComplexColumn(string name) => Name = Label = name;
 
-        public NumericColumn(string name, string label)
+        public ComplexColumn(string name, string label)
         {
             Name = name;
             Label = label;
         }
 
-        public override int GetHashCode() => Name.GetHashCode() ^ typeof(NumericColumn).GetHashCode();
+        public override int GetHashCode() => Name.GetHashCode() ^ typeof(ComplexColumn).GetHashCode();
     }
 }

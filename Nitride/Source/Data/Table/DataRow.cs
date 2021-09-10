@@ -19,10 +19,6 @@ namespace Nitride
 
         #region Numeric Column
 
-        /// <summary>
-        /// BarAnalysis Data Line
-        /// </summary>
-        // set is not allowed// One column only has one data
         private Dictionary<NumericColumn, double> NumericColumnsLUT { get; } = new Dictionary<NumericColumn, double>();
 
         public double this[NumericColumn column]
@@ -55,8 +51,9 @@ namespace Nitride
 
         #endregion Numeric Column
 
+        /*
         #region Datum Column
-
+        
         private Dictionary<DatumColumn, IDatum> DatumColumnsLUT { get; } = new Dictionary<DatumColumn, IDatum>();
 
         public IDatum this[DatumColumn dc]
@@ -81,6 +78,7 @@ namespace Nitride
         }
 
         #endregion Datum Column
+        */
 
         #region Equality
 

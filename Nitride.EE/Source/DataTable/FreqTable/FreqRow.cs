@@ -9,7 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Numerics;
 
 namespace Nitride.EE
 {
@@ -26,5 +26,19 @@ namespace Nitride.EE
         public double Frequency { get; }
 
         public override double X => Frequency;
+
+        private Dictionary<ComplexColumn, Complex> ComplexColumnsLUT { get; } = new Dictionary<ComplexColumn, Complex>();
+
+        public Complex this[ComplexColumn column]
+        {
+            get => column is ComplexColumn ic && ComplexColumnsLUT.ContainsKey(ic) ? ComplexColumnsLUT[ic] : double.NaN;
+            set
+            {
+                if (Complex.IsNaN(value) && ComplexColumnsLUT.ContainsKey(column))
+                    ComplexColumnsLUT.Remove(column);
+                else
+                    ComplexColumnsLUT[column] = value;
+            }
+        }
     }
 }

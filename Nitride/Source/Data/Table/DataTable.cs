@@ -13,7 +13,7 @@ using Nitride.Chart;
 
 namespace Nitride
 {
-    public abstract class DataTable : IDatumTable, IDataProvider
+    public abstract class DataTable : ITable, IDataProvider
     {
         ~DataTable() => Dispose();
 
@@ -59,7 +59,7 @@ namespace Nitride
         public abstract double this[int i, NumericColumn column] { get; }
 
         //public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
-        public abstract IDatum this[int i, DatumColumn column] { get; }
+        //public abstract IDatum this[int i, DatumColumn column] { get; }
 
         #region Data Consumers
 
