@@ -11,11 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nitride.EE
+namespace Nitride
 {
-    public abstract class DataRow
+    public abstract class DataRow : IEquatable<DataRow>
     {
-
         public abstract double X { get; }
 
         #region Numeric Column
@@ -28,28 +27,13 @@ namespace Nitride.EE
 
         public double this[NumericColumn column]
         {
-            get
-            {
-                return column switch
-                {
-                    NumericColumn ic when NumericColumnsLUT.ContainsKey(ic) => NumericColumnsLUT[ic],
-                    _ => double.NaN,
-                };
-            }
+            get => column is NumericColumn ic && NumericColumnsLUT.ContainsKey(ic) ? NumericColumnsLUT[ic] : double.NaN;
             set
             {
                 if (double.IsNaN(value) && NumericColumnsLUT.ContainsKey(column))
                     NumericColumnsLUT.Remove(column);
                 else
-                    switch (column)
-                    {
-                        default:
-                            if (!NumericColumnsLUT.ContainsKey(column))
-                                NumericColumnsLUT.Add(column, value);
-                            else
-                                NumericColumnsLUT[column] = value;
-                            break;
-                    }
+                    NumericColumnsLUT[column] = value;
             }
         }
 
@@ -97,5 +81,16 @@ namespace Nitride.EE
         }
 
         #endregion Datum Column
+
+        #region Equality
+
+        public static bool operator ==(DataRow s1, DataRow s2) => s1.Equals(s2);
+        public static bool operator !=(DataRow s1, DataRow s2) => !s1.Equals(s2);
+
+        public bool Equals(DataRow other) => other is DataRow dr && dr.X == X;
+        public override bool Equals(object other) => other is DataRow dr && dr.X == X;
+        public override int GetHashCode() => X.GetHashCode();
+
+        #endregion Equality
     }
 }

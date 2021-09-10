@@ -53,7 +53,8 @@ namespace Nitride
                 else
                 {
                     HostContainer = null;
-                    throw new Exception("TabPanel can only be exsiting in TabPanelContainer / Parent: " + Parent.GetType().ToString());
+                    //throw new Exception("TabPanel can only be exsiting in TabPanelContainer / Parent: " + Parent.GetType().ToString());
+                    Console.WriteLine("TabPanel can only be exsiting in TabPanelContainer / Parent: " + Parent.GetType().ToString());
                 }
             }
             else

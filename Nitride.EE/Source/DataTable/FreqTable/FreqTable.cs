@@ -13,27 +13,24 @@ using System.Text;
 
 namespace Nitride.EE
 {
-    public class ChronoTable : DataTable
+    public class FreqTable : DataTable
     {
-        public ChronoTable(int numOfPts) 
+        public FreqTable(double startFreq, double stopFreq, int numOfPts)
         {
             for (int i = 0; i < numOfPts; i++)
             {
-                Rows.Add(new ChronoRow(i, this));
+                double freq = startFreq + (i * (stopFreq - startFreq) / (numOfPts - 1D));
+                Rows.Add(new FreqRow(freq, this));
             }
         }
 
-        ~ChronoTable() => Dispose();
-
-        public double StartTime { get; set; }
-
-        public double SampleRate { get; set; }
+        ~FreqTable() => Dispose();
 
         public double Start => Count > 0 ? Rows.First().X : double.NaN;
 
         public double Stop => Count > 0 ? Rows.Last().X : double.NaN;
 
-        private List<ChronoRow> Rows { get; } = new();
+        private List<FreqRow> Rows { get; } = new();
 
         public override int Count => Rows.Count;
 
@@ -43,7 +40,7 @@ namespace Nitride.EE
                 Rows.Clear();
         }
 
-        public ChronoRow this[int i]
+        public FreqRow this[int i]
         {
             get
             {
@@ -58,6 +55,7 @@ namespace Nitride.EE
         public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : Rows[i][column];
 
         public override IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
+
 
     }
 }

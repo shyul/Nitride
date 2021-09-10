@@ -9,12 +9,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Nitride.Chart;
 
-namespace Nitride.EE
+namespace Nitride
 {
     public abstract class DataTable : IDatumTable, IDataProvider
     {
+        ~DataTable() => Dispose();
+
+        public void Dispose()
+        {
+            lock (DataConsumers)
+            {
+                foreach (IDataRenderer idr in DataConsumers)
+                {
+                    RemoveDataConsumer(idr);
+                    if (idr is ChartWidget bc)
+                        bc.Close();
+                    else
+                        RemoveDataConsumer(idr);
+                }
+            }
+
+            Clear();
+        }
+
         public object DataLockObject { get; } = new();
 
         //protected abstract IEnumerable<DataRow> Rows { get; } //= new();
@@ -23,6 +42,8 @@ namespace Nitride.EE
         /// Returns the number of the Rows in the BarTable.
         /// </summary>
         public abstract int Count { get; } // => Rows.Count;
+
+        public abstract void Clear();
 
         /// <summary>
         /// Returns if the BarTable is has no Bars.
