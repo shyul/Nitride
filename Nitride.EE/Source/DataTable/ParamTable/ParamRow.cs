@@ -13,16 +13,16 @@ using System.Numerics;
 
 namespace Nitride.EE
 {
-    public class FreqRow : DataRow
+    public class ParamRow : DataRow
     {
-        public FreqRow(double freq, int index, FreqTable ft)
+        public ParamRow(double freq, int index, ParamTable ft)
         {
-            FreqTable = ft;
+            ParamTable = ft;
             Index = index;
             Frequency = freq;
         }
 
-        public FreqTable FreqTable { get; }
+        public ParamTable ParamTable { get; }
 
         public int Index { get; }
 
@@ -30,17 +30,17 @@ namespace Nitride.EE
 
         public override double X => Frequency;
 
-        private Dictionary<ComplexColumn, Complex> ComplexColumnsLUT { get; } = new Dictionary<ComplexColumn, Complex>();
+        private Dictionary<(int p1, int p2), Complex> ParamDataLUT { get; } = new();
 
-        public Complex this[ComplexColumn column]
+        public Complex this[int p1, int p2]
         {
-            get => column is ComplexColumn ic && ComplexColumnsLUT.ContainsKey(ic) ? ComplexColumnsLUT[ic] : double.NaN;
+            get => ParamDataLUT.ContainsKey((p1, p2)) ? ParamDataLUT[(p1, p2)] : double.NaN;
             set
             {
-                if (Complex.IsNaN(value) && ComplexColumnsLUT.ContainsKey(column))
-                    ComplexColumnsLUT.Remove(column);
+                if (Complex.IsNaN(value) && ParamDataLUT.ContainsKey((p1, p2)))
+                    ParamDataLUT.Remove((p1, p2));
                 else
-                    ComplexColumnsLUT[column] = value;
+                    ParamDataLUT[(p1, p2)] = value;
             }
         }
     }

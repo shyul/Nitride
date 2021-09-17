@@ -73,7 +73,7 @@ namespace Nitride
             else
             {
                 int pixel = sz.Width * sz.Height;
-                if (icon.Count > 0)
+                if (icon.Count > 0 && pixel > 0)
                 {
                     Bitmap bm = icon.ElementAt(0).Value;
                     for (int i = 0; i < icon.Count; i++)
@@ -87,7 +87,7 @@ namespace Nitride
                     return new Bitmap(bm, sz);
                 }
                 else
-                    return new Bitmap(Nitride.Properties.Resources.Blank_32, sz);
+                    return new Bitmap(Properties.Resources.Blank_32, new Size(1, 1));
             }
         }
 

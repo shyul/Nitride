@@ -16,52 +16,81 @@ namespace Nitride.EE
 {
     public class FreqTable : DataTable, IComplexTable
     {
-        public FreqTable(double startFreq, double stopFreq, int numOfPts)
+        ~FreqTable() => Dispose();
+
+        public void Configure(double startFreq, double stopFreq, int numOfPts)
         {
-            double deltaFreq = (stopFreq - startFreq) / (numOfPts - 1D);
-            for (int i = 0; i < numOfPts; i++)
+            lock (DataLockObject)
             {
-                double freq = startFreq + (i * deltaFreq);
-                Rows.Add(new FreqRow(freq, this));
+                FreqRows.Clear();
+                Step = (stopFreq - startFreq) / (numOfPts - 1D);
+                Start = startFreq;
+
+                int pt = 0;
+                for (int i = 0; i < numOfPts; i++)
+                {
+                    double freq = startFreq + (i * Step);
+                    FreqRows.Add(new FreqRow(freq, pt, this));
+                    Stop = freq;
+                    pt++;
+                }
             }
         }
 
-        ~FreqTable() => Dispose();
+        public void Configure(double startFreq, double stopFreq, double stepFreq)
+        {
+            lock (DataLockObject)
+            {
+                FreqRows.Clear();
+                Step = stepFreq;
+                Start = startFreq;
 
-        public double Start => Count > 0 ? Rows.First().X : double.NaN;
+                int pt = 0;
+                for (double freq = startFreq; freq < stopFreq; freq += Step)
+                {
+                    FreqRows.Add(new FreqRow(freq, pt, this));
+                    Stop = freq;
+                    pt++;
+                }
+            }
+        }
 
-        public double Stop => Count > 0 ? Rows.Last().X : double.NaN;
+        public double Start { get; protected set; } = double.NaN; // => Count > 0 ? Rows.First().X : double.NaN;
 
-        private List<FreqRow> Rows { get; } = new();
+        public double Stop { get; protected set; } = double.NaN; // => Count > 0 ? Rows.Last().X : double.NaN;
 
-        public override int Count => Rows.Count;
+        public double Step { get; protected set; } = double.NaN;
+
+        protected List<FreqRow> FreqRows { get; } = new();
+
+        public override int Count => FreqRows.Count;
 
         public override void Clear()
         {
-            lock (Rows)
-                Rows.Clear();
+            lock (DataLockObject)
+                FreqRows.Clear();
         }
 
-        public IEnumerable<double> FreqList => Rows.Select(n => n.Frequency).OrderBy(n => n);
+        public IEnumerable<double> FreqList => FreqRows.Select(n => n.Frequency).OrderBy(n => n);
 
-        public IEnumerable<FreqRow> RowList => Rows.OrderBy(n => n.Frequency);
+        public IEnumerable<FreqRow> Rows => FreqRows.OrderBy(n => n.Frequency);
 
         public FreqRow this[int i]
         {
             get
             {
-                lock (Rows)
+                lock (DataLockObject)
                     if (i >= Count || i < 0)
                         return null;
                     else
-                        return Rows[i];
+                        return FreqRows[i];
             }
         }
 
-        public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : Rows[i][column];
+        public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : FreqRows[i][column];
 
         //public override IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
 
-        public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : Rows[i][column];
+        public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : FreqRows[i][column];
     }
 }

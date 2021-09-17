@@ -164,7 +164,7 @@ namespace Nitride.Chart
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (Chart.ReadyToShow)
+            if (Chart.ReadyToShow && Chart.EnableChartShift)
             {
                 int num = -e.Delta * SystemInformation.MouseWheelScrollLines / 360;
                 //int num = e.Delta > 0 ? 1 : -1;

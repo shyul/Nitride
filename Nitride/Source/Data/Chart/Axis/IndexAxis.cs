@@ -80,27 +80,30 @@ namespace Nitride.Chart
         public virtual void Coordinate(int size)
         {
             int tickNum = IndexCount;
-            TickWidth = size / tickNum;
-
-            indexToPixel = new int[tickNum];
-            pixelToIndex = new int[size];
-
-            double half = size / (tickNum * 2.0);
-            HalfTickWidth = half.ToInt32();
-
-            for (int i = 0; i < tickNum; i++)
+            if (tickNum > 0)
             {
-                double pix = size * ((0.5D + i) / tickNum);
-                indexToPixel[i] = pix.ToInt32();
+                TickWidth = size / tickNum;
 
-                int pix_left = Math.Floor(pix - half).ToInt32();
-                int pix_right = Math.Ceiling(pix + half).ToInt32();
+                indexToPixel = new int[tickNum];
+                pixelToIndex = new int[size];
 
-                if (pix_left < 0) pix_left = 0;
+                double half = size / (tickNum * 2.0);
+                HalfTickWidth = half.ToInt32();
 
-                for (int j = pix_left; j < pix_right; j++)
+                for (int i = 0; i < tickNum; i++)
                 {
-                    if (j < size) pixelToIndex[j] = i;
+                    double pix = size * ((0.5D + i) / tickNum);
+                    indexToPixel[i] = pix.ToInt32();
+
+                    int pix_left = Math.Floor(pix - half).ToInt32();
+                    int pix_right = Math.Ceiling(pix + half).ToInt32();
+
+                    if (pix_left < 0) pix_left = 0;
+
+                    for (int j = pix_left; j < pix_right; j++)
+                    {
+                        if (j < size) pixelToIndex[j] = i;
+                    }
                 }
             }
         }

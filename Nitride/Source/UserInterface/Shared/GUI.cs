@@ -21,9 +21,14 @@ namespace Nitride
         /// <returns></returns>
         public static Bitmap ToBitmap(this Control c)
         {
-            Bitmap newPic = new(c.Width, c.Height);
-            c.DrawToBitmap(newPic, c.ClientRectangle);
-            return newPic;
+            //if (c is not null)
+            //{
+                Bitmap newPic = new(c.Width, c.Height);
+                c.DrawToBitmap(newPic, c.ClientRectangle);
+                return newPic;
+            //}
+            //else
+                //return new Bitmap(1, 1);
         }
 
         public static Bitmap CaptureDesktopRegion(Point location, Size size)
