@@ -7,22 +7,18 @@
 /// ***************************************************************************
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.IO;
 
 namespace Nitride.EE
 {
-    public enum TouchstoneFormat : int
+    public enum ComplexFormat : int
     {
-        Invalid = 0,
-        RealImaginary = 1,
-        dBAngle = 2,
-        MagnitudeAngle = 3,
+        Real = 1,
+        Image = 2,
+        Magnitude = 3,
+        Phase = 4,
+        dB = 0
     }
-
-
-
 }

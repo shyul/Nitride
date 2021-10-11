@@ -11,10 +11,18 @@ namespace Nitride
 {
     public interface IDataProvider // : IDisposable
     {
-        bool AddDataConsumer(IDataConsumer idk);
+        void DataIsUpdated();/*
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers.ForEach(n => n.DataIsUpdated(this));
+        }*/
 
-        bool RemoveDataConsumer(IDataConsumer idk);
+        //List<IDataConsumer> DataConsumers { get; }
 
-        DateTime UpdateTime { get; }
+        bool AddDataConsumer(IDataConsumer idk);// => DataConsumers.CheckAdd(idk);
+
+        bool RemoveDataConsumer(IDataConsumer idk);// => DataConsumers.CheckRemove(idk);
+
+        DateTime UpdateTime { get; } //set; }
     }
 }

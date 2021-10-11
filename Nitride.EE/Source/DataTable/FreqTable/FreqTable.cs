@@ -23,13 +23,13 @@ namespace Nitride.EE
             lock (DataLockObject)
             {
                 FreqRows.Clear();
-                Step = (stopFreq - startFreq) / (numOfPts - 1D);
+                double step = (stopFreq - startFreq) / (numOfPts - 1D);
                 Start = startFreq;
 
                 int pt = 0;
                 for (int i = 0; i < numOfPts; i++)
                 {
-                    double freq = startFreq + (i * Step);
+                    double freq = startFreq + (i * step);
                     FreqRows.Add(new FreqRow(freq, pt, this));
                     Stop = freq;
                     pt++;
@@ -42,11 +42,10 @@ namespace Nitride.EE
             lock (DataLockObject)
             {
                 FreqRows.Clear();
-                Step = stepFreq;
                 Start = startFreq;
 
                 int pt = 0;
-                for (double freq = startFreq; freq < stopFreq; freq += Step)
+                for (double freq = startFreq; freq < stopFreq; freq += stepFreq)
                 {
                     FreqRows.Add(new FreqRow(freq, pt, this));
                     Stop = freq;
@@ -55,13 +54,34 @@ namespace Nitride.EE
             }
         }
 
-        public double Start { get; protected set; } = double.NaN; // => Count > 0 ? Rows.First().X : double.NaN;
+        public double Start { get; protected set; } = double.MaxValue; // => Count > 0 ? Rows.First().X : double.NaN;
 
-        public double Stop { get; protected set; } = double.NaN; // => Count > 0 ? Rows.Last().X : double.NaN;
+        public double Stop { get; protected set; } = double.MinValue; // => Count > 0 ? Rows.Last().X : double.NaN;
 
-        public double Step { get; protected set; } = double.NaN;
+        public List<FreqRow> FreqRows { get; } = new();
 
-        protected List<FreqRow> FreqRows { get; } = new();
+        protected Dictionary<double, int> FreqToIndex { get; } = new();
+
+        public void ImportRow(FreqRow row)
+        {
+
+
+
+        }
+
+        public void ImportRows(IEnumerable<FreqRow> rows)
+        {
+
+
+
+        }
+
+        public void Sort() 
+        {
+        
+        
+        }
+
 
         public override int Count => FreqRows.Count;
 
@@ -83,13 +103,11 @@ namespace Nitride.EE
                     if (i >= Count || i < 0)
                         return null;
                     else
-                        return FreqRows[i];
+                        return FreqRows[i];// as ;
             }
         }
 
         public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : FreqRows[i][column];
-
-        //public override IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
 
         public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : FreqRows[i][column];
     }

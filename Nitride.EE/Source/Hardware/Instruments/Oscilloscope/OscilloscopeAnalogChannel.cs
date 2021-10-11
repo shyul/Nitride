@@ -18,7 +18,11 @@ namespace Nitride.EE
         public void Start() => Device.Oscilloscope_Run();
 
 
-
+        public void DataIsUpdated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers.ForEach(n => n.DataIsUpdated(this));
+        }
 
         public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
 

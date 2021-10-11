@@ -63,6 +63,12 @@ namespace Nitride
 
         #region Data Consumers
 
+        public void DataIsUpdated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers.ForEach(n => n.DataIsUpdated(this));
+        }
+
         private List<IDataConsumer> DataConsumers { get; } = new();
 
         private IEnumerable<IDataRenderer> DataRenderers => DataConsumers.Where(n => n is IDataRenderer).Select(n => n as IDataRenderer);
@@ -71,7 +77,7 @@ namespace Nitride
 
         public bool RemoveDataConsumer(IDataConsumer idk) => DataConsumers.CheckRemove(idk);
 
-        public DateTime UpdateTime { get; private set; } = TimeTool.MinInvalid;
+        public DateTime UpdateTime { get; set; } = TimeTool.MinInvalid;
 
         public bool ReadyToShow => Count > 0 && Status >= TableStatus.DataReady;
 

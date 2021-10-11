@@ -87,6 +87,12 @@ namespace Nitride.EE.Visa
 
         public bool RemoveDataConsumer(IDataConsumer idk) => DataConsumers.CheckRemove(idk);
 
+        public void DataIsUpdated()
+        {
+            UpdateTime = DateTime.Now;
+            DataConsumers.ForEach(n => n.DataIsUpdated(this));
+        }
+
         public DateTime UpdateTime { get; private set; } = TimeTool.MinInvalid;
 
         public object DataLockObject { get; } = new object();
