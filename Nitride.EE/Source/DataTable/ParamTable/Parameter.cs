@@ -70,7 +70,7 @@ namespace Nitride.EE
             }
         }
 
-        public void CalculateFormat(FreqTable ft)
+        public void CalculateOtherFormats(FreqTable ft)
         {
             foreach (var row in ft.Rows)
             {

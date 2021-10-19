@@ -44,7 +44,8 @@ namespace Nitride.EE
             }
         }
 
-        public void GetZ1(FreqTable ft, ComplexColumn z2Column, ComplexColumn z1Column)
+        // https://en.wikipedia.org/wiki/Impedance_parameters
+        public void GetZin(FreqTable ft, ComplexColumn zinColumn, ComplexColumn zloadColumn)
         {
             foreach (FreqRow row in ft.Rows)
             {
@@ -52,12 +53,27 @@ namespace Nitride.EE
                 Complex z12 = row[this[1, 2]];
                 Complex z21 = row[this[2, 1]];
                 Complex z22 = row[this[2, 2]];
-                Complex z2 = row[z2Column];
-                row[z1Column] = z11 - (z12 * z21 / (z22 + z2));
+                Complex zload = row[zloadColumn];
+                row[zinColumn] = z11 - (z12 * z21 / (z22 + zload));
             }
         }
 
-        // Get Z2
+        // Get Zout
+        public void GetZout(FreqTable ft, ComplexColumn zoutColumn, ComplexColumn zsourceColumn)
+        {
+            foreach (FreqRow row in ft.Rows)
+            {
+                Complex z11 = row[this[1, 1]];
+                Complex z12 = row[this[1, 2]];
+                Complex z21 = row[this[2, 1]];
+                Complex z22 = row[this[2, 2]];
+                Complex zsource = row[zsourceColumn];
+                row[zoutColumn] = z22 - (z12 * z21 / (z11 + zsource));
+            }
+        }
+
+        // v1 = (z11 * i1) + (z12 * i2)
+        // v2 = (z21 * i1) + (z22 * i2)
 
         public void CalculatePort2VI(FreqTable ft)
         {
