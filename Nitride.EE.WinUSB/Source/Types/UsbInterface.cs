@@ -8,7 +8,7 @@ namespace Nitride.EE.WinUSB
 {
     public class UsbInterface
     {
-        public UsbInterface(WinUsbDevice device, USB_INTERFACE_DESCRIPTOR desc) 
+        public UsbInterface(WinUsbDevice device, USB_INTERFACE_DESCRIPTOR desc)
         {
             Device = device;
             // Length = desc.bLength;
@@ -40,8 +40,16 @@ namespace Nitride.EE.WinUSB
 
         public byte InterfaceProtocol { get; set; }
 
-        public byte Interface{ get; set; }
+        public byte Interface { get; set; }
 
-        public Dictionary<byte, UsbEndPoint> EndPoints { get; set; }
-}
+        public List<UsbEndPoint> EndPoints { get; } = new();
+
+        public void PrintInfo()
+        {
+            foreach (var ep in EndPoints)
+            {
+                Console.WriteLine("Interface EP: " + ep.ToString());
+            }
+        }
+    }
 }

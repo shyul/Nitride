@@ -12,11 +12,17 @@ namespace Nitride.Chart
 
         ColorTheme Theme { get; }
 
+        int Height { get; }
+
+        int Width { get; }
+
         int StopPt { get; }
 
         int StartPt { get; }
 
         int IndexToPixel(int index);
+
+        double Reference { get; }
 
         IndexAxis AxisX { get; }
 

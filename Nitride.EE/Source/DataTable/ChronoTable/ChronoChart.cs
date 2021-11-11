@@ -10,9 +10,9 @@ using Nitride.Chart;
 
 namespace Nitride.EE
 {
-    public sealed class FreqChart : ChartWidget
+    public sealed class ChronoChart : ChartWidget
     {
-        public FreqChart(string name, FreqTable st) : base(name)
+        public ChronoChart(string name, ChronoTable ct) : base(name)
         {
             Margin = new Padding(5, 15, 5, 5);
             Theme.FillColor = BackColor = Color.FromArgb(255, 255, 253, 245);
@@ -29,28 +29,29 @@ namespace Nitride.EE
             Style[Importance.Minor].HasLine = true;
             Style[Importance.Minor].Theme.EdgePen.DashPattern = new float[] { 1, 2 };
 
-            FreqTable = st;
-            FreqTable.Status = TableStatus.Loading;
-            FreqTable.AddDataConsumer(this);
+            ChronoTable = ct;
+            ChronoTable.Status = TableStatus.Loading;
+            ChronoTable.AddDataConsumer(this);
             TabName = Name = "Test Chart with Table Here:)";
-            /*
+            
             AddArea(MainArea = new OscillatorArea(this, "Main", 0.3f)
             {
                 HasXAxisBar = true,
                 Reference = 0,
-                FixedTickStep_Right = 10,
-            });*/
+                //UpperLimit = 20,
+                //LowerLimit = -20,
+                //UpperColor = Color.Green,
+                //LowerColor = Color.DarkOrange,
+                //FixedTickStep_Right = 10,
 
-
+            });
+            /*
             AddArea(MainArea = new Area(this, "Main", 0.3f)
             {
-                Reference = 0,
                 HasXAxisBar = true,
-            });
+            });*/
 
-            MainArea.AxisY(AlignType.Right).TickStep = 10;
-
-            EnableChartShift = false;
+            EnableChartShift = true;// false;
 
             ResumeLayout(false);
             PerformLayout();
@@ -58,7 +59,7 @@ namespace Nitride.EE
 
         public override int RightBlankAreaWidth => 0;
 
-        public FreqTable FreqTable { get; private set; }
+        public ChronoTable ChronoTable { get; private set; }
 
         public Area MainArea { get; }
 
@@ -66,8 +67,8 @@ namespace Nitride.EE
         {
             get
             {
-                if (FreqTable[i] is FreqRow sp && sp.Frequency is double d)
-                    return (d / 1e6).ToString("0.######") + "MHz";
+                if (ChronoTable[i] is ChronoRow sp && sp.TimeStamp is long t)
+                    return t.ToString();
                 else
                     return string.Empty;
             }
@@ -75,14 +76,14 @@ namespace Nitride.EE
 
         public override ITable Table
         {
-            get => FreqTable;
+            get => ChronoTable;
 
             set
             {
-                if (value is FreqTable st)
-                    FreqTable = st;
+                if (value is ChronoTable ct)
+                    ChronoTable = ct;
                 else
-                    FreqTable = null;
+                    ChronoTable = null;
             }
         }
 
@@ -136,10 +137,10 @@ namespace Nitride.EE
                                 //if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
                                 //if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
 
-                                double freq = FreqTable[i].Frequency;
+                                long time = ChronoTable[i].TimeStamp;
 
                                 //if ((freq % tickFreqSpan) < (tickFreqSpan / 10D)) AxisX.TickList.CheckAdd(px, (Importance.Major, freq.ToString()));
-                                if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (freq / 1e6).ToString("0.###") + "MHz"));
+                                if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (time / 1e2).ToString()));
 
 
 

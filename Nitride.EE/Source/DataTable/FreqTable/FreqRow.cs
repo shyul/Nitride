@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace Nitride.EE
 {
-    public class FreqRow : DataRow
+    public class FreqRow : DataRow, IComparable<FreqRow>
     {
         public FreqRow(double freq, int index, FreqTable ft)
         {
@@ -24,7 +24,7 @@ namespace Nitride.EE
 
         public FreqTable FreqTable { get; }
 
-        public int Index { get; }
+        public int Index { get; set; }
 
         public double Frequency { get; }
 
@@ -42,6 +42,13 @@ namespace Nitride.EE
                 else
                     ComplexColumnsLUT[column] = value;
             }
+        }
+
+        public int CompareTo(FreqRow other)
+        {
+            if (Frequency > other.Frequency) return 1;
+            else if (Frequency < other.Frequency) return -1;
+            else return 0;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Nitride.EE.WinUSB
 		public const uint ALLOW_PARTIAL_READS = 0x5;
 		public const uint AUTO_FLUSH = 0x6;
 		public const uint RAW_IO = 0x7;
-		public const uint MAXIMUM_TRANSFER_SIZE = 0x8;
-		public const uint RESET_PIPE_ON_RESUME = 0x9;
+		//public const uint MAXIMUM_TRANSFER_SIZE = 0x8;
+		//public const uint RESET_PIPE_ON_RESUME = 0x9;
 	}
 }

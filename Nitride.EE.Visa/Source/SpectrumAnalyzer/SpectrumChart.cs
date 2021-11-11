@@ -26,7 +26,7 @@ namespace Nitride.EE.Visa
                 LowerLimit = -80,
                 UpperColor = Color.Green,
                 LowerColor = Color.DarkOrange,
-                FixedTickStep_Right = 10,
+                //FixedTickStep_Right = 10,
 
             });
 

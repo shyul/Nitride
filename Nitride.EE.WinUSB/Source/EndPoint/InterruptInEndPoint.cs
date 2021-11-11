@@ -14,9 +14,11 @@ namespace Nitride.EE.WinUSB
             PipeId = pipeInfo.PipeId;
             MaximumPacketSize = pipeInfo.MaximumPacketSize;
             Timeout = 2000;
-            IgnoreShortPackets = false;
+            //IgnoreShortPackets = false;
             Interval = pipeInfo.Interval;
         }
+
+        // Delegate Function for responding to interrupts
 
         public byte Interval { get; }
     }

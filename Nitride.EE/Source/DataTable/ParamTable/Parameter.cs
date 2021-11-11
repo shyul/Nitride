@@ -33,8 +33,8 @@ namespace Nitride.EE
                 {
                     string label = this switch
                     {
-                        SParam => "S",
-                        ZParam => "Z",
+                        S_Parameter => "S",
+                        Z_Parameter => "Z",
                         _ => "Unknown"
                     } + p1 + p2;
 
@@ -55,8 +55,8 @@ namespace Nitride.EE
                 {
                     string label = this switch
                     {
-                        SParam => "S",
-                        ZParam => "Z",
+                        S_Parameter => "S",
+                        Z_Parameter => "Z",
                         _ => "Unknown"
                     } + p1 + p2;
 
@@ -80,7 +80,7 @@ namespace Nitride.EE
                 Complex p22 = row[this[2, 2]];
 
                 //Console.WriteLine("freq = " + row.Frequency + "; " + "Mag11 = " + p11.Magnitude + "; " + "Mag21 = " + p21.Magnitude + "; " + "Mag12 = " + p12.Magnitude + "; " + "Mag22 = " + p22.Magnitude);
-                Console.WriteLine("CalculateFormat: freq = " + row.Frequency + "; " + "p11 = " + p11 + "; " + "p21 = " + p21 + "; " + "p12 = " + p12 + "; " + "p22 = " + p22);
+                //Console.WriteLine("CalculateFormat: freq = " + row.Frequency + "; " + "p11 = " + p11 + "; " + "p21 = " + p21 + "; " + "p12 = " + p12 + "; " + "p22 = " + p22);
 
                 row[this[1, 1, ComplexFormat.Magnitude]] = p11.Magnitude;
                 row[this[1, 1, ComplexFormat.Phase]] = p11.Phase;
@@ -133,6 +133,117 @@ namespace Nitride.EE
             }
         }
 
+        public static void LoadSnP(FreqTable ft, Parameter pr, string fileName)
+        {
+            string suffix = fileName.Split('.').Last();
+            int validFieldCount = -1;
+            double freqUnit = 0;
+            int PortCount = 0;
+
+            if (suffix.StartsWith('s') && suffix.EndsWith('p'))
+            {
+                PortCount = suffix.TrimStart('s').TrimEnd('p').ToInt32(-1);
+            }
+            //Console.WriteLine("PortCount = " + PortCount);
+            if (PortCount == pr.PortCount)
+            {
+                using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using StreamReader sr = new(fs);
+                string format = string.Empty;
+                bool validHeader = false;
+                int linePt = 0;
+
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine().Split('!').First().Trim();
+
+                    if (line.Length > 0)// && (!line.StartsWith('!')))
+                    {
+                        if (line.StartsWith('#'))
+                        {
+                            while (line.Contains("  ")) line = line.Replace("  ", " ");
+                            Console.WriteLine("Header line: " + line);
+
+                            var fields = line.Split(' ');
+                            if (fields.Length == 6)
+                            {
+                                freqUnit = fields[1].Trim().ToUpper() switch
+                                {
+                                    "HZ" => 1,
+                                    "KHZ" => 1e3,
+                                    "MHZ" => 1e6,
+                                    "GHZ" => 1e9,
+                                    _ => throw new Exception("Invalid SnP file format.")
+                                };
+
+                                format = fields[3].Trim().ToUpper();
+
+                                if (format != "RI" && format != "DB" && format != "MA")
+                                    throw new Exception("Invalid SnP file format.");
+
+                                switch (fields[2].Trim().ToUpper())
+                                {
+                                    case "S": if (pr is S_Parameter sp && sp.Z0 == fields[5].Trim().ToDouble()) break; else return;
+                                    case "Z": if (pr is Z_Parameter) break; else return;
+                                    default: return;
+                                };
+
+                                validFieldCount = 1 + (2 * PortCount * PortCount);
+                                validHeader = true;
+                            }
+                        }
+                        else if (validHeader)
+                        {
+                            List<string> fields = new();
+                            foreach (string s in line.Split(' '))
+                            {
+                                string field = s.Trim();
+                                if (field.Length > 0)
+                                {
+                                    fields.Add(field);
+                                }
+                            }
+
+                            if (fields.Count == validFieldCount && pr is Parameter)
+                            {
+                                double freq = fields[0].Trim().ToDouble() * freqUnit;
+                                //if (freq < 500000) Console.WriteLine("freq = " + freq);
+                                if (!ft.Contains(freq))
+                                {
+                                    int pt = 1;
+                                    var row = new FreqRow(freq, linePt, ft);
+                                    linePt++;
+
+                                    for (int i = 1; i <= PortCount; i++)
+                                    {
+                                        for (int j = 1; j <= PortCount; j++)
+                                        {
+                                            row[pr[j, i]] = format switch
+                                            {
+                                                "RI" => new(fields[pt].ToDouble(), fields[pt + 1].ToDouble()),
+                                                "DB" => Complex.FromPolarCoordinates(Math.Pow((fields[pt].ToDouble() / 20D), 10D), fields[pt + 1].ToDouble() * Math.PI / 180D),
+                                                "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180D),
+                                                _ => throw new Exception("Invalid SnP file format.")
+                                            };
+
+                                            pt += 2;
+                                        }
+                                    }
+
+                                    ft.FreqRows.Add(row);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Already has frequency point: " + freq);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         public static (FreqTable, Parameter) LoadSnP(string fileName)
         {
@@ -151,7 +262,7 @@ namespace Nitride.EE
             {
                 PortCount = suffix.TrimStart('s').TrimEnd('p').ToInt32(-1);
             }
-
+            Console.WriteLine("PortCount = " + PortCount);
             if (PortCount > 0)
             {
                 using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -167,10 +278,13 @@ namespace Nitride.EE
                     {
                         if (line.StartsWith('#'))
                         {
+                            while (line.Contains("  ")) line = line.Replace("  ", " ");
+                            Console.WriteLine("Header line: " + line);
+
                             var fields = line.Split(' ');
                             if (fields.Length == 6)
                             {
-                                freqUnit = fields[1].ToUpper() switch
+                                freqUnit = fields[1].Trim().ToUpper() switch
                                 {
                                     "HZ" => 1,
                                     "KHZ" => 1e3,
@@ -179,19 +293,19 @@ namespace Nitride.EE
                                     _ => throw new Exception("Invalid SnP file format.")
                                 };
 
-                                format = fields[3].ToUpper();
+                                format = fields[3].Trim().ToUpper();
 
                                 if (format != "RI" && format != "DB" && format != "MA")
                                     throw new Exception("Invalid SnP file format.");
 
-                                double Z0 = fields[5].ToDouble();
+                                double Z0 = fields[5].Trim().ToDouble();
 
                                 if (Z0 > 0)
                                 {
-                                    pr = fields[2].ToUpper() switch
+                                    pr = fields[2].Trim().ToUpper() switch
                                     {
-                                        "S" => new SParam(fileName, PortCount, Z0), // ParamType.S,
-                                        "Z" => new ZParam(fileName, PortCount),
+                                        "S" => new S_Parameter(fileName, PortCount, Z0), // ParamType.S,
+                                        "Z" => new Z_Parameter(fileName, PortCount),
                                         //"Y" => ParamType.Y,
                                         //"G" => ParamType.G,
                                         _ => throw new Exception("Invalid SnP file format.")
@@ -219,35 +333,46 @@ namespace Nitride.EE
 
                             if (fields.Count == validFieldCount && pr is Parameter)
                             {
-                                double freq = fields[0].ToDouble() * freqUnit;
-                                int pt = 1;
-                                var row = new FreqRow(freq, linePt, ft);
-                                linePt++;
+                                double freq = fields[0].Trim().ToDouble() * freqUnit;
 
-                                for (int i = 1; i <= PortCount; i++)
+                                //if (freq < 500000) Console.WriteLine("freq = " + freq);
+
+                                if (!ft.Contains(freq))
                                 {
-                                    for (int j = 1; j <= PortCount; j++)
+                                    int pt = 1;
+                                    var row = new FreqRow(freq, linePt, ft);
+                                    linePt++;
+
+                                    for (int i = 1; i <= PortCount; i++)
                                     {
-                                        row[pr[j, i]] = format switch
+                                        for (int j = 1; j <= PortCount; j++)
                                         {
-                                            "RI" => new(fields[pt].ToDouble(), fields[pt + 1].ToDouble()),
-                                            "DB" => Complex.FromPolarCoordinates(Math.Pow((fields[pt].ToDouble() / 20D), 10D), fields[pt + 1].ToDouble() * Math.PI / 180D),
-                                            "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180D),
-                                            _ => throw new Exception("Invalid SnP file format.")
-                                        };
+                                            row[pr[j, i]] = format switch
+                                            {
+                                                "RI" => new(fields[pt].ToDouble(), fields[pt + 1].ToDouble()),
+                                                "DB" => Complex.FromPolarCoordinates(Math.Pow((fields[pt].ToDouble() / 20D), 10D), fields[pt + 1].ToDouble() * Math.PI / 180D),
+                                                "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180D),
+                                                _ => throw new Exception("Invalid SnP file format.")
+                                            };
 
-                                        pt += 2;
+                                            pt += 2;
+                                        }
                                     }
+
+                                    ft.FreqRows.Add(row);
                                 }
-
-
-
-                                ft.FreqRows.Add(row);
+                                else
+                                {
+                                    Console.WriteLine("Already has frequency point: " + freq);
+                                }
                             }
                         }
                     }
                 }
             }
+
+            ft.Sort();
+
             return (ft, pr);
         }
 
@@ -271,8 +396,8 @@ namespace Nitride.EE
                 {
                     string label = this switch
                     {
-                        SParam => "S",
-                        ZParam => "Z",
+                        S_Parameter => "S",
+                        Z_Parameter => "Z",
                         _ => "Unknown"
                     } + i + j;
 

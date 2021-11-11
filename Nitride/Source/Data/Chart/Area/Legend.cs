@@ -64,6 +64,8 @@ namespace Nitride.Chart
 
         public virtual int IndexCount => AxisX.IndexCount;
 
+        public virtual double Reference { get; set; } = double.NaN;
+
         public IndexAxis AxisX { get; } //= new DiscreteAxis() { IndexCount = 5 };
 
         public Rectangle Bounds { get; set; } = new Rectangle();

@@ -62,6 +62,8 @@ namespace Nitride.EE
 
         protected Dictionary<double, int> FreqToIndex { get; } = new();
 
+        public bool Contains(double freq) => FreqToIndex.ContainsKey(freq);
+
         public void ImportRow(FreqRow row)
         {
 
@@ -78,8 +80,24 @@ namespace Nitride.EE
 
         public void Sort() 
         {
-        
-        
+            lock (DataLockObject) 
+            {
+                var rows = FreqRows.OrderBy(n => n.Frequency).ToList();
+
+                FreqRows.Clear();
+
+                int pt = 0;
+                foreach (var row in rows)
+                {
+                    if (!Contains(row.Frequency))
+                    {
+                        row.Index = pt;
+                        FreqRows.Add(row);
+                        FreqToIndex.Add(row.Frequency, row.Index);
+                        pt++;
+                    }
+                }
+            }
         }
 
 

@@ -36,11 +36,11 @@ namespace Nitride.Chart
             AxisRight.MinimumTickHeight = 20;
         }
 
-        public double FixedTickStep_Right { get; set; } = double.NaN;
+        //public double FixedTickStep_Right { get; set; } = double.NaN;
 
-        public double FixedTickStep_Left { get; set; } = double.NaN;
+        //public double FixedTickStep_Left { get; set; } = double.NaN;
 
-        public virtual double Reference { get; set; } = 0;
+        //public virtual double Reference { get; set; } = 0;
 
         public virtual double UpperLimit { get; set; } = double.NaN;
 
@@ -116,111 +116,32 @@ namespace Nitride.Chart
                 }
 
             AxisRight.Coordinate(Height, Top);  // Setup the right axis which is the master axis.
-            int actual_size_right = (AxisRight.HeightRatio * Height).ToInt32();
-            int tickCount_right = (1.0 * actual_size_right / AxisRight.MinimumTickHeight).ToInt32(); // It needs at least 10 pixel for a tick
-            double tickStep_right = AxisRight.Delta / tickCount_right;
-
-            if (tickStep_right > 0)
+            if (!double.IsNaN(UpperLimit))
             {
-                if (!double.IsNaN(Reference))
-                {
-                    AxisRight.Range.Insert(Reference);
-                    AxisRight.TickList.CheckAdd(Reference, (Importance.Major, Reference.ToSINumberString("0.##").String));
-                }
-
-                if (!double.IsNaN(UpperLimit))
-                {
-                    AxisRight.Range.Insert(UpperLimit);
-                    AxisRight.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToSINumberString("0.##").String));
-                }
-
-                if (!double.IsNaN(LowerLimit))
-                {
-                    AxisRight.Range.Insert(LowerLimit);
-                    AxisRight.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToSINumberString("0.##").String));
-                }
-
-                if (!double.IsNaN(FixedTickStep_Right))
-                {
-                    tickStep_right = FixedTickStep_Right;
-                }
-                else
-                {
-                    tickStep_right = tickStep_right.FitDacades(AxisRight.TickDacades);
-                }
-
-                int halfTickNumber = (Math.Max(AxisRight.Range.Maximum - Reference, Reference - AxisRight.Range.Minimum) / tickStep_right).ToInt32() + 1;
-
-                for (int i = 1; i < halfTickNumber + 1; i++)
-                {
-                    double val = Reference + tickStep_right * i;
-                    AxisRight.TickList.CheckAdd(val, (Importance.Minor, val.ToSINumberString("0.##").String));
-                    AxisRight.Range.Insert(val);
-
-                    val = Reference - tickStep_right * i;
-                    AxisRight.TickList.CheckAdd(val, (Importance.Minor, val.ToSINumberString("0.##").String));
-                    AxisRight.Range.Insert(val);
-                }
+                AxisRight.Range.Insert(UpperLimit);
+                AxisRight.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToSINumberString("0.##").String));
             }
-            else if (AxisRight.Delta == 0)
+
+            if (!double.IsNaN(LowerLimit))
             {
-                AxisRight.Range.Insert(1);
-                AxisRight.Range.Insert(-1);
+                AxisRight.Range.Insert(LowerLimit);
+                AxisRight.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToSINumberString("0.##").String));
             }
+            AxisRight.GenerateTicks();
 
             AxisLeft.Coordinate(Height, Top);
-            int actual_size_left = (AxisLeft.HeightRatio * Height).ToInt32();
-            int tickCount_left = (1.0 * actual_size_left / AxisLeft.MinimumTickHeight).ToInt32(); // It needs at least 10 pixel for a tick
-            double tickStep_left = AxisLeft.Delta / tickCount_left;
-            //Console.WriteLine("AxisLeft.Range = " + AxisLeft.Range.ToString());
-
-            if (tickStep_left > 0)
+            if (!double.IsNaN(UpperLimit))
             {
-                if (!double.IsNaN(Reference))
-                {
-                    AxisLeft.Range.Insert(Reference);
-                    AxisLeft.TickList.CheckAdd(Reference, (Importance.Major, Reference.ToSINumberString("0.##").String));
-                }
-
-                if (!double.IsNaN(UpperLimit))
-                {
-                    AxisLeft.Range.Insert(UpperLimit);
-                    AxisLeft.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToSINumberString("0.##").String));
-                }
-
-                if (!double.IsNaN(LowerLimit))
-                {
-                    AxisLeft.Range.Insert(LowerLimit);
-                    AxisLeft.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToSINumberString("0.##").String));
-                }
-
-                if (!double.IsNaN(FixedTickStep_Left))
-                {
-                    tickStep_left = FixedTickStep_Left;
-                }
-                else
-                {
-                    tickStep_left = tickStep_left.FitDacades(AxisLeft.TickDacades);
-                }
-
-                int halfTickNumber = (Math.Max(AxisLeft.Range.Maximum - Reference, Reference - AxisLeft.Range.Minimum) / tickStep_left).ToInt32() + 1;
-
-                for (int i = 1; i < halfTickNumber + 1; i++)
-                {
-                    double val = Reference + tickStep_left * i;
-                    AxisLeft.TickList.CheckAdd(val, (Importance.Minor, val.ToSINumberString("0.##").String));
-                    AxisLeft.Range.Insert(val);
-
-                    val = Reference - tickStep_left * i;
-                    AxisLeft.TickList.CheckAdd(val, (Importance.Minor, val.ToSINumberString("0.##").String));
-                    AxisLeft.Range.Insert(val);
-                }
+                AxisLeft.Range.Insert(UpperLimit);
+                AxisLeft.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToSINumberString("0.##").String));
             }
-            else if (AxisLeft.Delta == 0)
+
+            if (!double.IsNaN(LowerLimit))
             {
-                AxisLeft.Range.Insert(1);
-                AxisLeft.Range.Insert(-1);
+                AxisLeft.Range.Insert(LowerLimit);
+                AxisLeft.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToSINumberString("0.##").String));
             }
+            AxisLeft.GenerateTicks();
 
             // *****************************
             // Calculate Graphics Coordinate

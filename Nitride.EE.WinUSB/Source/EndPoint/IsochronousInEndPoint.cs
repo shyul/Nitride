@@ -15,7 +15,7 @@ namespace Nitride.EE.WinUSB
 			PipeId = pipeInfo.PipeId;
 			MaximumPacketSize = pipeInfo.MaximumPacketSize;
 			Timeout = 2000;
-			IgnoreShortPackets = false;
+			//IgnoreShortPackets = false;
 
 			if(pipeInfo.Interval != 1) 
 			{
@@ -27,15 +27,15 @@ namespace Nitride.EE.WinUSB
 		{
 			uint bufferLength = (uint)buffer.Length;
 			var isoPacketDescriptors = new USBD_ISO_PACKET_DESCRIPTOR[numOfPackets];
-			var success = NativeMethods.WinUsb_RegisterIsochBuffer(Device.Handle, PipeId, buffer, bufferLength, out IntPtr bufferHandle);
+			var success = WinUsb_RegisterIsochBuffer(Device.Handle, PipeId, buffer, bufferLength, out IntPtr bufferHandle);
 			if (success)
 			{
-				success = NativeMethods.WinUsb_ReadIsochPipeAsap(bufferHandle, 0, bufferLength, false, numOfPackets, ref isoPacketDescriptors[0], IntPtr.Zero);
+				success = WinUsb_ReadIsochPipeAsap(bufferHandle, 0, bufferLength, false, numOfPackets, ref isoPacketDescriptors[0], IntPtr.Zero);
 				Console.WriteLine(Marshal.GetLastWin32Error());
 
 				if (success)
 				{
-					success = NativeMethods.WinUsb_UnregisterIsochBuffer(bufferHandle);
+					success = WinUsb_UnregisterIsochBuffer(bufferHandle);
 
 					for (var i = 0; i <= numOfPackets - 1; i++)
 					{
@@ -51,5 +51,8 @@ namespace Nitride.EE.WinUSB
 			}
 			return success;
 		}
+
+		[DllImport("winusb.dll", SetLastError = true)]
+		private static extern bool WinUsb_ReadIsochPipeAsap(IntPtr BufferHandle, uint Offset, uint Length, bool ContinueStream, uint NumberOfPackets, ref USBD_ISO_PACKET_DESCRIPTOR IsoPacketDescriptors, IntPtr Overlapped);
 	}
 }

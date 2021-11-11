@@ -2,7 +2,7 @@
 
 namespace Nitride.EE.WinUSB
 {
-	public enum UsbdPipeType
+	public enum UsbdPipeType : int
 	{
 		Control,
 		Isochronous,

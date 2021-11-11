@@ -50,8 +50,12 @@ namespace Nitride.Chart
 
                 double data = table[i, Data_Column];
 
-                if (i >= 0 && !double.IsNaN(data))
+                if (i >= 0 && !double.IsNaN(data)) 
+                {
+
                     area.AxisY(Side).Range.Insert(data);
+                }
+                
             }
         }
 

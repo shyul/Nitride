@@ -10,6 +10,7 @@
 /// 
 /// ***************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -41,11 +42,13 @@ namespace Nitride.Chart
 
         public ColorTheme Theme { get; }
 
-        public Range<double> Range { get; } = new Range<double>(double.MaxValue, double.MinValue);
+        public Range<double> Range { get; } = new(double.MaxValue, double.MinValue);
 
         public double Delta => Range.Maximum - Range.Minimum;
 
         public bool IsLogarithmic { get; set; } = false;
+
+
 
         public double HeightRatio { get; set; } = 1;
 
@@ -55,11 +58,7 @@ namespace Nitride.Chart
 
         public Dictionary<double, (Importance Importance, string Label)> TickList { get; } = new Dictionary<double, (Importance Importance, string Label)>();
 
-        public virtual void Reset()
-        {
-            Range.Reset(double.MaxValue, double.MinValue);
-            TickList.Clear();
-        }
+
 
         protected virtual double GetPixelRatio(double val)
         {
@@ -89,10 +88,80 @@ namespace Nitride.Chart
 
         public virtual string PixelToString(int pix) => PixelToValue(pix).ToSINumberString("G4").String;
 
+        public double Reference => Area.Reference;
+
+        public double TickStep { get; set; } = double.NaN;
+
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
         public virtual int MinimumTickHeight { get; set; } = 30;
+
+        public virtual void GenerateTicks()
+        {
+            //Console.WriteLine("GenerateTicks(): " + Range.Minimum);
+            if (!double.IsNaN(Reference))
+            {
+                Range.Insert(Reference);
+                TickList.CheckAdd(Reference, (Importance.Major, Reference.ToSINumberString("0.##").String));
+            }
+
+            int tickCount = (1.0 * HeightRatio * Area.Height / MinimumTickHeight).ToInt32(); // It needs at least 10 pixel for a tick
+
+            if (tickCount > 0)
+            {
+                double tickStep = (!double.IsNaN(TickStep) && (Delta / TickStep) >= 1 && (Delta / TickStep) <= tickCount) ? TickStep : (Delta / tickCount).FitDacades(TickDacades);
+
+                if (tickStep > 0)
+                {
+                    if (!double.IsNaN(Reference))
+                    {
+                        double tickVal = Reference;
+                        while (tickVal >= Range.Minimum)
+                        {
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            tickVal -= tickStep;
+                        }
+
+                        if (tickVal < Range.Minimum && Reference > Range.Minimum) Range.Insert(tickVal);
+
+                        tickVal = Reference;
+                        while (tickVal <= Range.Maximum)
+                        {
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            tickVal += tickStep;
+                        }
+
+                        if (tickVal > Range.Maximum && Reference < Range.Minimum) Range.Insert(tickVal);
+                    }
+                    else
+                    {
+                        Range.Insert(Range.Minimum - (Range.Minimum % tickStep));
+
+                        double max_remainder = Range.Maximum % tickStep;
+
+                        if (max_remainder > 0)
+                            Range.Insert(Range.Maximum - max_remainder + tickStep); // * 1.0001); // Fix the last tick
+                        else if (max_remainder < -0)
+                            Range.Insert(Range.Maximum + max_remainder - tickStep); // * 1.0001); // Fix the last tick
+
+                        double tickVal = Range.Minimum;
+
+                        while (tickVal <= Range.Maximum)
+                        {
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            tickVal += tickStep;
+                        }
+                    }
+                }
+            }
+        }
+
+        public virtual void Reset()
+        {
+            Range.Reset(double.MaxValue, double.MinValue);
+            TickList.Clear();
+        }
 
         public int Pixel_Near { get; protected set; }
 
@@ -102,6 +171,12 @@ namespace Nitride.Chart
 
         public virtual void Coordinate(int size, int offset)
         {
+            if (Delta == 0)
+            {
+                if (Range.Minimum > double.MinValue + 1) Range.Insert(Range.Minimum - 1);
+                if (Range.Maximum < double.MaxValue - 1) Range.Insert(Range.Minimum + 1);
+            }
+
             switch (Align)
             {
                 case AlignType.Left:
