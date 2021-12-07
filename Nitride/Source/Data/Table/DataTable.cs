@@ -8,7 +8,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Nitride.Chart;
 
 namespace Nitride
@@ -60,6 +62,13 @@ namespace Nitride
 
         //public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
         //public abstract IDatum this[int i, DatumColumn column] { get; }
+
+        /// <summary>
+        /// Label for X Axis
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public abstract string GetXAxisLabel(int i);
 
         #region Data Consumers
 
@@ -115,5 +124,40 @@ namespace Nitride
 
 
         #endregion Data Consumers
+
+        public void ExportCSV(FileInfo file, IEnumerable<NumericColumn> columns, string format = "")
+        {
+            if (file.Directory.Exists)
+            {
+                if (file.Exists) file.Delete();
+
+                //file.Create();
+                using StreamWriter sw = file.CreateText();
+
+                string header = "X_Axis,";
+
+                foreach (var column in columns)
+                {
+                    header += column.Label + ",";
+                }
+
+                header = header.Trim().Trim(',').Trim();
+
+
+                sw.WriteLine(header);
+
+                for (int i = 0; i < Count; i++)
+                {
+                    header = GetXAxisLabel(i) + ",";
+
+                    foreach (var column in columns)
+                    {
+                        header += (string.IsNullOrEmpty(format) ? this[i, column].ToString() : this[i, column].ToString(format)) + ",";
+                    }
+
+                    sw.WriteLine(header.TrimEnd(','));
+                }
+            }
+        }
     }
 }

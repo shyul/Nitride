@@ -14,31 +14,37 @@ namespace Nitride
 
         public virtual string Label { get; set; } = string.Empty;
 
-        public virtual object IdObject { get; set; }
+        public object DataLockObject => this;
 
         #region Equality
 
         public override int GetHashCode() => Name.GetHashCode() ^ GetType().GetHashCode();
 
-        public virtual bool Equals(Column other) 
+        public virtual bool Equals(Column other)
         {
-            if (GetType() == other.GetType())
-            {
-                return Name == other.Name;
-
-                /*
-                if (IdObject is null)
-                    return Name == other.Name;
+            if (other is not null)
+                if (DataLockObject == other.DataLockObject) 
+                {
+                    //Console.Write("#");
+                    return true;
+                }
                 else
-                    return IdObject == other.IdObject;*/
-            }
+                {
+                    //Console.Write("$");
+                    return GetType() == other.GetType() && Name == other.Name;
+                }
             else
                 return false;
         }
 
         public override bool Equals(object other)
         {
-            if (other is Column dc)
+            if (base.Equals(other))
+            {
+                //Console.Write("^");
+                return true;
+            }
+            else if (other is Column dc)
                 return Equals(dc);
             else
                 return false;

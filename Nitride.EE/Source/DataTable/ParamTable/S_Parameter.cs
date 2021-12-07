@@ -31,7 +31,7 @@ namespace Nitride.EE
 
         public void ExportSnP(FreqTable ft, string fileName)
         {
-            StringBuilder sb = new StringBuilder("# Hz S RI R " + Z0 + "\n");
+            StringBuilder sb = new("# Hz S RI R " + Z0 + "\n");
             foreach (var row in ft.Rows)
             {
                 string line = row.Frequency + " ";

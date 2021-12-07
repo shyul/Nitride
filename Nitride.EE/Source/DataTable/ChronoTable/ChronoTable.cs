@@ -72,6 +72,10 @@ namespace Nitride.EE
 
         public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : TimeRows[i][column];
 
-        //public override IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : Rows[i][column];
+        public override string GetXAxisLabel(int i)
+        {
+            //return (this[i].Frequency / 1e6).ToString("0.######") + "MHz";
+            return this[i].TimeStamp.ToString();
+        }
     }
 }

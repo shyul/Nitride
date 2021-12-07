@@ -221,8 +221,8 @@ namespace Nitride.EE
                                             row[pr[j, i]] = format switch
                                             {
                                                 "RI" => new(fields[pt].ToDouble(), fields[pt + 1].ToDouble()),
-                                                "DB" => Complex.FromPolarCoordinates(Math.Pow((fields[pt].ToDouble() / 20D), 10D), fields[pt + 1].ToDouble() * Math.PI / 180D),
-                                                "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180D),
+                                                "DB" => Complex.FromPolarCoordinates(Math.Pow(10.0, fields[pt].ToDouble() / 20.0), fields[pt + 1].ToDouble() * Math.PI / 180.0),
+                                                "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180.0),
                                                 _ => throw new Exception("Invalid SnP file format.")
                                             };
 
@@ -343,21 +343,41 @@ namespace Nitride.EE
                                     var row = new FreqRow(freq, linePt, ft);
                                     linePt++;
 
+                                    //if (linePt < 20) Console.Write("freq = " + freq + " | ");
+
                                     for (int i = 1; i <= PortCount; i++)
                                     {
                                         for (int j = 1; j <= PortCount; j++)
                                         {
+                                            /*
+                                            if (format == "DB" && linePt < 20)
+                                            {
+                                                double dBMag = fields[pt].ToDouble();
+                                                double magnitude = Math.Pow(10.0, dBMag / 20.0);
+
+
+                                                double degree = fields[pt + 1].ToDouble();
+                                                double radian = degree * Math.PI / 180;
+
+                                                Complex c = Complex.FromPolarCoordinates(magnitude, radian);
+
+                                                Console.Write("dBMag = " + dBMag + "Magnitude = " + magnitude + " | Degree = " + degree + " | Complex = " + c + " | ");
+
+                                            }*/
+
                                             row[pr[j, i]] = format switch
                                             {
                                                 "RI" => new(fields[pt].ToDouble(), fields[pt + 1].ToDouble()),
-                                                "DB" => Complex.FromPolarCoordinates(Math.Pow((fields[pt].ToDouble() / 20D), 10D), fields[pt + 1].ToDouble() * Math.PI / 180D),
-                                                "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180D),
+                                                "DB" => Complex.FromPolarCoordinates(Math.Pow(10.0, fields[pt].ToDouble() / 20.0), fields[pt + 1].ToDouble() * Math.PI / 180.0),
+                                                "MA" => Complex.FromPolarCoordinates(fields[pt].ToDouble(), fields[pt + 1].ToDouble() * Math.PI / 180.0),
                                                 _ => throw new Exception("Invalid SnP file format.")
                                             };
 
                                             pt += 2;
                                         }
                                     }
+
+                                    //if (linePt < 20) Console.Write("\n");
 
                                     ft.FreqRows.Add(row);
                                 }

@@ -51,6 +51,11 @@ namespace Nitride.Chart
             }
         }
 
+        public virtual void ShowAll() 
+        {
+            StopPt = IndexCount = Table.Count;
+        }
+
         public virtual int DataCount => Table.Count;
 
         public virtual int StartPt => StopPt - IndexCount;

@@ -157,10 +157,10 @@ namespace Nitride
         public T Max => Maximum;
 
         [DataMember, Browsable(true), DisplayName("Minimum Value")]
-        public T Minimum { get; private set; }
+        public virtual T Minimum { get; protected set; }
 
         [DataMember, Browsable(true), DisplayName("Maximum Value")]
-        public T Maximum { get; private set; }
+        public virtual T Maximum { get; protected set; }
 
         public static Range<T> Empty
         {
