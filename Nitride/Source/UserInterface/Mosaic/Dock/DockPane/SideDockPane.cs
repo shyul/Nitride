@@ -425,7 +425,7 @@ namespace Nitride
         public override void Coordinate()
         {
             //int shownPaneNum = ShownContainerCount;
-            int splitMargin = MosaicForm.PaneGripMargin;
+            int splitMargin = OldMosaicForm.PaneGripMargin;
 
             if (HasHiddenContainer)
             {

@@ -58,7 +58,9 @@ namespace Nitride.Chart
 
         public bool Enabled { get; set; } = true;
 
-        public bool Visible { get; set; } = true;
+        public bool Visible { get => m_Visible && Series.Count() > 0; set => m_Visible = value; }
+
+        private bool m_Visible = true;
 
         public int Order { get; set; }
 
@@ -116,7 +118,9 @@ namespace Nitride.Chart
 
         protected readonly ContinuousAxis AxisRight;
 
-        protected readonly List<Series> Series = new();
+        protected readonly List<Series> m_Series = new();
+
+        protected IEnumerable<Series> Series => m_Series.Where(n => n.Enabled).OrderBy(n => n.Order);
 
         public readonly Dictionary<string, Legend> Legends = new();
 
@@ -128,8 +132,8 @@ namespace Nitride.Chart
         {
             if (!Series.Contains(ser))
             {
-                Series.Add(ser);
-                Series.Sort((t1, t2) => t1.Order.CompareTo(t2.Order));
+                m_Series.Add(ser);
+                m_Series.Sort((t1, t2) => t1.Order.CompareTo(t2.Order));
                 if (ser.LegendName.Length > 0)
                 {
                     int legend_key_index = 0;
@@ -185,7 +189,7 @@ namespace Nitride.Chart
                     ser.Legend = null;
                 }
 
-                Series.CheckRemove(ser);
+                m_Series.CheckRemove(ser);
             }
         }
 
@@ -313,6 +317,9 @@ namespace Nitride.Chart
 
                     }
                 }
+
+                // Different strategy if Log is used!
+
             }
         }
 
@@ -410,7 +417,7 @@ namespace Nitride.Chart
             //List<Importance> importanceList = new List<Importance>();
             g.SetClip(Bounds);
 
-            lock (Series)
+            lock (m_Series)
             {
                 // Draw Patterns here
                 // ==================================
@@ -429,10 +436,9 @@ namespace Nitride.Chart
                 // ==================================
                 foreach (Importance imp in importanceArray)
                 {
-                    foreach (Series ser in Series)
+                    foreach (Series ser in Series.Where(n => n.Importance == imp))
                     {
-                        if (ser.Importance == imp)
-                            ser.Draw(g, this, Table);
+                        ser.Draw(g, this, Table);
                     }
                 }
 

@@ -149,8 +149,9 @@ namespace Nitride.EE.WinUSB
 				Marshal.WriteInt32(detailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
 				SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref myDeviceInterfaceData, detailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero);
 				var pDevicePathName = new IntPtr(detailDataBuffer.ToInt64() + 4);
-				Console.WriteLine("Found..." + pDevicePathName + " / " + Marshal.PtrToStringAuto(pDevicePathName));
-				deviceList.Add(Marshal.PtrToStringAuto(pDevicePathName));
+
+				//Console.WriteLine("Found..." + pDevicePathName + " / " + Marshal.PtrToStringAuto(pDevicePathName));
+				deviceList.CheckAdd(Marshal.PtrToStringAuto(pDevicePathName));
 				i++;
 
 			}

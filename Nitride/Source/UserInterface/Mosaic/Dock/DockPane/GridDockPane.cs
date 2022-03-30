@@ -204,7 +204,7 @@ namespace Nitride
         /// </summary>
         public override void Coordinate()
         {
-            int splitMargin = MosaicForm.PaneGripMargin;
+            int splitMargin = OldMosaicForm.PaneGripMargin;
             double TotalRatio = 0; // Must be caclulated and total of the count of containers
 
             lock (DockContainers)

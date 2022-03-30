@@ -394,7 +394,7 @@ namespace Nitride
         {
             if (HostDockPane != null)
             {
-                int splitMargin = (Unlocked) ? MosaicForm.PaneGripMargin : 0;
+                int splitMargin = (Unlocked) ? OldMosaicForm.PaneGripMargin : 0;
 
                 if (ShowTab)
                 {

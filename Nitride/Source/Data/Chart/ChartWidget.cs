@@ -323,28 +323,29 @@ namespace Nitride.Chart
                 lock (t.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        for (int i = 0; i < Areas.Count; i++)
-                        {
-                            Area ca = Areas[i];
-                            if (ca.Visible && ca.Enabled)
-                            {
-                                ca.Draw(g);
-                                if (ca.HasXAxisBar)
-                                {
-                                    for (int j = 0; j < IndexCount; j++)
-                                    {
-                                        int x = IndexToPixel(j);
-                                        int y = ca.Bottom;
-                                        g.DrawLine(ca.Theme.EdgePen, x, y, x, y + 1);
+                        var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 
-                                        if (i < Areas.Count - 1)
-                                        {
-                                            y = Areas[i + 1].Top;
-                                            g.DrawLine(ca.Theme.EdgePen, x, y, x, y - 1);
-                                        }
+                        int i = 0;
+                        foreach (var ca in areas)
+                        {
+                            ca.Draw(g);
+                            if (ca.HasXAxisBar)
+                            {
+                                for (int j = 0; j < IndexCount; j++)
+                                {
+                                    int x = IndexToPixel(j);
+                                    int y = ca.Bottom;
+                                    g.DrawLine(ca.Theme.EdgePen, x, y, x, y + 1);
+
+                                    if (i < Areas.Count - 1)
+                                    {
+                                        y = Areas[i + 1].Top;
+                                        g.DrawLine(ca.Theme.EdgePen, x, y, x, y - 1);
                                     }
                                 }
                             }
+
+                            i++;//
                         }
                     }
             }

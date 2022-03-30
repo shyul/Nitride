@@ -50,7 +50,7 @@ namespace Nitride
         /// <summary>
         /// Returns if the BarTable is has no Bars.
         /// </summary>
-        public bool IsEmpty => Count < 1;
+        public virtual bool IsEmpty => Count < 1;
 
         /// <summary>
         /// Returns Last Row's Index

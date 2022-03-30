@@ -6,6 +6,7 @@
 /// 
 /// ***************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -130,12 +131,19 @@ namespace Nitride.Chart
 
         public static void DrawLine(Graphics g, ColorTheme theme, GraphicsPath line, IEnumerable<Point> points, float width = 1, LineType type = LineType.Default)
         {
-            // Drawing the solid background of the path.
-            if (type == LineType.ColorDash)
-                g.DrawPath(theme.EdgePen, line);
+            try
+            {
+                // Drawing the solid background of the path.
+                if (type == LineType.ColorDash)
+                    g.DrawPath(theme.EdgePen, line);
 
-            // Draw the line itself. the line can be dashed.
-            g.DrawPath(theme.ForePen, line);
+                // Draw the line itself. the line can be dashed.
+                g.DrawPath(theme.ForePen, line);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
 
             // Draw the data point dots on top
             if (type == LineType.Dot)

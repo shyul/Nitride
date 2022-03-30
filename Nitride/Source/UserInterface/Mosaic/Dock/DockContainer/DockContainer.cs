@@ -186,7 +186,7 @@ namespace Nitride
         /// <summary>
         /// 
         /// </summary>
-        protected virtual ContextDropMenu Menu { get { return MosaicForm.ContextDropMenu; } }
+        protected virtual ContextDropMenu Menu { get { return OldMosaicForm.ContextDropMenu; } }
 
         /// <summary>
         /// 

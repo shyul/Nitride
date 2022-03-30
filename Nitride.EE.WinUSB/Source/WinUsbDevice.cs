@@ -81,7 +81,9 @@ namespace Nitride.EE.WinUSB
                 }
             }
             else
-                throw new Exception("Device Handle is invalid or Device not found.");
+                Console.WriteLine("Device Not Found");
+                
+               // throw new Exception("Device Handle is invalid or Device not found.");
 
 
         }
@@ -143,31 +145,31 @@ namespace Nitride.EE.WinUSB
             }
         }
 
-        public bool ControlRead(ref byte[] dataStage, ref uint bytesReturned)
+        public bool ControlRead(byte request, ushort value, ref byte[] dataStage, ref uint bytesReturned)
         {
             ushort dataStageLength = Convert.ToUInt16(dataStage.Length);
 
             WINUSB_SETUP_PACKET setupPacket = new()
             {
                 RequestType = 0xC1,
-                Request = 2,
+                Request = request,
                 Index = 0,
                 Length = dataStageLength,
-                Value = 0
+                Value = value
             };
 
             return WinUsb_ControlTransfer(Handle, setupPacket, dataStage, dataStageLength, ref bytesReturned, IntPtr.Zero);
         }
 
-        public bool ControlWrite(ref byte[] dataStage, ref uint bytesReturned, ushort value = 0)
+        public bool ControlWrite(byte request, ushort value, ref byte[] dataStage, ref uint bytesReturned)
         {
             ushort dataStageLength = Convert.ToUInt16(dataStage.Length);
 
             WINUSB_SETUP_PACKET setupPacket = new()
             {
                 RequestType = 0x41,
-                Request = 1,
-                Index = 0,
+                Request = request,
+                Index = 0, //x2125,
                 Length = dataStageLength,
                 Value = value
             };

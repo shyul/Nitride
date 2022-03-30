@@ -38,7 +38,7 @@ namespace Nitride
         #endregion
 
         #region Components
-        public MosaicForm MoForm { get; protected set; }
+        public OldMosaicForm MoForm { get; protected set; }
         public Ribbon Ribbon { get; protected set; }
         protected bool Unlocked => DockCanvas.Unlocked;
         protected bool IsShrink => MoForm.IsRibbonShrink;
@@ -103,7 +103,7 @@ namespace Nitride
                             {
                                 Rectangle tabRect = rt.TabRect;
                                 // RibbonTabContextHost must be recreated 
-                                MosaicForm.ContextPane.Show(MoForm, new RibbonTabContextHost(rt), new Point(Ribbon.Location.X + tabRect.X, Ribbon.Bounds.Bottom));
+                                OldMosaicForm.ContextPane.Show(MoForm, new RibbonTabContextHost(rt), new Point(Ribbon.Location.X + tabRect.X, Ribbon.Bounds.Bottom));
                             }
                             else
                                 rt.Focus();
@@ -121,9 +121,9 @@ namespace Nitride
             if (Parent != null)
             {
                 //Log.Debug("RibbonTabContainer Parent is: " + Parent.GetType().ToString());
-                if ((typeof(MosaicForm)).IsAssignableFrom(Parent.GetType()))
+                if ((typeof(OldMosaicForm)).IsAssignableFrom(Parent.GetType()))
                 {
-                    MoForm = (MosaicForm)Parent;
+                    MoForm = (OldMosaicForm)Parent;
                 }
                 else
                     throw new Exception("RibbonContainer can only be exsiting in Ribbon Parent: " + Parent.GetType().ToString());
@@ -166,8 +166,8 @@ namespace Nitride
                 g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
                 Rectangle tabRect = ActiveTab.TabRect;
-                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, 0), new Point(MosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Left, 0));
-                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(MosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Right, 0), new Point(Width, 0));
+                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, 0), new Point(OldMosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Left, 0));
+                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(OldMosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Right, 0), new Point(Width, 0));
             }
         }
         #endregion

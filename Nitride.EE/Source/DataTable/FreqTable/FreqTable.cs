@@ -78,9 +78,9 @@ namespace Nitride.EE
 
         }
 
-        public void Sort() 
+        public void Sort()
         {
-            lock (DataLockObject) 
+            lock (DataLockObject)
             {
                 var rows = FreqRows.OrderBy(n => n.Frequency).ToList();
 
@@ -102,6 +102,8 @@ namespace Nitride.EE
 
 
         public override int Count => FreqRows.Count;
+
+        public override bool IsEmpty => !FreqRows.Any();
 
         public override void Clear()
         {
@@ -129,7 +131,7 @@ namespace Nitride.EE
 
         public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : FreqRows[i][column];
 
-        public override string GetXAxisLabel(int i) 
+        public override string GetXAxisLabel(int i)
         {
             //return (this[i].Frequency / 1e6).ToString("0.######") + "MHz";
             return this[i].Frequency.ToString();
@@ -138,13 +140,13 @@ namespace Nitride.EE
         public Range<double> GetRange(NumericColumn column, double startFreq, double stopFreq)
         {
             var rows = Rows.Where(n => n.Frequency <= stopFreq && n.Frequency >= startFreq).Select(n => n[column]);
-            return rows.Count() > 0 ? new Range<double>(rows.Min(), rows.Max()) : null;
+            return rows.Any() ? new Range<double>(rows.Min(), rows.Max()) : null;
         }
 
         public Range<double> GetRange(NumericColumn column)
         {
             var rows = Rows.Select(n => n[column]);
-            return rows.Count() > 0 ? new Range<double>(rows.Min(), rows.Max()) : null;
+            return rows.Any() ? new Range<double>(rows.Min(), rows.Max()) : null;
         }
     }
 }

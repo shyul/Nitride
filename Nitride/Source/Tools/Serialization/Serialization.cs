@@ -17,6 +17,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml.XPath;
+using System.Runtime.InteropServices;
 
 namespace Nitride
 {
@@ -204,7 +205,10 @@ namespace Nitride
         public static T DeserializeJson<T>(this byte[] source)
         {
             using MemoryStream stream = new(source);
+            
             DataContractJsonSerializer JsonSer = new(typeof(T));
+
+            Console.WriteLine("Deserializing Json ##");
             return (T)JsonSer.ReadObject(stream);
         }
 
@@ -221,10 +225,35 @@ namespace Nitride
             if (File.Exists(fileName))
                 using (FileStream stream = File.OpenRead(fileName))
                     return DeserializeJson<T>(File.ReadAllBytes(fileName));
-            else
+            else 
+            {
+                Console.WriteLine("DeserializeJsonFile() Unable to find file: " + fileName);
                 return default;
+            }
+         
         }
 
         #endregion Json Data
+
+        public static byte[] SerializeBytes<T>(this T source) where T : notnull
+        {
+            int size = Marshal.SizeOf(source);
+            byte[] bytes = new byte[size];
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(source, ptr, true);
+            Marshal.Copy(ptr, bytes, 0, size);
+            Marshal.FreeHGlobal(ptr);
+            return bytes;
+        }
+
+        public static T DeserializeBytes<T>(this byte[] bytes) where T : notnull 
+        {
+            int size = Marshal.SizeOf(typeof(T));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.Copy(bytes, 0, ptr, size);
+            T res = (T)Marshal.PtrToStructure(ptr, typeof(T));
+            Marshal.FreeHGlobal(ptr);
+            return res;
+        }
     }
 }

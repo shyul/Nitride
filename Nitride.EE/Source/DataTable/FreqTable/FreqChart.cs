@@ -32,7 +32,7 @@ namespace Nitride.EE
             FreqTable = st;
             FreqTable.Status = TableStatus.Loading;
             FreqTable.AddDataConsumer(this);
-            TabName = Name = "Test Chart with Table Here:)";
+            TabName = Name = name;
             /*
             AddArea(MainArea = new OscillatorArea(this, "Main", 0.3f)
             {
@@ -130,7 +130,8 @@ namespace Nitride.EE
 
                             //Console.WriteLine("tickFreqSpan = " + tickFreqSpan);
 
-                            for (int i = StartPt; i < StopPt; i++)
+                            // TODO: Fix THIS!!
+                            for (int i = StartPt; i < Math.Min(FreqTable.Count, StopPt); i++)
                             {
                                 //DateTime time = m_BarTable.IndexToTime(i);
                                 //if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));

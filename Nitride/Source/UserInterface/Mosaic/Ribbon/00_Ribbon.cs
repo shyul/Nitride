@@ -39,7 +39,7 @@ namespace Nitride
 
         #region Components
         private IContainer components = null;
-        public MosaicForm MoForm { get; protected set; }
+        public OldMosaicForm MoForm { get; protected set; }
         public RibbonTabContainer RibbonContainer { get; protected set; }
         public List<TabItem> Tabs => RibbonContainer.Tabs;
         public RibbonTabItem ActiveTab => (RibbonTabItem)RibbonContainer.ActiveTab;
@@ -58,9 +58,9 @@ namespace Nitride
             base.OnParentChanged(e);
             if (Parent != null)
             {
-                if ((typeof(MosaicForm)).IsAssignableFrom(Parent.GetType()))
+                if ((typeof(OldMosaicForm)).IsAssignableFrom(Parent.GetType()))
                 {
-                    MoForm = (MosaicForm)Parent;
+                    MoForm = (OldMosaicForm)Parent;
 
                 }
                 else throw new Exception("Ribbon can only be exsiting in RibbonForm / Parent: " + Parent.GetType().ToString());

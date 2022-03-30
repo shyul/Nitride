@@ -4,7 +4,7 @@
 /// 
 /// ***************************************************************************
 
-namespace Nitride.Chart
+namespace Nitride
 {
     public interface IUid
     {

@@ -48,7 +48,7 @@ namespace Nitride.Chart
 
         public bool IsLogarithmic { get; set; } = false;
 
-
+        public double LogarithmicShiftFactor { get; set; } = 1; // Keep the actual minimum above 1
 
         public double HeightRatio { get; set; } = 1;
 
@@ -58,12 +58,25 @@ namespace Nitride.Chart
 
         public Dictionary<double, (Importance Importance, string Label)> TickList { get; } = new Dictionary<double, (Importance Importance, string Label)>();
 
-
-
         protected virtual double GetPixelRatio(double val)
         {
             if (Range.Maximum > Range.Minimum)
-                return (val - Range.Minimum) / Delta;
+            {
+                if (IsLogarithmic && val != Range.Minimum)
+                {
+                    //val *= LogarithmicShiftFactor;
+                    double ratio = Math.Log10(LogarithmicShiftFactor * (val - Range.Minimum)) / Math.Log10(LogarithmicShiftFactor * Delta);
+
+                    //double ratio = Math.Log10(val - Range.Minimum) / Math.Log10(Delta);
+
+                    //if (val < 1)
+                    // Console.WriteLine("log ratio = " + ratio + "; Max = " + Range.Maximum + "; Min = " + Range.Minimum + "; val = " + val);
+
+                    return ratio;
+                }
+                else
+                    return (val - Range.Minimum) / Delta;
+            }
             else
                 return 0;
         }
@@ -77,13 +90,29 @@ namespace Nitride.Chart
             };
         }
 
+
         public virtual double PixelToValue(int pix)
         {
+            double ratio = Align switch
+            {
+                AlignType.Left => (pix - Pixel_Near) * 1.0D / Pixel_Count,
+                _ => (Pixel_Far - pix) * 1.0D / Pixel_Count,
+            };
+
+            if (IsLogarithmic)
+            {
+                return (Range.Minimum + Math.Pow(10, ratio * Math.Log10(LogarithmicShiftFactor * Delta))) / LogarithmicShiftFactor;
+            }
+            else
+                return Range.Minimum + (ratio * Delta);
+
+            /*
             return Align switch
             {
-                AlignType.Left => Range.Minimum + ((pix - Pixel_Near) * Delta) / Pixel_Count,
-                _ => Range.Minimum + ((Pixel_Far - pix) * Delta) / Pixel_Count,
-            };
+                AlignType.Left => Range.Minimum + ((pix - Pixel_Near) * Delta / Pixel_Count),
+                _ => Range.Minimum + ((Pixel_Far - pix) * Delta / Pixel_Count),
+            };*/
+
         }
 
         public virtual string PixelToString(int pix) => PixelToValue(pix).ToSINumberString("G4").String;

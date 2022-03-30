@@ -304,7 +304,7 @@ namespace Nitride
         /// </summary>
         public override void Coordinate()
         {
-            int splitMargin = MosaicForm.PaneGripMargin;
+            int splitMargin = OldMosaicForm.PaneGripMargin;
             if (SubPane != null)
             {
                 if (HasSizeGrip)

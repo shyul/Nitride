@@ -56,6 +56,11 @@ namespace Nitride.EE
                 sb.AppendLine(line);
             }
 
+            if (fileName.Split('.') is string[] fields && fields.Length == 2 && fields[1].Length == 3 && fields[1].StartsWith('s') && fields[1].EndsWith('p'))
+            {
+                fileName = fields[0];
+            }
+
             sb.ToFile(fileName + ".s" + PortCount + "p");
         }
 

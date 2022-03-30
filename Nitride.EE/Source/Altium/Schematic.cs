@@ -26,6 +26,8 @@ namespace Nitride.EE
 
         public bool IsLowActive { get; set; } = false;
 
+        public bool IsPower { get; set; } = false;
+
         public PinType Type { get; set; } = PinType.Passive;
     }
 

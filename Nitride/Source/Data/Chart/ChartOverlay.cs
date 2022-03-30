@@ -55,27 +55,75 @@ namespace Nitride.Chart
                     Graphics g = pe.Graphics;
                     g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
+                    var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
+
                     // Draw Legends
                     // ==================================
-                    foreach (Area ca in Areas)
+                    foreach (Area ca in areas)
                     {
-                        if (ca.Enabled && ca.Visible)
-                        {
-                            using SolidBrush backBrush = new(Chart.Theme.FillColor.Opaque(220));
-                            g.FillPath(backBrush, ca.LegendBackgroundPath);
+                        using SolidBrush backBrush = new(Chart.Theme.FillColor.Opaque(220));
+                        g.FillPath(backBrush, ca.LegendBackgroundPath);
 
-                            foreach (var lg in ca.Legends.Values)
-                                lg.Draw(g, Chart.Table);
-                        }
+                        foreach (var lg in ca.Legends.Values)
+                            lg.Draw(g, Chart.Table);
                     }
 
                     if (Chart.HoverIndex > -1)
                     {
                         // Draw cursor on X Axis
                         int x = Chart.SelectedIndexPixel;
-                        g.DrawLine(Main.Theme.ActiveCursor.EdgePen, new Point(x, ChartBounds.Top), new Point(x, Areas.Last().Bottom));
+                        g.DrawLine(Main.Theme.ActiveCursor.EdgePen, new Point(x, ChartBounds.Top), new Point(x, areas.Last().Bottom));
 
                         Font tagFont = Chart.Style[Importance.Major].Font;
+
+                        int i = 0;
+                        foreach (var ca in areas)
+                        {
+                            if (ca.HasXAxisBar)
+                            {
+                                Point tagLocation = new(x, ca.TimeLabelY);
+                                if (i < areas.Count() - 1)
+                                {
+                                    using GraphicsPath gp = ShapeTool.UpDownTag(tagLocation, new Size(85, Chart.AxisXLabelHeight - 2), new Size(8, 4), 1);
+                                    g.FillPath(Main.Theme.ActiveCursor.FillBrush, gp);
+                                    g.DrawPath(Main.Theme.ActiveCursor.EdgePen, gp);
+                                }
+                                else
+                                {
+                                    using GraphicsPath gp = ShapeTool.UpTag(tagLocation, new Size(85, Chart.AxisXLabelHeight - 2), new Size(8, 4), 1);
+                                    g.FillPath(Main.Theme.ActiveCursor.FillBrush, gp);
+                                    g.DrawPath(Main.Theme.ActiveCursor.EdgePen, gp);
+                                }
+
+                                g.DrawString(Chart[Chart.HoverIndex], tagFont, Main.Theme.ActiveCursor.EdgeBrush, tagLocation, AppTheme.TextAlignCenter);
+                            }
+
+                            // Draw cursor belongs to each series
+                            ca.DrawCursor(g, Chart.Table);
+
+                            // Draw cursor on Y Axis
+                            if (ca.Bounds.Contains(MousePoint))
+                            {
+                                Point rightCursorPt = new(ca.RightCursorX, MousePoint.Y);
+                                g.DrawLine(Main.Theme.ActiveCursor.EdgePen, new Point(ChartBounds.Left, MousePoint.Y), rightCursorPt);
+
+                                ContinuousAxis axis = ca.AxisY(AlignType.Right);
+                                if (axis.Pixel_Far > MousePoint.Y && MousePoint.Y > axis.Pixel_Near && axis.Delta > 0)
+                                {
+                                    g.DrawLeftCursor(axis.PixelToString(MousePoint.Y), tagFont, Main.Theme.ActiveCursor, rightCursorPt, 16, Chart.RightYAxisLabelWidth);
+                                }
+
+                                axis = ca.AxisY(AlignType.Left);
+                                if (axis.Pixel_Far > MousePoint.Y && MousePoint.Y > axis.Pixel_Near && axis.Delta > 0)
+                                {
+                                    Point leftCursorPt = new(ca.LeftCursorX, MousePoint.Y);
+                                    g.DrawRightCursor(axis.PixelToString(MousePoint.Y), tagFont, Main.Theme.ActiveCursor, leftCursorPt, 16, Chart.LeftYAxisLabelWidth);
+                                }
+                            }
+                            i++;
+                        }
+
+                        /*
                         for (int i = 0; i < Areas.Count; i++)
                         {
                             Area ca = Areas.ElementAt(i); // Areas[i];
@@ -124,6 +172,8 @@ namespace Nitride.Chart
                                 }
                             }
                         }
+
+                        */
                     }
                 }
         }

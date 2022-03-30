@@ -108,7 +108,7 @@ namespace Nitride.EE
                 Complex z12 = row[this[1, 2]];
                 Complex z21 = row[this[2, 1]];
                 Complex z22 = row[this[2, 2]];
-                
+
                 Complex v1 = row[V1];
                 Complex i1 = row[I1];
 
@@ -116,8 +116,8 @@ namespace Nitride.EE
                 row[V2] = (z21 * i1) + (z22 * i2);
             }
         }
-        /*
-        public void CalculatePort2VI(FreqTable ft, NumericColumn V1, NumericColumn I1, ComplexColumn V2, ComplexColumn I2)
+
+        public void CalculatePort2VI_ReverseP2Current(FreqTable ft, ComplexColumn V1, ComplexColumn I1, ComplexColumn V2, ComplexColumn I2)
         {
             foreach (var row in ft.Rows)
             {
@@ -126,13 +126,14 @@ namespace Nitride.EE
                 Complex z21 = row[this[2, 1]];
                 Complex z22 = row[this[2, 2]];
 
-                double v1 = row[V1];
-                double i1 = row[I1];
+                Complex v1 = row[V1];
+                Complex i1 = row[I1];
 
-                Complex i2 = row[I2] = (v1 - (z11 * i1)) / z12;
+                Complex i2 = (v1 - (z11 * i1)) / z12;
                 row[V2] = (z21 * i1) + (z22 * i2);
+                row[I2] = 0 - i2;
             }
-        }*/
+        }
 
         public void CalculatePort1VI(FreqTable ft, ComplexColumn V1, ComplexColumn I1, ComplexColumn V2, ComplexColumn I2)
         {
@@ -150,8 +151,7 @@ namespace Nitride.EE
                 row[V1] = (z11 * i1) + (z12 * i2);
             }
         }
-        /*
-        public void CalculatePort1VI(FreqTable ft, ComplexColumn V1, ComplexColumn I1, NumericColumn V2, NumericColumn I2)
+        public void CalculatePort1VI_ReverseP2Current(FreqTable ft, ComplexColumn V1, ComplexColumn I1, ComplexColumn V2, ComplexColumn I2)
         {
             foreach (var row in ft.Rows)
             {
@@ -160,12 +160,12 @@ namespace Nitride.EE
                 Complex z21 = row[this[2, 1]];
                 Complex z22 = row[this[2, 2]];
 
-                double v2 = row[V2];
-                double i2 = row[I2];
+                Complex v2 = row[V2];
+                Complex i2 = 0 - row[I2];
 
                 Complex i1 = row[I1] = (v2 - (z22 * i2)) / z21;
                 row[V1] = (z11 * i1) + (z12 * i2);
             }
-        }*/
+        }
     }
 }
