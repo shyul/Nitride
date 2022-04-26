@@ -177,6 +177,24 @@ namespace Nitride.EE.WinUSB
             return WinUsb_ControlTransfer(Handle, setupPacket, dataStage, dataStageLength, ref bytesReturned, IntPtr.Zero);
         }
 
+        private readonly byte[] EmptyBuffer = Array.Empty<byte>();
+
+        public bool ControlWrite(byte request, ushort value)
+        {
+            uint length_returned = 0;
+
+            WINUSB_SETUP_PACKET setupPacket = new()
+            {
+                RequestType = 0x41,
+                Request = request,
+                Index = 0, //x2125,
+                Length = 0,
+                Value = value
+            };
+
+            return WinUsb_ControlTransfer(Handle, setupPacket, EmptyBuffer, 0, ref length_returned, IntPtr.Zero);
+        }
+
         public void PrintInfo()
         {
             foreach (var iface in Interfaces)

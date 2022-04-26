@@ -46,6 +46,12 @@ namespace Nitride.Chart
 
         public double Delta => Range.Maximum - Range.Minimum;
 
+        public bool FixedRange { get; set; } = false;
+
+        public double FixedMinimum { get; set; } = 0;
+
+        public double FixedMaximum { get; set; } = 0;
+
         public bool IsLogarithmic { get; set; } = false;
 
         public double LogarithmicShiftFactor { get; set; } = 1; // Keep the actual minimum above 1
@@ -204,6 +210,11 @@ namespace Nitride.Chart
             {
                 if (Range.Minimum > double.MinValue + 1) Range.Insert(Range.Minimum - 1);
                 if (Range.Maximum < double.MaxValue - 1) Range.Insert(Range.Minimum + 1);
+            }
+
+            if (FixedRange) 
+            {
+                Range.Set(FixedMinimum, FixedMaximum);
             }
 
             switch (Align)

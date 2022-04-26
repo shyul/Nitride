@@ -33,14 +33,6 @@ namespace Nitride.EE
             FreqTable.Status = TableStatus.Loading;
             FreqTable.AddDataConsumer(this);
             TabName = Name = name;
-            /*
-            AddArea(MainArea = new OscillatorArea(this, "Main", 0.3f)
-            {
-                HasXAxisBar = true,
-                Reference = 0,
-                FixedTickStep_Right = 10,
-            });*/
-
 
             AddArea(MainArea = new Area(this, "Main", 0.3f)
             {
@@ -48,7 +40,12 @@ namespace Nitride.EE
                 HasXAxisBar = true,
             });
 
-            MainArea.AxisY(AlignType.Right).TickStep = 10;
+            ContinuousAxis MainAxis = MainArea.AxisY(AlignType.Right);
+
+            MainAxis.TickStep = 10;
+            MainAxis.FixedRange = true;
+            MainAxis.FixedMinimum = -120;
+            MainAxis.FixedMaximum = 0;
 
             EnableChartShift = false;
 
