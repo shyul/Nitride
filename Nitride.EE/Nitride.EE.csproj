@@ -1,33 +1,124 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>x64</Platforms>
-    <Authors>Xu Li</Authors>
-    <Company>Xu Li</Company>
-    <Product>Nitride.EE C# Common Library</Product>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{8082B9AD-E7F5-4C3A-9B94-F42FD537605C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nitride.EE</RootNamespace>
+    <AssemblyName>Nitride.EE</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Nitride\Nitride.csproj" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Altium\FPGA\Altera.cs" />
+    <Compile Include="Source\Altium\FPGA\FPGA.cs" />
+    <Compile Include="Source\Altium\FPGA\FPGABank.cs" />
+    <Compile Include="Source\Altium\FPGA\FPGAPin.cs" />
+    <Compile Include="Source\Altium\Schematic.cs" />
+    <Compile Include="Source\DataTable\ChronoTable\ChronoChart.cs" />
+    <Compile Include="Source\DataTable\ChronoTable\ChronoRow.cs" />
+    <Compile Include="Source\DataTable\ChronoTable\ChronoTable.cs" />
+    <Compile Include="Source\DataTable\FreqTable\FreqChart.cs" />
+    <Compile Include="Source\DataTable\FreqTable\FreqRow.cs" />
+    <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
+    <Compile Include="Source\DataTable\ParamTable\ComplexFormat.cs" />
+    <Compile Include="Source\DataTable\ParamTable\Parameter.cs" />
+    <Compile Include="Source\DataTable\ParamTable\S_Parameter.cs" />
+    <Compile Include="Source\DataTable\ParamTable\Z_Parameter.cs" />
+    <Compile Include="Source\FFT\FFT.cs" />
+    <Compile Include="Source\FFT\Waveform.cs" />
+    <Compile Include="Source\FFT\WindowFunctions.cs" />
+    <Compile Include="Source\Hardware\Converters\IFiniteADC.cs" />
+    <Compile Include="Source\Hardware\Converters\IFiniteDAC.cs" />
+    <Compile Include="Source\Hardware\Converters\IStreamADC.cs" />
+    <Compile Include="Source\Hardware\Converters\IStreamDAC.cs" />
+    <Compile Include="Source\Hardware\Instruments\FunctionGenerator\FunctionGeneratorArbitraryConfig.cs" />
+    <Compile Include="Source\Hardware\Instruments\FunctionGenerator\FunctionGeneratorChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\FunctionGenerator\FunctionGeneratorConfig.cs" />
+    <Compile Include="Source\Hardware\Instruments\FunctionGenerator\IFunctionGenerator.cs" />
+    <Compile Include="Source\Hardware\Instruments\Multimeter\IMultimeter.cs" />
+    <Compile Include="Source\Hardware\Instruments\Multimeter\MultimeterChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\Multimeter\MultimeterConfig.cs" />
+    <Compile Include="Source\Hardware\Instruments\NetworkAnalyzer\INetworkAnalyzer.cs" />
+    <Compile Include="Source\Hardware\Instruments\NetworkAnalyzer\NetworkAnalyzerPort.cs" />
+    <Compile Include="Source\Hardware\Instruments\Oscilloscope\IOscilloscope.cs" />
+    <Compile Include="Source\Hardware\Instruments\Oscilloscope\OscilloscopeAnalogChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\Oscilloscope\OscilloscopeAnalogProbe.cs" />
+    <Compile Include="Source\Hardware\Instruments\Oscilloscope\OscilloscopeChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\Oscilloscope\OscilloscopeDigitalChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\PowerMeter\IPowerMeter.cs" />
+    <Compile Include="Source\Hardware\Instruments\PowerMeter\PowerMeterChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\PowerSupply\IPowerSupply.cs" />
+    <Compile Include="Source\Hardware\Instruments\PowerSupply\PowerSupplyChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\PowerSupply\PowerSupplyMode.cs" />
+    <Compile Include="Source\Hardware\Instruments\SignalGenerator\ISignalGenerator.cs" />
+    <Compile Include="Source\Hardware\Instruments\SignalGenerator\SignalGeneratorChannel.cs" />
+    <Compile Include="Source\Hardware\Instruments\SpectrumAnalyzer\ISpectrumAnalyzer.cs" />
+    <Compile Include="Source\Hardware\Instruments\SpectrumAnalyzer\SpectrumAnalyzerChannel.cs" />
+    <Compile Include="Source\Hardware\IO\AnalogCoupling.cs" />
+    <Compile Include="Source\Hardware\IO\InputPin.cs" />
+    <Compile Include="Source\Hardware\IO\ParallelPort.cs" />
+    <Compile Include="Source\Hardware\IO\Serial\I2C.cs" />
+    <Compile Include="Source\Hardware\IO\Serial\ISpiMaster.cs" />
+    <Compile Include="Source\Hardware\IO\TriggerEdge.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\IAnalogPin.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\IDigitalPin.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\IPort.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\ISerialDataInput.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\ITriggerSource.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IHardwareDevice.cs" />
+    <Compile Include="Source\Math\Calculate.cs" />
+    <Compile Include="Source\Math\Decade.cs" />
+    <Compile Include="Source\Math\Interpolation.cs" />
+    <Compile Include="Source\Signal\SignalTool.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\Nitride\Nitride.csproj">
+      <Project>{1a45b271-a52b-4584-9e71-0d92d5f78d48}</Project>
+      <Name>Nitride</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

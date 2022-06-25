@@ -37,7 +37,7 @@ namespace Nitride.EE
             get => column is ComplexColumn ic && ComplexColumnsLUT.ContainsKey(ic) ? ComplexColumnsLUT[ic] : double.NaN;
             set
             {
-                if (Complex.IsNaN(value) && ComplexColumnsLUT.ContainsKey(column))
+                if (value == double.NaN && ComplexColumnsLUT.ContainsKey(column))
                     ComplexColumnsLUT.Remove(column);
                 else
                     ComplexColumnsLUT[column] = value;

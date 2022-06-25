@@ -140,7 +140,7 @@ namespace Nitride.EE
             double freqUnit = 0;
             int PortCount = 0;
 
-            if (suffix.StartsWith('s') && suffix.EndsWith('p'))
+            if (suffix.StartsWith("s") && suffix.EndsWith("p"))
             {
                 PortCount = suffix.TrimStart('s').TrimEnd('p').ToInt32(-1);
             }
@@ -159,7 +159,7 @@ namespace Nitride.EE
 
                     if (line.Length > 0)// && (!line.StartsWith('!')))
                     {
-                        if (line.StartsWith('#'))
+                        if (line.StartsWith("#"))
                         {
                             while (line.Contains("  ")) line = line.Replace("  ", " ");
                             Console.WriteLine("Header line: " + line);
@@ -258,7 +258,7 @@ namespace Nitride.EE
             FreqTable ft = new();
             Parameter pr = null;
 
-            if (suffix.StartsWith('s') && suffix.EndsWith('p'))
+            if (suffix.StartsWith("s") && suffix.EndsWith("p"))
             {
                 PortCount = suffix.TrimStart('s').TrimEnd('p').ToInt32(-1);
             }
@@ -276,7 +276,7 @@ namespace Nitride.EE
                     string line = sr.ReadLine().Split('!').First().Trim();
                     if (line.Length > 0)// && (!line.StartsWith('!')))
                     {
-                        if (line.StartsWith('#'))
+                        if (line.StartsWith("#"))
                         {
                             while (line.Contains("  ")) line = line.Replace("  ", " ");
                             Console.WriteLine("Header line: " + line);

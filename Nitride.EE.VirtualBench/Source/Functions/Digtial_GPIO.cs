@@ -13,7 +13,7 @@ namespace Nitride.EE.VirtualBench
 
         #region DLL Export
 
-        private IntPtr NiDIO_Handle;
+        //private IntPtr NiDIO_Handle;
 
         [DllImport(DLL_NAME, EntryPoint = "niVB_Dig_Initialize", CallingConvention = CallingConvention.Cdecl)]
         private static extern int NiDig_Initialize(

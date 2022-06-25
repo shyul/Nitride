@@ -13,7 +13,7 @@ using System.Runtime.Serialization;
 
 namespace Nitride.Business
 {
-    public class Item : IOrdered, IObject
+    public class BusinessItem : IOrdered, IObject
     {
         public string Name { get; set; }
 
@@ -32,7 +32,7 @@ namespace Nitride.Business
 
 
 
-    public abstract class Entity : Item
+    public abstract class Entity : BusinessItem
     {
         public Dictionary<string, string> Ids { get; } = new();
 
@@ -106,7 +106,7 @@ namespace Nitride.Business
         public bool Equals(Person other) => Person is Person p && p.Equals(other);
     }
 
-    public class Group : Item
+    public class Group : BusinessItem
     {
 
         public List<Employee> Members { get; } = new();
@@ -153,7 +153,7 @@ namespace Nitride.Business
 
 
 
-    public class Part : Item
+    public class Part : BusinessItem
     {
 
 

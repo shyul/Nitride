@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.IO;
-using Nitride;
+ using Nitride;
 
 namespace Nitride.EE.FTDI
 {

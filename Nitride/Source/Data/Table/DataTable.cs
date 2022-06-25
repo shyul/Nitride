@@ -25,12 +25,14 @@ namespace Nitride
             {
                 foreach (IDataRenderer idr in DataConsumers)
                 {
-                    RemoveDataConsumer(idr);
+                    //RemoveDataConsumer(idr);
                     if (idr is ChartWidget bc)
                         bc.Close();
-                    else
-                        RemoveDataConsumer(idr);
+                    //else
+                       // RemoveDataConsumer(idr);
                 }
+
+                DataConsumers.Clear();
             }
 
             Clear();

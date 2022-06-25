@@ -19,10 +19,10 @@ namespace Nitride.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Nitride.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Nitride.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Nitride.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Area_16 {
+        internal static System.Drawing.Bitmap Area_16 {
             get {
                 object obj = ResourceManager.GetObject("Area_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Area_24 {
+        internal static System.Drawing.Bitmap Area_24 {
             get {
                 object obj = ResourceManager.GetObject("Area_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Area_32 {
+        internal static System.Drawing.Bitmap Area_32 {
             get {
                 object obj = ResourceManager.GetObject("Area_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_045_16 {
+        internal static System.Drawing.Bitmap Arrow_045_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_045_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +103,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_135_16 {
+        internal static System.Drawing.Bitmap Arrow_135_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_135_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +113,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_225_16 {
+        internal static System.Drawing.Bitmap Arrow_225_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_225_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -123,7 +123,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_315_16 {
+        internal static System.Drawing.Bitmap Arrow_315_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_315_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -133,7 +133,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Down_16 {
+        internal static System.Drawing.Bitmap Arrow_Down_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Down_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -143,7 +143,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Down_24 {
+        internal static System.Drawing.Bitmap Arrow_Down_24 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Down_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -153,7 +153,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Down_32 {
+        internal static System.Drawing.Bitmap Arrow_Down_32 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Down_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -163,7 +163,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Left_16 {
+        internal static System.Drawing.Bitmap Arrow_Left_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Left_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -173,7 +173,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Left_24 {
+        internal static System.Drawing.Bitmap Arrow_Left_24 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Left_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -183,7 +183,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Left_32 {
+        internal static System.Drawing.Bitmap Arrow_Left_32 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Left_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -193,7 +193,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Right_16 {
+        internal static System.Drawing.Bitmap Arrow_Right_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Right_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -203,7 +203,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Right_24 {
+        internal static System.Drawing.Bitmap Arrow_Right_24 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Right_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -213,7 +213,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Right_32 {
+        internal static System.Drawing.Bitmap Arrow_Right_32 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Right_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -223,7 +223,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Up_16 {
+        internal static System.Drawing.Bitmap Arrow_Up_16 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Up_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -233,7 +233,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Up_24 {
+        internal static System.Drawing.Bitmap Arrow_Up_24 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Up_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -243,7 +243,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Arrow_Up_32 {
+        internal static System.Drawing.Bitmap Arrow_Up_32 {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Up_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -253,7 +253,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Battery_24 {
+        internal static System.Drawing.Bitmap Battery_24 {
             get {
                 object obj = ResourceManager.GetObject("Battery_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -263,7 +263,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Battery_Charging_24 {
+        internal static System.Drawing.Bitmap Battery_Charging_24 {
             get {
                 object obj = ResourceManager.GetObject("Battery_Charging_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -273,7 +273,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Battery_Empty_24 {
+        internal static System.Drawing.Bitmap Battery_Empty_24 {
             get {
                 object obj = ResourceManager.GetObject("Battery_Empty_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -283,7 +283,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Battery_Full_24 {
+        internal static System.Drawing.Bitmap Battery_Full_24 {
             get {
                 object obj = ResourceManager.GetObject("Battery_Full_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -293,7 +293,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Battery_Low_24 {
+        internal static System.Drawing.Bitmap Battery_Low_24 {
             get {
                 object obj = ResourceManager.GetObject("Battery_Low_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -303,7 +303,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Battery_Plug_24 {
+        internal static System.Drawing.Bitmap Battery_Plug_24 {
             get {
                 object obj = ResourceManager.GetObject("Battery_Plug_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -313,7 +313,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bell_24 {
+        internal static System.Drawing.Bitmap Bell_24 {
             get {
                 object obj = ResourceManager.GetObject("Bell_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -323,7 +323,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Blank_16 {
+        internal static System.Drawing.Bitmap Blank_16 {
             get {
                 object obj = ResourceManager.GetObject("Blank_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -333,7 +333,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Blank_24 {
+        internal static System.Drawing.Bitmap Blank_24 {
             get {
                 object obj = ResourceManager.GetObject("Blank_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -343,7 +343,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Blank_32 {
+        internal static System.Drawing.Bitmap Blank_32 {
             get {
                 object obj = ResourceManager.GetObject("Blank_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -353,7 +353,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Book_Blue_24 {
+        internal static System.Drawing.Bitmap Book_Blue_24 {
             get {
                 object obj = ResourceManager.GetObject("Book_Blue_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -363,7 +363,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Book_Brown_24 {
+        internal static System.Drawing.Bitmap Book_Brown_24 {
             get {
                 object obj = ResourceManager.GetObject("Book_Brown_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -373,7 +373,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bookmark_16 {
+        internal static System.Drawing.Bitmap Bookmark_16 {
             get {
                 object obj = ResourceManager.GetObject("Bookmark_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -383,7 +383,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bookmark_24 {
+        internal static System.Drawing.Bitmap Bookmark_24 {
             get {
                 object obj = ResourceManager.GetObject("Bookmark_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -393,7 +393,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bookmark_32 {
+        internal static System.Drawing.Bitmap Bookmark_32 {
             get {
                 object obj = ResourceManager.GetObject("Bookmark_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -403,7 +403,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bottle_16 {
+        internal static System.Drawing.Bitmap Bottle_16 {
             get {
                 object obj = ResourceManager.GetObject("Bottle_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -413,7 +413,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bottle_24 {
+        internal static System.Drawing.Bitmap Bottle_24 {
             get {
                 object obj = ResourceManager.GetObject("Bottle_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -423,7 +423,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bottle_Label_16 {
+        internal static System.Drawing.Bitmap Bottle_Label_16 {
             get {
                 object obj = ResourceManager.GetObject("Bottle_Label_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -433,7 +433,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Bottle_Label_24 {
+        internal static System.Drawing.Bitmap Bottle_Label_24 {
             get {
                 object obj = ResourceManager.GetObject("Bottle_Label_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -443,7 +443,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Box_16 {
+        internal static System.Drawing.Bitmap Box_16 {
             get {
                 object obj = ResourceManager.GetObject("Box_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -453,7 +453,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Box_24 {
+        internal static System.Drawing.Bitmap Box_24 {
             get {
                 object obj = ResourceManager.GetObject("Box_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -463,7 +463,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Calculator_16 {
+        internal static System.Drawing.Bitmap Calculator_16 {
             get {
                 object obj = ResourceManager.GetObject("Calculator_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -473,7 +473,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Calculator_24 {
+        internal static System.Drawing.Bitmap Calculator_24 {
             get {
                 object obj = ResourceManager.GetObject("Calculator_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -483,7 +483,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Calendar_16 {
+        internal static System.Drawing.Bitmap Calendar_16 {
             get {
                 object obj = ResourceManager.GetObject("Calendar_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -493,7 +493,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Calendar_24 {
+        internal static System.Drawing.Bitmap Calendar_24 {
             get {
                 object obj = ResourceManager.GetObject("Calendar_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -503,7 +503,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Calendar_32 {
+        internal static System.Drawing.Bitmap Calendar_32 {
             get {
                 object obj = ResourceManager.GetObject("Calendar_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -513,7 +513,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_ArrowDown {
+        internal static System.Drawing.Bitmap Caption_ArrowDown {
             get {
                 object obj = ResourceManager.GetObject("Caption_ArrowDown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -523,7 +523,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_ArrowLeft {
+        internal static System.Drawing.Bitmap Caption_ArrowLeft {
             get {
                 object obj = ResourceManager.GetObject("Caption_ArrowLeft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -533,7 +533,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_ArrowRight {
+        internal static System.Drawing.Bitmap Caption_ArrowRight {
             get {
                 object obj = ResourceManager.GetObject("Caption_ArrowRight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -543,7 +543,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_ArrowUp {
+        internal static System.Drawing.Bitmap Caption_ArrowUp {
             get {
                 object obj = ResourceManager.GetObject("Caption_ArrowUp", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -553,7 +553,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_Bars {
+        internal static System.Drawing.Bitmap Caption_Bars {
             get {
                 object obj = ResourceManager.GetObject("Caption_Bars", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -563,7 +563,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_Close {
+        internal static System.Drawing.Bitmap Caption_Close {
             get {
                 object obj = ResourceManager.GetObject("Caption_Close", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -573,7 +573,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_Dot {
+        internal static System.Drawing.Bitmap Caption_Dot {
             get {
                 object obj = ResourceManager.GetObject("Caption_Dot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -583,7 +583,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_DotPointDown {
+        internal static System.Drawing.Bitmap Caption_DotPointDown {
             get {
                 object obj = ResourceManager.GetObject("Caption_DotPointDown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -593,7 +593,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_DotPointUp {
+        internal static System.Drawing.Bitmap Caption_DotPointUp {
             get {
                 object obj = ResourceManager.GetObject("Caption_DotPointUp", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -603,7 +603,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_Maximize {
+        internal static System.Drawing.Bitmap Caption_Maximize {
             get {
                 object obj = ResourceManager.GetObject("Caption_Maximize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -613,7 +613,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_Minimize {
+        internal static System.Drawing.Bitmap Caption_Minimize {
             get {
                 object obj = ResourceManager.GetObject("Caption_Minimize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -623,7 +623,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PinSet {
+        internal static System.Drawing.Bitmap Caption_PinSet {
             get {
                 object obj = ResourceManager.GetObject("Caption_PinSet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -633,7 +633,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PinUnset {
+        internal static System.Drawing.Bitmap Caption_PinUnset {
             get {
                 object obj = ResourceManager.GetObject("Caption_PinUnset", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -643,7 +643,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointDown {
+        internal static System.Drawing.Bitmap Caption_PointDown {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointDown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -653,7 +653,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointLeft {
+        internal static System.Drawing.Bitmap Caption_PointLeft {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointLeft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -663,7 +663,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointPlusDown {
+        internal static System.Drawing.Bitmap Caption_PointPlusDown {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointPlusDown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -673,7 +673,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointPlusLeft {
+        internal static System.Drawing.Bitmap Caption_PointPlusLeft {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointPlusLeft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -683,7 +683,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointPlusRight {
+        internal static System.Drawing.Bitmap Caption_PointPlusRight {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointPlusRight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -693,7 +693,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointPlusUp {
+        internal static System.Drawing.Bitmap Caption_PointPlusUp {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointPlusUp", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -703,7 +703,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointRight {
+        internal static System.Drawing.Bitmap Caption_PointRight {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointRight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -713,7 +713,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_PointUp {
+        internal static System.Drawing.Bitmap Caption_PointUp {
             get {
                 object obj = ResourceManager.GetObject("Caption_PointUp", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -723,7 +723,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_Question {
+        internal static System.Drawing.Bitmap Caption_Question {
             get {
                 object obj = ResourceManager.GetObject("Caption_Question", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -733,7 +733,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Caption_RestoreNormal {
+        internal static System.Drawing.Bitmap Caption_RestoreNormal {
             get {
                 object obj = ResourceManager.GetObject("Caption_RestoreNormal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -743,7 +743,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Card_24 {
+        internal static System.Drawing.Bitmap Card_24 {
             get {
                 object obj = ResourceManager.GetObject("Card_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -753,7 +753,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Card_32 {
+        internal static System.Drawing.Bitmap Card_32 {
             get {
                 object obj = ResourceManager.GetObject("Card_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -763,7 +763,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Card_Id_24 {
+        internal static System.Drawing.Bitmap Card_Id_24 {
             get {
                 object obj = ResourceManager.GetObject("Card_Id_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -773,7 +773,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Card_Id_32 {
+        internal static System.Drawing.Bitmap Card_Id_32 {
             get {
                 object obj = ResourceManager.GetObject("Card_Id_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -783,7 +783,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Categories_16 {
+        internal static System.Drawing.Bitmap Categories_16 {
             get {
                 object obj = ResourceManager.GetObject("Categories_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -793,7 +793,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Category_16 {
+        internal static System.Drawing.Bitmap Category_16 {
             get {
                 object obj = ResourceManager.GetObject("Category_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -803,7 +803,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Circles_16 {
+        internal static System.Drawing.Bitmap Circles_16 {
             get {
                 object obj = ResourceManager.GetObject("Circles_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -813,7 +813,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Copy_16 {
+        internal static System.Drawing.Bitmap Clip_Copy_16 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Copy_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -823,7 +823,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Copy_24 {
+        internal static System.Drawing.Bitmap Clip_Copy_24 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Copy_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -833,7 +833,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Copy_32 {
+        internal static System.Drawing.Bitmap Clip_Copy_32 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Copy_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -843,7 +843,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Cut_16 {
+        internal static System.Drawing.Bitmap Clip_Cut_16 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Cut_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -853,7 +853,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Cut_24 {
+        internal static System.Drawing.Bitmap Clip_Cut_24 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Cut_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -863,7 +863,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Cut_32 {
+        internal static System.Drawing.Bitmap Clip_Cut_32 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Cut_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -873,7 +873,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Cut_Blue_24 {
+        internal static System.Drawing.Bitmap Clip_Cut_Blue_24 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Cut_Blue_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -883,7 +883,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Paste_16 {
+        internal static System.Drawing.Bitmap Clip_Paste_16 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Paste_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -893,7 +893,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Paste_24 {
+        internal static System.Drawing.Bitmap Clip_Paste_24 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Paste_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -903,7 +903,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clip_Paste_32 {
+        internal static System.Drawing.Bitmap Clip_Paste_32 {
             get {
                 object obj = ResourceManager.GetObject("Clip_Paste_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -913,7 +913,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clock_24 {
+        internal static System.Drawing.Bitmap Clock_24 {
             get {
                 object obj = ResourceManager.GetObject("Clock_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -923,7 +923,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Clock_32 {
+        internal static System.Drawing.Bitmap Clock_32 {
             get {
                 object obj = ResourceManager.GetObject("Clock_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -933,7 +933,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_16 {
+        internal static System.Drawing.Bitmap Color_16 {
             get {
                 object obj = ResourceManager.GetObject("Color_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -943,7 +943,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_24 {
+        internal static System.Drawing.Bitmap Color_24 {
             get {
                 object obj = ResourceManager.GetObject("Color_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -953,7 +953,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_32 {
+        internal static System.Drawing.Bitmap Color_32 {
             get {
                 object obj = ResourceManager.GetObject("Color_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -963,7 +963,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_Picker_24 {
+        internal static System.Drawing.Bitmap Color_Picker_24 {
             get {
                 object obj = ResourceManager.GetObject("Color_Picker_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -973,7 +973,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_Swatch_16 {
+        internal static System.Drawing.Bitmap Color_Swatch_16 {
             get {
                 object obj = ResourceManager.GetObject("Color_Swatch_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -983,7 +983,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_Swatch_24 {
+        internal static System.Drawing.Bitmap Color_Swatch_24 {
             get {
                 object obj = ResourceManager.GetObject("Color_Swatch_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -993,7 +993,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Color_Swatch_32 {
+        internal static System.Drawing.Bitmap Color_Swatch_32 {
             get {
                 object obj = ResourceManager.GetObject("Color_Swatch_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1003,7 +1003,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Compile_16 {
+        internal static System.Drawing.Bitmap Compile_16 {
             get {
                 object obj = ResourceManager.GetObject("Compile_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1013,7 +1013,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Counter_16 {
+        internal static System.Drawing.Bitmap Counter_16 {
             get {
                 object obj = ResourceManager.GetObject("Counter_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1023,7 +1023,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Counter_24 {
+        internal static System.Drawing.Bitmap Counter_24 {
             get {
                 object obj = ResourceManager.GetObject("Counter_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1033,7 +1033,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Counter_32 {
+        internal static System.Drawing.Bitmap Counter_32 {
             get {
                 object obj = ResourceManager.GetObject("Counter_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1043,7 +1043,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Counter_Zero_16 {
+        internal static System.Drawing.Bitmap Counter_Zero_16 {
             get {
                 object obj = ResourceManager.GetObject("Counter_Zero_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1053,7 +1053,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Credit_Card_24 {
+        internal static System.Drawing.Bitmap Credit_Card_24 {
             get {
                 object obj = ResourceManager.GetObject("Credit_Card_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1063,7 +1063,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Credit_CardGreen_24 {
+        internal static System.Drawing.Bitmap Credit_CardGreen_24 {
             get {
                 object obj = ResourceManager.GetObject("Credit_CardGreen_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1073,7 +1073,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Currency_16 {
+        internal static System.Drawing.Bitmap Currency_16 {
             get {
                 object obj = ResourceManager.GetObject("Currency_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1083,7 +1083,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Currency_Euro_16 {
+        internal static System.Drawing.Bitmap Currency_Euro_16 {
             get {
                 object obj = ResourceManager.GetObject("Currency_Euro_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1093,7 +1093,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Currency_Pound_16 {
+        internal static System.Drawing.Bitmap Currency_Pound_16 {
             get {
                 object obj = ResourceManager.GetObject("Currency_Pound_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1103,7 +1103,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Currency_Yn_16 {
+        internal static System.Drawing.Bitmap Currency_Yn_16 {
             get {
                 object obj = ResourceManager.GetObject("Currency_Yn_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1113,7 +1113,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Cursor_16 {
+        internal static System.Drawing.Bitmap Cursor_16 {
             get {
                 object obj = ResourceManager.GetObject("Cursor_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1123,7 +1123,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Cursor_24 {
+        internal static System.Drawing.Bitmap Cursor_24 {
             get {
                 object obj = ResourceManager.GetObject("Cursor_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1133,7 +1133,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Database_16 {
+        internal static System.Drawing.Bitmap Database_16 {
             get {
                 object obj = ResourceManager.GetObject("Database_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1143,7 +1143,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Database_24 {
+        internal static System.Drawing.Bitmap Database_24 {
             get {
                 object obj = ResourceManager.GetObject("Database_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1153,7 +1153,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Database_32 {
+        internal static System.Drawing.Bitmap Database_32 {
             get {
                 object obj = ResourceManager.GetObject("Database_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1163,7 +1163,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Database_Export_24 {
+        internal static System.Drawing.Bitmap Database_Export_24 {
             get {
                 object obj = ResourceManager.GetObject("Database_Export_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1173,7 +1173,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Database_Import_24 {
+        internal static System.Drawing.Bitmap Database_Import_24 {
             get {
                 object obj = ResourceManager.GetObject("Database_Import_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1183,7 +1183,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Delete_16 {
+        internal static System.Drawing.Bitmap Delete_16 {
             get {
                 object obj = ResourceManager.GetObject("Delete_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1193,7 +1193,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Delete_24 {
+        internal static System.Drawing.Bitmap Delete_24 {
             get {
                 object obj = ResourceManager.GetObject("Delete_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1203,7 +1203,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Delete_32 {
+        internal static System.Drawing.Bitmap Delete_32 {
             get {
                 object obj = ResourceManager.GetObject("Delete_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1213,7 +1213,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dir_Down_32 {
+        internal static System.Drawing.Bitmap Dir_Down_32 {
             get {
                 object obj = ResourceManager.GetObject("Dir_Down_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1223,7 +1223,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dir_Left_32 {
+        internal static System.Drawing.Bitmap Dir_Left_32 {
             get {
                 object obj = ResourceManager.GetObject("Dir_Left_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1233,7 +1233,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dir_Right_32 {
+        internal static System.Drawing.Bitmap Dir_Right_32 {
             get {
                 object obj = ResourceManager.GetObject("Dir_Right_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1243,7 +1243,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dir_Up_32 {
+        internal static System.Drawing.Bitmap Dir_Up_32 {
             get {
                 object obj = ResourceManager.GetObject("Dir_Up_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1253,7 +1253,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Doc_Richtext_32 {
+        internal static System.Drawing.Bitmap Doc_Richtext_32 {
             get {
                 object obj = ResourceManager.GetObject("Doc_Richtext_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1263,7 +1263,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Doc_Table_24 {
+        internal static System.Drawing.Bitmap Doc_Table_24 {
             get {
                 object obj = ResourceManager.GetObject("Doc_Table_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1273,7 +1273,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Doc_Table_32 {
+        internal static System.Drawing.Bitmap Doc_Table_32 {
             get {
                 object obj = ResourceManager.GetObject("Doc_Table_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1283,7 +1283,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Doc_Text_32 {
+        internal static System.Drawing.Bitmap Doc_Text_32 {
             get {
                 object obj = ResourceManager.GetObject("Doc_Text_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1293,7 +1293,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dock_Bottom {
+        internal static System.Drawing.Bitmap Dock_Bottom {
             get {
                 object obj = ResourceManager.GetObject("Dock_Bottom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1303,7 +1303,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dock_Center {
+        internal static System.Drawing.Bitmap Dock_Center {
             get {
                 object obj = ResourceManager.GetObject("Dock_Center", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1313,7 +1313,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dock_Guide {
+        internal static System.Drawing.Bitmap Dock_Guide {
             get {
                 object obj = ResourceManager.GetObject("Dock_Guide", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1323,7 +1323,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dock_Left {
+        internal static System.Drawing.Bitmap Dock_Left {
             get {
                 object obj = ResourceManager.GetObject("Dock_Left", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1333,7 +1333,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dock_Right {
+        internal static System.Drawing.Bitmap Dock_Right {
             get {
                 object obj = ResourceManager.GetObject("Dock_Right", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1343,7 +1343,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Dock_Top {
+        internal static System.Drawing.Bitmap Dock_Top {
             get {
                 object obj = ResourceManager.GetObject("Dock_Top", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1353,7 +1353,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Document_24 {
+        internal static System.Drawing.Bitmap Document_24 {
             get {
                 object obj = ResourceManager.GetObject("Document_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1363,7 +1363,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Document_32 {
+        internal static System.Drawing.Bitmap Document_32 {
             get {
                 object obj = ResourceManager.GetObject("Document_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1373,7 +1373,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Document_Horizontal_24 {
+        internal static System.Drawing.Bitmap Document_Horizontal_24 {
             get {
                 object obj = ResourceManager.GetObject("Document_Horizontal_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1383,7 +1383,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Document_Horizontal_32 {
+        internal static System.Drawing.Bitmap Document_Horizontal_32 {
             get {
                 object obj = ResourceManager.GetObject("Document_Horizontal_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1393,7 +1393,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Equalizer_16 {
+        internal static System.Drawing.Bitmap Equalizer_16 {
             get {
                 object obj = ResourceManager.GetObject("Equalizer_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1403,7 +1403,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Equalizer_24 {
+        internal static System.Drawing.Bitmap Equalizer_24 {
             get {
                 object obj = ResourceManager.GetObject("Equalizer_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1413,7 +1413,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Eraser_16 {
+        internal static System.Drawing.Bitmap Eraser_16 {
             get {
                 object obj = ResourceManager.GetObject("Eraser_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1423,7 +1423,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Eraser_24 {
+        internal static System.Drawing.Bitmap Eraser_24 {
             get {
                 object obj = ResourceManager.GetObject("Eraser_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1433,7 +1433,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Exit_16 {
+        internal static System.Drawing.Bitmap Exit_16 {
             get {
                 object obj = ResourceManager.GetObject("Exit_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1443,7 +1443,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Exit_24 {
+        internal static System.Drawing.Bitmap Exit_24 {
             get {
                 object obj = ResourceManager.GetObject("Exit_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1453,7 +1453,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Exit_32 {
+        internal static System.Drawing.Bitmap Exit_32 {
             get {
                 object obj = ResourceManager.GetObject("Exit_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1463,7 +1463,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Exit_Blue_16 {
+        internal static System.Drawing.Bitmap Exit_Blue_16 {
             get {
                 object obj = ResourceManager.GetObject("Exit_Blue_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1473,7 +1473,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Eye_24 {
+        internal static System.Drawing.Bitmap Eye_24 {
             get {
                 object obj = ResourceManager.GetObject("Eye_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1483,7 +1483,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Feed_24 {
+        internal static System.Drawing.Bitmap Feed_24 {
             get {
                 object obj = ResourceManager.GetObject("Feed_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1493,7 +1493,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_New_16 {
+        internal static System.Drawing.Bitmap File_New_16 {
             get {
                 object obj = ResourceManager.GetObject("File_New_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1503,7 +1503,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_New_24 {
+        internal static System.Drawing.Bitmap File_New_24 {
             get {
                 object obj = ResourceManager.GetObject("File_New_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1513,7 +1513,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_New_32 {
+        internal static System.Drawing.Bitmap File_New_32 {
             get {
                 object obj = ResourceManager.GetObject("File_New_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1523,7 +1523,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_Save_16 {
+        internal static System.Drawing.Bitmap File_Save_16 {
             get {
                 object obj = ResourceManager.GetObject("File_Save_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1533,7 +1533,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_Save_24 {
+        internal static System.Drawing.Bitmap File_Save_24 {
             get {
                 object obj = ResourceManager.GetObject("File_Save_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1543,7 +1543,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_Save_32 {
+        internal static System.Drawing.Bitmap File_Save_32 {
             get {
                 object obj = ResourceManager.GetObject("File_Save_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1553,7 +1553,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap File_Save_Black_24 {
+        internal static System.Drawing.Bitmap File_Save_Black_24 {
             get {
                 object obj = ResourceManager.GetObject("File_Save_Black_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1563,7 +1563,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Folder_Open_16 {
+        internal static System.Drawing.Bitmap Folder_Open_16 {
             get {
                 object obj = ResourceManager.GetObject("Folder_Open_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1573,7 +1573,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Folder_Open_24 {
+        internal static System.Drawing.Bitmap Folder_Open_24 {
             get {
                 object obj = ResourceManager.GetObject("Folder_Open_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1583,7 +1583,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Folder_Open_32 {
+        internal static System.Drawing.Bitmap Folder_Open_32 {
             get {
                 object obj = ResourceManager.GetObject("Folder_Open_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1593,7 +1593,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Gear_24 {
+        internal static System.Drawing.Bitmap Gear_24 {
             get {
                 object obj = ResourceManager.GetObject("Gear_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1603,7 +1603,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Globe_24 {
+        internal static System.Drawing.Bitmap Globe_24 {
             get {
                 object obj = ResourceManager.GetObject("Globe_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1613,7 +1613,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Heart_16 {
+        internal static System.Drawing.Bitmap Heart_16 {
             get {
                 object obj = ResourceManager.GetObject("Heart_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1623,7 +1623,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Image_32 {
+        internal static System.Drawing.Bitmap Image_32 {
             get {
                 object obj = ResourceManager.GetObject("Image_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1633,7 +1633,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Key_16 {
+        internal static System.Drawing.Bitmap Key_16 {
             get {
                 object obj = ResourceManager.GetObject("Key_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1643,7 +1643,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_16 {
+        internal static System.Drawing.Bitmap Keyboard_16 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1653,7 +1653,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_24 {
+        internal static System.Drawing.Bitmap Keyboard_24 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1663,7 +1663,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_32 {
+        internal static System.Drawing.Bitmap Keyboard_32 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1673,7 +1673,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_Enter_16 {
+        internal static System.Drawing.Bitmap Keyboard_Enter_16 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_Enter_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1683,7 +1683,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_Enter_24 {
+        internal static System.Drawing.Bitmap Keyboard_Enter_24 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_Enter_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1693,7 +1693,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_Enter_32 {
+        internal static System.Drawing.Bitmap Keyboard_Enter_32 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_Enter_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1703,7 +1703,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_Space_16 {
+        internal static System.Drawing.Bitmap Keyboard_Space_16 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_Space_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1713,7 +1713,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_Space_24 {
+        internal static System.Drawing.Bitmap Keyboard_Space_24 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_Space_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1723,7 +1723,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Keyboard_Space_32 {
+        internal static System.Drawing.Bitmap Keyboard_Space_32 {
             get {
                 object obj = ResourceManager.GetObject("Keyboard_Space_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1733,7 +1733,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lens_24 {
+        internal static System.Drawing.Bitmap Lens_24 {
             get {
                 object obj = ResourceManager.GetObject("Lens_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1743,7 +1743,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lock_24 {
+        internal static System.Drawing.Bitmap Lock_24 {
             get {
                 object obj = ResourceManager.GetObject("Lock_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1753,7 +1753,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lock_32 {
+        internal static System.Drawing.Bitmap Lock_32 {
             get {
                 object obj = ResourceManager.GetObject("Lock_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1763,7 +1763,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lock_SSL_24 {
+        internal static System.Drawing.Bitmap Lock_SSL_24 {
             get {
                 object obj = ResourceManager.GetObject("Lock_SSL_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1773,7 +1773,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Lock_SSL_32 {
+        internal static System.Drawing.Bitmap Lock_SSL_32 {
             get {
                 object obj = ResourceManager.GetObject("Lock_SSL_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1783,7 +1783,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_16 {
+        internal static System.Drawing.Bitmap Log_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1793,7 +1793,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_24 {
+        internal static System.Drawing.Bitmap Log_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1803,7 +1803,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_32 {
+        internal static System.Drawing.Bitmap Log_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1813,7 +1813,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Fail_16 {
+        internal static System.Drawing.Bitmap Log_Fail_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Fail_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1823,7 +1823,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Fail_24 {
+        internal static System.Drawing.Bitmap Log_Fail_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Fail_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1833,7 +1833,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Fail_32 {
+        internal static System.Drawing.Bitmap Log_Fail_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Fail_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1843,7 +1843,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Fire_16 {
+        internal static System.Drawing.Bitmap Log_Fire_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Fire_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1853,7 +1853,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Fire_24 {
+        internal static System.Drawing.Bitmap Log_Fire_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Fire_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1863,7 +1863,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Fire_Big_16 {
+        internal static System.Drawing.Bitmap Log_Fire_Big_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Fire_Big_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1873,7 +1873,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Info_16 {
+        internal static System.Drawing.Bitmap Log_Info_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Info_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1883,7 +1883,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Info_24 {
+        internal static System.Drawing.Bitmap Log_Info_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Info_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1893,7 +1893,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Info_32 {
+        internal static System.Drawing.Bitmap Log_Info_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Info_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1903,7 +1903,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Pass_16 {
+        internal static System.Drawing.Bitmap Log_Pass_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Pass_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1913,7 +1913,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Pass_24 {
+        internal static System.Drawing.Bitmap Log_Pass_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Pass_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1923,7 +1923,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Pass_32 {
+        internal static System.Drawing.Bitmap Log_Pass_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Pass_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1933,7 +1933,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Plus_16 {
+        internal static System.Drawing.Bitmap Log_Plus_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Plus_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1943,7 +1943,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Plus_24 {
+        internal static System.Drawing.Bitmap Log_Plus_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Plus_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1953,7 +1953,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Plus_32 {
+        internal static System.Drawing.Bitmap Log_Plus_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Plus_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1963,7 +1963,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Question_16 {
+        internal static System.Drawing.Bitmap Log_Question_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Question_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1973,7 +1973,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Question_24 {
+        internal static System.Drawing.Bitmap Log_Question_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Question_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1983,7 +1983,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Question_32 {
+        internal static System.Drawing.Bitmap Log_Question_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Question_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1993,7 +1993,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Radiation_16 {
+        internal static System.Drawing.Bitmap Log_Radiation_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Radiation_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2003,7 +2003,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Stop_16 {
+        internal static System.Drawing.Bitmap Log_Stop_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Stop_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2013,7 +2013,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Stop_24 {
+        internal static System.Drawing.Bitmap Log_Stop_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Stop_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2023,7 +2023,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Stop_32 {
+        internal static System.Drawing.Bitmap Log_Stop_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Stop_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2033,7 +2033,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Wafer_16 {
+        internal static System.Drawing.Bitmap Log_Wafer_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Wafer_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2043,7 +2043,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Wafer_Gold_16 {
+        internal static System.Drawing.Bitmap Log_Wafer_Gold_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Wafer_Gold_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2053,7 +2053,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Warning_16 {
+        internal static System.Drawing.Bitmap Log_Warning_16 {
             get {
                 object obj = ResourceManager.GetObject("Log_Warning_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2063,7 +2063,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Warning_24 {
+        internal static System.Drawing.Bitmap Log_Warning_24 {
             get {
                 object obj = ResourceManager.GetObject("Log_Warning_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2073,7 +2073,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Log_Warning_32 {
+        internal static System.Drawing.Bitmap Log_Warning_32 {
             get {
                 object obj = ResourceManager.GetObject("Log_Warning_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2083,7 +2083,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnet_16 {
+        internal static System.Drawing.Bitmap Magnet_16 {
             get {
                 object obj = ResourceManager.GetObject("Magnet_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2093,7 +2093,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnet_24 {
+        internal static System.Drawing.Bitmap Magnet_24 {
             get {
                 object obj = ResourceManager.GetObject("Magnet_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2103,7 +2103,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnet_32 {
+        internal static System.Drawing.Bitmap Magnet_32 {
             get {
                 object obj = ResourceManager.GetObject("Magnet_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2113,7 +2113,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnifier_16 {
+        internal static System.Drawing.Bitmap Magnifier_16 {
             get {
                 object obj = ResourceManager.GetObject("Magnifier_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2123,7 +2123,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnifier_24 {
+        internal static System.Drawing.Bitmap Magnifier_24 {
             get {
                 object obj = ResourceManager.GetObject("Magnifier_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2133,7 +2133,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnifier_Zoom_In_16 {
+        internal static System.Drawing.Bitmap Magnifier_Zoom_In_16 {
             get {
                 object obj = ResourceManager.GetObject("Magnifier_Zoom_In_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2143,7 +2143,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnifier_Zoom_In_24 {
+        internal static System.Drawing.Bitmap Magnifier_Zoom_In_24 {
             get {
                 object obj = ResourceManager.GetObject("Magnifier_Zoom_In_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2153,7 +2153,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnifier_Zoom_Out_16 {
+        internal static System.Drawing.Bitmap Magnifier_Zoom_Out_16 {
             get {
                 object obj = ResourceManager.GetObject("Magnifier_Zoom_Out_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2163,7 +2163,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Magnifier_Zoom_Out_24 {
+        internal static System.Drawing.Bitmap Magnifier_Zoom_Out_24 {
             get {
                 object obj = ResourceManager.GetObject("Magnifier_Zoom_Out_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2173,7 +2173,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Mail_16 {
+        internal static System.Drawing.Bitmap Mail_16 {
             get {
                 object obj = ResourceManager.GetObject("Mail_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2183,7 +2183,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Mail_24 {
+        internal static System.Drawing.Bitmap Mail_24 {
             get {
                 object obj = ResourceManager.GetObject("Mail_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2193,7 +2193,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Mail_32 {
+        internal static System.Drawing.Bitmap Mail_32 {
             get {
                 object obj = ResourceManager.GetObject("Mail_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2203,7 +2203,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Map_16 {
+        internal static System.Drawing.Bitmap Map_16 {
             get {
                 object obj = ResourceManager.GetObject("Map_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2213,7 +2213,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Map_24 {
+        internal static System.Drawing.Bitmap Map_24 {
             get {
                 object obj = ResourceManager.GetObject("Map_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2223,7 +2223,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Map_32 {
+        internal static System.Drawing.Bitmap Map_32 {
             get {
                 object obj = ResourceManager.GetObject("Map_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2233,7 +2233,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Map_Mark_16 {
+        internal static System.Drawing.Bitmap Map_Mark_16 {
             get {
                 object obj = ResourceManager.GetObject("Map_Mark_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2243,7 +2243,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Map_Mark_24 {
+        internal static System.Drawing.Bitmap Map_Mark_24 {
             get {
                 object obj = ResourceManager.GetObject("Map_Mark_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2253,7 +2253,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Megaphone_16 {
+        internal static System.Drawing.Bitmap Megaphone_16 {
             get {
                 object obj = ResourceManager.GetObject("Megaphone_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2263,7 +2263,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Megaphone_24 {
+        internal static System.Drawing.Bitmap Megaphone_24 {
             get {
                 object obj = ResourceManager.GetObject("Megaphone_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2273,7 +2273,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Message_Yellow_16 {
+        internal static System.Drawing.Bitmap Message_Yellow_16 {
             get {
                 object obj = ResourceManager.GetObject("Message_Yellow_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2283,7 +2283,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Message_Yellow_24 {
+        internal static System.Drawing.Bitmap Message_Yellow_24 {
             get {
                 object obj = ResourceManager.GetObject("Message_Yellow_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2293,7 +2293,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Message_Yellow_32 {
+        internal static System.Drawing.Bitmap Message_Yellow_32 {
             get {
                 object obj = ResourceManager.GetObject("Message_Yellow_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2303,7 +2303,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Microphone_16 {
+        internal static System.Drawing.Bitmap Microphone_16 {
             get {
                 object obj = ResourceManager.GetObject("Microphone_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2313,7 +2313,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Microphone_24 {
+        internal static System.Drawing.Bitmap Microphone_24 {
             get {
                 object obj = ResourceManager.GetObject("Microphone_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2323,7 +2323,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Minus_16 {
+        internal static System.Drawing.Bitmap Minus_16 {
             get {
                 object obj = ResourceManager.GetObject("Minus_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2333,7 +2333,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Minus_24 {
+        internal static System.Drawing.Bitmap Minus_24 {
             get {
                 object obj = ResourceManager.GetObject("Minus_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2343,7 +2343,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Minus_32 {
+        internal static System.Drawing.Bitmap Minus_32 {
             get {
                 object obj = ResourceManager.GetObject("Minus_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2353,7 +2353,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Monitor_24 {
+        internal static System.Drawing.Bitmap Monitor_24 {
             get {
                 object obj = ResourceManager.GetObject("Monitor_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2363,7 +2363,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Monitor_32 {
+        internal static System.Drawing.Bitmap Monitor_32 {
             get {
                 object obj = ResourceManager.GetObject("Monitor_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2373,7 +2373,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Movie_16 {
+        internal static System.Drawing.Bitmap Movie_16 {
             get {
                 object obj = ResourceManager.GetObject("Movie_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2383,7 +2383,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Movie_24 {
+        internal static System.Drawing.Bitmap Movie_24 {
             get {
                 object obj = ResourceManager.GetObject("Movie_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2393,7 +2393,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Movie_32 {
+        internal static System.Drawing.Bitmap Movie_32 {
             get {
                 object obj = ResourceManager.GetObject("Movie_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2403,7 +2403,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Nav_Back_16 {
+        internal static System.Drawing.Bitmap Nav_Back_16 {
             get {
                 object obj = ResourceManager.GetObject("Nav_Back_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2413,7 +2413,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Nav_Back_32 {
+        internal static System.Drawing.Bitmap Nav_Back_32 {
             get {
                 object obj = ResourceManager.GetObject("Nav_Back_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2423,7 +2423,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Nav_Next_16 {
+        internal static System.Drawing.Bitmap Nav_Next_16 {
             get {
                 object obj = ResourceManager.GetObject("Nav_Next_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2433,7 +2433,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Nav_Next_32 {
+        internal static System.Drawing.Bitmap Nav_Next_32 {
             get {
                 object obj = ResourceManager.GetObject("Nav_Next_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2443,7 +2443,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Newspaper_16 {
+        internal static System.Drawing.Bitmap Newspaper_16 {
             get {
                 object obj = ResourceManager.GetObject("Newspaper_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2453,7 +2453,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Newspaper_24 {
+        internal static System.Drawing.Bitmap Newspaper_24 {
             get {
                 object obj = ResourceManager.GetObject("Newspaper_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2463,7 +2463,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Notebook_16 {
+        internal static System.Drawing.Bitmap Notebook_16 {
             get {
                 object obj = ResourceManager.GetObject("Notebook_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2473,7 +2473,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Notebook_24 {
+        internal static System.Drawing.Bitmap Notebook_24 {
             get {
                 object obj = ResourceManager.GetObject("Notebook_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2483,7 +2483,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Notebook_32 {
+        internal static System.Drawing.Bitmap Notebook_32 {
             get {
                 object obj = ResourceManager.GetObject("Notebook_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2493,7 +2493,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Notebooks_16 {
+        internal static System.Drawing.Bitmap Notebooks_16 {
             get {
                 object obj = ResourceManager.GetObject("Notebooks_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2503,7 +2503,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap PaneCornerButton {
+        internal static System.Drawing.Bitmap PaneCornerButton {
             get {
                 object obj = ResourceManager.GetObject("PaneCornerButton", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2513,7 +2513,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Pencil_16 {
+        internal static System.Drawing.Bitmap Pencil_16 {
             get {
                 object obj = ResourceManager.GetObject("Pencil_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2523,7 +2523,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Pencil_24 {
+        internal static System.Drawing.Bitmap Pencil_24 {
             get {
                 object obj = ResourceManager.GetObject("Pencil_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2533,7 +2533,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Plus_16 {
+        internal static System.Drawing.Bitmap Plus_16 {
             get {
                 object obj = ResourceManager.GetObject("Plus_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2543,7 +2543,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Plus_24 {
+        internal static System.Drawing.Bitmap Plus_24 {
             get {
                 object obj = ResourceManager.GetObject("Plus_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2553,7 +2553,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Plus_32 {
+        internal static System.Drawing.Bitmap Plus_32 {
             get {
                 object obj = ResourceManager.GetObject("Plus_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2563,7 +2563,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap PowerUnit_16 {
+        internal static System.Drawing.Bitmap PowerUnit_16 {
             get {
                 object obj = ResourceManager.GetObject("PowerUnit_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2573,7 +2573,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap PowerUnit_32 {
+        internal static System.Drawing.Bitmap PowerUnit_32 {
             get {
                 object obj = ResourceManager.GetObject("PowerUnit_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2583,7 +2583,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Receipt_24 {
+        internal static System.Drawing.Bitmap Receipt_24 {
             get {
                 object obj = ResourceManager.GetObject("Receipt_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2593,7 +2593,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Receipt_32 {
+        internal static System.Drawing.Bitmap Receipt_32 {
             get {
                 object obj = ResourceManager.GetObject("Receipt_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2603,7 +2603,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Receipt_Text_24 {
+        internal static System.Drawing.Bitmap Receipt_Text_24 {
             get {
                 object obj = ResourceManager.GetObject("Receipt_Text_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2613,7 +2613,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Redo_16 {
+        internal static System.Drawing.Bitmap Redo_16 {
             get {
                 object obj = ResourceManager.GetObject("Redo_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2623,7 +2623,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Redo_24 {
+        internal static System.Drawing.Bitmap Redo_24 {
             get {
                 object obj = ResourceManager.GetObject("Redo_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2633,7 +2633,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Rescue_16 {
+        internal static System.Drawing.Bitmap Rescue_16 {
             get {
                 object obj = ResourceManager.GetObject("Rescue_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2643,7 +2643,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Rescue_24 {
+        internal static System.Drawing.Bitmap Rescue_24 {
             get {
                 object obj = ResourceManager.GetObject("Rescue_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2653,7 +2653,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Ruler_16 {
+        internal static System.Drawing.Bitmap Ruler_16 {
             get {
                 object obj = ResourceManager.GetObject("Ruler_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2663,7 +2663,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Ruler_24 {
+        internal static System.Drawing.Bitmap Ruler_24 {
             get {
                 object obj = ResourceManager.GetObject("Ruler_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2673,7 +2673,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Ruler_Triangle_16 {
+        internal static System.Drawing.Bitmap Ruler_Triangle_16 {
             get {
                 object obj = ResourceManager.GetObject("Ruler_Triangle_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2683,7 +2683,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Script_16 {
+        internal static System.Drawing.Bitmap Script_16 {
             get {
                 object obj = ResourceManager.GetObject("Script_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2693,7 +2693,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Script_24 {
+        internal static System.Drawing.Bitmap Script_24 {
             get {
                 object obj = ResourceManager.GetObject("Script_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2703,7 +2703,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Script_32 {
+        internal static System.Drawing.Bitmap Script_32 {
             get {
                 object obj = ResourceManager.GetObject("Script_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2713,7 +2713,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Script_Text_16 {
+        internal static System.Drawing.Bitmap Script_Text_16 {
             get {
                 object obj = ResourceManager.GetObject("Script_Text_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2723,7 +2723,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Script_Text_24 {
+        internal static System.Drawing.Bitmap Script_Text_24 {
             get {
                 object obj = ResourceManager.GetObject("Script_Text_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2733,7 +2733,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Script_Text_32 {
+        internal static System.Drawing.Bitmap Script_Text_32 {
             get {
                 object obj = ResourceManager.GetObject("Script_Text_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2743,7 +2743,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Server_16 {
+        internal static System.Drawing.Bitmap Server_16 {
             get {
                 object obj = ResourceManager.GetObject("Server_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2753,7 +2753,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Server_24 {
+        internal static System.Drawing.Bitmap Server_24 {
             get {
                 object obj = ResourceManager.GetObject("Server_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2763,7 +2763,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Star_16 {
+        internal static System.Drawing.Bitmap Star_16 {
             get {
                 object obj = ResourceManager.GetObject("Star_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2773,7 +2773,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Star_24 {
+        internal static System.Drawing.Bitmap Star_24 {
             get {
                 object obj = ResourceManager.GetObject("Star_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2783,7 +2783,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Stop_16 {
+        internal static System.Drawing.Bitmap Stop_16 {
             get {
                 object obj = ResourceManager.GetObject("Stop_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2793,7 +2793,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Stop_24 {
+        internal static System.Drawing.Bitmap Stop_24 {
             get {
                 object obj = ResourceManager.GetObject("Stop_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2803,7 +2803,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Stop_32 {
+        internal static System.Drawing.Bitmap Stop_32 {
             get {
                 object obj = ResourceManager.GetObject("Stop_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2813,7 +2813,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tablet_16 {
+        internal static System.Drawing.Bitmap Tablet_16 {
             get {
                 object obj = ResourceManager.GetObject("Tablet_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2823,7 +2823,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tablet_24 {
+        internal static System.Drawing.Bitmap Tablet_24 {
             get {
                 object obj = ResourceManager.GetObject("Tablet_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2833,7 +2833,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tablet_32 {
+        internal static System.Drawing.Bitmap Tablet_32 {
             get {
                 object obj = ResourceManager.GetObject("Tablet_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2843,7 +2843,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tag_16 {
+        internal static System.Drawing.Bitmap Tag_16 {
             get {
                 object obj = ResourceManager.GetObject("Tag_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2853,7 +2853,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tag_24 {
+        internal static System.Drawing.Bitmap Tag_24 {
             get {
                 object obj = ResourceManager.GetObject("Tag_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2863,7 +2863,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tag_32 {
+        internal static System.Drawing.Bitmap Tag_32 {
             get {
                 object obj = ResourceManager.GetObject("Tag_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2873,7 +2873,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tag_Blue_16 {
+        internal static System.Drawing.Bitmap Tag_Blue_16 {
             get {
                 object obj = ResourceManager.GetObject("Tag_Blue_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2883,7 +2883,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tag_Blue_24 {
+        internal static System.Drawing.Bitmap Tag_Blue_24 {
             get {
                 object obj = ResourceManager.GetObject("Tag_Blue_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2893,7 +2893,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Tag_Blue_32 {
+        internal static System.Drawing.Bitmap Tag_Blue_32 {
             get {
                 object obj = ResourceManager.GetObject("Tag_Blue_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2903,7 +2903,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Target_16 {
+        internal static System.Drawing.Bitmap Target_16 {
             get {
                 object obj = ResourceManager.GetObject("Target_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2913,7 +2913,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Target_24 {
+        internal static System.Drawing.Bitmap Target_24 {
             get {
                 object obj = ResourceManager.GetObject("Target_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2923,7 +2923,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Terminal_16 {
+        internal static System.Drawing.Bitmap Terminal_16 {
             get {
                 object obj = ResourceManager.GetObject("Terminal_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2933,7 +2933,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Terminal_24 {
+        internal static System.Drawing.Bitmap Terminal_24 {
             get {
                 object obj = ResourceManager.GetObject("Terminal_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2943,7 +2943,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Ticket_16 {
+        internal static System.Drawing.Bitmap Ticket_16 {
             get {
                 object obj = ResourceManager.GetObject("Ticket_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2953,7 +2953,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Ticket_24 {
+        internal static System.Drawing.Bitmap Ticket_24 {
             get {
                 object obj = ResourceManager.GetObject("Ticket_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2963,7 +2963,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Trash_16 {
+        internal static System.Drawing.Bitmap Trash_16 {
             get {
                 object obj = ResourceManager.GetObject("Trash_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2973,7 +2973,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Undo_16 {
+        internal static System.Drawing.Bitmap Undo_16 {
             get {
                 object obj = ResourceManager.GetObject("Undo_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2983,7 +2983,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Undo_24 {
+        internal static System.Drawing.Bitmap Undo_24 {
             get {
                 object obj = ResourceManager.GetObject("Undo_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -2993,7 +2993,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Wall_16 {
+        internal static System.Drawing.Bitmap Wall_16 {
             get {
                 object obj = ResourceManager.GetObject("Wall_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -3003,7 +3003,7 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Wall_24 {
+        internal static System.Drawing.Bitmap Wall_24 {
             get {
                 object obj = ResourceManager.GetObject("Wall_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

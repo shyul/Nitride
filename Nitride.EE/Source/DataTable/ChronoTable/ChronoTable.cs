@@ -70,7 +70,7 @@ namespace Nitride.EE
 
         public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : TimeRows[i][column];
 
-        public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? Complex.NaN : TimeRows[i][column];
+        public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? double.NaN : TimeRows[i][column];
 
         public override string GetXAxisLabel(int i)
         {

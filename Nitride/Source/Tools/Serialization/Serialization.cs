@@ -246,6 +246,17 @@ namespace Nitride
             return bytes;
         }
 
+        public static int SerializeBytes<T>(this T source, byte[] bytes) where T : notnull
+        {
+            int size = Marshal.SizeOf(source);
+            if (size > bytes.Length) return 0;
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(source, ptr, true);
+            Marshal.Copy(ptr, bytes, 0, size);
+            Marshal.FreeHGlobal(ptr);
+            return size;
+        }
+
         public static T DeserializeBytes<T>(this byte[] bytes) where T : notnull 
         {
             int size = Marshal.SizeOf(typeof(T));
