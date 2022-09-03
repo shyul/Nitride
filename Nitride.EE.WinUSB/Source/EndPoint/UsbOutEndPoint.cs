@@ -14,7 +14,7 @@ namespace Nitride.EE.WinUSB
             return Write(buffer, 0, (uint)buffer.Length, out _);
         }
 
-        public bool Write(byte[] buffer, int offset, uint bytesToWrite, out uint bytesWritten)
+        public bool Write(byte[] buffer, uint offset, uint bytesToWrite, out uint bytesWritten)
         {
             bool success;
             unsafe

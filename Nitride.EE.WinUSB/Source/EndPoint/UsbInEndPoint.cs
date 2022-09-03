@@ -14,7 +14,7 @@ namespace Nitride.EE.WinUSB
             return Read(buffer, 0, (uint)buffer.Length, out bytesRead);
         }
 
-        public bool Read(byte[] buffer, int offset, uint bytesToRead, out uint bytesRead)
+        public bool Read(byte[] buffer, uint offset, uint bytesToRead, out uint bytesRead)
         {
             unsafe
             {

@@ -108,6 +108,7 @@
     <Compile Include="Source\Hardware\IO\_Types\IPort.cs" />
     <Compile Include="Source\Hardware\IO\_Types\ISerialDataInput.cs" />
     <Compile Include="Source\Hardware\IO\_Types\ITriggerSource.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\Clock.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IHardwareDevice.cs" />
     <Compile Include="Source\Math\Calculate.cs" />
     <Compile Include="Source\Math\Decade.cs" />
@@ -120,5 +121,6 @@
       <Name>Nitride</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

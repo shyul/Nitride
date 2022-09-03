@@ -96,6 +96,7 @@
     <Compile Include="Source\Data\GridView\Renderer\TextGridRenderer.cs" />
     <Compile Include="Source\Data\Plot\Area.cs" />
     <Compile Include="Source\Data\Plot\Plot2DWidget.cs" />
+    <Compile Include="Source\Data\StringDatum.cs" />
     <Compile Include="Source\Data\Table\Analysis\IChartAnalysis.cs" />
     <Compile Include="Source\Data\Table\Analysis\IDualData.cs" />
     <Compile Include="Source\Data\Table\Analysis\ISingleData.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Source\Data\Table\Types\ITable.cs" />
     <Compile Include="Source\Data\Table\Types\TableStatus.cs" />
     <Compile Include="Source\Data\TraceDataTable.cs" />
+    <Compile Include="Source\Data\VariableData.cs" />
     <Compile Include="Source\Main\Icons.cs" />
     <Compile Include="Source\Main\Main.cs" />
     <Compile Include="Source\Tools\Collections.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="Source\Types\Flow\IDataProvider.cs" />
     <Compile Include="Source\Types\Flow\IDataRenderer.cs" />
     <Compile Include="Source\Types\Flow\SimpleDataProvider.cs" />
+    <Compile Include="Source\Types\Flow\IVariable.cs" />
     <Compile Include="Source\Types\Interfaces\IDependable.cs" />
     <Compile Include="Source\Types\Interfaces\IObject.cs" />
     <Compile Include="Source\Types\Interfaces\IOrdered.cs" />

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Nitride.EE.WinUSB
@@ -169,7 +171,7 @@ namespace Nitride.EE.WinUSB
             {
                 RequestType = 0x41,
                 Request = request,
-                Index = 0, //x2125,
+                Index = 3, //x2125,
                 Length = dataStageLength,
                 Value = value
             };
@@ -177,33 +179,86 @@ namespace Nitride.EE.WinUSB
             return WinUsb_ControlTransfer(Handle, setupPacket, dataStage, dataStageLength, ref bytesReturned, IntPtr.Zero);
         }
 
-        private readonly byte[] EmptyBuffer = new byte[] { 0, 0, 0, 0 }; //Array.Empty<byte>();
-
-        public bool ControlWrite(byte request, ushort value)
+        public bool ControlWrite(byte request, ushort value = 0)
         {
-            uint length_returned = 0;
-            ushort dataStageLength = Convert.ToUInt16(EmptyBuffer.Length);
-
+            uint bytesReturned = 0;
             WINUSB_SETUP_PACKET setupPacket = new()
             {
                 RequestType = 0x41,
                 Request = request,
                 Index = 0, //x2125,
+                Length = 0,
+                Value = value
+            };
+
+            return WinUsb_ControlTransfer(Handle, setupPacket, null, 0, ref bytesReturned, IntPtr.Zero);
+        }
+
+        // private byte[] ControlReadBuffer = new byte[1024];
+
+        public T ControlRead<T>(byte request, ushort value, ushort index = 0) // where T : notnull
+        {
+            ushort dataStageLength = Convert.ToUInt16(Marshal.SizeOf(typeof(T)));
+            byte[] buffer = new byte[dataStageLength];
+            uint bytesReturned = 0;
+
+            WINUSB_SETUP_PACKET setupPacket = new()
+            {
+                RequestType = 0xC1,
+                Request = request,
+                Index = index,
                 Length = dataStageLength,
                 Value = value
             };
 
-            return WinUsb_ControlTransfer(Handle, setupPacket, EmptyBuffer, dataStageLength, ref length_returned, IntPtr.Zero);
+            if (WinUsb_ControlTransfer(Handle, setupPacket, buffer, dataStageLength, ref bytesReturned, IntPtr.Zero))
+            {
+                if (bytesReturned == dataStageLength)
+                    return buffer.DeserializeBytes<T>(); // data.DeserializeBytes(ControlReadBuffer) == bytesReturned;
+                else
+                    return default(T);
+            }
+
+            return default(T);
+        }
+
+        private byte[] ControlWriteBuffer = new byte[1024];
+
+        public bool ControlWrite<T>(byte request, ushort value, T data, ushort index = 0)
+        {
+            ushort dataStageLength = Convert.ToUInt16(data.SerializeBytes(ControlWriteBuffer));
+            uint bytesReturned = 0;
+
+            WINUSB_SETUP_PACKET setupPacket = new()
+            {
+                RequestType = 0x41,
+                Request = request,
+                Index = index, //x2125,
+                Length = dataStageLength,
+                Value = value
+            };
+
+            return WinUsb_ControlTransfer(Handle, setupPacket, ControlWriteBuffer, dataStageLength, ref bytesReturned, IntPtr.Zero) && (bytesReturned == dataStageLength);
         }
 
         public void PrintInfo()
         {
+
+
             foreach (var iface in Interfaces)
             {
                 Console.WriteLine("Interface: " + iface.InterfaceClass);
                 iface.PrintInfo();
                 
             }
+        }
+
+        public void TestStringDesc() 
+        {
+            byte[] buffer = new byte[64];
+            WinUsb_GetDescriptor(Handle, 3, 1, 0x0409, buffer, (uint)buffer.Length, out UInt32 LengthTransfered);
+            string s = System.Text.Encoding.UTF8.GetString(buffer, 0, (int)LengthTransfered);
+            Console.WriteLine("USB: " + s);
         }
     }
 }

@@ -266,5 +266,15 @@ namespace Nitride
             Marshal.FreeHGlobal(ptr);
             return res;
         }
+
+        public static int DeserializeBytes<T>(this T dest, byte[] bytes) where T : notnull
+        {
+            int size = Marshal.SizeOf(typeof(T));
+            GCHandle handle = GCHandle.Alloc(dest);
+            IntPtr ptr = (IntPtr)handle;
+            Marshal.Copy(bytes, 0, ptr, size);
+            handle.Free();
+            return size;
+        }
     }
 }

@@ -24,6 +24,9 @@ namespace Nitride.EE.WinUSB
 		private static extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, Byte[] Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred, IntPtr Overlapped);
 
 		[DllImport("winusb.dll", SetLastError = true)]
+		private static extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, IntPtr BufferPtr, UInt32 BufferLength, ref UInt32 LengthTransferred, IntPtr Overlapped);
+
+		[DllImport("winusb.dll", SetLastError = true)]
 		private static unsafe extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, Byte[] Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred, NativeOverlapped* pOverlapped);
 
 		[DllImport("winusb.dll", SetLastError = true)]
@@ -48,16 +51,14 @@ namespace Nitride.EE.WinUSB
 		private static unsafe extern bool CancelIoEx(IntPtr hFile, NativeOverlapped* pOverlapped);
 
 		[DllImport("winusb.dll", SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType,
-						byte Index, UInt16 LanguageID, byte[] Buffer, UInt32 BufferLength, out UInt32 LengthTransfered);
+		private static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType, byte Index, UInt16 LanguageID, byte[] Buffer, UInt32 BufferLength, out UInt32 LengthTransfered);
+		//private static unsafe extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType, byte Index, ushort LanguageID, byte* pBuffer, uint BufferLength, out uint LengthTransferred);
 
 		[DllImport("winusb.dll", SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType,
-						byte Index, UInt16 LanguageID, out USB_DEVICE_DESCRIPTOR deviceDesc, UInt32 BufferLength, out UInt32 LengthTransfered);
+		private static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType, byte Index, UInt16 LanguageID, out USB_DEVICE_DESCRIPTOR deviceDesc, UInt32 BufferLength, out UInt32 LengthTransfered);
 
 		[DllImport("winusb.dll", SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType,
-						byte Index, UInt16 LanguageID, out USB_CONFIGURATION_DESCRIPTOR deviceDesc, UInt32 BufferLength, out UInt32 LengthTransfered);
+		private static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType, byte Index, UInt16 LanguageID, out USB_CONFIGURATION_DESCRIPTOR deviceDesc, UInt32 BufferLength, out UInt32 LengthTransfered);
 
 		[DllImport("winusb.dll", SetLastError = true)]
 		private static extern bool WinUsb_GetAssociatedInterface(IntPtr InterfaceHandle, byte AssociatedInterfaceIndex, out IntPtr AssociatedInterfaceHandle);
