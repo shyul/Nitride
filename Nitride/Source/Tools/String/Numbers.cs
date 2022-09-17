@@ -230,6 +230,49 @@ namespace Nitride
             }
         }
 
+        public static ushort ToUInt16(this string input, ushort defaultValue = 0)
+        {
+            if (input == null) return defaultValue;
+
+            try
+            {
+                string str = CleanUpNumString(input);
+                if (str.Length > 0)
+                {
+                    return ushort.Parse(str);
+                }
+                else
+                    return defaultValue;
+            }
+            catch (Exception e) when (e is FormatException || e is OverflowException)
+            {
+                Console.WriteLine("ToInt64 Error: " + e + ", Input was: " + input);
+                return defaultValue;
+            }
+        }
+
+        public static byte ToByte(this string input, byte defaultValue = 0)
+        {
+            if (input is null) 
+                return defaultValue;
+
+            try
+            {
+                string str = CleanUpNumString(input);
+                if (str.Length > 0)
+                {
+                    return byte.Parse(str);
+                }
+                else
+                    return defaultValue;
+            }
+            catch (Exception e) when (e is FormatException || e is OverflowException)
+            {
+                Console.WriteLine("ToInt64 Error: " + e + ", Input was: " + input);
+                return defaultValue;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -74,7 +74,7 @@ namespace Nitride.EE
         public static NumericColumn Column_ResultMag { get; } = new("FFT Result Mag", "FS");
         public static NumericColumn Column_ResultDb { get; } = new("FFT Result Db", "FS");
 
-        public void Transform(FreqTable ft, ChronoTable t, ComplexColumn inputColumn, int startPt)
+        public void Transform(FreqTable ft, ChronoTable t, ComplexColumn inputColumn, double dbOffset = 0, int startPt = 0)
         {
             Complex[] dsw = new Complex[Length];
 
@@ -123,22 +123,21 @@ namespace Nitride.EE
 
             //FreqTable ft = new();
         
-
+            /*
             Complex[] c = new Complex[dsw.Length];
 
             for (uint i = 0; i < dsw.Length; i++)
             {
                 c[i] = dsw[i.EndianInverse(m)];
-            }
+            }*/
 
-            for (int i = 0; i < ft.Count; i++)
+            for (uint i = 0; i < ft.Count; i++)
             {
-                FreqRow row = ft[i];
-                //Complex c = row[Column_Result] = dsw[i.EndianInverse(m)];
-
-                double mag = row[Column_ResultMag] = c.Skip(i * 64).Take(64).Select(c => c.Magnitude).Max();
-                row[Column_ResultDb] = (20 * Math.Log10(mag));
-
+                FreqRow row = ft[(int)i];
+                Complex res = row[Column_Result] = dsw[i.EndianInverse(m)];
+                //double mag = row[Column_ResultMag] = c.Skip(i * 64).Take(64).Select(c => c.Magnitude).Max();
+                double mag = row[Column_ResultMag] = res.Magnitude;
+                row[Column_ResultDb] = (20 * Math.Log10(mag)) - dbOffset;
             }
 
             ft.DataIsUpdated();

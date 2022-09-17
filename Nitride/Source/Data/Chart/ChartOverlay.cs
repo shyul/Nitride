@@ -206,6 +206,7 @@ namespace Nitride.Chart
             if (ReadyToShow)
             {
                 Chart.GetFocus();
+                DockCanvas.ActiveDockForm = Chart;
                 //Invalidate();
             }
 

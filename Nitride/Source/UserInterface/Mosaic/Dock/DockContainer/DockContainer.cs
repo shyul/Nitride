@@ -679,12 +679,23 @@ namespace Nitride
         protected override void OnMouseDown(MouseEventArgs e)
         {
             DockCanvas.ActiveDockContainer = this;
+
             if (!ShowTab)
             {
                 Focus();
                 UpdateGraphics();
             }
             Point pt = new(e.X, e.Y);
+
+            foreach (DockForm df in Tabs)
+            {
+                Rectangle tabRect = df.TabRect;
+                if (tabRect.Contains(pt))
+                {
+                    DockCanvas.ActiveDockForm = df;
+                }
+            }
+
             if (Unlocked && SizeGrip.Contains(pt))
             {
                 MouseState = MouseState.Drag;

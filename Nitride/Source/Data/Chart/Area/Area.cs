@@ -323,63 +323,67 @@ namespace Nitride.Chart
             }
         }
 
-
-        public readonly GraphicsPath LegendBackgroundPath = new();
+        public GraphicsPath LegendBackgroundPath { get; } = new();
 
         public virtual void UpdateLegend()
         {
             lock (Chart.GraphicsLockObject)
-            {
-                Size LegendMargin = new(5, 3);
-
-                int x = Bounds.Left + LegendMargin.Width;
-                int y = Bounds.Top + LegendMargin.Width;
-
-                LegendBackgroundPath.Reset();
-
-                int pt = SelectedDataPoint;
-                int i = 0, label_area_buttom = 0;
-
-                // Stack up Legends and get their coordinates
-                foreach (var lg in Legends.Values.OrderByDescending(n => n.Importance).OrderBy(n => n.Side))
+                try
                 {
-                    lg.Bounds = new Rectangle(x, y, lg.Width, lg.Height);
+                    Size LegendMargin = new(5, 3);
 
-                    int y1 = y;
-                    y += lg.Height + LegendMargin.Height;
+                    int x = Bounds.Left + LegendMargin.Width;
+                    int y = Bounds.Top + LegendMargin.Width;
 
-                    lg.StopPt = pt + 1;
-                    lg.StartPt = lg.StopPt - lg.IndexCount;
+                    LegendBackgroundPath.Reset();
 
-                    lg.Coordinate(Table);
+                    int pt = SelectedDataPoint;
+                    int i = 0, label_area_buttom = 0;
 
-                    if (LegendBackgroundPath.PointCount == 0 && lg.LabelBound.Count > 0) // the first legend
+                    // Stack up Legends and get their coordinates
+                    foreach (var lg in Legends.Values.OrderByDescending(n => n.Importance).OrderBy(n => n.Side))
                     {
-                        LegendBackgroundPath.AddLines(new Point[] { new Point(Bounds.Left + 1, Bounds.Top + 1), new Point(lg.LabelBound[0].Right, Bounds.Top + 1) });
-                    }
+                        lg.Bounds = new Rectangle(x, y, lg.Width, lg.Height);
 
-                    foreach (Rectangle lbb in lg.LabelBound)
-                    {
-                        if (LegendBackgroundPath.PointCount > 0)
+                        int y1 = y;
+                        y += lg.Height + LegendMargin.Height;
+
+                        lg.StopPt = pt + 1;
+                        lg.StartPt = lg.StopPt - lg.IndexCount;
+
+                        lg.Coordinate(Table);
+
+                        if (LegendBackgroundPath.PointCount == 0 && lg.LabelBound.Count > 0) // the first legend
                         {
-                            PointF lp = LegendBackgroundPath.GetLastPoint();
-                            LegendBackgroundPath.AddLines(new Point[] { new Point(lbb.Right, lp.Y.ToInt32() + 1), new Point(lbb.Right, lbb.Bottom + 1) });
+                            LegendBackgroundPath.AddLines(new Point[] { new Point(Bounds.Left + 1, Bounds.Top + 1), new Point(lg.LabelBound[0].Right, Bounds.Top + 1) });
                         }
+
+                        foreach (Rectangle lbb in lg.LabelBound)
+                        {
+                            if (LegendBackgroundPath.PointCount > 0)
+                            {
+                                PointF lp = LegendBackgroundPath.GetLastPoint();
+                                LegendBackgroundPath.AddLines(new Point[] { new Point(lbb.Right, lp.Y.ToInt32() + 1), new Point(lbb.Right, lbb.Bottom + 1) });
+                            }
+                        }
+
+                        if (label_area_buttom < lg.Bottom) label_area_buttom = lg.Bottom;
+
+                        i++;
                     }
 
-                    if (label_area_buttom < lg.Bottom) label_area_buttom = lg.Bottom;
-
-                    i++;
+                    // Draw the last buttom line
+                    label_area_buttom += LegendMargin.Width + 1;
+                    if (LegendBackgroundPath.PointCount > 0)
+                    {
+                        PointF last_point = LegendBackgroundPath.GetLastPoint();
+                        LegendBackgroundPath.AddLines(new Point[] { new Point(last_point.X.ToInt32(), label_area_buttom), new Point(Bounds.Left + 1, label_area_buttom) });
+                    }
                 }
-
-                // Draw the last buttom line
-                label_area_buttom += LegendMargin.Width + 1;
-                if (LegendBackgroundPath.PointCount > 0)
+                catch (Exception c) 
                 {
-                    PointF last_point = LegendBackgroundPath.GetLastPoint();
-                    LegendBackgroundPath.AddLines(new Point[] { new Point(last_point.X.ToInt32(), label_area_buttom), new Point(Bounds.Left + 1, label_area_buttom) });
+                    Console.WriteLine("Chart UpdateLegend(): " + c.Message);
                 }
-            }
         }
 
 

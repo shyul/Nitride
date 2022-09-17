@@ -229,6 +229,15 @@ namespace Nitride.EE.WinUSB
             ushort dataStageLength = Convert.ToUInt16(data.SerializeBytes(ControlWriteBuffer));
             uint bytesReturned = 0;
 
+            Console.Write("ControlWrite Data: " + dataStageLength + " | ");
+
+            for (int i = 0; i < dataStageLength; i++) 
+            {
+                Console.Write(ControlWriteBuffer[i].ToString("X") + " ");
+            }
+
+            Console.Write("\n\r");
+            
             WINUSB_SETUP_PACKET setupPacket = new()
             {
                 RequestType = 0x41,

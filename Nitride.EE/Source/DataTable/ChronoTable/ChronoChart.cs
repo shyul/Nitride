@@ -133,16 +133,18 @@ namespace Nitride.EE
 
                             for (int i = StartPt; i < StopPt; i++)
                             {
-                                //DateTime time = m_BarTable.IndexToTime(i);
-                                //if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
-                                //if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
 
-                                long time = ChronoTable[i].TimeStamp;
+                                if (i > 0 && i < ChronoTable.Count) 
+                                {
+                                    //DateTime time = m_BarTable.IndexToTime(i);
+                                    //if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
+                                    //if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
 
-                                //if ((freq % tickFreqSpan) < (tickFreqSpan / 10D)) AxisX.TickList.CheckAdd(px, (Importance.Major, freq.ToString()));
-                                if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (time / 1e2).ToString()));
+                                    long time = ChronoTable[i].TimeStamp;
 
-
+                                    //if ((freq % tickFreqSpan) < (tickFreqSpan / 10D)) AxisX.TickList.CheckAdd(px, (Importance.Major, freq.ToString()));
+                                    if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (time / 1e2).ToString()));
+                                }
 
                                 px++;
                             }

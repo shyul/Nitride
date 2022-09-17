@@ -99,11 +99,19 @@ namespace Nitride
             {
                 if (m_AsyncUpdateUI)
                 {
-                    this?.Invoke(() =>
+                    try 
                     {
-                        CoordinateLayout();
-                        Invalidate(true);
-                    });
+                        this?.Invoke(() =>
+                        {
+                            CoordinateLayout();
+                            Invalidate(true);
+                        });
+                    }
+                    catch(Exception e) 
+                    {
+                        Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                    }
+
                     m_AsyncUpdateUI = false;
                 }
                 Thread.Sleep(5);
@@ -143,6 +151,7 @@ namespace Nitride
         {
             //Focus();
             //DockControl.Invalidate(true);
+            DockCanvas.ActiveDockForm = this;
             base.OnMouseClick(e);
         }
         #endregion

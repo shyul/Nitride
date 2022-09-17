@@ -197,19 +197,23 @@ namespace Nitride
 
         internal static void StartDock()
         {
-            if (HelperOverlay != null) DisposeHf();
-            ActiveFormPic = ActiveDockForm.ToBitmap();
-            HelperOverlay = new HelperOverlay()
+            if (HelperOverlay is not null) DisposeHf();
+
+            if (ActiveDockForm is not null)
             {
-                Opacity = 0.8D,
-                Location = new Point(0, 0),
-                Size = SystemInformation.VirtualScreen.Size,
-            };
-            lock (HelperOverlay)
-            {
-                HelperOverlay.Paint += DockHelper_Paint;
-                HelperOverlay.Invalidate();
-                HelperOverlay.Show();
+                ActiveFormPic = ActiveDockForm.ToBitmap();
+                HelperOverlay = new HelperOverlay()
+                {
+                    Opacity = 0.8D,
+                    Location = new Point(0, 0),
+                    Size = SystemInformation.VirtualScreen.Size,
+                };
+                lock (HelperOverlay)
+                {
+                    HelperOverlay.Paint += DockHelper_Paint;
+                    HelperOverlay.Invalidate();
+                    HelperOverlay.Show();
+                }
             }
         }
 
