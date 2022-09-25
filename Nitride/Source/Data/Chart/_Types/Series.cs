@@ -146,7 +146,7 @@ namespace Nitride.Chart
                 else if (i >= 0)
                 {
                     double data = table[i, column];
-                    if (!double.IsNaN(data))
+                    if (!double.IsNaN(data) && !double.IsInfinity(data))
                     {
                         int x = area.IndexToPixel(pt);
                         int data_pix = area.AxisY(side).ValueToPixel(data);

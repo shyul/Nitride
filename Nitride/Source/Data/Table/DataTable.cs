@@ -88,6 +88,8 @@ namespace Nitride
 
         public bool RemoveDataConsumer(IDataConsumer idk) => DataConsumers.CheckRemove(idk);
 
+        public void ClearDataConsumers() => DataConsumers.Clear();
+
         public DateTime UpdateTime { get; set; } = TimeTool.MinInvalid;
 
         public bool ReadyToShow => Count > 0 && Status >= TableStatus.DataReady;

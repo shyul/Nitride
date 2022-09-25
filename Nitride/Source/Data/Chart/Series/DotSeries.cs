@@ -113,7 +113,7 @@ namespace Nitride.Chart
                 pt = 0;
 
             double data = table[pt, Data_Column];
-            if (!double.IsNaN(data))
+            if (!double.IsNaN(data) && (!double.IsInfinity(data)))
             {
                 int y = area.AxisY(Side).ValueToPixel(data);
                 if (y >= area.Top && y <= area.Bottom)
@@ -127,7 +127,7 @@ namespace Nitride.Chart
             int pt = area.SelectedDataPoint;
 
             double data = table[pt, Data_Column];
-            if (!double.IsNaN(data))
+            if (!double.IsNaN(data) && (!double.IsInfinity(data)))
             {
                 int y = area.AxisY(Side).ValueToPixel(data);
                 if (y >= area.Top && y <= area.Bottom)

@@ -18,11 +18,6 @@ namespace Nitride.EE
         public ChronoTable(int numOfPts)
         {
             Clear(numOfPts);
-            /*
-            for (int i = 0; i < numOfPts; i++)
-            {
-                TimeRows.Add(new ChronoRow(i, this));
-            }*/
         }
 
         ~ChronoTable() => Dispose();
@@ -39,20 +34,29 @@ namespace Nitride.EE
 
         public IEnumerable<ChronoRow> Rows => TimeRows.OrderBy(n => n.TimeStamp);
 
-        public override int Count => TimeRows.Count;
+        public override int Count => m_Count; // TimeRows.Count;
+
+        private int m_Count = 0;
 
         public override void Clear()
         {
-            lock (TimeRows)
-                TimeRows.Clear();
+            lock (TimeRows) 
+            {
+                m_Count = 0;
+                TimeRows.Clear(); 
+            }
         }
 
         public void Clear(int numOfPts)
         {
-            TimeRows.Clear();
-            for (int i = 0; i < numOfPts; i++)
+            lock (TimeRows)
             {
-                TimeRows.Add(new ChronoRow(i, this));
+                m_Count = numOfPts;
+                TimeRows.Clear();
+                for (int i = 0; i < numOfPts; i++)
+                {
+                    TimeRows.Add(new ChronoRow(i, this));
+                }
             }
         }
 

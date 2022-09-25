@@ -250,6 +250,12 @@ namespace Nitride.EE.WinUSB
             return WinUsb_ControlTransfer(Handle, setupPacket, ControlWriteBuffer, dataStageLength, ref bytesReturned, IntPtr.Zero) && (bytesReturned == dataStageLength);
         }
 
+        public bool ControlTransfer(WINUSB_SETUP_PACKET setupPacket, byte[] buffer)
+        {
+            uint bytesReturned = 0;
+            return WinUsb_ControlTransfer(Handle, setupPacket, buffer, setupPacket.Length, ref bytesReturned, IntPtr.Zero) && (bytesReturned == setupPacket.Length);
+        }
+
         public void PrintInfo()
         {
 

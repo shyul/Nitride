@@ -134,7 +134,7 @@ namespace Nitride
         /// <returns></returns>
         public static long ToInt64(this double input, long defaultValue = 0)
         {
-            if (!(input is double.NaN))
+            if ((!(input is double.NaN)) && (!double.IsInfinity(input)))
                 return Convert.ToInt64(Math.Round(input, MidpointRounding.AwayFromZero));
             else
                 return defaultValue;

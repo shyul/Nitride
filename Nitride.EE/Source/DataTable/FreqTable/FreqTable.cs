@@ -23,60 +23,49 @@ namespace Nitride.EE
             lock (DataLockObject)
             {
                 FreqRows.Clear();
-                double step = (stopFreq - startFreq) / (numOfPts - 1D);
-                Start = startFreq;
+                FreqStep = (stopFreq - startFreq) / (numOfPts - 1D);
+                StartFreq = startFreq;
 
                 int pt = 0;
                 for (int i = 0; i < numOfPts; i++)
                 {
-                    double freq = startFreq + (i * step);
+                    double freq = startFreq + (i * FreqStep);
                     FreqRows.Add(new FreqRow(freq, pt, this));
-                    Stop = freq;
+                    StopFreq = freq;
                     pt++;
                 }
             }
         }
 
-        public void Configure(double startFreq, double stopFreq, double stepFreq)
+        public void Configure(double startFreq, double stopFreq, double freqStep)
         {
             lock (DataLockObject)
             {
                 FreqRows.Clear();
-                Start = startFreq;
+                StartFreq = startFreq;
+                FreqStep = freqStep;
 
                 int pt = 0;
-                for (double freq = startFreq; freq <= stopFreq; freq += stepFreq)
+                for (double freq = startFreq; freq <= stopFreq; freq += freqStep)
                 {
                     FreqRows.Add(new FreqRow(freq, pt, this));
-                    Stop = freq;
+                    StopFreq = freq;
                     pt++;
                 }
             }
         }
 
-        public double Start { get; protected set; } = double.MaxValue; // => Count > 0 ? Rows.First().X : double.NaN;
+        public double StartFreq { get; protected set; } = double.MaxValue; // => Count > 0 ? Rows.First().X : double.NaN;
 
-        public double Stop { get; protected set; } = double.MinValue; // => Count > 0 ? Rows.Last().X : double.NaN;
+        public double StopFreq { get; protected set; } = double.MinValue; // => Count > 0 ? Rows.Last().X : double.NaN;
+
+        public double FreqStep { get; protected set; } = double.MaxValue;
 
         public List<FreqRow> FreqRows { get; } = new();
 
         protected Dictionary<double, int> FreqToIndex { get; } = new();
 
         public bool Contains(double freq) => FreqToIndex.ContainsKey(freq);
-
-        public void ImportRow(FreqRow row)
-        {
-
-
-
-        }
-
-        public void ImportRows(IEnumerable<FreqRow> rows)
-        {
-
-
-
-        }
 
         public void Sort()
         {

@@ -40,14 +40,14 @@ namespace Nitride.Chart
 
         public virtual string Description { get; set; }
 
-        public abstract ITable Table { get; set; }
+        public abstract ITable Table { get; }
 
         public virtual void RemoveDataSource()
         {
             lock (GraphicsLockObject)
             {
                 ReadyToShow = false;
-                Table = null;
+                // Table = null;
             }
         }
 

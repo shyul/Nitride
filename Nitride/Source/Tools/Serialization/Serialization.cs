@@ -252,7 +252,7 @@ namespace Nitride
             if (size > bytes.Length) return 0;
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(source, ptr, true);
-            Marshal.Copy(ptr, bytes, 0, size);
+            Marshal.Copy(ptr, bytes, 0, size); // public static void Copy (IntPtr source, byte[] destination, int startIndex, int length);
             Marshal.FreeHGlobal(ptr);
             return size;
         }
@@ -261,7 +261,7 @@ namespace Nitride
         {
             int size = Marshal.SizeOf(typeof(T));
             IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.Copy(bytes, 0, ptr, size);
+            Marshal.Copy(bytes, 0, ptr, size); // Copy (byte[] source, int startIndex, IntPtr destination, int length);
             T res = (T)Marshal.PtrToStructure(ptr, typeof(T));
             Marshal.FreeHGlobal(ptr);
             return res;

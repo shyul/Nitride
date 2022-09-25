@@ -10,9 +10,9 @@ using Nitride.Chart;
 
 namespace Nitride.EE
 {
-    public sealed class FreqChart : ChartWidget
+    public sealed class SpectrumChart : ChartWidget
     {
-        public FreqChart(string name, FreqTable st) : base(name)
+        public SpectrumChart(string name, FreqTable st, NumericColumn mainCol) : base(name)
         {
             Margin = new Padding(5, 15, 5, 5);
             Theme.FillColor = BackColor = Color.FromArgb(255, 255, 253, 245);
@@ -49,13 +49,43 @@ namespace Nitride.EE
 
             EnableChartShift = false;
 
+            MainColumn = mainCol;
+
+            MainLineSeries = new LineSeries(MainColumn)
+            {
+                Order = 0,
+                Importance = Importance.Major,
+                Name = "FFT Spectrum",
+                LegendName = "FFT Spectrum",
+                Color = Color.Gray,
+                IsAntialiasing = true,
+                Tension = 0,
+                HasTailTag = false
+            };
+
+            MainArea.AddSeries(MainLineSeries);
+
+            ReadyToShow = true;
+            Location = new Point(0, 0);
+            Dock = DockStyle.Fill;
+
+            PixelTable.AddDataConsumer(this);
+
+            UpdatePixelTable(true);
+
             ResumeLayout(false);
             PerformLayout();
         }
 
         public override int RightBlankAreaWidth => 0;
 
-        public FreqTable FreqTable { get; private set; }
+        public FreqTable FreqTable { get; }
+
+        public NumericColumn MainColumn { get; }
+
+        public LineSeries MainLineSeries { get; }
+
+        public FreqTable PixelTable { get; } = new();
 
         public Area MainArea { get; }
 
@@ -63,19 +93,87 @@ namespace Nitride.EE
         {
             get
             {
-                if (FreqTable[i] is FreqRow sp && sp.Frequency is double d)
+                if (PixelTable[i] is FreqRow sp && sp.Frequency is double d)
                     return (d / 1e6).ToString("0.######") + "MHz";
                 else
                     return string.Empty;
             }
         }
 
-        public override ITable Table => FreqTable;
+        public override ITable Table => PixelTable; // FreqTable; // PixelTable;
 
         public override bool ReadyToShow { get => m_ReadyToShow; set { m_ReadyToShow = value; } }
 
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
+
+        public void UpdatePixelTable(bool force = false)
+        {
+            //Console.WriteLine("UpdatePixelTable");
+
+            if (PixelTable.Count != ChartBounds.Width || PixelTable.StartFreq != FreqTable.StartFreq || PixelTable.StopFreq != FreqTable.StopFreq || force)
+            {
+                PixelTable.Configure(FreqTable.StartFreq, FreqTable.StopFreq, ChartBounds.Width); // Count is pegged with window size, OR it can be manually set.
+                IndexCount = Table.Count;
+                StopPt = Table.Count;
+
+                //Console.WriteLine("IndexCount = " + IndexCount);
+            }
+
+            if (FreqTable.Count > PixelTable.Count)
+            {
+                int j = 0;
+                for (int i = 0; i < PixelTable.Count; i++)
+                {
+                    FreqRow prow = PixelTable[i];
+
+                    double freq_min = prow.Frequency - (PixelTable.FreqStep / 2);
+                    double freq_max = prow.Frequency + (PixelTable.FreqStep / 2);
+
+                    prow[MainColumn] = double.MinValue;// Peak detection!
+
+                    while (j < FreqTable.Count)
+                    {
+                        FreqRow drow = FreqTable[j];
+
+                        if (drow.Frequency >= freq_min && drow.Frequency < freq_max)
+                        {
+                            // Peak detection!
+                            if (prow[MainColumn] < drow[MainColumn]) prow[MainColumn] = drow[MainColumn];
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                        j++;
+
+
+                    }
+                }
+            }
+            else if (FreqTable.Count == PixelTable.Count)
+            {
+                for (int i = 0; i < PixelTable.Count; i++)
+                {
+                    FreqRow prow = PixelTable[i];
+                    FreqRow drow = FreqTable[i];
+                    prow[MainColumn] = drow[MainColumn];
+                }
+            }
+            else if (FreqTable.Count > 0)// Spline interpolation.
+            {
+                CubicSpline cs = new(FreqTable.FreqRows.Select(n => n.Frequency), FreqTable.FreqRows.Select(n => n[MainColumn]));
+                var result = cs.Evaluate(PixelTable.FreqRows.Select(n => n.Frequency));
+
+                for (int i = 0; i < PixelTable.Count; i++)
+                {
+                    FreqRow prow = PixelTable[i];
+                    prow[MainColumn] = result.ElementAt(i);
+                }
+            }
+
+        }
 
         public override void CoordinateOverlay()
         {
@@ -89,9 +187,11 @@ namespace Nitride.EE
 
             if (ReadyToShow)
             {
-                lock (Table.DataLockObject)
+                lock (PixelTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
+                        UpdatePixelTable();
+
                         AxisX.TickList.Clear();
 
                         //int tickMulti = 1;
@@ -110,22 +210,14 @@ namespace Nitride.EE
                         if (tickNum > 0)
                         {
                             int tickStep = Math.Round((StopPt - StartPt) / tickNum).ToInt32();
-                            //Console.WriteLine("totalTicks =" + totalTicks);
-                            //double freqSpan = FreqTable[StopPt - 1].Frequency - FreqTable[StartPt].Frequency;
-                            //double tickFreqSpan = (freqSpan / totalTicks).FitDacades(TickDacades);
 
-                            //Console.WriteLine("tickFreqSpan = " + tickFreqSpan);
+                           // Console.WriteLine("tickStep = " + tickStep);
 
                             // TODO: Fix THIS!!
-                            for (int i = StartPt; i < Math.Min(FreqTable.Count, StopPt); i++)
+                            for (int i = StartPt; i < Math.Min(PixelTable.Count, StopPt); i++)
                             {
-                                //DateTime time = m_BarTable.IndexToTime(i);
-                                //if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
-                                //if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
+                                double freq = PixelTable[i].Frequency;
 
-                                double freq = FreqTable[i].Frequency;
-
-                                //if ((freq % tickFreqSpan) < (tickFreqSpan / 10D)) AxisX.TickList.CheckAdd(px, (Importance.Major, freq.ToString()));
                                 if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (freq / 1e6).ToString("0.###") + "MHz"));
 
 

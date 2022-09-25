@@ -32,8 +32,8 @@ namespace Nitride.EE
             ChronoTable = ct;
             ChronoTable.Status = TableStatus.Loading;
             ChronoTable.AddDataConsumer(this);
-            TabName = Name = "Test Chart with Table Here:)";
-            
+            TabName = Name = name;
+
             AddArea(MainArea = new OscillatorArea(this, "Main", 0.3f)
             {
                 HasXAxisBar = true,
@@ -74,18 +74,7 @@ namespace Nitride.EE
             }
         }
 
-        public override ITable Table
-        {
-            get => ChronoTable;
-
-            set
-            {
-                if (value is ChronoTable ct)
-                    ChronoTable = ct;
-                else
-                    ChronoTable = null;
-            }
-        }
+        public override ITable Table => ChronoTable;
 
         public override bool ReadyToShow { get => m_ReadyToShow; set { m_ReadyToShow = value; } }
 
