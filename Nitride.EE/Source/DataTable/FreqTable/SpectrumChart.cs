@@ -57,7 +57,7 @@ namespace Nitride.EE
                 Importance = Importance.Major,
                 Name = "FFT Spectrum",
                 LegendName = "FFT Spectrum",
-                Color = Color.Gray,
+                Color = Color.FromArgb(128, 128, 128, 128),
                 IsAntialiasing = true,
                 Tension = 0,
                 HasTailTag = false
@@ -68,6 +68,43 @@ namespace Nitride.EE
             ReadyToShow = true;
             Location = new Point(0, 0);
             Dock = DockStyle.Fill;
+
+            
+            List<NumericColumn> persistCol_L = new();
+            List<NumericColumn> persistCol_H = new();
+            List<BandSeries> persistSeries = new();
+            
+            for (int i = 0; i < 8; i++) 
+            {
+                NumericColumn h_col = new("Persist H" + i);
+                NumericColumn l_col = new("Persist L" + i);
+                BandSeries s = new(h_col, l_col, Color.FromArgb(32, 128, 128, 128))
+                {
+                    EdgeColor = Color.FromArgb(64, 128, 128, 128),
+                    FillColor = Color.FromArgb(32, 128, 128, 128),
+                    LowerEdgeColor = Color.FromArgb(8, 128, 128, 128),
+                    Order = i + 2,
+                    Importance = Importance.Minor,
+                    Name = "FFT Persist " + i,
+                    // LegendName = "FFT Persist " + i,
+                    Color = Color.FromArgb(8, 128, 128, 128),
+                    IsAntialiasing = true,
+                    Tension = 0,
+                    HasTailTag = false,
+                    
+                };
+
+                persistSeries.Add(s);
+                MainArea.AddSeries(s);
+
+                persistCol_L.Add(l_col);
+                persistCol_H.Add(h_col);
+
+            }
+
+            PersistColumnL = persistCol_L.ToArray();
+            PersistColumnH = persistCol_H.ToArray();
+            PersisSeries = persistSeries.ToArray();
 
             PixelTable.AddDataConsumer(this);
 
@@ -84,6 +121,12 @@ namespace Nitride.EE
         public NumericColumn MainColumn { get; }
 
         public LineSeries MainLineSeries { get; }
+
+        public NumericColumn[] PersistColumnL { get; }
+
+        public NumericColumn[] PersistColumnH { get; }
+
+        public BandSeries[] PersisSeries { get; } // = new LineSeries[32];
 
         public FreqTable PixelTable { get; } = new();
 
@@ -107,6 +150,8 @@ namespace Nitride.EE
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
+        private int PersistIndex { get; set; } = 0;
+
         public void UpdatePixelTable(bool force = false)
         {
             //Console.WriteLine("UpdatePixelTable");
@@ -123,15 +168,26 @@ namespace Nitride.EE
             if (FreqTable.Count > PixelTable.Count)
             {
                 int j = 0;
+                
+                NumericColumn h_col = PersistColumnH[PersistIndex];
+                NumericColumn l_col = PersistColumnL[PersistIndex];
+
+                PersistIndex++;
+                if (PersistIndex >= PersistColumnL.Length)
+                    PersistIndex = 0;
+                
                 for (int i = 0; i < PixelTable.Count; i++)
                 {
                     FreqRow prow = PixelTable[i];
 
                     double freq_min = prow.Frequency - (PixelTable.FreqStep / 2);
                     double freq_max = prow.Frequency + (PixelTable.FreqStep / 2);
-
+                    
                     prow[MainColumn] = double.MinValue;// Peak detection!
-
+                    
+                    prow[h_col] = double.MinValue;
+                    prow[l_col] = double.MaxValue;
+                    
                     while (j < FreqTable.Count)
                     {
                         FreqRow drow = FreqTable[j];
@@ -139,7 +195,15 @@ namespace Nitride.EE
                         if (drow.Frequency >= freq_min && drow.Frequency < freq_max)
                         {
                             // Peak detection!
-                            if (prow[MainColumn] < drow[MainColumn]) prow[MainColumn] = drow[MainColumn];
+                            if (prow[MainColumn] < drow[MainColumn])
+                            {
+                                prow[MainColumn] = drow[MainColumn];
+                                prow[h_col] = drow[MainColumn];
+                            }
+
+                            //if (prow[h_col] < drow[MainColumn]) prow[h_col] = drow[MainColumn];
+
+                            if (prow[l_col] > drow[MainColumn]) prow[l_col] = drow[MainColumn];
                         }
                         else
                         {
