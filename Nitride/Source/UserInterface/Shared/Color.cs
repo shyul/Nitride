@@ -105,5 +105,49 @@ namespace Nitride
                 _ => Color.FromArgb(alpha, iC, iX, i0),
             };
         }
+
+
+        public static Color GetGradient(Color c_min, Color c_max, double ratio)
+        {
+            int a_min = c_min.A;
+            int r_min = c_min.R;
+            int g_min = c_min.G;
+            int b_min = c_min.B;
+
+            int a_max = c_max.A;
+            int r_max = c_max.R;
+            int g_max = c_max.G;
+            int b_max = c_max.B;
+
+            int a_average = Convert.ToInt32(a_min + ((a_max - a_min) * ratio));
+            int r_average = Convert.ToInt32(r_min + ((r_max - r_min) * ratio));
+            int g_average = Convert.ToInt32(g_min + ((g_max - g_min) * ratio));
+            int b_average = Convert.ToInt32(b_min + ((b_max - b_min) * ratio));
+
+            /*
+            Range<int> a_range = new(c_min.A, c_max.A);
+            Range<int> r_range = new(c_min.R, c_max.R);
+            Range<int> g_range = new(c_min.G, c_max.G);
+            Range<int> b_range = new(c_min.B, c_max.B);
+
+            int a_average = Convert.ToInt32(a_range.Min + ((a_range.Max - a_range.Min) * ratio));
+            int r_average = Convert.ToInt32(r_range.Min + ((r_range.Max - r_range.Min) * ratio));
+            int g_average = Convert.ToInt32(g_range.Min + ((g_range.Max - g_range.Min) * ratio));
+            int b_average = Convert.ToInt32(b_range.Min + ((b_range.Max - b_range.Min) * ratio));*/
+
+            if (a_average < 0) a_average = 0;
+            else if (a_average > 255) a_average = 255;
+
+            if (r_average < 0) r_average = 0;
+            else if (r_average > 255) r_average = 255;
+
+            if (g_average < 0) g_average = 0;
+            else if (g_average > 255) g_average = 255;
+
+            if (b_average < 0) b_average = 0;
+            else if (b_average > 255) b_average = 255;
+
+            return Color.FromArgb(a_average, r_average, g_average, b_average);
+        }
     }
 }

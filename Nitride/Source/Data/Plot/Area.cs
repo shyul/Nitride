@@ -13,10 +13,11 @@ using System.Windows.Forms;
 
 namespace Nitride.Plot
 {
+    /*
     public class Area
     {
         public ContinuousAxis AxixX { get; }
 
         public ContinuousAxis AxixY { get; }
-    }
+    }*/
 }

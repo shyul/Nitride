@@ -32,7 +32,7 @@ namespace Nitride.Plot
         (double X, double Y) this[int i] { get; }
     }
 
-
+    /*
 
     public class ContinuousAxis
     {
@@ -92,5 +92,5 @@ namespace Nitride.Plot
                     break;
             }
         }
-    }
+    }*/
 }
