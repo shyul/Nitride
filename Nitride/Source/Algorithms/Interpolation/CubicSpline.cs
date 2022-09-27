@@ -16,7 +16,7 @@ namespace Nitride
 {
     public class CubicSpline
     {
-        public CubicSpline(IEnumerable<double> x, IEnumerable<double> y, double startSlope = 0, double endSlope = 0)
+        public CubicSpline(IEnumerable<double> x, IEnumerable<double> y, double startSlope = double.NaN, double endSlope = double.NaN)
         {
             N = x.Count();
             if (N == y.Count() && N > 1) 

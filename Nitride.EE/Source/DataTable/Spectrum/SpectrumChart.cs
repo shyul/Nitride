@@ -229,7 +229,7 @@ namespace Nitride.EE
         {
             //Console.WriteLine("UpdatePixelTable");
 
-            if (PixelTable.Count != ChartBounds.Width || PixelTable.StartFreq != FreqTable.StartFreq || PixelTable.StopFreq != FreqTable.StopFreq || force)
+            if (PixelTable.Count != MainArea.Bounds.Width || PixelTable.StartFreq != FreqTable.StartFreq || PixelTable.StopFreq != FreqTable.StopFreq || force)
             {
                 PixelTable.Configure(FreqTable.StartFreq, FreqTable.StopFreq, ChartBounds.Width); // Count is pegged with window size, OR it can be manually set.
                 IndexCount = Table.Count;
@@ -237,10 +237,10 @@ namespace Nitride.EE
                 //Console.WriteLine("IndexCount = " + IndexCount);
             }
 
-            if (PersistBufferWidth != ChartBounds.Width || PersistBufferHeight != ChartBounds.Height)
+            if (PersistBufferWidth != MainArea.Bounds.Width || PersistBufferHeight != MainArea.Bounds.Height)
             {
-                PersistBufferWidth = ChartBounds.Width + 1;
-                PersistBufferHeight = ChartBounds.Height + 1;
+                PersistBufferWidth = MainArea.Bounds.Width + 1;
+                PersistBufferHeight = MainArea.Bounds.Height + 1;
                 PersistBuffer = new int[PersistBufferWidth, PersistBufferHeight];
                 PersistBitmap = new Bitmap(PersistBufferWidth, PersistBufferHeight);
             }
@@ -480,8 +480,8 @@ namespace Nitride.EE
                 lock (t.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        g.DrawImage(PersistBitmap, ChartBounds.Left, 0);
-
+                        //g.DrawImage(PersistBitmap, MainArea.Bounds); 
+                        g.DrawImage(PersistBitmap, MainArea.Bounds.Left, MainArea.Bounds.Top);
                         var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 
                         int i = 0;
