@@ -63,6 +63,7 @@
     <Compile Include="Source\DataTable\FreqTable\FreqChart.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqRow.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
+    <Compile Include="Source\DataTable\Spectrum\FreqTrace.cs" />
     <Compile Include="Source\DataTable\Spectrum\SampleBuffer.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumChart.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumData.cs" />

@@ -257,7 +257,7 @@ namespace Nitride.EE
                 {
                     var drow = Data.ElementAt(j);
                     f = drow.Freq;
-                    d = drow.Value;
+                    d = drow.Value;  // d = (drow.Value * 1) + 0;
                     cnt++;
 
                     if (f >= freq_min && f < freq_max)

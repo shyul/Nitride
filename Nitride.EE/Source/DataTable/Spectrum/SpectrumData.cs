@@ -2,29 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using Nitride;
-using Nitride.Chart;
-using Nitride.Plot;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Nitride.EE
 {
     // when data length is longer than trace length.
-    public enum Detector : int
+    public enum FreqDetector : int
     {
-        Peak,
+        Peak = 0,
         NegativePeak,
         Average, // Average of peak and low
+        Mean,
         RMS, // Average of all bin members.
         Spline
     }
-
 
     public class FreqFrame
     {
@@ -63,8 +57,8 @@ namespace Nitride.EE
         {
             get => m_Count;
             private set
-            { 
-                if (value < 3) 
+            {
+                if (value < 3)
                 {
                     m_Count = 3;
                 }
@@ -112,6 +106,7 @@ namespace Nitride.EE
             private set => Count = Convert.ToInt32(Math.Ceiling(Span / value));
         }
 
+        public FreqDetector Detector { get; set; } = FreqDetector.Peak;
 
         #endregion Basic Settings
 
@@ -135,9 +130,9 @@ namespace Nitride.EE
 
         public double[] FreqPoints { get; private set; }
 
-        public void ConfigureFreq(double centerFreq, double span, int count) 
+        public void ConfigureFreq(double centerFreq, double span, int count)
         {
-            lock (FreqTable.DataLockObject) 
+            lock (FreqTable.DataLockObject)
             {
                 Count = count;
                 CenterFreq = centerFreq;
@@ -187,6 +182,7 @@ namespace Nitride.EE
         public int HistoDepth { get; private set; }
         public FreqFrame[] HistoFrames { get; private set; }
 
+        public bool PersistEnable { get; set; }
         public int PersistDepth { get; private set; }
         public Color[] PersistColor { get; private set; }
         private int[,] PersistBuffer { get; set; }
@@ -196,27 +192,68 @@ namespace Nitride.EE
 
         #region Add Data
 
+        public Queue<(double Freq, double Value)[]> TraceBuffer { get; } = new();
+
         public Queue<FreqFrame> FrameBuffer { get; } = new();
 
+        private Task GetFrameTask { get; }
 
+        private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        // CubicSpline when data length < trace length...
-
-        public void AppendTrace((double h, double l, double m)[] trace) // Queue<double[]> queue) 
+        public void GetFrameWorker() 
         {
-            if (trace.Length == Count && FrameBuffer.Count < 3)
+            while (true) 
             {
-                // FreqTable ft = new();
+                if (GetFrameCancellationTokenSource.IsCancellationRequested)
+                    return;
 
-                // CubicSpline cs;
+                if (TraceBuffer.Count > 0) 
+                {
+                    GetFrame(TraceBuffer.Dequeue());
+                }
+                else
+                {
+                    Thread.Sleep(10);
+                }
+            }
+        }
 
-
-
+        private void GetFrame(IEnumerable<(double Freq, double Value)> traceData)
+        {
+            if (FrameBuffer.Count < 3)
+            {
+                FreqTrace ft;
                 FreqFrame frame = HistoFrames[HistoIndex];
-                for (int i = 0; i < Count; i++) 
+                int traceCount = traceData.Count();
+
+                if (traceCount > Count)
+                {
+                    ft = Detector switch
+                    {
+                        FreqDetector.NegativePeak => new FreqTraceNegativePeak(traceData),
+                        FreqDetector.Average => new FreqTraceAverage(traceData),
+                        FreqDetector.Mean => new FreqTraceMean(traceData),
+                        FreqDetector.RMS => new FreqTraceRms(traceData),
+                        FreqDetector.Spline => new FreqTraceSpline(traceData),
+                        _ => new FreqTracePeak(traceData),
+                    };
+                }
+                else if (traceCount == Count)
+                {
+                    ft = new FreqTrace(traceData);
+                }
+                else
+                {
+                    ft = new FreqTraceSpline(traceData);
+                }
+
+                ft.Evaluate(FreqTable, frame);
+
+                for (int i = 0; i < Count; i++)
                 {
                     FreqRow row = FreqTable[i];
-                    (double h_value, double l_value, row[frame.TraceColumn]) = trace[i];
+                    double h_value = row[frame.HighValueColumn];
+                    double l_value = row[frame.LowValueColumn];
 
                     if (h_value > Y_Max) h_value = Y_Max;
                     if (l_value < Y_Min) l_value = Y_Min;
@@ -277,8 +314,6 @@ namespace Nitride.EE
             {
                 FrameBuffer.Dequeue();
             }
-            else if (trace.Length != Count)
-                throw new Exception("Trace Length Mis-match!!");
         }
 
         #endregion Add Data
