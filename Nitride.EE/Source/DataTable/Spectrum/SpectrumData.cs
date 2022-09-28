@@ -1,33 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Nitride;
 using Nitride.Chart;
 using Nitride.Plot;
-using static Nitride.EE.SpectrumData;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Nitride.EE
 {
-    public sealed class SpectrumData //: IDataProvider
+    // when data length is longer than trace length.
+    public enum Detector : int
     {
-        public SpectrumData() 
+        Peak,
+        NegativePeak,
+        Average, // Average of peak and low
+        RMS, // Average of all bin members.
+        Spline
+    }
+
+
+    public class FreqFrame
+    {
+        public FreqFrame(int i, int width, int height)
         {
-        
-        
+            Index = i;
+            HighPixColumn = new("Pix H" + i);
+            LowPixColumn = new("Pix L" + i);
+            HighValueColumn = new("Value H" + i);
+            LowValueColumn = new("Value L" + i);
+            TraceColumn = new("Main " + i);
+            PersistBitmap = new(width, height);
         }
 
+        public int Index { get; }
+        public NumericColumn HighPixColumn { get; }
+        public NumericColumn LowPixColumn { get; }
+        public NumericColumn HighValueColumn { get; }
+        public NumericColumn LowValueColumn { get; }
+        public NumericColumn TraceColumn { get; }
+        public Bitmap PersistBitmap { get; set; }
+    }
 
-
+    public sealed class SpectrumData //: IDataProvider
+    {
         #region Basic Settings
 
-        public double CenterFreq { get; set; }
+        public double CenterFreq { get; private set; }
 
-        public double Span { get; set; }
+        public double Span { get; private set; }
 
         /// <summary>
         /// A.k.a Number of Points
@@ -35,7 +62,7 @@ namespace Nitride.EE
         public int Count
         {
             get => m_Count;
-            set
+            private set
             { 
                 if (value < 3) 
                 {
@@ -51,12 +78,12 @@ namespace Nitride.EE
                 }
             }
         }
-        public int m_Count;
+        private int m_Count = -1;
 
         public double StartFreq
         {
             get => CenterFreq - (Span / 2);
-            set
+            private set
             {
                 if (value < 0) value = 0;
 
@@ -70,7 +97,7 @@ namespace Nitride.EE
         public double StopFreq
         {
             get => CenterFreq + (Span / 2);
-            set
+            private set
             {
                 double stop = value > StartFreq ? value : StartFreq;
                 double start = StartFreq;
@@ -82,7 +109,7 @@ namespace Nitride.EE
         public double FreqStep
         {
             get => Span / Count;
-            set => Count = Convert.ToInt32(Math.Ceiling(Span / value));
+            private set => Count = Convert.ToInt32(Math.Ceiling(Span / value));
         }
 
 
@@ -104,84 +131,88 @@ namespace Nitride.EE
 
         #region Data
 
-        public class HistoFrame
-        {
-            public HistoFrame(int i, int width, int height)
-            {
-                Index = i;
-                HighPixColumn = new(" Pix H" + i);
-                LowPixColumn = new("Pix L" + i);
-                TraceColumn = new("Main " + i);
-                PersistBitmap = new(width, height);
-            }
+        public FreqTable FreqTable { get; } = new();
 
-            public int Index { get; }
-            public NumericColumn HighPixColumn { get; }
-            public NumericColumn LowPixColumn { get; }
-            public NumericColumn TraceColumn { get; }
-            public Bitmap PersistBitmap { get; set; }
+        public double[] FreqPoints { get; private set; }
+
+        public void ConfigureFreq(double centerFreq, double span, int count) 
+        {
+            lock (FreqTable.DataLockObject) 
+            {
+                Count = count;
+                CenterFreq = centerFreq;
+                Span = span;
+
+                FreqTable.Configure(StartFreq, StopFreq, Count);
+                FreqPoints = FreqTable.Rows.Select(n => n.Frequency).OrderBy(n => n).ToArray();
+            }
         }
 
-        public void Configure(int depth, int persistDepth, int height = 1000)
+        public void ConfigureDepth(int depth, int persistDepth, int height = 1000)
         {
-            HistoDepth = depth;
-            PersistDepth = persistDepth;
-            PersistBufferHeight = height;
-
-            FreqTable.Configure(StartFreq, StopFreq, Count);
-
-            List<HistoFrame> frames = new();
-
-            for (int i = 0; i < HistoDepth; i++)
+            lock (FreqTable.DataLockObject)
             {
-                frames.Add(new(i, Count, PersistBufferHeight));
+                if (Count > 2)
+                {
+                    HistoDepth = depth;
+                    PersistDepth = persistDepth;
+                    PersistBufferHeight = height;
+
+                    List<FreqFrame> frames = new();
+
+                    for (int i = 0; i < HistoDepth; i++)
+                    {
+                        frames.Add(new(i, Count, PersistBufferHeight));
+                    }
+
+                    HistoFrames = frames.ToArray();
+
+                    List<Color> persistColor = new();
+                    // int colorStep = 256 / PersistDepth;
+                    for (int i = 0; i < PersistDepth; i++)
+                    {
+                        //persistColor.Add(Color.FromArgb((colorStep * (i + 1) - 1), 96, 96, 96));
+                        persistColor.Add(ColorTool.GetGradient(Color.FromArgb(96, 60, 119, 177), Color.FromArgb(128, 254, 135, 149), i * 1.0D / PersistDepth));
+                    }
+                    PersistColor = persistColor.ToArray();
+                    PersistBuffer = new int[Count, PersistBufferHeight];
+
+                }
+
+                HistoIndex = 0;
             }
-
-            HistoFrames = frames.ToArray();
-
-            List<Color> persistColor = new();
-            // int colorStep = 256 / PersistDepth;
-            for (int i = 0; i < PersistDepth; i++)
-            {
-                //persistColor.Add(Color.FromArgb((colorStep * (i + 1) - 1), 96, 96, 96));
-                persistColor.Add(ColorTool.GetGradient(Color.FromArgb(96, 60, 119, 177), Color.FromArgb(128, 254, 135, 149), i * 1.0D / PersistDepth));
-            }
-            PersistColor = persistColor.ToArray();
-            PersistBuffer = new int[Count, PersistBufferHeight];
-
-            HistoIndex = 0;
         }
 
-        public int HistoIndex { get; set; }
+        public int HistoIndex { get; private set; }
+        public int HistoDepth { get; private set; }
+        public FreqFrame[] HistoFrames { get; private set; }
 
-        public int HistoDepth { get; set; }
-
-        public int PersistDepth { get; set; }
-
-        public HistoFrame[] HistoFrames { get; private set; }
-
+        public int PersistDepth { get; private set; }
         public Color[] PersistColor { get; private set; }
         private int[,] PersistBuffer { get; set; }
         private int PersistBufferHeight { get; set; }
-        public FreqTable FreqTable { get; } = new();
 
         #endregion Data
 
         #region Add Data
 
-        public Queue<HistoFrame> FramesBuffer { get; } = new();
+        public Queue<FreqFrame> FrameBuffer { get; } = new();
+
+
+
+        // CubicSpline when data length < trace length...
 
         public void AppendTrace((double h, double l, double m)[] trace) // Queue<double[]> queue) 
         {
-            if (trace.Length == Count && FramesBuffer.Count < 3)
+            if (trace.Length == Count && FrameBuffer.Count < 3)
             {
-                FreqTable ft = new();
+                // FreqTable ft = new();
 
-                CubicSpline cs;
+                // CubicSpline cs;
 
 
 
-                HistoFrame frame = HistoFrames[HistoIndex];
+                FreqFrame frame = HistoFrames[HistoIndex];
                 for (int i = 0; i < Count; i++) 
                 {
                     FreqRow row = FreqTable[i];
@@ -199,7 +230,7 @@ namespace Nitride.EE
                 int histo_index = HistoIndex;
                 for (int z = 0; z < PersistDepth; z++)
                 {
-                    HistoFrame histo_frame = HistoFrames[histo_index];
+                    FreqFrame histo_frame = HistoFrames[histo_index];
                     for (int x = 0; x < Count; x++)
                     {
                         FreqRow prow = FreqTable[x];
@@ -236,15 +267,15 @@ namespace Nitride.EE
                     }
                 }
 
-                FramesBuffer.Enqueue(frame);
+                FrameBuffer.Enqueue(frame);
 
                 HistoIndex++;
                 if (HistoIndex >= HistoDepth)
                     HistoIndex = 0;
             }
-            else if (FramesBuffer.Count > 2)
+            else if (FrameBuffer.Count > 2)
             {
-                FramesBuffer.Dequeue();
+                FrameBuffer.Dequeue();
             }
             else if (trace.Length != Count)
                 throw new Exception("Trace Length Mis-match!!");
