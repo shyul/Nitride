@@ -63,14 +63,17 @@
     <Compile Include="Source\DataTable\FreqTable\FreqChart.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqRow.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
+    <Compile Include="Source\DataTable\Spectrum\TraceDetectorType.cs" />
     <Compile Include="Source\DataTable\Spectrum\FreqTrace.cs" />
     <Compile Include="Source\DataTable\Spectrum\SampleBuffer.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumChart.cs" />
+    <Compile Include="Source\DataTable\Spectrum\SpectrumChartOld.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumData.cs" />
     <Compile Include="Source\DataTable\ParamTable\ComplexFormat.cs" />
     <Compile Include="Source\DataTable\ParamTable\Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\S_Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\Z_Parameter.cs" />
+    <Compile Include="Source\DataTable\Spectrum\TraceFrame.cs" />
     <Compile Include="Source\FFT\FFT.cs" />
     <Compile Include="Source\FFT\Waveform.cs" />
     <Compile Include="Source\FFT\WindowFunctions.cs" />

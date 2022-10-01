@@ -5,7 +5,10 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Nitride
 {
@@ -148,6 +151,156 @@ namespace Nitride
             else if (b_average > 255) b_average = 255;
 
             return Color.FromArgb(a_average, r_average, g_average, b_average);
+        }
+
+        public static Color[] GetGradient(IEnumerable<(double X, double A, double R, double G, double B)> vector, int cnt)
+        {
+            var X = vector.Select(n => n.X);
+
+            CubicSpline a_cs = new(X, vector.Select(n => n.A), 0, 0);
+            CubicSpline r_cs = new(X, vector.Select(n => n.R), 0, 0);
+            CubicSpline g_cs = new(X, vector.Select(n => n.G), 0, 0);
+            CubicSpline b_cs = new(X, vector.Select(n => n.B), 0, 0);
+
+            double[] NX = new double[cnt];
+            double min_nx = X.Min();
+            double delta_nx = X.Max() - min_nx;
+
+            for (int i = 0; i < cnt; i++)
+            {
+                NX[i] = ((Convert.ToDouble(i) / (cnt - 1.0D)) * delta_nx) + min_nx;
+            }
+
+            double[] A = a_cs.Evaluate(NX);
+            double[] R = r_cs.Evaluate(NX);
+            double[] G = g_cs.Evaluate(NX);
+            double[] B = b_cs.Evaluate(NX);
+            Color[] res = new Color[cnt];
+
+            for (int i = 0; i < cnt; i++)
+            {
+                double a = A[i];
+                if (a > 255) a = 255; else if (a < 0) a = 0;
+
+                double r = R[i];
+                if (r > 255) r = 255; else if (r < 0) r = 0;
+
+                double g = G[i];
+                if (g > 255) g = 255; else if (g < 0) g = 0;
+
+                double b = B[i];
+                if (b > 255) b = 255; else if (b < 0) b = 0;
+
+                res[i] = Color.FromArgb(Convert.ToByte(a), Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b));
+            }
+
+            return res;
+        }
+
+        private static (double X, double A, double R, double G, double B)[] ThermalColorVector { get; } =
+        {
+            (0, 16, 5, 0, 255),
+            (1, 32, 4, 0, 255),
+            (2, 48, 3, 0, 255),
+            (3, 64, 2, 0, 255),
+            (4, 80, 1, 0, 255),
+            (5, 96, 0, 0, 255),
+            (6, 112, 0, 2, 255),
+            (7, 128, 0, 18, 255),
+            (8, 112, 0, 34, 255),
+            (9, 120, 0, 50, 255),
+
+            (10, 128, 0, 68, 255),
+            (11, 144, 0, 84, 255),
+            (12, 160, 0, 100, 255),
+            (13, 176, 0, 116, 255),
+            (14, 192, 0, 132, 255),
+            (15, 208, 0, 148, 255),
+            (16, 224, 0, 164, 255),
+            (17, 240, 0, 180, 255),
+            (18, 255, 0, 196, 255),
+            (19, 255, 0, 212, 255),
+
+            (20, 255, 0, 228, 255),
+            (21, 255, 0, 255, 244),
+            (22, 255, 0, 255, 208),
+            (23, 255, 0, 255, 168),
+            (24, 255, 0, 255, 131),
+            (25, 255, 0, 255, 92),
+            (26, 255, 0, 255, 54),
+            (27, 255, 0, 255, 16),
+            (28, 255, 23, 255, 0),
+            (29, 255, 62, 255, 0),
+            
+            (30, 255, 101, 255, 0),
+            (31, 255, 138, 255, 0),
+            (32, 255, 176, 255, 0),
+            (33, 255, 215, 255, 0),
+            (34, 255, 253, 255, 0),
+            (35, 255, 255, 250, 0),
+            (36, 255, 255, 240, 0),
+            (37, 255, 255, 230, 0),
+            (38, 255, 255, 220, 0),
+            (39, 255, 255, 210, 0),
+
+            (40, 255, 255, 200, 0),
+            (41, 255, 255, 190, 0),
+            (42, 255, 255, 180, 0),
+            (43, 255, 255, 170, 0),
+            (44, 255, 255, 160, 0),
+            (45, 255, 255, 150, 0),
+            (46, 255, 255, 140, 0),
+            (47, 255, 255, 130, 0),
+            (48, 255, 255, 120, 0),
+            (49, 255, 255, 110, 0),
+
+            (50, 255, 255, 100, 0),
+            (51, 255, 255, 90, 0),
+            (52, 255, 255, 80, 0),
+            (53, 255, 255, 70, 0),
+            (54, 255, 255, 60, 0),
+            (55, 255, 255, 50, 0),
+            (56, 255, 255, 40, 0),
+            (57, 255, 255, 30, 0),
+            (58, 255, 255, 20, 0),
+            (59, 255, 255, 10, 0),
+
+            (60, 255, 255, 0, 0),
+            (61, 255, 255, 0, 16),
+            (62, 255, 255, 0, 32),
+            (63, 255, 255, 0, 48),
+            (64, 255, 255, 0, 64),
+            (65, 255, 255, 0, 80),
+            (66, 255, 255, 0, 96),
+            (67, 255, 255, 0, 112),
+            (68, 255, 255, 0, 128),
+            (69, 255, 255, 0, 144),
+            (70, 255, 255, 0, 160),
+            (71, 255, 255, 0, 176),
+            (72, 255, 255, 0, 192),
+            (73, 255, 255, 0, 208),
+            (74, 255, 255, 0, 224),
+            
+            (75, 255, 255, 0, 240),
+            (76, 255, 255, 1, 240),
+            (77, 255, 255, 2, 240),
+            (78, 255, 255, 3, 240),
+            (79, 255, 255, 4, 240),
+            (80, 255, 255, 5, 240),
+            (81, 255, 255, 6, 240),
+            (82, 255, 255, 7, 240),
+            (83, 255, 255, 8, 240),
+            (84, 255, 255, 9, 240),
+            (85, 255, 255, 10, 240),
+            (86, 255, 255, 11, 240),
+            (87, 255, 255, 12, 240),
+            (88, 255, 255, 13, 240),
+            (89, 255, 255, 14, 240)
+        };
+
+        public static Color[] GetThermalGradient(int cnt, int range)
+        {
+            return GetGradient(ThermalColorVector.Take(range), cnt);
         }
     }
 }

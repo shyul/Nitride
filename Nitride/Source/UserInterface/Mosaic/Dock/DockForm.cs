@@ -114,7 +114,8 @@ namespace Nitride
 
                     m_AsyncUpdateUI = false;
                 }
-                Thread.Sleep(5);
+                else
+                    Thread.Sleep(5);
             }
         }
 

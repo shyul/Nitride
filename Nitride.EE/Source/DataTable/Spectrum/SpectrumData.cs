@@ -9,41 +9,22 @@ using Nitride;
 
 namespace Nitride.EE
 {
-    // when data length is longer than trace length.
-    public enum FreqDetector : int
+    public sealed class SpectrumData : IDisposable //: IDataProvider
     {
-        Peak = 0,
-        NegativePeak,
-        Average, // Average of peak and low
-        Mean,
-        RMS, // Average of all bin members.
-        Spline
-    }
-
-    public class FreqFrame
-    {
-        public FreqFrame(int i, int width, int height)
+        public SpectrumData()
         {
-            Index = i;
-            HighPixColumn = new("Pix H" + i);
-            LowPixColumn = new("Pix L" + i);
-            HighValueColumn = new("Value H" + i);
-            LowValueColumn = new("Value L" + i);
-            TraceColumn = new("Main " + i);
-            PersistBitmap = new(width, height);
+            GetFrameTask = new(() => GetFrameWorker());
+            GetFrameTask.Start();
         }
 
-        public int Index { get; }
-        public NumericColumn HighPixColumn { get; }
-        public NumericColumn LowPixColumn { get; }
-        public NumericColumn HighValueColumn { get; }
-        public NumericColumn LowValueColumn { get; }
-        public NumericColumn TraceColumn { get; }
-        public Bitmap PersistBitmap { get; set; }
-    }
+        ~SpectrumData() => Dispose();
 
-    public sealed class SpectrumData //: IDataProvider
-    {
+        public void Dispose()
+        {
+            GetFrameCancellationTokenSource.Cancel();
+            FreqTable.Dispose();
+        }
+
         #region Basic Settings
 
         public double CenterFreq { get; private set; }
@@ -106,7 +87,7 @@ namespace Nitride.EE
             private set => Count = Convert.ToInt32(Math.Ceiling(Span / value));
         }
 
-        public FreqDetector Detector { get; set; } = FreqDetector.Peak;
+        public TraceDetectorType Detector { get; set; } = TraceDetectorType.Peak;
 
         #endregion Basic Settings
 
@@ -130,12 +111,12 @@ namespace Nitride.EE
 
         public double[] FreqPoints { get; private set; }
 
-        public void ConfigureFreq(double centerFreq, double span, int count)
+        public void ConfigureRange(double center, double span, int count)
         {
             lock (FreqTable.DataLockObject)
             {
                 Count = count;
-                CenterFreq = centerFreq;
+                CenterFreq = center;
                 Span = span;
 
                 FreqTable.Configure(StartFreq, StopFreq, Count);
@@ -153,7 +134,7 @@ namespace Nitride.EE
                     PersistDepth = persistDepth;
                     PersistBufferHeight = height;
 
-                    List<FreqFrame> frames = new();
+                    List<TraceFrame> frames = new();
 
                     for (int i = 0; i < HistoDepth; i++)
                     {
@@ -180,7 +161,7 @@ namespace Nitride.EE
 
         public int HistoIndex { get; private set; }
         public int HistoDepth { get; private set; }
-        public FreqFrame[] HistoFrames { get; private set; }
+        public TraceFrame[] HistoFrames { get; private set; }
 
         public bool PersistEnable { get; set; }
         public int PersistDepth { get; private set; }
@@ -192,22 +173,27 @@ namespace Nitride.EE
 
         #region Add Data
 
-        public Queue<(double Freq, double Value)[]> TraceBuffer { get; } = new();
+        public void AppendTrace((double Freq, double Value)[] trace)
+        {
+            TraceBuffer.Enqueue(trace);
+        }
 
-        public Queue<FreqFrame> FrameBuffer { get; } = new();
+        private Queue<(double Freq, double Value)[]> TraceBuffer { get; } = new();
+
+        public Queue<TraceFrame> FrameBuffer { get; } = new();
 
         private Task GetFrameTask { get; }
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        public void GetFrameWorker() 
+        public void GetFrameWorker()
         {
-            while (true) 
+            while (true)
             {
                 if (GetFrameCancellationTokenSource.IsCancellationRequested)
                     return;
 
-                if (TraceBuffer.Count > 0) 
+                if (TraceBuffer.Count > 0)
                 {
                     GetFrame(TraceBuffer.Dequeue());
                 }
@@ -223,18 +209,18 @@ namespace Nitride.EE
             if (FrameBuffer.Count < 3)
             {
                 FreqTrace ft;
-                FreqFrame frame = HistoFrames[HistoIndex];
+                TraceFrame frame = HistoFrames[HistoIndex];
                 int traceCount = traceData.Count();
 
                 if (traceCount > Count)
                 {
                     ft = Detector switch
                     {
-                        FreqDetector.NegativePeak => new FreqTraceNegativePeak(traceData),
-                        FreqDetector.Average => new FreqTraceAverage(traceData),
-                        FreqDetector.Mean => new FreqTraceMean(traceData),
-                        FreqDetector.RMS => new FreqTraceRms(traceData),
-                        FreqDetector.Spline => new FreqTraceSpline(traceData),
+                        TraceDetectorType.NegativePeak => new FreqTraceNegativePeak(traceData),
+                        TraceDetectorType.Average => new FreqTraceAverage(traceData),
+                        TraceDetectorType.Mean => new FreqTraceMean(traceData),
+                        TraceDetectorType.RMS => new FreqTraceRms(traceData),
+                        TraceDetectorType.Spline => new FreqTraceSpline(traceData),
                         _ => new FreqTracePeak(traceData),
                     };
                 }
@@ -267,7 +253,7 @@ namespace Nitride.EE
                 int histo_index = HistoIndex;
                 for (int z = 0; z < PersistDepth; z++)
                 {
-                    FreqFrame histo_frame = HistoFrames[histo_index];
+                    TraceFrame histo_frame = HistoFrames[histo_index];
                     for (int x = 0; x < Count; x++)
                     {
                         FreqRow prow = FreqTable[x];
@@ -315,6 +301,8 @@ namespace Nitride.EE
                 FrameBuffer.Dequeue();
             }
         }
+
+
 
         #endregion Add Data
     }

@@ -36,7 +36,7 @@ namespace Nitride.EE
 
         public virtual double FreqStep { get; }*/
 
-        public virtual void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public virtual void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             for (int i = 0; i < pixTable.Count; i++)
             {
@@ -51,7 +51,7 @@ namespace Nitride.EE
     {
         public FreqTracePeak(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
-        public override void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             double freq_min, freq_max, high, low, f, d;
             int j = 0;
@@ -95,7 +95,7 @@ namespace Nitride.EE
     {
         public FreqTraceNegativePeak(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
-        public override void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             double freq_min, freq_max, high, low, f, d;
             int j = 0;
@@ -139,7 +139,7 @@ namespace Nitride.EE
     {
         public FreqTraceAverage(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
-        public override void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             double freq_min, freq_max, high, low, f, d;
             int j = 0;
@@ -184,7 +184,7 @@ namespace Nitride.EE
     {
         public FreqTraceMean(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
-        public override void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             double freq_min, freq_max, high, low, f, d, cnt, sum;
             int j = 0;
@@ -235,7 +235,7 @@ namespace Nitride.EE
     {
         public FreqTraceRms(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
-        public override void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             double freq_min, freq_max, high, low, f, d, cnt, sum;
             int j = 0;
@@ -374,7 +374,7 @@ namespace Nitride.EE
 
         public double[] B { get; }
 
-        public override void Evaluate(FreqTable pixTable, FreqFrame frame)
+        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
             int pt = 0;
             double y;
