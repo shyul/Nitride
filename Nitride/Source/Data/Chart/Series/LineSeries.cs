@@ -25,6 +25,16 @@ namespace Nitride.Chart
 
     public class LineSeries : DotSeries
     {
+        public LineSeries(
+            LineType type = LineType.Default, float width = 1, float tension = 0)
+        {
+            // Data_Column = data_column;
+            Width = width;
+            Tension = tension;
+            LineType = type;
+            Color = EdgeColor = Color.Magenta;
+        }
+
         public LineSeries(NumericColumn data_column,
             LineType type = LineType.Default, float width = 1, float tension = 0)
         {

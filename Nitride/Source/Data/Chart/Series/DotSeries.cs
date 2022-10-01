@@ -34,6 +34,8 @@ namespace Nitride.Chart
 
         protected DotSeries() { }
 
+        public void AssignMainDataColumn(NumericColumn col) => Data_Column = col;
+
         public virtual NumericColumn Data_Column { get; protected set; }
 
         /// <summary>

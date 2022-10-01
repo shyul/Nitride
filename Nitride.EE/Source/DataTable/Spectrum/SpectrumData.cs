@@ -124,7 +124,7 @@ namespace Nitride.EE
             }
         }
 
-        public void ConfigureDepth(int depth, int persistDepth, int height = 1000)
+        public void ConfigureDepth(int depth, int persistDepth = 64, int height = 1000)
         {
             lock (FreqTable.DataLockObject)
             {
@@ -143,14 +143,15 @@ namespace Nitride.EE
 
                     HistoFrames = frames.ToArray();
 
+                    /*
                     List<Color> persistColor = new();
                     // int colorStep = 256 / PersistDepth;
                     for (int i = 0; i < PersistDepth; i++)
                     {
                         //persistColor.Add(Color.FromArgb((colorStep * (i + 1) - 1), 96, 96, 96));
                         persistColor.Add(ColorTool.GetGradient(Color.FromArgb(96, 60, 119, 177), Color.FromArgb(128, 254, 135, 149), i * 1.0D / PersistDepth));
-                    }
-                    PersistColor = persistColor.ToArray();
+                    }*/
+                    PersistColor = ColorTool.GetThermalGradient(PersistDepth, 58); // persistColor.ToArray();
                     PersistBuffer = new int[Count, PersistBufferHeight];
 
                 }

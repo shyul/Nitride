@@ -69,26 +69,23 @@ namespace Nitride.EE
             Location = new Point(0, 0);
             Dock = DockStyle.Fill;
 
-            //List<Color> persistColor = new();
             List<NumericColumn> persistCol_L = new();
             List<NumericColumn> persistCol_H = new();
 
             int num = 64;
-            int colorStep = 256 / num;
+
             for (int i = 0; i < num; i++)
             {
-                //persistColor.Add(Color.FromArgb((colorStep * (i + 1) - 1), 96, 96, 96));
-                //persistColor.Add(ColorTool.GetGradient(Color.FromArgb(96, 60, 119, 177), Color.FromArgb(128, 254, 135, 149), i * 1.0D / num));
-
                 NumericColumn h_col = new("Persist H" + i);
                 NumericColumn l_col = new("Persist L" + i);
                 persistCol_L.Add(l_col);
                 persistCol_H.Add(h_col);
             }
+            
+            PersistColor = ColorTool.GetThermalGradient(num, 58);
+            //PersistColor = ColorTool.GetTransparentGradient(Color.FromArgb(255, 96, 96, 96), (byte)num);
+            //PersistColor = ColorTool.GetDarkSkyGradient(num);
 
-            //PersistColor = persistColor.ToArray();
-
-            PersistColor = ColorTool.GetThermalGradient(num, 40);
             PersistColumnL = persistCol_L.ToArray();
             PersistColumnH = persistCol_H.ToArray();
 
@@ -98,8 +95,6 @@ namespace Nitride.EE
             ResumeLayout(false);
             PerformLayout();
         }
-
-
 
         public override int RightBlankAreaWidth => 0;
 
@@ -128,7 +123,7 @@ namespace Nitride.EE
             get
             {
                 if (PixelTable[i] is FreqRow sp && sp.Frequency is double d)
-                    return (d / 1e6).ToString("0.######") + "MHz";
+                    return (d / 1e6).ToString("0.###") + "MHz";
                 else
                     return string.Empty;
             }

@@ -109,6 +109,19 @@ namespace Nitride
             };
         }
 
+        public static Color[] GetTransparentGradient(Color c, byte num)
+        {
+            List<Color> persistColor = new();
+
+            double step = 255.0D / (double)num;
+
+            for (int i = 0; i < num; i++)
+            {
+                persistColor.Add(Color.FromArgb(Convert.ToByte((double)i * step), c));
+            }
+
+            return persistColor.ToArray();
+        }
 
         public static Color GetGradient(Color c_min, Color c_max, double ratio)
         {
@@ -153,10 +166,10 @@ namespace Nitride
             return Color.FromArgb(a_average, r_average, g_average, b_average);
         }
 
-        public static Color[] GetGradient(IEnumerable<(double X, double A, double R, double G, double B)> vector, int cnt)
+        public static Color[] GetGradient(IEnumerable<(double X, double A, double R, double G, double B)> vec, int cnt)
         {
+            var vector = vec.OrderBy(n => n.X);
             var X = vector.Select(n => n.X);
-
             CubicSpline a_cs = new(X, vector.Select(n => n.A), 0, 0);
             CubicSpline r_cs = new(X, vector.Select(n => n.R), 0, 0);
             CubicSpline g_cs = new(X, vector.Select(n => n.G), 0, 0);
@@ -195,6 +208,16 @@ namespace Nitride
             }
 
             return res;
+        }
+
+        public static Color[] GetThermalGradient(int cnt, int range)
+        {
+            return GetGradient(ThermalColorVector.Take(range), cnt);
+        }
+
+        public static Color[] GetDarkSkyGradient(int cnt)
+        {
+            return GetGradient(DarkSkyColorVector, cnt);
         }
 
         private static (double X, double A, double R, double G, double B)[] ThermalColorVector { get; } =
@@ -298,9 +321,23 @@ namespace Nitride
             (89, 255, 255, 14, 240)
         };
 
-        public static Color[] GetThermalGradient(int cnt, int range)
-        {
-            return GetGradient(ThermalColorVector.Take(range), cnt);
-        }
+        private static (double X, double A, double R, double G, double B)[] DarkSkyColorVector { get; } =
+{
+            (0, 16, 0, 4, 62),
+            (1, 32, 0, 14, 75),
+            (2, 64, 0, 18, 84),
+            (3, 128, 0, 29, 97),
+            (4, 196, 0, 37, 107),
+            (5, 255, 0, 66, 130),
+            (6, 255, 0, 80, 141),
+            (7, 255, 29, 100, 144),
+            (8, 255, 61, 116, 146),
+            (9, 255, 29, 100, 144),
+            (10, 255, 96, 130, 140),
+            (11, 255, 140, 145, 132),
+            (12, 255, 178, 148, 110),
+            (13, 255, 227, 153, 88),
+            (14, 255, 247, 157, 79),
+        };
     }
 }
