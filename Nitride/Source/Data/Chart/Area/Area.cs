@@ -210,6 +210,8 @@ namespace Nitride.Chart
         public int LeftCursorX { get; protected set; }
         public int RightCursorX { get; protected set; }
 
+        public Rectangle DataBounds { get; set; } = new Rectangle();
+
         public int TimeLabelY { get; set; }
 
         public virtual void Coordinate()
@@ -251,6 +253,8 @@ namespace Nitride.Chart
                 AxisLeft.Coordinate(Height, Top);
 
             AxisLeft.GenerateTicks();
+
+            DataBounds = new Rectangle(Bounds.Left + Chart.AxisX.Left, Bounds.Top, Chart.AxisX.Width, Bounds.Height);
 
             // *****************************
             // Update Legend

@@ -66,12 +66,12 @@ namespace Nitride.Chart
             List<(string text, Font font, Brush brush)> labels = new();
 
             string text = Label;
-            if (text is null) text = Data_Column.Label;
+            if (text is null && Data_Column is not null) text = Data_Column.Label;
 
             double data = table[pt, Data_Column];
             if (!double.IsNaN(data)) text += ": " + data.ToString(LegendLabelFormat) + " ";
 
-            if (text.Length > 0) labels.Add((text, Main.Theme.Font, Legend.LabelBrush(Theme)));
+            if (!string.IsNullOrWhiteSpace(text)) labels.Add((text, Main.Theme.Font, Legend.LabelBrush(Theme)));
 
             return labels;
         }

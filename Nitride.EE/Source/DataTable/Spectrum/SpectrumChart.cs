@@ -149,7 +149,7 @@ namespace Nitride.EE
 
         public override ITable Table => Data.FreqTable;
 
-        public override bool ReadyToShow { get => m_ReadyToShow; set { m_ReadyToShow = value; } }
+        public override bool ReadyToShow { get => m_ReadyToShow && CurrentTraceFrame is not null && Table.Count > 0; set { m_ReadyToShow = value; } }
 
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
@@ -263,7 +263,11 @@ namespace Nitride.EE
                 lock (t.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left, MainArea.Bounds.Top);
+                        //g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left, MainArea.Bounds.Top);
+                        //g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left + 2, MainArea.Bounds.Top + 2);
+                        //g.DrawImage(CurrentTraceFrame.PersistBitmap, 0, 0);
+                        g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.DataBounds);
+
                         var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 
                         int i = 0;

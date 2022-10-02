@@ -85,6 +85,8 @@ namespace Nitride.EE
                     j++;
                 }
 
+                //Console.WriteLine("h_value = " + high + " | l_value = " + low);
+
                 prow[frame.TraceColumn] = prow[frame.HighValueColumn] = high;// Peak detection!
                 prow[frame.LowValueColumn] = low;
             }
@@ -288,7 +290,11 @@ namespace Nitride.EE
         {
             if (Count > 1)
             {
+                N = Count;
+
                 double[] R = new double[N];
+                X = traceData.Select(n => n.Freq).ToArray();
+                Y = traceData.Select(n => n.Value).ToArray();
 
                 TridiagonalMatrix tdm = new(N);
                 double dx1, dy1, dx2, dy2;

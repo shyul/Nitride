@@ -77,6 +77,12 @@ namespace Nitride.Chart
 
         public int HalfTickWidth { get; protected set; }
 
+        public int Left { get; protected set; }
+
+        public int Right { get; protected set; }
+
+        public int Width { get; protected set; }
+
         public virtual void Coordinate(int size)
         {
             int tickNum = IndexCount;
@@ -105,6 +111,10 @@ namespace Nitride.Chart
                         if (j < size) pixelToIndex[j] = i;
                     }
                 }
+
+                Left = indexToPixel[0];
+                Right = indexToPixel[tickNum - 1];
+                Width = Right - Left;
             }
         }
 
