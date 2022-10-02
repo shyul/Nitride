@@ -174,12 +174,12 @@ namespace Nitride.EE
                     {
                         if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
                         {
-                            if (PersistBitmap is not null)
+                            if (PersistBitmapFrame is not null) 
                             {
-                                //PersistBitmap.Dispose();
+                                PersistBitmapFrame.PersistBitmapValid = false;
                             }
 
-                            PersistBitmap = Data.PersistBitmapBuffer.Dequeue();
+                            PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
                         }
 
                         AxisX.TickList.Clear();
@@ -256,7 +256,7 @@ namespace Nitride.EE
             }
         }
 
-        Bitmap PersistBitmap { get; set; }
+        TraceFrame PersistBitmapFrame { get; set; }
 
         protected override void OnPaint(PaintEventArgs pe)
         {
@@ -276,10 +276,11 @@ namespace Nitride.EE
                 lock (t.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        if (PersistBitmap is not null)
-                            lock (PersistBitmap)
-                                g.DrawImage(PersistBitmap, MainArea.DataBounds);
-
+                        if (PersistBitmapFrame is not null)
+                        {
+                            g.DrawImage(PersistBitmapFrame.PersistBitmap, MainArea.DataBounds);
+                        }
+               
                         var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 
                         int i = 0;

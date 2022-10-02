@@ -35,6 +35,7 @@ namespace Nitride.EE
             PersistBuffer = new int[PersistWidth, PersistHeight];
             PersistBitmap = new(PersistWidth, PersistHeight);
             PersistBitmapGraphics = Graphics.FromImage(PersistBitmap);
+            PersistBitmapValid = false;
         }
 
         public int Index { get; }
@@ -49,6 +50,7 @@ namespace Nitride.EE
         public int[,] PersistBuffer { get; }
         public Bitmap PersistBitmap { get; }
         public Graphics PersistBitmapGraphics { get; }
+        public bool PersistBitmapValid { get; set; }
 
         public void ClearPersistBitmap()
         {

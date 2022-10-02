@@ -385,7 +385,7 @@ namespace Nitride.EE
 
         public TraceFrame CurrentTraceFrame { get; private set; }
 
-        public Queue<Bitmap> PersistBitmapBuffer { get; } = new();
+        public Queue<TraceFrame> PersistBitmapBuffer { get; } = new();
 
         private Task GetPersistBitmapTask { get; }
 
@@ -399,10 +399,10 @@ namespace Nitride.EE
                 if (GetFrameCancellationTokenSource.IsCancellationRequested)
                     return;
 
-                if (CurrentTraceFrame is TraceFrame frame && Enable)
+                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable)
                 {
-                    var bp = GetPersistBitmap(frame);
-                    PersistBitmapBuffer.Enqueue(bp);
+                    GetPersistBitmap(frame);
+                    PersistBitmapBuffer.Enqueue(frame);
 
                     if (cnt == 50)
                     {
@@ -415,38 +415,36 @@ namespace Nitride.EE
                     else
                         cnt++;
                 }
+                else
+                {
+                    Thread.Sleep(5);
+                }
             }
         }
 
         public bool Enable { get; set; }
 
-        public Bitmap GetPersistBitmap(TraceFrame frame)
+        public void GetPersistBitmap(TraceFrame frame)
         {
             Bitmap bp = frame.PersistBitmap; // new(Count, PersistBufferHeight);
-            lock (bp) 
+
+            frame.ClearPersistBitmap();
+
+            lock (frame)
             {
-                // using Graphics g = Graphics.FromImage(bp);
-                // g.Clear(Color.White);
-
-                frame.ClearPersistBitmap();
-
-                lock (frame)
+                for (int x = 0; x < Count; x++)
                 {
-                    for (int x = 0; x < Count; x++)
+                    for (int y = 0; y < PersistBufferHeight; y++)
                     {
-                        for (int y = 0; y < PersistBufferHeight; y++)
+                        int z = frame.PersistBuffer[x, y];
+                        if (z > 0)
                         {
-                            int z = frame.PersistBuffer[x, y];
-                            if (z > 0)
-                            {
-                                bp.SetPixel(x, y, PersistColor[z - 1]);
-                            }
+                            bp.SetPixel(x, y, PersistColor[z - 1]);
                         }
                     }
                 }
-
-                return bp;
-            }
+                frame.PersistBitmapValid = true;
+            } 
         }
 
         #endregion Add Data
