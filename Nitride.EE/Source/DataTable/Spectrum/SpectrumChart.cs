@@ -172,43 +172,16 @@ namespace Nitride.EE
                 lock (FreqTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        /*
-                        Bitmap pf = Data.PersistBitmap;
-
-                        for (int x = 0; x < Data.Count; x++)
-                        {
-                            for (int y = 0; y < Data.PersistBufferHeight; y++)
-                            {
-                                int z = CurrentTraceFrame.PersistBuffer[x, y] - 1;
-                                if (z >= 0)
-                                {
-                                    //Console.WriteLine("############### z = " + z);
-                                    pf.SetPixel(x, y, Data.PersistColor[z]);
-                                }
-                                else
-                                {
-                                    // frame.PersistBitmap.SetPixel(x, y, Color.Transparent);
-                                }
-                            }
-                        }*/
-
                         if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
                         {
                             if (PersistBitmap is not null)
                             {
-                                PersistBitmap.Dispose();
-                                /*
-                                lock (PersistBitmap) 
-                                {
-                                    using Graphics gb = Graphics.FromImage(PersistBitmap);
-                                    gb.FillRectangle(TransparentBrush, 0, 0, Data.Count, Data.PersistBufferHeight);
-                                }*/
+                                //PersistBitmap.Dispose();
                             }
 
                             PersistBitmap = Data.PersistBitmapBuffer.Dequeue();
                         }
 
-                        //UpdatePersistBuffer();
                         AxisX.TickList.Clear();
 
                         //int tickMulti = 1;
@@ -303,30 +276,9 @@ namespace Nitride.EE
                 lock (t.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        //g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left, MainArea.Bounds.Top);
-                        //g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left + 2, MainArea.Bounds.Top + 2);
-                        //g.DrawImage(CurrentTraceFrame.PersistBitmap, 0, 0);
-
-                        // Bitmap pf = CurrentTraceFrame.PersistBitmap;
-
-                        //lock (pf) 
-
-                        //using Bitmap pf = new(Data.Count, Data.PersistBufferHeight); // Data.PersistBitmap;
-
-                        try
-                        {
-                            if (PersistBitmap is not null)
-                                lock (PersistBitmap)
-                                    g.DrawImage(PersistBitmap, MainArea.DataBounds);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
-                        //using Graphics gb = Graphics.FromImage(pf);
-                        //gb.FillRectangle(TransparentBrush, 0, 0, pf.Width, pf.Height);
-
-
+                        if (PersistBitmap is not null)
+                            lock (PersistBitmap)
+                                g.DrawImage(PersistBitmap, MainArea.DataBounds);
 
                         var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 

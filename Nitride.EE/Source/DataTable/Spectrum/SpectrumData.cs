@@ -184,112 +184,51 @@ namespace Nitride.EE
 
         #region Add Data
 
-        public void AppendTrace((double Freq, double Value)[] trace)
+        public void AppendTrace(IEnumerable<(double Freq, double Value)> trace)
         {
             if (Enable) 
             {
                 var frame = GetGetScaledTrace(trace);
-                ScaledTraceBuffer.Enqueue(frame);
+
+                if (ScaledTraceBuffer.Count < 3)
+                    ScaledTraceBuffer.Enqueue(frame);
+                else
+                    ScaledTraceBuffer.Dequeue();
             }
-
-
-            /*
-            if (TraceBuffer.Count < 3)
-                TraceBuffer.Enqueue(trace);
-            else
-                TraceBuffer.Dequeue();*/
         }
 
         public void Clear()
         {
             Enable = false;
-            //TraceBuffer.Clear();
 
             ScaledTraceBuffer.Clear();
             FrameBuffer.Clear();
 
             CurrentTraceFrame = null;
+            PersistBitmapBuffer.Clear();
 
             for (int i = 0; i < HistoFrames.Length; i++)
             {
                 var frame = HistoFrames[i];
 
-                frame.ClearPersistBuffer();
+                //frame.ClearPersistBuffer();
                 //frame.ClearPersistBitmap();
 
                 Parallel.For(0, Count, i => {
                     FreqRow row = FreqTable[i];
-                    row.Clear();
+                    //row.Clear();
 
-                    // row[frame.HighValueColumn] = double.NaN;
-                    // row[frame.LowValueColumn] = double.NaN;
-                    // row[frame.HighPixColumn] = double.NaN;
-                    // row[frame.LowPixColumn] = double.NaN;
+                    row[frame.HighValueColumn] = double.NaN;
+                    row[frame.LowValueColumn] = double.NaN;
+                    row[frame.HighPixColumn] = double.NaN;
+                    row[frame.LowPixColumn] = double.NaN;
                 });
             }
-
-            PersistBitmapBuffer.Clear();
-
-            /*
-            HistoFrames.RunEach(n => {
-                lock (n)
-                {
-                    n.ClearPersistBuffer();
-
-                    lock (n.PersistBitmap)
-                        n.ClearPersistBitmap();
-                }
-            });*/
         }
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        //private Queue<(double Freq, double Value)[]> TraceBuffer { get; } = new();
-
         private Queue<TraceFrame> ScaledTraceBuffer { get; } = new();
-
-        //private Task GetScaledTraceTask { get; }
-        /*
-        public void GetGetScaledTraceWorker()
-        {
-            int cnt = 0;
-            DateTime time = DateTime.Now;
-
-            while (true)
-            {
-                if (GetFrameCancellationTokenSource.IsCancellationRequested)
-                    return;
-
-                if (TraceBuffer.Count > 0)
-                {
-                    if (FrameBuffer.Count < 3)
-                    {
-                        var frame = GetGetScaledTrace(TraceBuffer.Dequeue());
-                        ScaledTraceBuffer.Enqueue(frame);
-                    }
-                    else if (FrameBuffer.Count > 2)
-                    {
-                        Console.WriteLine("ScaledTraceBuffer overflow!");
-                        ScaledTraceBuffer.Dequeue();
-                    }
-
-                    if (cnt == 50)
-                    {
-                        TimeSpan span = DateTime.Now - time;
-                        double fps = 50 / span.TotalSeconds;
-                        Console.WriteLine("Time for Scaled Trace: " + fps.ToString("0.###") + " fps");
-                        time = DateTime.Now;
-                        cnt = 0;
-                    }
-                    else
-                        cnt++;
-                }
-                else
-                {
-                    Thread.Sleep(10);
-                }
-            }
-        }*/
 
         private TraceFrame GetGetScaledTrace(IEnumerable<(double Freq, double Value)> traceData)
         {
@@ -437,43 +376,12 @@ namespace Nitride.EE
                     if (histo_index < 0) histo_index = HistoDepth - 1;
                 }//);
 
-
-                //frame.ApplyPersistBitmap(PersistColor);
-
-                /*
-                lock (frame.PersistBitmap) 
-                {
-                   // PersistBitmap
-
-                    for (int x = 0; x < Count; x++)
-                    {
-                        for (int y = 0; y < PersistBufferHeight; y++)
-                        {
-                            int z = frame.PersistBuffer[x, y] - 1;
-                            if (z >= 0)
-                            {
-                                //Console.WriteLine("############### z = " + z);
-                                frame.PersistBitmap.SetPixel(x, y, PersistColor[z]);
-                            }
-                            else
-                            {
-                               // frame.PersistBitmap.SetPixel(x, y, Color.Transparent);
-                            }
-                        }
-                    }
-                }*/
-
-                //FrameBuffer.Enqueue(frame);
-
-
                 HistoIndex++;
                 if (HistoIndex >= HistoDepth)
                     HistoIndex = 0;
             }
             return frame;
         }
-
-
 
         public TraceFrame CurrentTraceFrame { get; private set; }
 
@@ -507,9 +415,6 @@ namespace Nitride.EE
                     else
                         cnt++;
                 }
-                
-
-
             }
         }
 
@@ -517,44 +422,31 @@ namespace Nitride.EE
 
         public Bitmap GetPersistBitmap(TraceFrame frame)
         {
-            //Bitmap bp = frame.PersistBitmap;
-            Bitmap bp = new(Count, PersistBufferHeight);
-            try
+            Bitmap bp = frame.PersistBitmap; // new(Count, PersistBufferHeight);
+            lock (bp) 
             {
+                // using Graphics g = Graphics.FromImage(bp);
+                // g.Clear(Color.White);
+
+                frame.ClearPersistBitmap();
+
                 lock (frame)
                 {
-                    
-                    lock (bp)
+                    for (int x = 0; x < Count; x++)
                     {
-                        //using Graphics gb = Graphics.FromImage(bp);
-                        //gb.FillRectangle(TransparentBrush, 0, 0, Count, PersistBufferHeight);
-                        //frame.ClearPersistBitmap();
-                        for (int x = 0; x < Count; x++)
+                        for (int y = 0; y < PersistBufferHeight; y++)
                         {
-                            for (int y = 0; y < PersistBufferHeight; y++)
+                            int z = frame.PersistBuffer[x, y];
+                            if (z > 0)
                             {
-                                int z = frame.PersistBuffer[x, y];
-                                if (z > 0)
-                                {
-                                    //Console.WriteLine("############### z = " + z);
-                                    bp.SetPixel(x, y, PersistColor[z - 1]);
-                                }
-                                else
-                                {
-                                    //bp.SetPixel(x, y, Color.Transparent);
-                                }
+                                bp.SetPixel(x, y, PersistColor[z - 1]);
                             }
                         }
                     }
-
-                
                 }
+
+                return bp;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            return bp;
         }
 
         #endregion Add Data

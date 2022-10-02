@@ -36,6 +36,7 @@ namespace Nitride.EE
             if (length > 4 && length.IsPowerOf2())
             {
                 Length = length;
+            
 
                 if (type == WindowsType.Custom)
                 {
@@ -64,7 +65,10 @@ namespace Nitride.EE
                 throw new ArgumentException("Length must be greater than 4 and power of 2");
         }
 
-        public int Length { get; private set; } = 1024;
+        public int Length { get; } = 1024;
+
+        private int LengthBy2 { get; set; }
+
         public WindowsType WindowType { get; private set; }
 
         public Complex[] Wn { get; private set; }
@@ -74,14 +78,56 @@ namespace Nitride.EE
         public static NumericColumn Column_ResultMag { get; } = new("FFT Result Mag", "FS");
         public static NumericColumn Column_ResultDb { get; } = new("FFT Result Db", "FS");
 
+        public void Transform(FftBuffer bf, double dbOffset = 0, int startPt = 0)
+        {
+            // Apply window to input sample
+            for (int i = startPt; i < Length + startPt; i++)
+            {
+                Dsw[i - startPt] = bf.Td[i] * WinF[i];
+            }
+
+            LengthBy2 = Length / 2;
+
+            int m = 0;
+            int w = 1;
+            int d;
+
+            // Transform Radix-2
+            while (LengthBy2 >= 1)
+            {
+      
+                for (int i = 0; i < w; i++)
+                {
+                    d = Length / w;
+                    for (int j = 0; j < LengthBy2; j++)
+                    {
+                        Complex TmpA = Dsw[i * d + j] + Dsw[i * d + LengthBy2 + j];
+                        Complex TmpB = (Dsw[i * d + j] - Dsw[i * d + LengthBy2 + j]) * Wn[w * j];
+                        Dsw[i * d + j] = TmpA;
+                        Dsw[i * d + LengthBy2 + j] = TmpB;
+                    }
+                }
+                LengthBy2 /= 2;
+                m += 1;
+                w *= 2;
+            }
+
+            for (uint i = 0; i < Length; i++)
+            {
+                Complex res = bf.Fd[i] = Dsw[i.EndianInverse(m)];
+                bf.DbMag[i].Value = (20 * Math.Log10(res.Magnitude)) - dbOffset;
+            }
+        }
+
+
         public void Transform(FreqTable ft, ChronoTable t, ComplexColumn inputColumn, double dbOffset = 0, int startPt = 0)
         {
-            Complex[] dsw = new Complex[Length];
+            //Complex[] Dsw = new Complex[Length];
 
             // Apply window to input sample
             for (int i = startPt; i < Length + startPt; i++) 
             {
-                dsw[i - startPt] = t[i][inputColumn] * WinF[i];
+                Dsw[i - startPt] = t[i][inputColumn] * WinF[i];
             }
            
 
@@ -99,10 +145,10 @@ namespace Nitride.EE
                     d = Length / w;
                     for (int j = 0; j < LengthBy2; j++)
                     {
-                        Complex TmpA = dsw[i * d + j] + dsw[i * d + LengthBy2 + j];
-                        Complex TmpB = (dsw[i * d + j] - dsw[i * d + LengthBy2 + j]) * Wn[w * j];
-                        dsw[i * d + j] = TmpA;
-                        dsw[i * d + LengthBy2 + j] = TmpB;
+                        Complex TmpA = Dsw[i * d + j] + Dsw[i * d + LengthBy2 + j];
+                        Complex TmpB = (Dsw[i * d + j] - Dsw[i * d + LengthBy2 + j]) * Wn[w * j];
+                        Dsw[i * d + j] = TmpA;
+                        Dsw[i * d + LengthBy2 + j] = TmpB;
                     }
                 }
                 LengthBy2 /= 2;
@@ -134,7 +180,7 @@ namespace Nitride.EE
             for (uint i = 0; i < ft.Count; i++)
             {
                 FreqRow row = ft[(int)i];
-                Complex res = row[Column_Result] = dsw[i.EndianInverse(m)];
+                Complex res = row[Column_Result] = Dsw[i.EndianInverse(m)];
                 //double mag = row[Column_ResultMag] = c.Skip(i * 64).Take(64).Select(c => c.Magnitude).Max();
                 double mag = row[Column_ResultMag] = res.Magnitude;
                 row[Column_ResultDb] = (20 * Math.Log10(mag)) - dbOffset;
