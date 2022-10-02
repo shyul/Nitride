@@ -32,6 +32,7 @@ namespace Nitride.Chart
             { Importance.Micro, new AxisTickStyle() },
             { Importance.Minor, new AxisTickStyle() },
             { Importance.Major, new AxisTickStyle() },
+            { Importance.MajorText, new AxisTickStyle() },
         };
 
         public virtual ColorTheme Theme { get; } = new();
@@ -232,9 +233,9 @@ namespace Nitride.Chart
 
         public abstract string this[int i] { get; }
 
-        public virtual int AxisXLabelHeight { get; set; } = 20;
-
         public virtual int RightBlankAreaWidth { get; set; } = 16;
+
+        public virtual int AxisXLabelHeight { get; set; } = 20;
 
         public virtual int LeftYAxisLabelWidth { get; set; } = 50;
 

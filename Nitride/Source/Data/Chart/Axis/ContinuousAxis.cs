@@ -135,7 +135,7 @@ namespace Nitride.Chart
         public virtual void GenerateTicks()
         {
             //Console.WriteLine("GenerateTicks(): " + Range.Minimum);
-            if (!double.IsNaN(Reference))
+            if (!double.IsNaN(Reference) && (!FixedRange))
             {
                 Range.Insert(Reference);
                 TickList.CheckAdd(Reference, (Importance.Major, Reference.ToSINumberString("0.##").String));
@@ -158,7 +158,7 @@ namespace Nitride.Chart
                             tickVal -= tickStep;
                         }
 
-                        if (tickVal < Range.Minimum && Reference > Range.Minimum) Range.Insert(tickVal);
+                        if (tickVal < Range.Minimum && Reference > Range.Minimum && (!FixedRange)) Range.Insert(tickVal);
 
                         tickVal = Reference;
                         while (tickVal <= Range.Maximum)
@@ -167,18 +167,21 @@ namespace Nitride.Chart
                             tickVal += tickStep;
                         }
 
-                        if (tickVal > Range.Maximum && Reference < Range.Minimum) Range.Insert(tickVal);
+                        if (tickVal > Range.Maximum && Reference < Range.Minimum && (!FixedRange)) Range.Insert(tickVal);
                     }
                     else
                     {
-                        Range.Insert(Range.Minimum - (Range.Minimum % tickStep));
+                        if (!FixedRange) 
+                        {
+                            Range.Insert(Range.Minimum - (Range.Minimum % tickStep));
 
-                        double max_remainder = Range.Maximum % tickStep;
+                            double max_remainder = Range.Maximum % tickStep;
 
-                        if (max_remainder > 0)
-                            Range.Insert(Range.Maximum - max_remainder + tickStep); // * 1.0001); // Fix the last tick
-                        else if (max_remainder < -0)
-                            Range.Insert(Range.Maximum + max_remainder - tickStep); // * 1.0001); // Fix the last tick
+                            if (max_remainder > 0)
+                                Range.Insert(Range.Maximum - max_remainder + tickStep); // * 1.0001); // Fix the last tick
+                            else if (max_remainder < -0)
+                                Range.Insert(Range.Maximum + max_remainder - tickStep); // * 1.0001); // Fix the last tick
+                        }
 
                         double tickVal = Range.Minimum;
 

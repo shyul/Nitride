@@ -20,6 +20,8 @@ namespace Nitride.EE
             FreqTable = ft;
             Index = index;
             Frequency = freq;
+            double stepBy2 = ft.FreqStep / 2;
+            FreqRange = new (Frequency - stepBy2, Frequency + stepBy2);
         }
 
         public FreqTable FreqTable { get; }
@@ -27,6 +29,8 @@ namespace Nitride.EE
         public int Index { get; set; }
 
         public double Frequency { get; }
+
+        public Range<double> FreqRange { get; }
 
         public override double X => Frequency;
 

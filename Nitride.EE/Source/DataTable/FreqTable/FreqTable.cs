@@ -26,6 +26,8 @@ namespace Nitride.EE
                 FreqStep = (stopFreq - startFreq) / (numOfPts - 1D);
                 StartFreq = startFreq;
 
+                // Console.WriteLine("startFreq = " + startFreq + " | stopFreq = " + stopFreq + " | numOfPts = " + numOfPts + " | Step = " + FreqStep);
+
                 int pt = 0;
                 for (int i = 0; i < numOfPts; i++)
                 {

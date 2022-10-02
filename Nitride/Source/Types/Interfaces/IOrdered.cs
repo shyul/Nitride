@@ -39,7 +39,9 @@ namespace Nitride
     public enum Importance : int
     {
         Huge = 64,
+        HugeText = 48,
         Major = 32,
+        MajorText = 24,
         Minor = 16,
         Tiny = 12,
         Micro = 8,

@@ -27,7 +27,8 @@ namespace Nitride.EE
             TabName = Name = name;
             Data = sd;
 
-            Margin = new Padding(5, 15, 5, 5);
+            LeftYAxisLabelWidth = 5;
+            Margin = new Padding(60, 60, 5, 5); // new Padding(5, 15, 5, 5); 
             Theme.FillColor = BackColor = Color.FromArgb(255, 255, 253, 245);
             Theme.EdgeColor = Theme.ForeColor = Color.FromArgb(192, 192, 192);
 
@@ -42,6 +43,11 @@ namespace Nitride.EE
             Style[Importance.Minor].HasLine = true;
             Style[Importance.Minor].Theme.EdgePen.DashPattern = new float[] { 1, 2 };
 
+            Style[Importance.MajorText].Font = Main.Theme.FontBold;
+            Style[Importance.MajorText].HasLabel = true;
+            Style[Importance.MajorText].HasLine = false;
+            // Style[Importance.MajorText].Theme.EdgePen.DashPattern = new float[] { 1, 2 };
+
             AddArea(MainArea = new Area(this, "Main", 0.3f)
             {
                 Reference = 0,
@@ -50,10 +56,10 @@ namespace Nitride.EE
 
             MainAxis = MainArea.AxisY(AlignType.Right);
 
-            MainAxis.TickStep = 10;
+            //MainAxis.TickStep = 10;
             MainAxis.FixedRange = true;
-            MainAxis.FixedMinimum = -120;
-            MainAxis.FixedMaximum = 0;
+            // MainAxis.FixedMinimum = -120;
+            // MainAxis.FixedMaximum = 0;
 
             EnableChartShift = false;
 
@@ -62,10 +68,11 @@ namespace Nitride.EE
                 Order = 0,
                 Importance = Importance.Major,
                 Name = "FFT Spectrum",
-                LegendName = "FFT Spectrum",
+                LegendName = string.Empty, //"FFT Spectrum",
                 Color = Color.FromArgb(128, 128, 128, 128),
                 IsAntialiasing = true,
-                HasTailTag = false
+                HasTailTag = false,
+                
             };
 
             MainArea.AddSeries(MainLineSeries);
@@ -90,6 +97,19 @@ namespace Nitride.EE
 
         private SpectrumData Data { get; }
 
+        public void UpdateConfiguration() 
+        {
+            MinimumTextWidth = TextRenderer.MeasureText("0.0000MHz", Style[Importance.Major].Font).Width * 1D;
+            TickStripWidth = 0;
+
+            MainArea.Reference = Data.Reference;
+            MainAxis.FixedMaximum = Data.Y_Max;
+            MainAxis.FixedMinimum = Data.Y_Min;
+
+            MainAxis.TickStep = 10;
+            MainAxis.TickDacades = new double[] { 0.1, 0.2, 0.5, 1 };
+        }
+
         private FreqTable FreqTable => Data.FreqTable;
 
         private Area MainArea { get; }
@@ -106,6 +126,10 @@ namespace Nitride.EE
 
         private CancellationTokenSource DataUpdateCancellationTokenSource { get; } = new();
 
+        private double MinimumTextWidth;
+
+        private double TickStripWidth;
+
         public void DataUpdateWorker()
         {
             while (true)
@@ -118,7 +142,80 @@ namespace Nitride.EE
                     CurrentTraceFrame = Data.FrameBuffer.Dequeue();
                     MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.TraceColumn);
 
+                    if (TickStripWidth != Width) 
+                    {
+                        TickStripWidth = Width;
 
+                        AxisX.TickList.Clear();
+
+                        double tickCount = TickStripWidth / MinimumTextWidth;
+
+                        if (tickCount > 0)
+                        {
+                            int tickStep = Math.Round((StopPt - StartPt) / tickCount).ToInt32();
+
+                            int px;
+                            int centerPt = (FreqTable.Count / 2); // (StartPt + Math.Min(FreqTable.Count, StopPt)) / 2;
+                            double freq;
+                            freq = FreqTable[centerPt].Frequency;
+                            AxisX.TickList.CheckAdd(centerPt, (Importance.Major, (freq / 1e6).ToString("0.###") + "MHz"));
+                            freq = FreqTable[0].Frequency;
+                            AxisX.TickList.CheckAdd(0, (Importance.MajorText, (freq / 1e6).ToString("0.###") + "MHz"));
+                            freq = FreqTable[FreqTable.Count - 1].Frequency;
+                            AxisX.TickList.CheckAdd(FreqTable.Count - 1, (Importance.MajorText, (freq / 1e6).ToString("0.###") + "MHz"));
+
+                            for (int i = 1; i < (tickCount / 2); i++)
+                            {
+                                px = centerPt - (i * tickStep);
+
+                                if (px >= StartPt)
+                                {
+                                    freq = FreqTable[px].Frequency;
+                                    AxisX.TickList.CheckAdd(px, (Importance.Minor, (freq / 1e6).ToString("0.0")));
+                                }
+
+                                px = centerPt + (i * tickStep);
+
+                                if (px < StopPt)
+                                {
+                                    freq = FreqTable[px].Frequency;
+                                    AxisX.TickList.CheckAdd(px, (Importance.Minor, (freq / 1e6).ToString("0.0")));
+                                }
+                            }
+                        }
+                    }
+
+                    if (ChartBounds.Width > RightBlankAreaWidth)
+                    {
+                        AxisX.IndexCount = IndexCount;
+                        AxisX.Coordinate(ChartBounds.Width - RightBlankAreaWidth);
+
+                        int ptY = ChartBounds.Top;
+                        float totalY = TotalAreaHeightRatio;
+
+                        if (AutoScaleFit)
+                        {
+                            foreach (Area ca in Areas)
+                            {
+                                if (ca.Visible && ca.Enabled)
+                                {
+                                    if (ca.HasXAxisBar)
+                                    {
+                                        ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY - AxisXLabelHeight).ToInt32());
+                                        ptY += ca.Bounds.Height + AxisXLabelHeight;
+                                        ca.TimeLabelY = ca.Bounds.Bottom + AxisXLabelHeight / 2 + 1;
+                                    }
+                                    else
+                                    {
+                                        ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY).ToInt32());
+                                        ptY += ca.Bounds.Height;
+                                    }
+                                    ca.Coordinate();
+                                }
+                            }
+                        }
+                        else { }
+                    }
 
                     m_AsyncUpdateUI = true;
                 }
@@ -155,7 +252,7 @@ namespace Nitride.EE
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
-        static SolidBrush TransparentBrush { get; } = new(Color.Transparent);
+        //static SolidBrush TransparentBrush { get; } = new(Color.Transparent);
 
         public override void CoordinateOverlay()
         {
@@ -182,71 +279,7 @@ namespace Nitride.EE
                             PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
                         }
 
-                        AxisX.TickList.Clear();
 
-                        //int tickMulti = 1;
-                        //int tickWidth = AxisX.TickWidth;
-                        double minTextWidth = TextRenderer.MeasureText("0.0000MHz", Style[Importance.Major].Font).Width * 1D;
-
-                        //while (tickWidth <= minTextWidth) { tickWidth += tickWidth; tickMulti++; }
-
-
-                        int px = 0;
-
-                        //int totalTicks = (StopPt - StartPt) / tickMulti;
-
-                        double tickNum = Width / minTextWidth;
-
-                        if (tickNum > 0)
-                        {
-                            int tickStep = Math.Round((StopPt - StartPt) / tickNum).ToInt32();
-
-                            // Console.WriteLine("tickStep = " + tickStep);
-
-                            // TODO: Fix THIS!!
-                            for (int i = StartPt; i < Math.Min(FreqTable.Count, StopPt); i++)
-                            {
-                                double freq = FreqTable[i].Frequency;
-
-                                if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (freq / 1e6).ToString("0.###") + "MHz"));
-
-
-
-                                px++;
-                            }
-
-                            if (ChartBounds.Width > RightBlankAreaWidth)
-                            {
-                                AxisX.IndexCount = IndexCount;
-                                AxisX.Coordinate(ChartBounds.Width - RightBlankAreaWidth);
-
-                                int ptY = ChartBounds.Top;
-                                float totalY = TotalAreaHeightRatio;
-
-                                if (AutoScaleFit)
-                                {
-                                    foreach (Area ca in Areas)
-                                    {
-                                        if (ca.Visible && ca.Enabled)
-                                        {
-                                            if (ca.HasXAxisBar)
-                                            {
-                                                ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY - AxisXLabelHeight).ToInt32());
-                                                ptY += ca.Bounds.Height + AxisXLabelHeight;
-                                                ca.TimeLabelY = ca.Bounds.Bottom + AxisXLabelHeight / 2 + 1;
-                                            }
-                                            else
-                                            {
-                                                ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY).ToInt32());
-                                                ptY += ca.Bounds.Height;
-                                            }
-                                            ca.Coordinate();
-                                        }
-                                    }
-                                }
-                                else { }
-                            }
-                        }
 
 
 

@@ -53,15 +53,12 @@ namespace Nitride.EE
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
-            double freq_min, freq_max, high, low, f, d;
+            double high, low, f, d;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
-
-                freq_min = prow.Frequency - (pixTable.FreqStep / 2);
-                freq_max = prow.Frequency + (pixTable.FreqStep / 2);
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -72,12 +69,12 @@ namespace Nitride.EE
                     f = drow.Freq;
                     d = drow.Value;
 
-                    if (f >= freq_min && f < freq_max)
+                    if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                     }
-                    else
+                    else if (prow.FreqRange.Max < f)
                     {
                         break;
                     }
@@ -99,15 +96,12 @@ namespace Nitride.EE
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
-            double freq_min, freq_max, high, low, f, d;
+            double high, low, f, d;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
-
-                freq_min = prow.Frequency - (pixTable.FreqStep / 2);
-                freq_max = prow.Frequency + (pixTable.FreqStep / 2);
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -118,12 +112,12 @@ namespace Nitride.EE
                     f = drow.Freq;
                     d = drow.Value;
 
-                    if (f >= freq_min && f < freq_max)
+                    if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                     }
-                    else
+                    else if (prow.FreqRange.Max < f)
                     {
                         break;
                     }
@@ -143,15 +137,12 @@ namespace Nitride.EE
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
-            double freq_min, freq_max, high, low, f, d;
+            double high, low, f, d;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
-
-                freq_min = prow.Frequency - (pixTable.FreqStep / 2);
-                freq_max = prow.Frequency + (pixTable.FreqStep / 2);
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -162,12 +153,12 @@ namespace Nitride.EE
                     f = drow.Freq;
                     d = drow.Value;
 
-                    if (f >= freq_min && f < freq_max)
+                    if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                     }
-                    else
+                    else if (prow.FreqRange.Max < f)
                     {
                         break;
                     }
@@ -188,15 +179,12 @@ namespace Nitride.EE
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
-            double freq_min, freq_max, high, low, f, d, cnt, sum;
+            double high, low, f, d, cnt, sum;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
-
-                freq_min = prow.Frequency - (pixTable.FreqStep / 2);
-                freq_max = prow.Frequency + (pixTable.FreqStep / 2);
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -211,14 +199,14 @@ namespace Nitride.EE
                     d = drow.Value;
                     cnt++;
 
-                    if (f >= freq_min && f < freq_max)
+                    if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                         cnt++;
                         sum += d;
                     }
-                    else
+                    else if (prow.FreqRange.Max < f)
                     {
                         break;
                     }
@@ -239,15 +227,12 @@ namespace Nitride.EE
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
-            double freq_min, freq_max, high, low, f, d, cnt, sum;
+            double high, low, f, d, cnt, sum;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
-
-                freq_min = prow.Frequency - (pixTable.FreqStep / 2);
-                freq_max = prow.Frequency + (pixTable.FreqStep / 2);
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -262,14 +247,14 @@ namespace Nitride.EE
                     d = drow.Value;  // d = (drow.Value * 1) + 0;
                     cnt++;
 
-                    if (f >= freq_min && f < freq_max)
+                    if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                         cnt++;
                         sum += d * d;
                     }
-                    else
+                    else if (prow.FreqRange.Max < f)
                     {
                         break;
                     }

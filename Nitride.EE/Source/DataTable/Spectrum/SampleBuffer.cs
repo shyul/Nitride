@@ -115,14 +115,7 @@ namespace Nitride.EE
             Fd = new Complex[Length];
             DbMag = new (double Freq, double Value)[Length];
 
-            StartFreq = rate * (nyquist / 2);
-            StopFreq = StartFreq + rate;
-            FreqStep = rate / (Length - 1D);
-
-            for (int i = 0; i < Length; i++)
-            {
-                DbMag[i].Freq = StartFreq + (i * FreqStep);
-            }
+            Configure(format, length, rate, nyquist);
         }
 
         public FftBuffer(SampleBuffer buffer, int length, SampleFormat format, double rate, int nyquist = 0)
@@ -135,6 +128,13 @@ namespace Nitride.EE
             Fd = new Complex[Length];
             DbMag = new (double Freq, double Value)[Length];
 
+            Configure(format, length, rate, nyquist);
+        }
+
+        public void Configure(SampleFormat format, int length, double rate, int nyquist = 0)
+        {
+            IsBusy = true;
+            Format = format;
             StartFreq = rate * (nyquist / 2);
             StopFreq = StartFreq + rate;
             FreqStep = rate / (Length - 1D);
@@ -143,6 +143,8 @@ namespace Nitride.EE
             {
                 DbMag[i].Freq = StartFreq + (i * FreqStep);
             }
+
+            IsBusy = false;
         }
 
         public double StartFreq { get; protected set; } = double.MaxValue; // => Count > 0 ? Rows.First().X : double.NaN;
@@ -153,7 +155,7 @@ namespace Nitride.EE
 
         public void CopyData(Complex[] samples) 
         {
-            for (int i = 0; i < Length; i++) 
+            for (int i = 0; i < samples.Length; i++) 
             {
                 Td[i] = samples[i];
             }
@@ -207,11 +209,9 @@ namespace Nitride.EE
 
         public SampleBuffer SampleBuffer { get; }
 
-        public uint SampleSize => SampleBuffer.Length;
+        public int Length { get; private set; }
 
-        public int Length { get; }
-
-        public SampleFormat Format { get;  }
+        public SampleFormat Format { get; set; }
 
         public Complex[] Td { get; }
 

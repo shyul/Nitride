@@ -67,7 +67,6 @@
     <Compile Include="Source\DataTable\Spectrum\FreqTrace.cs" />
     <Compile Include="Source\DataTable\Spectrum\SampleBuffer.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumChart.cs" />
-    <Compile Include="Source\DataTable\Spectrum\SpectrumChartOld.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumData.cs" />
     <Compile Include="Source\DataTable\ParamTable\ComplexFormat.cs" />
     <Compile Include="Source\DataTable\ParamTable\Parameter.cs" />

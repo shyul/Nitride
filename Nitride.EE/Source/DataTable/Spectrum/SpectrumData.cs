@@ -48,7 +48,7 @@ namespace Nitride.EE
                 {
                     m_Count = 3;
                 }
-                else if (value % 2 != 0)
+                else if (value % 2 == 0)
                 {
                     m_Count = value + 1;
                 }
@@ -88,7 +88,7 @@ namespace Nitride.EE
 
         public double FreqStep
         {
-            get => Span / Count;
+            get => Span / (Count - 1);
             private set => Count = Convert.ToInt32(Math.Ceiling(Span / value));
         }
 
@@ -98,15 +98,19 @@ namespace Nitride.EE
 
         #region Y Axis
 
-        public double Reference { get; set; }
+        public double Reference { get; private set; }
 
-        public double Y_Range { get; set; }
+        public double Y_Range { get; private set; }
 
         public double Y_Max => Reference;
 
         public double Y_Min => Reference - Y_Range;
 
-        public double Y_DivRange { get; set; }
+        public void ConfigureLevel(double reference, double range)
+        {
+            Reference = reference;
+            Y_Range = range;
+        }
 
         #endregion Y Axis
 
@@ -120,9 +124,13 @@ namespace Nitride.EE
         {
             lock (FreqTable.DataLockObject)
             {
+                //if (count % 2 == 0) count++;
+
                 Count = count;
                 CenterFreq = center;
                 Span = span;
+
+                // Console.WriteLine("Count = " + Count);
 
                 FreqTable.Configure(StartFreq, StopFreq, Count);
                 FreqPoints = FreqTable.Rows.Select(n => n.Frequency).OrderBy(n => n).ToArray();
@@ -207,6 +215,7 @@ namespace Nitride.EE
             CurrentTraceFrame = null;
             PersistBitmapBuffer.Clear();
 
+            if (HistoFrames is not null)
             for (int i = 0; i < HistoFrames.Length; i++)
             {
                 var frame = HistoFrames[i];
