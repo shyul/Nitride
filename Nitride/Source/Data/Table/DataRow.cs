@@ -17,6 +17,8 @@ namespace Nitride
     {
         public abstract double X { get; }
 
+        public virtual void Clear() => NumericColumnsLUT.Clear();
+
         #region Numeric Column
 
         private Dictionary<NumericColumn, double> NumericColumnsLUT { get; } = new Dictionary<NumericColumn, double>();

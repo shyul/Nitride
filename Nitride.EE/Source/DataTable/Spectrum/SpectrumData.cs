@@ -13,7 +13,12 @@ namespace Nitride.EE
     {
         public SpectrumData()
         {
+            //GetScaledTraceTask = new(() => GetGetScaledTraceWorker());
+            GetPersistBitmapTask = new(() => GetPersistBitmapWorker());
             GetFrameTask = new(() => GetFrameWorker());
+
+            //GetScaledTraceTask.Start();
+            GetPersistBitmapTask.Start();
             GetFrameTask.Start();
         }
 
@@ -154,13 +159,16 @@ namespace Nitride.EE
                         persistColor.Add(ColorTool.GetGradient(Color.FromArgb(96, 60, 119, 177), Color.FromArgb(128, 254, 135, 149), i * 1.0D / PersistDepth));
                     }*/
                     PersistColor = ColorTool.GetThermalGradient(PersistDepth, 58); // persistColor.ToArray();
-                    PersistBuffer = new int[Count, PersistBufferHeight];
+                    //PersistBuffer = new int[Count, PersistBufferHeight];
+                    //PersistBitmap = new(Count, PersistBufferHeight);
 
                 }
 
                 HistoIndex = 0;
             }
         }
+        
+
 
         public int HistoIndex { get; private set; }
         public int HistoDepth { get; private set; }
@@ -169,8 +177,8 @@ namespace Nitride.EE
         public bool PersistEnable { get; set; }
         public int PersistDepth { get; private set; }
         public Color[] PersistColor { get; private set; }
-        private int[,] PersistBuffer { get; set; }
-        private int PersistBufferHeight { get; set; }
+        //private int[,] PersistBuffer { get; set; }
+        public int PersistBufferHeight { get; private set; }
 
         #endregion Data
 
@@ -178,25 +186,110 @@ namespace Nitride.EE
 
         public void AppendTrace((double Freq, double Value)[] trace)
         {
+            if (Enable) 
+            {
+                var frame = GetGetScaledTrace(trace);
+                ScaledTraceBuffer.Enqueue(frame);
+            }
+
+
+            /*
             if (TraceBuffer.Count < 3)
                 TraceBuffer.Enqueue(trace);
             else
-                TraceBuffer.Dequeue();
+                TraceBuffer.Dequeue();*/
         }
 
-        public void Clear() 
+        public void Clear()
         {
-            TraceBuffer.Clear();
+            Enable = false;
+            //TraceBuffer.Clear();
+
+            ScaledTraceBuffer.Clear();
             FrameBuffer.Clear();
+
+            CurrentTraceFrame = null;
+
+            for (int i = 0; i < HistoFrames.Length; i++)
+            {
+                var frame = HistoFrames[i];
+
+                frame.ClearPersistBuffer();
+                //frame.ClearPersistBitmap();
+
+                Parallel.For(0, Count, i => {
+                    FreqRow row = FreqTable[i];
+                    row.Clear();
+
+                    // row[frame.HighValueColumn] = double.NaN;
+                    // row[frame.LowValueColumn] = double.NaN;
+                    // row[frame.HighPixColumn] = double.NaN;
+                    // row[frame.LowPixColumn] = double.NaN;
+                });
+            }
+
+            PersistBitmapBuffer.Clear();
+
+            /*
+            HistoFrames.RunEach(n => {
+                lock (n)
+                {
+                    n.ClearPersistBuffer();
+
+                    lock (n.PersistBitmap)
+                        n.ClearPersistBitmap();
+                }
+            });*/
         }
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        private Queue<(double Freq, double Value)[]> TraceBuffer { get; } = new();
+        //private Queue<(double Freq, double Value)[]> TraceBuffer { get; } = new();
 
         private Queue<TraceFrame> ScaledTraceBuffer { get; } = new();
 
-        private Task GetScaledTraceTask { get; }
+        //private Task GetScaledTraceTask { get; }
+        /*
+        public void GetGetScaledTraceWorker()
+        {
+            int cnt = 0;
+            DateTime time = DateTime.Now;
+
+            while (true)
+            {
+                if (GetFrameCancellationTokenSource.IsCancellationRequested)
+                    return;
+
+                if (TraceBuffer.Count > 0)
+                {
+                    if (FrameBuffer.Count < 3)
+                    {
+                        var frame = GetGetScaledTrace(TraceBuffer.Dequeue());
+                        ScaledTraceBuffer.Enqueue(frame);
+                    }
+                    else if (FrameBuffer.Count > 2)
+                    {
+                        Console.WriteLine("ScaledTraceBuffer overflow!");
+                        ScaledTraceBuffer.Dequeue();
+                    }
+
+                    if (cnt == 50)
+                    {
+                        TimeSpan span = DateTime.Now - time;
+                        double fps = 50 / span.TotalSeconds;
+                        Console.WriteLine("Time for Scaled Trace: " + fps.ToString("0.###") + " fps");
+                        time = DateTime.Now;
+                        cnt = 0;
+                    }
+                    else
+                        cnt++;
+                }
+                else
+                {
+                    Thread.Sleep(10);
+                }
+            }
+        }*/
 
         private TraceFrame GetGetScaledTrace(IEnumerable<(double Freq, double Value)> traceData)
         {
@@ -227,7 +320,9 @@ namespace Nitride.EE
 
             ft.Evaluate(FreqTable, frame);
 
-            Parallel.For(0, Count, i => {
+            for (int i = 0; i < Count; i++)
+            // Parallel.For(0, Count, i =>
+            {
                 FreqRow row = FreqTable[i];
                 double h_value = row[frame.HighValueColumn];
                 double l_value = row[frame.LowValueColumn];
@@ -244,26 +339,7 @@ namespace Nitride.EE
 
                 row[frame.HighPixColumn] = h_pix;
                 row[frame.LowPixColumn] = l_pix;
-
-
-            });
-            /*
-            for (int i = 0; i < Count; i++)
-            {
-                FreqRow row = FreqTable[i];
-                double h_value = row[frame.HighValueColumn];
-                double l_value = row[frame.LowValueColumn];
-
-                if (h_value > Y_Max) h_value = Y_Max;
-                if (l_value < Y_Min) l_value = Y_Min;
-
-                double full_height = (PersistBufferHeight - 1) / Y_Range;
-
-                row[frame.HighPixColumn] = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
-                row[frame.LowPixColumn] = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
-            }*/
-
-            
+            }//);
 
             return frame;
         }
@@ -271,8 +347,6 @@ namespace Nitride.EE
         public Queue<TraceFrame> FrameBuffer { get; } = new();
 
         private Task GetFrameTask { get; }
-
-
 
         public void GetFrameWorker()
         {
@@ -282,14 +356,23 @@ namespace Nitride.EE
             while (true)
             {
                 if (GetFrameCancellationTokenSource.IsCancellationRequested)
+                {
+                    CurrentTraceFrame = null;
                     return;
+                }  
 
-                if (TraceBuffer.Count > 0)
+                if (ScaledTraceBuffer.Count > 0 && Enable)
                 {
                     if (FrameBuffer.Count < 3)
                     {
-                        var frame = GetFrame(TraceBuffer.Dequeue());
-                        FrameBuffer.Enqueue(frame);
+
+                        //Task.Run(() => GetFrame(ScaledTraceBuffer.Dequeue()));
+
+                        //Thread.Sleep(100);
+
+
+                        CurrentTraceFrame = GetFrame(ScaledTraceBuffer.Dequeue());
+                        FrameBuffer.Enqueue(CurrentTraceFrame);
                     }
                     else if (FrameBuffer.Count > 2)
                     {
@@ -310,140 +393,168 @@ namespace Nitride.EE
                 }
                 else
                 {
+                    // if(!Enable) ClearFrame();
                     Thread.Sleep(10);
                 }
             }
+
+
         }
 
-        private TraceFrame GetFrame(IEnumerable<(double Freq, double Value)> traceData)
+        private TraceFrame GetFrame(TraceFrame frame)
         {
-            FreqTrace ft;
-            TraceFrame frame = HistoFrames[HistoIndex];
-            int traceCount = traceData.Count();
-
-            if (traceCount > Count)
+            lock (frame)
             {
-                ft = Detector switch
+                int histo_index = HistoIndex;
+
+                frame.ClearPersistBuffer();
+
+                for (int z = 0; z < PersistDepth; z++)
+                //Parallel.For(0, PersistDepth, z =>
                 {
-                    TraceDetectorType.NegativePeak => new FreqTraceNegativePeak(traceData),
-                    TraceDetectorType.Average => new FreqTraceAverage(traceData),
-                    TraceDetectorType.Mean => new FreqTraceMean(traceData),
-                    TraceDetectorType.RMS => new FreqTraceRms(traceData),
-                    TraceDetectorType.Spline => new FreqTraceSpline(traceData),
-                    _ => new FreqTracePeak(traceData),
-                };
-            }
-            else if (traceCount == Count)
-            {
-                ft = new FreqTrace(traceData);
-            }
-            else
-            {
-                ft = new FreqTraceSpline(traceData);
-            }
-
-            ft.Evaluate(FreqTable, frame);
-
-            Parallel.For(0, Count, i => {
-                FreqRow row = FreqTable[i];
-                double h_value = row[frame.HighValueColumn];
-                double l_value = row[frame.LowValueColumn];
-
-                if (h_value > Y_Max) h_value = Y_Max;
-                if (l_value < Y_Min) l_value = Y_Min;
-
-                double full_height = (PersistBufferHeight - 1) / Y_Range;
-
-                double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
-                double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
-
-                // Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
-
-                row[frame.HighPixColumn] = h_pix;
-                row[frame.LowPixColumn] = l_pix;
-
-
-            });
-            /*
-            for (int i = 0; i < Count; i++)
-            {
-                FreqRow row = FreqTable[i];
-                double h_value = row[frame.HighValueColumn];
-                double l_value = row[frame.LowValueColumn];
-
-                if (h_value > Y_Max) h_value = Y_Max;
-                if (l_value < Y_Min) l_value = Y_Min;
-
-                double full_height = (PersistBufferHeight - 1) / Y_Range;
-
-                row[frame.HighPixColumn] = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
-                row[frame.LowPixColumn] = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
-            }*/
-
-            int histo_index = HistoIndex;
-            /*
-            for (int x = 0; x < Count; x++)
-            {
-                for (int y = 0; y < PersistBufferHeight; y++)
-                {
-                    PersistBuffer[x, y] = 0;
-                }
-            }*/
-
-            Array.Clear(PersistBuffer, 0, PersistBuffer.Length);
-
-            for (int z = 0; z < PersistDepth; z++)
-            //Parallel.For(0, PersistDepth, z =>
-            {
-                TraceFrame histo_frame = HistoFrames[histo_index];
-                for (int x = 0; x < Count; x++)
-                {
-                    FreqRow prow = FreqTable[x];
-
-                    double h_pix = prow[histo_frame.HighPixColumn];
-                    double l_pix = prow[histo_frame.LowPixColumn];
-
-                    // Console.WriteLine("h_pix = " + h_pix + " | l_pix = " + l_pix);
-
-                    if (!double.IsNaN(h_pix) && !double.IsNaN(l_pix))
+                    TraceFrame histo_frame = HistoFrames[histo_index];
+                    for (int x = 0; x < Count; x++)
                     {
-                        for (int y = Convert.ToInt32(h_pix); y <= l_pix; y++)  // h and l swapped
+                        FreqRow prow = FreqTable[x];
+
+                        double h_pix = prow[histo_frame.HighPixColumn];
+                        double l_pix = prow[histo_frame.LowPixColumn];
+
+                        // Console.WriteLine("h_pix = " + h_pix + " | l_pix = " + l_pix);
+
+                        if (!double.IsNaN(h_pix) && !double.IsNaN(l_pix))
                         {
-                            PersistBuffer[x, y]++;
+                            for (int y = Convert.ToInt32(h_pix); y <= l_pix; y++)  // h and l swapped
+                            {
+                                frame.PersistBuffer[x, y]++;
+                            }
                         }
                     }
-                }
 
-                //Console.Write(" " + histo_index);
+                    //Console.Write(" " + histo_index);
 
-                histo_index--;
-                if (histo_index < 0) histo_index = HistoDepth - 1;
-            }//);
-
+                    histo_index--;
+                    if (histo_index < 0) histo_index = HistoDepth - 1;
+                }//);
 
 
-            for (int x = 0; x < Count; x++)
-            {
-                for (int y = 0; y < PersistBufferHeight; y++)
+                //frame.ApplyPersistBitmap(PersistColor);
+
+                /*
+                lock (frame.PersistBitmap) 
                 {
-                    int z = PersistBuffer[x, y] - 1;
-                    if (z >= 0)
+                   // PersistBitmap
+
+                    for (int x = 0; x < Count; x++)
                     {
-                        //Console.WriteLine("############### z = " + z);
-                        frame.PersistBitmap.SetPixel(x, y, PersistColor[z]);
+                        for (int y = 0; y < PersistBufferHeight; y++)
+                        {
+                            int z = frame.PersistBuffer[x, y] - 1;
+                            if (z >= 0)
+                            {
+                                //Console.WriteLine("############### z = " + z);
+                                frame.PersistBitmap.SetPixel(x, y, PersistColor[z]);
+                            }
+                            else
+                            {
+                               // frame.PersistBitmap.SetPixel(x, y, Color.Transparent);
+                            }
+                        }
+                    }
+                }*/
+
+                //FrameBuffer.Enqueue(frame);
+
+
+                HistoIndex++;
+                if (HistoIndex >= HistoDepth)
+                    HistoIndex = 0;
+            }
+            return frame;
+        }
+
+
+
+        public TraceFrame CurrentTraceFrame { get; private set; }
+
+        public Queue<Bitmap> PersistBitmapBuffer { get; } = new();
+
+        private Task GetPersistBitmapTask { get; }
+
+        public void GetPersistBitmapWorker()
+        {
+            int cnt = 0;
+            DateTime time = DateTime.Now;
+
+            while (true)
+            {
+                if (GetFrameCancellationTokenSource.IsCancellationRequested)
+                    return;
+
+                if (CurrentTraceFrame is TraceFrame frame && Enable)
+                {
+                    var bp = GetPersistBitmap(frame);
+                    PersistBitmapBuffer.Enqueue(bp);
+
+                    if (cnt == 50)
+                    {
+                        TimeSpan span = DateTime.Now - time;
+                        double fps = 50 / span.TotalSeconds;
+                        Console.WriteLine("Time for PersistBitmap: " + fps.ToString("0.###") + " fps");
+                        time = DateTime.Now;
+                        cnt = 0;
                     }
                     else
+                        cnt++;
+                }
+                
+
+
+            }
+        }
+
+        public bool Enable { get; set; }
+
+        public Bitmap GetPersistBitmap(TraceFrame frame)
+        {
+            //Bitmap bp = frame.PersistBitmap;
+            Bitmap bp = new(Count, PersistBufferHeight);
+            try
+            {
+                lock (frame)
+                {
+                    
+                    lock (bp)
                     {
-                        frame.PersistBitmap.SetPixel(x, y, Color.Transparent);
+                        //using Graphics gb = Graphics.FromImage(bp);
+                        //gb.FillRectangle(TransparentBrush, 0, 0, Count, PersistBufferHeight);
+                        //frame.ClearPersistBitmap();
+                        for (int x = 0; x < Count; x++)
+                        {
+                            for (int y = 0; y < PersistBufferHeight; y++)
+                            {
+                                int z = frame.PersistBuffer[x, y];
+                                if (z > 0)
+                                {
+                                    //Console.WriteLine("############### z = " + z);
+                                    bp.SetPixel(x, y, PersistColor[z - 1]);
+                                }
+                                else
+                                {
+                                    //bp.SetPixel(x, y, Color.Transparent);
+                                }
+                            }
+                        }
                     }
+
+                
                 }
             }
-
-            HistoIndex++;
-            if (HistoIndex >= HistoDepth)
-                HistoIndex = 0;
-
-            return frame;
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return bp;
         }
 
         #endregion Add Data

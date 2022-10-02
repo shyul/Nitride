@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Nitride;
 using Nitride.Chart;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Nitride.EE
 {
@@ -96,7 +97,7 @@ namespace Nitride.EE
         private Area HistoArea { get; }
 
         private ContinuousAxis MainAxis { get; }
-        
+
         public LineSeries MainLineSeries { get; }
 
         #region Data Update
@@ -149,10 +150,12 @@ namespace Nitride.EE
 
         public override ITable Table => Data.FreqTable;
 
-        public override bool ReadyToShow { get => m_ReadyToShow && CurrentTraceFrame is not null && Table.Count > 0; set { m_ReadyToShow = value; } }
+        public override bool ReadyToShow { get => m_ReadyToShow && CurrentTraceFrame is not null && Table.Count > 0 ; set { m_ReadyToShow = value; } } // && Data.Enable
 
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
+
+        static SolidBrush TransparentBrush { get; } = new(Color.Transparent);
 
         public override void CoordinateOverlay()
         {
@@ -169,7 +172,42 @@ namespace Nitride.EE
                 lock (FreqTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        //UpdatePixelTable();
+                        /*
+                        Bitmap pf = Data.PersistBitmap;
+
+                        for (int x = 0; x < Data.Count; x++)
+                        {
+                            for (int y = 0; y < Data.PersistBufferHeight; y++)
+                            {
+                                int z = CurrentTraceFrame.PersistBuffer[x, y] - 1;
+                                if (z >= 0)
+                                {
+                                    //Console.WriteLine("############### z = " + z);
+                                    pf.SetPixel(x, y, Data.PersistColor[z]);
+                                }
+                                else
+                                {
+                                    // frame.PersistBitmap.SetPixel(x, y, Color.Transparent);
+                                }
+                            }
+                        }*/
+
+                        if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
+                        {
+                            if (PersistBitmap is not null)
+                            {
+                                PersistBitmap.Dispose();
+                                /*
+                                lock (PersistBitmap) 
+                                {
+                                    using Graphics gb = Graphics.FromImage(PersistBitmap);
+                                    gb.FillRectangle(TransparentBrush, 0, 0, Data.Count, Data.PersistBufferHeight);
+                                }*/
+                            }
+
+                            PersistBitmap = Data.PersistBitmapBuffer.Dequeue();
+                        }
+
                         //UpdatePersistBuffer();
                         AxisX.TickList.Clear();
 
@@ -245,6 +283,8 @@ namespace Nitride.EE
             }
         }
 
+        Bitmap PersistBitmap { get; set; }
+
         protected override void OnPaint(PaintEventArgs pe)
         {
             Graphics g = pe.Graphics;
@@ -266,7 +306,27 @@ namespace Nitride.EE
                         //g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left, MainArea.Bounds.Top);
                         //g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.Bounds.Left + 2, MainArea.Bounds.Top + 2);
                         //g.DrawImage(CurrentTraceFrame.PersistBitmap, 0, 0);
-                        g.DrawImage(CurrentTraceFrame.PersistBitmap, MainArea.DataBounds);
+
+                        // Bitmap pf = CurrentTraceFrame.PersistBitmap;
+
+                        //lock (pf) 
+
+                        //using Bitmap pf = new(Data.Count, Data.PersistBufferHeight); // Data.PersistBitmap;
+
+                        try
+                        {
+                            if (PersistBitmap is not null)
+                                lock (PersistBitmap)
+                                    g.DrawImage(PersistBitmap, MainArea.DataBounds);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                        //using Graphics gb = Graphics.FromImage(pf);
+                        //gb.FillRectangle(TransparentBrush, 0, 0, pf.Width, pf.Height);
+
+
 
                         var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 
