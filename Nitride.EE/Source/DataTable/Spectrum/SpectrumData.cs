@@ -196,12 +196,12 @@ namespace Nitride.EE
         {
             if (Enable) 
             {
-                var frame = GetGetScaledTrace(trace);
+                //var frame = GetGetScaledTrace(trace);
 
-                if (ScaledTraceBuffer.Count < 3)
-                    ScaledTraceBuffer.Enqueue(frame);
+                if (FreqTraceBuffer.Count < 3)
+                    FreqTraceBuffer.Enqueue(trace.ToArray());
                 else
-                    ScaledTraceBuffer.Dequeue();
+                    FreqTraceBuffer.Dequeue();
             }
         }
 
@@ -209,7 +209,7 @@ namespace Nitride.EE
         {
             Enable = false;
 
-            ScaledTraceBuffer.Clear();
+            FreqTraceBuffer.Clear();
             FrameBuffer.Clear();
 
             CurrentTraceFrame = null;
@@ -237,60 +237,7 @@ namespace Nitride.EE
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        private Queue<TraceFrame> ScaledTraceBuffer { get; } = new();
-
-        private TraceFrame GetGetScaledTrace(IEnumerable<(double Freq, double Value)> traceData)
-        {
-            TraceDetector ft;
-            TraceFrame frame = HistoFrames[HistoIndex];
-            int traceCount = traceData.Count();
-
-            if (traceCount > Count)
-            {
-                ft = Detector switch
-                {
-                    TraceDetectorType.NegativePeak => new NegativePeakTraceDetector(traceData),
-                    TraceDetectorType.Average => new AverageTraceDetector(traceData),
-                    TraceDetectorType.Mean => new MeanTraceDetector(traceData),
-                    TraceDetectorType.RMS => new RmsTraceDetector(traceData),
-                    TraceDetectorType.Spline => new SplineTraceDetector(traceData),
-                    _ => new PeakTraceDetector(traceData),
-                };
-            }
-            else if (traceCount == Count)
-            {
-                ft = new TraceDetector(traceData);
-            }
-            else
-            {
-                ft = new SplineTraceDetector(traceData);
-            }
-
-            ft.Evaluate(FreqTable, frame);
-
-            for (int i = 0; i < Count; i++)
-            // Parallel.For(0, Count, i =>
-            {
-                FreqRow row = FreqTable[i];
-                double h_value = row[frame.HighValueColumn];
-                double l_value = row[frame.LowValueColumn];
-
-                if (h_value > Y_Max) h_value = Y_Max;
-                if (l_value < Y_Min) l_value = Y_Min;
-
-                double full_height = (PersistBufferHeight - 1) / Y_Range;
-
-                double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
-                double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
-
-                // Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
-
-                row[frame.HighPixColumn] = h_pix;
-                row[frame.LowPixColumn] = l_pix;
-            }//);
-
-            return frame;
-        }
+        private Queue<(double Freq, double Value)[]> FreqTraceBuffer { get; } = new();
 
         public Queue<TraceFrame> FrameBuffer { get; } = new();
 
@@ -309,17 +256,11 @@ namespace Nitride.EE
                     return;
                 }  
 
-                if (ScaledTraceBuffer.Count > 0 && Enable)
+                if (FreqTraceBuffer.Count > 0 && Enable)
                 {
                     if (FrameBuffer.Count < 3)
                     {
-
-                        //Task.Run(() => GetFrame(ScaledTraceBuffer.Dequeue()));
-
-                        //Thread.Sleep(100);
-
-
-                        CurrentTraceFrame = GetFrame(ScaledTraceBuffer.Dequeue());
+                        CurrentTraceFrame = GetFrame(FreqTraceBuffer.Dequeue());
                         FrameBuffer.Enqueue(CurrentTraceFrame);
                     }
                     else if (FrameBuffer.Count > 2)
@@ -349,10 +290,60 @@ namespace Nitride.EE
 
         }
 
-        private TraceFrame GetFrame(TraceFrame frame)
+        private TraceFrame GetFrame((double Freq, double Value)[] traceData)
         {
+            TraceFrame frame = HistoFrames[HistoIndex];
+
             lock (frame)
             {
+                TraceDetector ft;
+                int traceCount = traceData.Count();
+                if (traceCount > Count)
+                {
+                    ft = Detector switch
+                    {
+                        TraceDetectorType.NegativePeak => new NegativePeakTraceDetector(traceData),
+                        TraceDetectorType.Average => new AverageTraceDetector(traceData),
+                        TraceDetectorType.Mean => new MeanTraceDetector(traceData),
+                        TraceDetectorType.RMS => new RmsTraceDetector(traceData),
+                        TraceDetectorType.Spline => new SplineTraceDetector(traceData),
+                        _ => new PeakTraceDetector(traceData),
+                    };
+                }
+                else if (traceCount == Count)
+                {
+                    ft = new TraceDetector(traceData);
+                }
+                else
+                {
+                    ft = new SplineTraceDetector(traceData);
+                }
+
+                ft.Evaluate(FreqTable, frame);
+
+                for (int i = 0; i < Count; i++)
+                // Parallel.For(0, Count, i =>
+                {
+                    FreqRow row = FreqTable[i];
+                    double h_value = row[frame.HighValueColumn];
+                    double l_value = row[frame.LowValueColumn];
+
+                    if (h_value > Y_Max) h_value = Y_Max;
+                    if (l_value < Y_Min) l_value = Y_Min;
+
+                    double full_height = (PersistBufferHeight - 1) / Y_Range;
+
+                    double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
+                    double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
+
+                    // Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
+
+                    row[frame.HighPixColumn] = h_pix;
+                    row[frame.LowPixColumn] = l_pix;
+                }//);
+
+                // Getting the Histo BMP
+
                 int histo_index = HistoIndex;
 
                 frame.ClearPersistBuffer();
@@ -379,18 +370,21 @@ namespace Nitride.EE
                         }
                     }
 
-                    Console.Write(" " + histo_index);
+                    //Console.Write(" " + histo_index);
 
                     histo_index--;
                     if (histo_index < 0) histo_index = HistoDepth - 1;
                 }//);
 
-                Console.Write("\n\r");
+                //Console.Write("\n\r");
 
-                HistoIndex++;
-                if (HistoIndex >= HistoDepth)
-                    HistoIndex = 0;
+
             }
+
+            HistoIndex++;
+            if (HistoIndex >= HistoDepth)
+                HistoIndex = 0;
+
             return frame;
         }
 
