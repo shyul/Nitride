@@ -12,9 +12,9 @@ using Nitride.Plot;
 
 namespace Nitride.EE
 {
-    public class FreqTrace
+    public class TraceDetector
     {
-        public FreqTrace(IEnumerable<(double Freq, double Value)> traceData)
+        public TraceDetector(IEnumerable<(double Freq, double Value)> traceData)
         {
             Data = traceData;
             //StartFreq = traceData.First().Freq;
@@ -47,9 +47,9 @@ namespace Nitride.EE
     }
 
 
-    public class FreqTracePeak : FreqTrace
+    public class PeakTraceDetector : TraceDetector
     {
-        public FreqTracePeak(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public PeakTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
@@ -90,9 +90,9 @@ namespace Nitride.EE
         }
     }
 
-    public class FreqTraceNegativePeak : FreqTrace
+    public class NegativePeakTraceDetector : TraceDetector
     {
-        public FreqTraceNegativePeak(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public NegativePeakTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
@@ -131,9 +131,9 @@ namespace Nitride.EE
         }
     }
 
-    public class FreqTraceAverage : FreqTrace
+    public class AverageTraceDetector : TraceDetector
     {
-        public FreqTraceAverage(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public AverageTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
@@ -173,9 +173,9 @@ namespace Nitride.EE
         }
     }
 
-    public class FreqTraceMean : FreqTrace
+    public class MeanTraceDetector : TraceDetector
     {
-        public FreqTraceMean(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public MeanTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
@@ -221,9 +221,9 @@ namespace Nitride.EE
         }
     }
 
-    public class FreqTraceRms : FreqTrace
+    public class RmsTraceDetector : TraceDetector
     {
-        public FreqTraceRms(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public RmsTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
@@ -269,9 +269,9 @@ namespace Nitride.EE
         }
     }
 
-    public class FreqTraceSpline : FreqTrace
+    public class SplineTraceDetector : TraceDetector
     {
-        public FreqTraceSpline(IEnumerable<(double Freq, double Value)> traceData, double startSlope = double.NaN, double endSlope = double.NaN) : base(traceData)
+        public SplineTraceDetector(IEnumerable<(double Freq, double Value)> traceData, double startSlope = double.NaN, double endSlope = double.NaN) : base(traceData)
         {
             if (Count > 1)
             {

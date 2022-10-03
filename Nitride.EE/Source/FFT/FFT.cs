@@ -16,21 +16,6 @@ namespace Nitride.EE
 {
     public class FFT
     {
-        public static Complex[] GetSineWave(int numPt, double fullScale, double normFreq)
-        {
-            Complex[] res = new Complex[numPt];
-            double ang = 2 * normFreq * Math.PI; // normFreq * Math.PI;// / numPt;
-            Complex w = new(Math.Cos(ang), Math.Sin(ang));
-            res[0] = new Complex(fullScale, 0.0);
-
-            for (int i = 1; i < numPt; i++)
-            {
-                res[i] = res[i - 1] * w;
-            }
-
-            return res;
-        }
-
         public FFT(int length = 65536, WindowsType type = WindowsType.FlatTop, double[] winF = null, int[] winParam = null)
         {
             if (length > 4 && length.IsPowerOf2())
@@ -77,6 +62,48 @@ namespace Nitride.EE
         public static ComplexColumn Column_Result { get; } = new("FFT Result", "FS");
         public static NumericColumn Column_ResultMag { get; } = new("FFT Result Mag", "FS");
         public static NumericColumn Column_ResultDb { get; } = new("FFT Result Db", "FS");
+
+        public void Transform(WaveForm td, List<FreqPoint> fd, int startPt = 0) 
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                Dsw[i] = td.Data[i + startPt] * WinF[i];
+            }
+
+            LengthBy2 = Length / 2;
+
+            int m = 0;
+            int w = 1;
+            int d;
+
+            // Transform Radix-2
+            while (LengthBy2 >= 1)
+            {
+
+                for (int i = 0; i < w; i++)
+                {
+                    d = Length / w;
+                    for (int j = 0; j < LengthBy2; j++)
+                    {
+                        Complex TmpA = Dsw[i * d + j] + Dsw[i * d + LengthBy2 + j];
+                        Complex TmpB = (Dsw[i * d + j] - Dsw[i * d + LengthBy2 + j]) * Wn[w * j];
+                        Dsw[i * d + j] = TmpA;
+                        Dsw[i * d + LengthBy2 + j] = TmpB;
+                    }
+                }
+                LengthBy2 /= 2;
+                m += 1;
+                w *= 2;
+            }
+
+            for (uint i = 0; i < Length; i++)
+            {
+                fd[(int)i].Value = Dsw[i.EndianInverse(m)];
+            }
+        }
+
+
+
 
         public void Transform(FftBuffer bf, double dbOffset = 0, int startPt = 0)
         {

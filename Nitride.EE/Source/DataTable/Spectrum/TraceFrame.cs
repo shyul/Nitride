@@ -70,9 +70,5 @@ namespace Nitride.EE
 
             Array.Clear(PersistBuffer, 0, PersistBuffer.Length);
         }
-
-
-
-
     }
 }

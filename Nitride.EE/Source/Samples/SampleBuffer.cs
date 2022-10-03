@@ -12,30 +12,6 @@ using System.Runtime.InteropServices;
 
 namespace Nitride.EE
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Dual16BitDatum
-    {
-        public short D1 { get; set; } //= 0;
-
-        public short D2 { get; set; } //= 0;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Dual32BitDatum
-    {
-        public int D1 { get; set; } //= 0;
-
-        public int D2 { get; set; } //= 0;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Dual64BitDatum
-    {
-        public long D1 { get; set; } //= 0;
-
-        public long D2 { get; set; } //= 0;
-    }
-
     [StructLayout(LayoutKind.Explicit)]
     public class SampleBuffer : IDisposable
     {
@@ -55,6 +31,9 @@ namespace Nitride.EE
         [FieldOffset(0)]
         public Dual16BitDatum[] Sample_D16;
 
+        //[FieldOffset(0)]
+        //public Quad16BitDatum[] Sample_Q16;
+
         [FieldOffset(0)]
         public int[] Sample_S32;
 
@@ -63,6 +42,9 @@ namespace Nitride.EE
 
         [FieldOffset(0)]
         public Dual32BitDatum[] Sample_D32;
+
+        //[FieldOffset(0)]
+        //public Quad32BitDatum[] Sample_Q32;
 
         [FieldOffset(0)]
         public long[] Sample_S64;
@@ -76,15 +58,9 @@ namespace Nitride.EE
         }
     }
 
-    public enum SampleFormat 
-    {
-        R16,
-        C16,
-        R32,
-        C32,
-        R64,
-        C64
-    }
+
+
+
 
     public class FftBuffer
     {

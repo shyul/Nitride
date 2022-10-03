@@ -2,7 +2,7 @@
 /// Nitride Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
 /// 
-/// Radix-2 Software FFT
+/// 
 /// 
 /// ***************************************************************************
 
@@ -16,6 +16,43 @@ namespace Nitride.EE
     public static class SignalTool
     {
 
+
+        public static Complex[] GetSineWave(int numPt, double fullScale, double normFreq)
+        {
+            Complex[] res = new Complex[numPt];
+            double ang = 2 * normFreq * Math.PI; // normFreq * Math.PI;// / numPt;
+            Complex w = new(Math.Cos(ang), Math.Sin(ang));
+            res[0] = new Complex(fullScale, 0.0);
+
+            for (int i = 1; i < numPt; i++)
+            {
+                res[i] = res[i - 1] * w;
+            }
+
+            return res;
+        }
+
+        public static double[] Sine(int N = 65536, double cycle = 1)
+        {
+            double ang = Math.PI * 2 * cycle / (N - 1);
+
+            double[] data = new double[N];
+            for (int i = 0; i < N; i++)
+                data[i] = Math.Sin(i * ang);
+
+            return data;
+        }
+
+        public static Complex[] ComplexSine(int N = 65536, double cycle = 1)
+        {
+            double ang = Math.PI * 2 * cycle / (N - 1);
+
+            Complex[] data = new Complex[N];
+            for (int i = 0; i < N; i++)
+                data[i] = new Complex(Math.Cos(i * ang), Math.Sin(i * ang));
+
+            return data;
+        }
 
         public static double Amplitude(IEnumerable<double> signal)
             => signal.Count() > 0 ? (signal.Max() - signal.Min()) : double.NaN;
@@ -57,23 +94,5 @@ namespace Nitride.EE
 
 
         }
-    }
-
-    public class WaveForm
-    {
-        public WaveForm()
-        {
-
-        }
-
-        public List<double> Data { get; } = new();
-
-        public TriggerEdge TriggerEdge { get; }
-
-        // Get Cycle Length..
-
-        // Get Average Amplitude
-
-        // Compare Phase Shift with another WaveForm
     }
 }

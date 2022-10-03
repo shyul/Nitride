@@ -64,8 +64,11 @@
     <Compile Include="Source\DataTable\FreqTable\FreqRow.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceDetectorType.cs" />
-    <Compile Include="Source\DataTable\Spectrum\FreqTrace.cs" />
-    <Compile Include="Source\DataTable\Spectrum\SampleBuffer.cs" />
+    <Compile Include="Source\DataTable\Spectrum\TraceDetector.cs" />
+    <Compile Include="Source\Samples\SampleDatum.cs" />
+    <Compile Include="Source\Samples\SampleFormat.cs" />
+    <Compile Include="Source\Signal\FreqTrace.cs" />
+    <Compile Include="Source\Samples\SampleBuffer.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumChart.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumData.cs" />
     <Compile Include="Source\DataTable\ParamTable\ComplexFormat.cs" />
@@ -73,8 +76,8 @@
     <Compile Include="Source\DataTable\ParamTable\S_Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\Z_Parameter.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceFrame.cs" />
+    <Compile Include="Source\Signal\WaveForm.cs" />
     <Compile Include="Source\FFT\FFT.cs" />
-    <Compile Include="Source\FFT\Waveform.cs" />
     <Compile Include="Source\FFT\WindowFunctions.cs" />
     <Compile Include="Source\Hardware\Converters\IFiniteADC.cs" />
     <Compile Include="Source\Hardware\Converters\IFiniteDAC.cs" />

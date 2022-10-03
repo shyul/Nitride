@@ -241,7 +241,7 @@ namespace Nitride.EE
 
         private TraceFrame GetGetScaledTrace(IEnumerable<(double Freq, double Value)> traceData)
         {
-            FreqTrace ft;
+            TraceDetector ft;
             TraceFrame frame = HistoFrames[HistoIndex];
             int traceCount = traceData.Count();
 
@@ -249,21 +249,21 @@ namespace Nitride.EE
             {
                 ft = Detector switch
                 {
-                    TraceDetectorType.NegativePeak => new FreqTraceNegativePeak(traceData),
-                    TraceDetectorType.Average => new FreqTraceAverage(traceData),
-                    TraceDetectorType.Mean => new FreqTraceMean(traceData),
-                    TraceDetectorType.RMS => new FreqTraceRms(traceData),
-                    TraceDetectorType.Spline => new FreqTraceSpline(traceData),
-                    _ => new FreqTracePeak(traceData),
+                    TraceDetectorType.NegativePeak => new NegativePeakTraceDetector(traceData),
+                    TraceDetectorType.Average => new AverageTraceDetector(traceData),
+                    TraceDetectorType.Mean => new MeanTraceDetector(traceData),
+                    TraceDetectorType.RMS => new RmsTraceDetector(traceData),
+                    TraceDetectorType.Spline => new SplineTraceDetector(traceData),
+                    _ => new PeakTraceDetector(traceData),
                 };
             }
             else if (traceCount == Count)
             {
-                ft = new FreqTrace(traceData);
+                ft = new TraceDetector(traceData);
             }
             else
             {
-                ft = new FreqTraceSpline(traceData);
+                ft = new SplineTraceDetector(traceData);
             }
 
             ft.Evaluate(FreqTable, frame);
