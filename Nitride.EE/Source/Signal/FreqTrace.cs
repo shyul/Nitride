@@ -20,9 +20,14 @@ namespace Nitride.EE
 
         public Complex Value { get; set; }
 
-        public double MagOffset { get; set; } = 0;
+        public double Magnitude => Value.Magnitude;
 
-        public double DbMag => (20 * Math.Log10(Value.Magnitude)) - MagOffset;
+
+        // Calculate these after Detection!!
+        // public double MagOffset { get; set; } = 0;
+
+
+        // public double DbMag => (20 * Math.Log10(Value.Magnitude)) - MagOffset;
     }
 
     public class FreqTrace

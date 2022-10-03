@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Nitride;
 using Nitride.Chart;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Nitride.EE
 {
@@ -82,8 +81,8 @@ namespace Nitride.EE
             Dock = DockStyle.Fill;
 
 
-            DataUpdateTask = new(() => DataUpdateWorker());
-            DataUpdateTask.Start();
+            //DataUpdateTask = new(() => DataUpdateWorker());
+            //DataUpdateTask.Start();
 
             ResumeLayout(false);
             PerformLayout();
@@ -91,7 +90,11 @@ namespace Nitride.EE
 
         protected override void Dispose(bool disposing)
         {
-            DataUpdateCancellationTokenSource.Cancel();
+            //DataUpdateCancellationTokenSource.Cancel();
+            if (AsyncUpdateUITask_Cts is CancellationTokenSource cts && cts.IsContinue()) 
+            {
+                cts.Cancel();
+            }
             base.Dispose(disposing);
         }
 
@@ -100,7 +103,7 @@ namespace Nitride.EE
         public void UpdateConfiguration() 
         {
             MinimumTextWidth = TextRenderer.MeasureText("0.0000MHz", Style[Importance.Major].Font).Width * 1D;
-            TickStripWidth = 0;
+            CoordinatedSize = new Size(0, 0);
 
             MainArea.Reference = Data.Reference;
             MainAxis.FixedMaximum = Data.Y_Max;
@@ -122,14 +125,14 @@ namespace Nitride.EE
 
         #region Data Update
 
-        private Task DataUpdateTask { get; }
+        //private Task DataUpdateTask { get; }
 
-        private CancellationTokenSource DataUpdateCancellationTokenSource { get; } = new();
+        //private CancellationTokenSource DataUpdateCancellationTokenSource { get; } = new();
 
         private double MinimumTextWidth;
 
-        private double TickStripWidth;
 
+        /*
         public void DataUpdateWorker()
         {
             while (true)
@@ -142,79 +145,14 @@ namespace Nitride.EE
                     CurrentTraceFrame = Data.FrameBuffer.Dequeue();
                     MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.TraceColumn);
 
-                    if (TickStripWidth != Width) 
+                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
                     {
-                        TickStripWidth = Width;
-
-                        AxisX.TickList.Clear();
-
-                        double tickCount = TickStripWidth / MinimumTextWidth;
-
-                        if (tickCount > 0)
+                        if (PersistBitmapFrame is not null)
                         {
-                            int tickStep = Math.Round((StopPt - StartPt) / tickCount).ToInt32();
-
-                            int px;
-                            int centerPt = (FreqTable.Count / 2); // (StartPt + Math.Min(FreqTable.Count, StopPt)) / 2;
-                            double freq;
-                            freq = FreqTable[centerPt].Frequency;
-                            AxisX.TickList.CheckAdd(centerPt, (Importance.Major, (freq / 1e6).ToString("0.###") + "MHz"));
-                            freq = FreqTable[0].Frequency;
-                            AxisX.TickList.CheckAdd(0, (Importance.MajorText, (freq / 1e6).ToString("0.###") + "MHz"));
-                            freq = FreqTable[FreqTable.Count - 1].Frequency;
-                            AxisX.TickList.CheckAdd(FreqTable.Count - 1, (Importance.MajorText, (freq / 1e6).ToString("0.###") + "MHz"));
-
-                            for (int i = 1; i < (tickCount / 2); i++)
-                            {
-                                px = centerPt - (i * tickStep);
-
-                                if (px >= StartPt)
-                                {
-                                    freq = FreqTable[px].Frequency;
-                                    AxisX.TickList.CheckAdd(px, (Importance.Minor, (freq / 1e6).ToString("0.0")));
-                                }
-
-                                px = centerPt + (i * tickStep);
-
-                                if (px < StopPt)
-                                {
-                                    freq = FreqTable[px].Frequency;
-                                    AxisX.TickList.CheckAdd(px, (Importance.Minor, (freq / 1e6).ToString("0.0")));
-                                }
-                            }
+                            PersistBitmapFrame.PersistBitmapValid = false;
                         }
-                    }
 
-                    if (ChartBounds.Width > RightBlankAreaWidth)
-                    {
-                        AxisX.IndexCount = IndexCount;
-                        AxisX.Coordinate(ChartBounds.Width - RightBlankAreaWidth);
-
-                        int ptY = ChartBounds.Top;
-                        float totalY = TotalAreaHeightRatio;
-
-                        if (AutoScaleFit)
-                        {
-                            foreach (Area ca in Areas)
-                            {
-                                if (ca.Visible && ca.Enabled)
-                                {
-                                    if (ca.HasXAxisBar)
-                                    {
-                                        ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY - AxisXLabelHeight).ToInt32());
-                                        ptY += ca.Bounds.Height + AxisXLabelHeight;
-                                        ca.TimeLabelY = ca.Bounds.Bottom + AxisXLabelHeight / 2 + 1;
-                                    }
-                                    else
-                                    {
-                                        ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY).ToInt32());
-                                        ptY += ca.Bounds.Height;
-                                    }
-                                    ca.Coordinate();
-                                }
-                            }
-                        }
-                        else { }
+                        PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
                     }
 
                     m_AsyncUpdateUI = true;
@@ -224,11 +162,59 @@ namespace Nitride.EE
                     Thread.Sleep(10);
                 }
             }
+        }*/
+
+        protected override void AsyncUpdateUIWorker()
+        {
+            while (AsyncUpdateUITask_Cts.IsContinue())
+            {
+                if (Data.FrameBuffer.Count > 0 && m_AsyncUpdateUI == false) // && Graphics is not busy!!
+                {
+                    CurrentTraceFrame = Data.FrameBuffer.Dequeue();
+                    MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.TraceColumn);
+
+                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
+                    {
+                        if (PersistBitmapFrame is not null)
+                        {
+                            PersistBitmapFrame.PersistBitmapValid = false;
+                        }
+
+                        PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
+                    }
+
+                    m_AsyncUpdateUI = true;
+                }
+                else
+                {
+                    Thread.Sleep(5);
+                }
+
+                if (m_AsyncUpdateUI)
+                {
+                    try
+                    {
+                        this?.Invoke(() =>
+                        {
+                            CoordinateLayout();
+                            Invalidate(true);
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                    }
+
+                    m_AsyncUpdateUI = false;
+                }
+                else
+                    Thread.Sleep(5);
+            }
         }
+
 
         public TraceFrame CurrentTraceFrame { get; private set; }
 
-        public override void DataIsUpdated(IDataProvider _) => m_AsyncUpdateUI = true;
 
         #endregion Data Update
 
@@ -252,7 +238,7 @@ namespace Nitride.EE
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
-        //static SolidBrush TransparentBrush { get; } = new(Color.Transparent);
+        private Size CoordinatedSize { get; set;  } = new Size(0, 0);
 
         public override void CoordinateOverlay()
         {
@@ -264,27 +250,91 @@ namespace Nitride.EE
                 ClientRectangle.Height - Margin.Top - Margin.Bottom
                 );
 
-            if (ReadyToShow)
+            if (ReadyToShow && (CoordinatedSize != Size || AxisX.IndexCount != IndexCount))
             {
+         
                 lock (FreqTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
-                        if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
-                        {
-                            if (PersistBitmapFrame is not null) 
-                            {
-                                PersistBitmapFrame.PersistBitmapValid = false;
-                            }
+                        //if (ChartBounds.Width > RightBlankAreaWidth)
 
-                            PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
+                        if (true)
+                        {
+                            AxisX.IndexCount = IndexCount;
+                            AxisX.Coordinate(ChartBounds.Width - RightBlankAreaWidth);
+
+                            int ptY = ChartBounds.Top;
+                            float totalY = TotalAreaHeightRatio;
+
+                            if (AutoScaleFit)
+                            {
+                                foreach (Area ca in Areas)
+                                {
+                                    if (ca.Visible && ca.Enabled)
+                                    {
+                                        if (ca.HasXAxisBar)
+                                        {
+                                            ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY - AxisXLabelHeight).ToInt32());
+                                            ptY += ca.Bounds.Height + AxisXLabelHeight;
+                                            ca.TimeLabelY = ca.Bounds.Bottom + AxisXLabelHeight / 2 + 1;
+                                        }
+                                        else
+                                        {
+                                            ca.Bounds = new Rectangle(ChartBounds.X, ptY, ChartBounds.Width, (ChartBounds.Height * ca.HeightRatio / totalY).ToInt32());
+                                            ptY += ca.Bounds.Height;
+                                        }
+                                        ca.Coordinate();
+                                    }
+                                }
+                            }
+                            else { }
+                        }
+
+                        if (CoordinatedSize.Width != Size.Width)
+                        {
+                            //TickStripWidth = Width;
+
+                            AxisX.TickList.Clear();
+
+                            double tickCount = ChartBounds.Width / MinimumTextWidth;
+
+                            if (tickCount > 0)
+                            {
+                                int tickStep = Math.Round((StopPt - StartPt) / tickCount).ToInt32();
+
+                                int px;
+                                int centerPt = (FreqTable.Count / 2); // (StartPt + Math.Min(FreqTable.Count, StopPt)) / 2;
+                                double freq, centerFreq;
+                                centerFreq = FreqTable[centerPt].Frequency;
+                                AxisX.TickList.CheckAdd(centerPt, (Importance.Major, (centerFreq / 1e6).ToString("0.###") + "MHz"));
+                                freq = FreqTable[0].Frequency;
+                                AxisX.TickList.CheckAdd(0, (Importance.MajorText, (freq / 1e6).ToString("0.###") + "MHz"));
+                                freq = FreqTable[FreqTable.Count - 1].Frequency;
+                                AxisX.TickList.CheckAdd(FreqTable.Count - 1, (Importance.MajorText, (freq / 1e6).ToString("0.###") + "MHz"));
+
+                                for (int i = 1; i < (tickCount / 2); i++)
+                                {
+                                    px = centerPt - (i * tickStep);
+
+                                    if (px >= StartPt)
+                                    {
+                                        freq = centerFreq - FreqTable[px].Frequency;
+                                        AxisX.TickList.CheckAdd(px, (Importance.Minor, "-" + (freq / 1e6).ToString("0.0") + "M"));
+                                    }
+
+                                    px = centerPt + (i * tickStep);
+
+                                    if (px < StopPt)
+                                    {
+                                        freq = FreqTable[px].Frequency - centerFreq;
+                                        AxisX.TickList.CheckAdd(px, (Importance.Minor, "+" + (freq / 1e6).ToString("0.0") + "M"));
+                                    }
+                                }
+                            }
                         }
 
 
-
-
-
-
-
+                        CoordinatedSize = Size;
                     }
             }
         }

@@ -379,11 +379,13 @@ namespace Nitride.EE
                         }
                     }
 
-                    //Console.Write(" " + histo_index);
+                    Console.Write(" " + histo_index);
 
                     histo_index--;
                     if (histo_index < 0) histo_index = HistoDepth - 1;
                 }//);
+
+                Console.Write("\n\r");
 
                 HistoIndex++;
                 if (HistoIndex >= HistoDepth)

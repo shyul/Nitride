@@ -59,16 +59,16 @@ namespace Nitride.EE
 
         public void ClearPersistBuffer()
         {
-            /*
+            
             for (int x = 0; x < PersistWidth; x++)
             {
                 for (int y = 0; y < PersistHeight; y++)
                 {
                     PersistBuffer[x, y] = 0;
                 }
-            }*/
+            }
 
-            Array.Clear(PersistBuffer, 0, PersistBuffer.Length);
+            //Array.Clear(PersistBuffer, 0, PersistBuffer.Length);
         }
     }
 }
