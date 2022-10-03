@@ -14,20 +14,28 @@ namespace Nitride.EE
 {
     public class TraceDetector
     {
-        public TraceDetector(IEnumerable<(double Freq, double Value)> traceData)
+        public TraceDetector(FreqTrace trace)
         {
-            Data = traceData;
+            Trace = trace;
+            Data = Trace.Data;
             //StartFreq = traceData.First().Freq;
             //StopFreq = traceData.Last().Freq;
-            Count = Data.Count();
+            Count = Trace.Data.Count;
             //FreqStep = (StopFreq - StartFreq) / (Count - 1);
         }
 
-        public virtual IEnumerable<(double Freq, double Value)> Data { get; }
+        public virtual FreqTrace Trace { get; }
 
-        public double this[int i] => Data.ElementAt(i).Value;
+        public List<FreqPoint> Data { get; }
+
+        public double this[int i] => Trace.Data[i].Magnitude;
 
         public virtual int Count { get; }
+
+
+        //public double MultiCorr { get; } = 20;
+
+
 
         /*
         public virtual double StartFreq { get; }
@@ -36,12 +44,13 @@ namespace Nitride.EE
 
         public virtual double FreqStep { get; }*/
 
-        public virtual void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public virtual void Evaluate(SpectrumData sd, TraceFrame frame)
         {
+            FreqTable pixTable = sd.FreqTable;
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
-                prow[frame.TraceColumn] = prow[frame.HighValueColumn] = prow[frame.LowValueColumn] = Data.ElementAt(i).Value;// Peak detection!
+                prow[frame.MagnitudeColumn] = prow[frame.MagnitudeHighColumn] = prow[frame.MagnitudeLowColumn] = Data[i].Magnitude;// Peak detection!
             }
         }
     }
@@ -49,25 +58,29 @@ namespace Nitride.EE
 
     public class PeakTraceDetector : TraceDetector
     {
-        public PeakTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public PeakTraceDetector(FreqTrace trace) : base(trace) { }
 
-        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public override void Evaluate(SpectrumData sd, TraceFrame frame)
         {
-            double high, low, f, d;
+            FreqTable pixTable = sd.FreqTable;
+            bool isLog = sd.IsLog;
+            double high, low, f, d, multi, offset;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
+                multi = prow[SpectrumData.MultiCorrColumn];
+                offset = prow[SpectrumData.OffsetCorrColumn];
 
                 high = double.MinValue;
                 low = double.MaxValue;
 
                 while (j < Count)
                 {
-                    var drow = Data.ElementAt(j);
-                    f = drow.Freq;
-                    d = drow.Value;
+                    var drow = Data[j];
+                    f = drow.Frequency;
+                    d = drow.Magnitude;
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
@@ -84,33 +97,37 @@ namespace Nitride.EE
 
                 //Console.WriteLine("h_value = " + high + " | l_value = " + low);
 
-                prow[frame.TraceColumn] = prow[frame.HighValueColumn] = high;// Peak detection!
-                prow[frame.LowValueColumn] = low;
+                prow[frame.MagnitudeColumn] = prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // Peak detection!
+                prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
             }
         }
     }
 
     public class NegativePeakTraceDetector : TraceDetector
     {
-        public NegativePeakTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public NegativePeakTraceDetector(FreqTrace trace) : base(trace) { }
 
-        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public override void Evaluate(SpectrumData sd, TraceFrame frame)
         {
-            double high, low, f, d;
+            FreqTable pixTable = sd.FreqTable;
+            bool isLog = sd.IsLog;
+            double high, low, f, d, multi, offset;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
+                multi = prow[SpectrumData.MultiCorrColumn];
+                offset = prow[SpectrumData.OffsetCorrColumn];
 
                 high = double.MinValue;
                 low = double.MaxValue;
 
                 while (j < Count)
                 {
-                    var drow = Data.ElementAt(j);
-                    f = drow.Freq;
-                    d = drow.Value;
+                    var drow = Data[j];
+                    f = drow.Frequency;
+                    d = drow.Magnitude; // prow[SpectrumData.MultiCorrColumn] * (isLog ? Math.Log10(drow.Magnitude) : drow.Magnitude) + prow[SpectrumData.OffsetCorrColumn];
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
@@ -125,33 +142,37 @@ namespace Nitride.EE
                     j++;
                 }
 
-                prow[frame.HighValueColumn] = high;// Peak detection!
-                prow[frame.TraceColumn] = prow[frame.LowValueColumn] = low;
+                prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // high;// Peak detection!
+                prow[frame.MagnitudeColumn] = prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
             }
         }
     }
 
     public class AverageTraceDetector : TraceDetector
     {
-        public AverageTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public AverageTraceDetector(FreqTrace trace) : base(trace) { }
 
-        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public override void Evaluate(SpectrumData sd, TraceFrame frame)
         {
-            double high, low, f, d;
+            FreqTable pixTable = sd.FreqTable;
+            bool isLog = sd.IsLog;
+            double high, low, f, d, multi, offset;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
+                multi = prow[SpectrumData.MultiCorrColumn];
+                offset = prow[SpectrumData.OffsetCorrColumn];
 
                 high = double.MinValue;
                 low = double.MaxValue;
 
                 while (j < Count)
                 {
-                    var drow = Data.ElementAt(j);
-                    f = drow.Freq;
-                    d = drow.Value;
+                    var drow = Data[j];
+                    f = drow.Frequency;
+                    d = drow.Magnitude;
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
@@ -166,25 +187,29 @@ namespace Nitride.EE
                     j++;
                 }
 
-                prow[frame.HighValueColumn] = high;// Peak detection!
-                prow[frame.LowValueColumn] = low;
-                prow[frame.TraceColumn] = (high + low) / 2;
+                high = prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // high;// Peak detection!
+                low = prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
+                prow[frame.MagnitudeColumn] = (high + low) / 2;
             }
         }
     }
 
     public class MeanTraceDetector : TraceDetector
     {
-        public MeanTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public MeanTraceDetector(FreqTrace trace) : base(trace) { }
 
-        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public override void Evaluate(SpectrumData sd, TraceFrame frame)
         {
-            double high, low, f, d, cnt, sum;
+            FreqTable pixTable = sd.FreqTable;
+            bool isLog = sd.IsLog;
+            double high, low, f, d, cnt, sum, multi, offset;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
+                multi = prow[SpectrumData.MultiCorrColumn];
+                offset = prow[SpectrumData.OffsetCorrColumn];
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -194,9 +219,9 @@ namespace Nitride.EE
 
                 while (j < Count)
                 {
-                    var drow = Data.ElementAt(j);
-                    f = drow.Freq;
-                    d = drow.Value;
+                    var drow = Data[j];
+                    f = drow.Frequency;
+                    d = drow.Magnitude;
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
@@ -213,30 +238,36 @@ namespace Nitride.EE
                     j++;
                 }
 
-                prow[frame.HighValueColumn] = high;// Peak detection!
-                prow[frame.LowValueColumn] = low;
-                prow[frame.TraceColumn] = sum / cnt;
+                prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // Peak detection!
+                prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
+
+                double mean = sum / cnt;
+                prow[frame.MagnitudeColumn] = multi * (isLog ? Math.Log10(mean) : mean) + offset;
             }
         }
     }
 
     public class RmsTraceDetector : TraceDetector
     {
-        public RmsTraceDetector(IEnumerable<(double Freq, double Value)> traceData, double corOffset = 1000) : base(traceData) 
+        public RmsTraceDetector(FreqTrace trace, double corOffset = 1000) : base(trace) 
         {
-            CorrectionOffset = corOffset;
+            CompensateOffset = corOffset;
         }
 
-        double CorrectionOffset { get; }
+        double CompensateOffset { get; }
 
-        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public override void Evaluate(SpectrumData sd, TraceFrame frame)
         {
-            double high, low, f, d, cnt, sum; //, avg;
+            FreqTable pixTable = sd.FreqTable;
+            bool isLog = sd.IsLog;
+            double high, low, f, d, cnt, sum, multi, offset; //, avg;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
+                multi = prow[SpectrumData.MultiCorrColumn];
+                offset = prow[SpectrumData.OffsetCorrColumn];
 
                 high = double.MinValue;
                 low = double.MaxValue;
@@ -246,16 +277,16 @@ namespace Nitride.EE
 
                 while (j < Count)
                 {
-                    var drow = Data.ElementAt(j);
-                    f = drow.Freq;
-                    d = drow.Value;
+                    var drow = Data[j];
+                    f = drow.Frequency;
+                    d = drow.Magnitude;
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                         cnt++;
-                        d += CorrectionOffset;
+                        d += CompensateOffset;
                         sum += d * d;
                     }
                     else if (prow.FreqRange.Max < f)
@@ -266,13 +297,12 @@ namespace Nitride.EE
                     j++;
                 }
 
-                prow[frame.HighValueColumn] = high;// Peak detection!
-                prow[frame.LowValueColumn] = low;
+                prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // Peak detection!
+                prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
                 // avg = (high + low) / 2; 
 
-                // WARNING, RMS is meant for positive numbers only!!
-                //double rms = prow[frame.TraceColumn] = ((((high + low) / 2) < 0) ? -1 : 1) * Math.Sqrt(sum / cnt);
-                double rms = prow[frame.TraceColumn] = Math.Sqrt(sum / cnt) - CorrectionOffset;
+                double mean = Math.Sqrt(sum / cnt) - CompensateOffset;
+                double rms = prow[frame.MagnitudeColumn] = multi * (isLog ? Math.Log10(mean) : mean) + offset;
                 // Console.WriteLine("high = " + high + " | low = " + low + " | rms = " + rms);
             }
         }
@@ -280,15 +310,15 @@ namespace Nitride.EE
 
     public class SplineTraceDetector : TraceDetector
     {
-        public SplineTraceDetector(IEnumerable<(double Freq, double Value)> traceData, double startSlope = double.NaN, double endSlope = double.NaN) : base(traceData)
+        public SplineTraceDetector(FreqTrace trace, double startSlope = double.NaN, double endSlope = double.NaN) : base(trace)
         {
             if (Count > 1)
             {
                 N = Count;
 
                 double[] R = new double[N];
-                X = traceData.Select(n => n.Freq).ToArray();
-                Y = traceData.Select(n => n.Value).ToArray();
+                X = trace.Data.Select(n => n.Frequency).ToArray();
+                Y = trace.Data.Select(n => n.Magnitude).ToArray();
 
                 TridiagonalMatrix tdm = new(N);
                 double dx1, dy1, dx2, dy2;
@@ -374,13 +404,18 @@ namespace Nitride.EE
 
         public double[] B { get; }
 
-        public override void Evaluate(FreqTable pixTable, TraceFrame frame)
+        public override void Evaluate(SpectrumData sd, TraceFrame frame)
         {
+            FreqTable pixTable = sd.FreqTable;
+            bool isLog = sd.IsLog;
             int pt = 0;
-            double y;
+            double y, multi, offset;
             for (int i = 0; i < pixTable.Count; i++)
             {
                 FreqRow prow = pixTable[i];
+                multi = prow[SpectrumData.MultiCorrColumn];
+                offset = prow[SpectrumData.OffsetCorrColumn];
+
                 double x = prow.Frequency;
                 y = double.NaN;
 
@@ -400,7 +435,7 @@ namespace Nitride.EE
                     y = (1 - t) * Y[pt] + t * Y[pt + 1] + t * (1 - t) * (A[pt] * (1 - t) + B[pt] * t);
                 }
 
-                prow[frame.TraceColumn] = prow[frame.LowValueColumn] = prow[frame.HighValueColumn] = y;
+                prow[frame.MagnitudeColumn] = prow[frame.MagnitudeLowColumn] = prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(y) : y) + offset;
             }
         }
     }

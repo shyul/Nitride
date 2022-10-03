@@ -120,7 +120,7 @@ namespace Nitride.EE
 
         public double[] FreqPoints { get; private set; }
 
-        public void ConfigureRange(double center, double span, int count)
+        public void ConfigureRange(double center, double span, int count, double offset)
         {
             lock (FreqTable.DataLockObject)
             {
@@ -134,6 +134,18 @@ namespace Nitride.EE
 
                 FreqTable.Configure(StartFreq, StopFreq, Count);
                 FreqPoints = FreqTable.Rows.Select(n => n.Frequency).OrderBy(n => n).ToArray();
+
+
+
+
+                // Generate Correction Data
+
+                for (int i = 0 ; i < FreqTable.Count; i++) 
+                {
+                    FreqRow prow = FreqTable[i];
+                    prow[MultiCorrColumn] = 20;
+                    prow[OffsetCorrColumn] = offset;
+                }
 
                 // Console.WriteLine(FreqPoints.ToStringWithIndex());
             }
@@ -175,8 +187,8 @@ namespace Nitride.EE
                 HistoIndex = 0;
             }
         }
-        
 
+        public bool EnableHisto { get; set; } = true;
 
         public int HistoIndex { get; private set; }
         public int HistoDepth { get; private set; }
@@ -192,14 +204,14 @@ namespace Nitride.EE
 
         #region Add Data
 
-        public void AppendTrace(IEnumerable<(double Freq, double Value)> trace)
+        public void AppendTrace(FreqTrace trace)
         {
             if (Enable) 
             {
                 //var frame = GetGetScaledTrace(trace);
 
                 if (FreqTraceBuffer.Count < 3)
-                    FreqTraceBuffer.Enqueue(trace.ToArray());
+                    FreqTraceBuffer.Enqueue(trace);
                 else
                     FreqTraceBuffer.Dequeue();
             }
@@ -227,8 +239,8 @@ namespace Nitride.EE
                     FreqRow row = FreqTable[i];
                     //row.Clear();
 
-                    row[frame.HighValueColumn] = double.NaN;
-                    row[frame.LowValueColumn] = double.NaN;
+                    row[frame.MagnitudeHighColumn] = double.NaN;
+                    row[frame.MagnitudeLowColumn] = double.NaN;
                     row[frame.HighPixColumn] = double.NaN;
                     row[frame.LowPixColumn] = double.NaN;
                 });
@@ -237,7 +249,7 @@ namespace Nitride.EE
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        private Queue<(double Freq, double Value)[]> FreqTraceBuffer { get; } = new();
+        private Queue<FreqTrace> FreqTraceBuffer { get; } = new();
 
         public Queue<TraceFrame> FrameBuffer { get; } = new();
 
@@ -290,95 +302,104 @@ namespace Nitride.EE
 
         }
 
-        private TraceFrame GetFrame((double Freq, double Value)[] traceData)
+        public bool IsLog { get; } = true;
+
+        public static NumericColumn MultiCorrColumn { get; } = new("MultiCorr");
+
+        public static NumericColumn OffsetCorrColumn { get; } = new("OffsetCorr");
+
+        private TraceFrame GetFrame(FreqTrace trace)
         {
             TraceFrame frame = HistoFrames[HistoIndex];
 
             lock (frame)
             {
                 TraceDetector ft;
-                int traceCount = traceData.Count();
+                int traceCount = trace.Data.Count;
                 if (traceCount > Count)
                 {
                     ft = Detector switch
                     {
-                        TraceDetectorType.NegativePeak => new NegativePeakTraceDetector(traceData),
-                        TraceDetectorType.Average => new AverageTraceDetector(traceData),
-                        TraceDetectorType.Mean => new MeanTraceDetector(traceData),
-                        TraceDetectorType.RMS => new RmsTraceDetector(traceData),
-                        TraceDetectorType.Spline => new SplineTraceDetector(traceData),
-                        _ => new PeakTraceDetector(traceData),
+                        TraceDetectorType.NegativePeak => new NegativePeakTraceDetector(trace),
+                        TraceDetectorType.Average => new AverageTraceDetector(trace),
+                        TraceDetectorType.Mean => new MeanTraceDetector(trace),
+                        TraceDetectorType.RMS => new RmsTraceDetector(trace),
+                        TraceDetectorType.Spline => new SplineTraceDetector(trace),
+                        _ => new PeakTraceDetector(trace),
                     };
                 }
                 else if (traceCount == Count)
                 {
-                    ft = new TraceDetector(traceData);
+                    ft = new TraceDetector(trace);
                 }
                 else
                 {
-                    ft = new SplineTraceDetector(traceData);
+                    ft = new SplineTraceDetector(trace);
                 }
 
-                ft.Evaluate(FreqTable, frame);
+                ft.Evaluate(this, frame);
 
-                for (int i = 0; i < Count; i++)
-                // Parallel.For(0, Count, i =>
+
+                if (EnableHisto)
                 {
-                    FreqRow row = FreqTable[i];
-                    double h_value = row[frame.HighValueColumn];
-                    double l_value = row[frame.LowValueColumn];
-
-                    if (h_value > Y_Max) h_value = Y_Max;
-                    if (l_value < Y_Min) l_value = Y_Min;
-
-                    double full_height = (PersistBufferHeight - 1) / Y_Range;
-
-                    double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
-                    double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
-
-                    // Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
-
-                    row[frame.HighPixColumn] = h_pix;
-                    row[frame.LowPixColumn] = l_pix;
-                }//);
-
-                // Getting the Histo BMP
-
-                int histo_index = HistoIndex;
-
-                frame.ClearPersistBuffer();
-
-                for (int z = 0; z < PersistDepth; z++)
-                //Parallel.For(0, PersistDepth, z =>
-                {
-                    TraceFrame histo_frame = HistoFrames[histo_index];
-                    for (int x = 0; x < Count; x++)
+                    for (int i = 0; i < Count; i++)
+                    // Parallel.For(0, Count, i =>
                     {
-                        FreqRow prow = FreqTable[x];
+                        FreqRow row = FreqTable[i];
+                        
+                        double h_value = row[frame.MagnitudeHighColumn];
+                        double l_value = row[frame.MagnitudeLowColumn];
 
-                        double h_pix = prow[histo_frame.HighPixColumn];
-                        double l_pix = prow[histo_frame.LowPixColumn];
+                        if (h_value > Y_Max) h_value = Y_Max;
+                        if (l_value < Y_Min) l_value = Y_Min;
 
-                        // Console.WriteLine("h_pix = " + h_pix + " | l_pix = " + l_pix);
+                        double full_height = (PersistBufferHeight - 1) / Y_Range;
 
-                        if (!double.IsNaN(h_pix) && !double.IsNaN(l_pix))
+                        double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
+                        double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
+
+                        // Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
+
+                        row[frame.HighPixColumn] = h_pix;
+                        row[frame.LowPixColumn] = l_pix;
+                    }//);
+
+                    // Getting the Histo BMP
+
+                    int histo_index = HistoIndex;
+
+                    frame.ClearPersistBuffer();
+
+                    for (int z = 0; z < PersistDepth; z++) // Parallel.For(0, PersistDepth, z =>
+                    {
+                        TraceFrame histo_frame = HistoFrames[histo_index];
+                        for (int x = 0; x < Count; x++)
                         {
-                            for (int y = Convert.ToInt32(h_pix); y <= l_pix; y++)  // h and l swapped
+                            FreqRow prow = FreqTable[x];
+
+                            double h_pix = prow[histo_frame.HighPixColumn];
+                            double l_pix = prow[histo_frame.LowPixColumn];
+
+                            // Console.WriteLine("h_pix = " + h_pix + " | l_pix = " + l_pix);
+
+                            if (!double.IsNaN(h_pix) && !double.IsNaN(l_pix))
                             {
-                                frame.PersistBuffer[x, y]++;
+                                for (int y = Convert.ToInt32(h_pix); y <= l_pix; y++)  // h and l swapped
+                                {
+                                    frame.PersistBuffer[x, y]++;
+                                }
                             }
                         }
-                    }
 
-                    //Console.Write(" " + histo_index);
+                        //Console.Write(" " + histo_index);
 
-                    histo_index--;
-                    if (histo_index < 0) histo_index = HistoDepth - 1;
-                }//);
+                        histo_index--;
+                        if (histo_index < 0) histo_index = HistoDepth - 1;
+                    }//);
 
-                //Console.Write("\n\r");
+                    //Console.Write("\n\r");
 
-
+                }
             }
 
             HistoIndex++;
@@ -404,7 +425,7 @@ namespace Nitride.EE
                 if (GetFrameCancellationTokenSource.IsCancellationRequested)
                     return;
 
-                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable)
+                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable && EnableHisto)
                 {
                     GetPersistBitmap(frame);
                     PersistBitmapBuffer.Enqueue(frame);

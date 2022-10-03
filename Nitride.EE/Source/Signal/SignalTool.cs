@@ -15,8 +15,6 @@ namespace Nitride.EE
 {
     public static class SignalTool
     {
-
-
         public static Complex[] GetSineWave(int numPt, double fullScale, double normFreq)
         {
             Complex[] res = new Complex[numPt];

@@ -21,10 +21,7 @@ namespace Nitride.EE
             Data = new Complex[count];
             SampleRate = rate;
             Start = start;
-            IsBusy = false;
         }
-
-        public bool IsBusy { get; set; }
 
         public double SampleRate { get; set; }
 
@@ -42,58 +39,23 @@ namespace Nitride.EE
 
         public double Rms => Math.Sqrt(Data.Select(x => Math.Pow(x.Magnitude, 2)).Sum() / Count);
 
-        public static void CopyData(SampleBuffer source, WaveForm[] dest, SampleFormat format, int offset = 0)
+        public void CopyData(Complex[] samples)
         {
-            int i;
-            int pt = 0;
-            int num = dest.Length;
-            int len = (dest.Select(n => n.Count).Min() * num) + offset;
-
-            switch (format)
+            for (int i = 0; i < samples.Length; i++)
             {
-                default:
-                case SampleFormat.R16:
-                    for (i = offset; i < len; i += num)
-                    {
-                        dest[i % num].Data[pt] = new Complex(source.Sample_S16[i], 0);
-                        pt++;
-                    }
-                    break;
-                case SampleFormat.C16:
-                    for (i = offset; i < len; i += num)
-                    {
-                        dest[i % num].Data[pt] = new Complex(source.Sample_D16[i].D1, source.Sample_D16[i].D2);
-                        pt++;
-                    }
-                    break;
-                case SampleFormat.R32:
-                    for (i = offset; i < len; i += num)
-                    {
-                        dest[i % num].Data[pt] = new Complex(source.Sample_S32[i], 0);
-                        pt++;
-                    }
-                    break;
-                case SampleFormat.C32:
-                    for (i = offset; i < len; i += num)
-                    {
-                        dest[i % num].Data[pt] = new Complex(source.Sample_D32[i].D1, source.Sample_D32[i].D2);
-                        pt++;
-                    }
-                    break;
-                case SampleFormat.R64:
-                    for (i = offset; i < len; i += num)
-                    {
-                        dest[i % num].Data[pt] = new Complex(source.Sample_S64[i], 0);
-                        pt++;
-                    }
-                    break;
-                case SampleFormat.C64:
-                    for (i = offset; i < len; i += num)
-                    {
-                        dest[i % num].Data[pt] = new Complex(source.Sample_D64[i].D1, source.Sample_D64[i].D2);
-                        pt++;
-                    }
-                    break;
+                Data[i] = samples[i];
+            }
+        }
+
+        public void GetSineWave(double fullScale, double normFreq)
+        {
+            double ang = 2 * normFreq * Math.PI; // normFreq * Math.PI;// / numPt;
+            Complex w = new(Math.Cos(ang), Math.Sin(ang));
+            Data[0] = new Complex(fullScale, 0.0);
+
+            for (int i = 1; i < Count; i++)
+            {
+                Data[i] = Data[i - 1] * w;
             }
         }
     }

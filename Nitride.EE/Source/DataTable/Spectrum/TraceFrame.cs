@@ -27,11 +27,12 @@ namespace Nitride.EE
             Index = i;
             PersistWidth = width;
             PersistHeight = height;
+            //MultiCorrColumn = new("Main Trace " + i);
             HighPixColumn = new("Pix H" + i);
             LowPixColumn = new("Pix L" + i);
-            HighValueColumn = new("Value H" + i);
-            LowValueColumn = new("Value L" + i);
-            TraceColumn = new("Main " + i);
+            MagnitudeHighColumn = new("Magnitude H" + i);
+            MagnitudeLowColumn = new("Magnitude L" + i);
+            MagnitudeColumn = new("Magnitude " + i);
             PersistBuffer = new int[PersistWidth, PersistHeight];
             PersistBitmap = new(PersistWidth, PersistHeight);
             PersistBitmapGraphics = Graphics.FromImage(PersistBitmap);
@@ -42,11 +43,15 @@ namespace Nitride.EE
         public int PersistWidth { get; }
         public int PersistHeight { get; }
 
+
+
+        public NumericColumn MagnitudeColumn { get; }
+        public NumericColumn MagnitudeHighColumn { get; }
+        public NumericColumn MagnitudeLowColumn { get; }
+
         public NumericColumn HighPixColumn { get; }
         public NumericColumn LowPixColumn { get; }
-        public NumericColumn HighValueColumn { get; }
-        public NumericColumn LowValueColumn { get; }
-        public NumericColumn TraceColumn { get; }
+
         public int[,] PersistBuffer { get; }
         public Bitmap PersistBitmap { get; }
         public Graphics PersistBitmapGraphics { get; }

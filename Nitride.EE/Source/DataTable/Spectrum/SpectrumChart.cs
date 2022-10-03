@@ -171,9 +171,9 @@ namespace Nitride.EE
                 if (Data.FrameBuffer.Count > 0 && m_AsyncUpdateUI == false) // && Graphics is not busy!!
                 {
                     CurrentTraceFrame = Data.FrameBuffer.Dequeue();
-                    MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.TraceColumn);
+                    MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
 
-                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
+                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable && Data.EnableHisto)
                     {
                         if (PersistBitmapFrame is not null)
                         {
@@ -181,6 +181,10 @@ namespace Nitride.EE
                         }
 
                         PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
+                    }
+                    else if (!Data.EnableHisto) 
+                    {
+                        PersistBitmapFrame = null;
                     }
 
                     m_AsyncUpdateUI = true;
@@ -211,7 +215,6 @@ namespace Nitride.EE
                     Thread.Sleep(5);
             }
         }
-
 
         public TraceFrame CurrentTraceFrame { get; private set; }
 
