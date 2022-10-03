@@ -32,4 +32,11 @@ namespace Nitride.EE
 
         public List<FreqPoint> Data { get; }
     }
+
+    public enum SweepMode
+    {
+        FFT, // FFT Frame Length
+        DDC, // DDC FFT Detector Length x Points (A.k.a Multi FFT frame merged)
+        Analog, // Points (dewelling time), FFT Detector Length
+    }
 }

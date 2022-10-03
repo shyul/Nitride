@@ -197,7 +197,6 @@ namespace Nitride.EE
                     var drow = Data.ElementAt(j);
                     f = drow.Freq;
                     d = drow.Value;
-                    cnt++;
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
@@ -223,11 +222,16 @@ namespace Nitride.EE
 
     public class RmsTraceDetector : TraceDetector
     {
-        public RmsTraceDetector(IEnumerable<(double Freq, double Value)> traceData) : base(traceData) { }
+        public RmsTraceDetector(IEnumerable<(double Freq, double Value)> traceData, double corOffset = 1000) : base(traceData) 
+        {
+            CorrectionOffset = corOffset;
+        }
+
+        double CorrectionOffset { get; }
 
         public override void Evaluate(FreqTable pixTable, TraceFrame frame)
         {
-            double high, low, f, d, cnt, sum;
+            double high, low, f, d, cnt, sum; //, avg;
             int j = 0;
 
             for (int i = 0; i < pixTable.Count; i++)
@@ -244,14 +248,14 @@ namespace Nitride.EE
                 {
                     var drow = Data.ElementAt(j);
                     f = drow.Freq;
-                    d = drow.Value;  // d = (drow.Value * 1) + 0;
-                    cnt++;
+                    d = drow.Value;
 
                     if (prow.FreqRange.ContainsNoMax(f))
                     {
                         if (high < d) high = d;
                         if (low > d) low = d;
                         cnt++;
+                        d += CorrectionOffset;
                         sum += d * d;
                     }
                     else if (prow.FreqRange.Max < f)
@@ -264,7 +268,12 @@ namespace Nitride.EE
 
                 prow[frame.HighValueColumn] = high;// Peak detection!
                 prow[frame.LowValueColumn] = low;
-                prow[frame.TraceColumn] = Math.Sqrt(sum / cnt);
+                // avg = (high + low) / 2; 
+
+                // WARNING, RMS is meant for positive numbers only!!
+                //double rms = prow[frame.TraceColumn] = ((((high + low) / 2) < 0) ? -1 : 1) * Math.Sqrt(sum / cnt);
+                double rms = prow[frame.TraceColumn] = Math.Sqrt(sum / cnt) - CorrectionOffset;
+                // Console.WriteLine("high = " + high + " | low = " + low + " | rms = " + rms);
             }
         }
     }

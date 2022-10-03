@@ -70,28 +70,26 @@ namespace Nitride.EE
                 Dsw[i] = td.Data[i + startPt] * WinF[i];
             }
 
-            LengthBy2 = Length / 2;
-
+            int l2 = Length / 2;
             int m = 0;
             int w = 1;
             int d;
 
             // Transform Radix-2
-            while (LengthBy2 >= 1)
+            while (l2 >= 1)
             {
-
                 for (int i = 0; i < w; i++)
                 {
                     d = Length / w;
-                    for (int j = 0; j < LengthBy2; j++)
+                    for (int j = 0; j < l2; j++)
                     {
-                        Complex TmpA = Dsw[i * d + j] + Dsw[i * d + LengthBy2 + j];
-                        Complex TmpB = (Dsw[i * d + j] - Dsw[i * d + LengthBy2 + j]) * Wn[w * j];
+                        Complex TmpA = Dsw[i * d + j] + Dsw[i * d + l2 + j];
+                        Complex TmpB = (Dsw[i * d + j] - Dsw[i * d + l2 + j]) * Wn[w * j];
                         Dsw[i * d + j] = TmpA;
-                        Dsw[i * d + LengthBy2 + j] = TmpB;
+                        Dsw[i * d + l2 + j] = TmpB;
                     }
                 }
-                LengthBy2 /= 2;
+                l2 /= 2;
                 m += 1;
                 w *= 2;
             }
