@@ -80,10 +80,6 @@ namespace Nitride.EE
             Location = new Point(0, 0);
             Dock = DockStyle.Fill;
 
-
-            //DataUpdateTask = new(() => DataUpdateWorker());
-            //DataUpdateTask.Start();
-
             ResumeLayout(false);
             PerformLayout();
         }
@@ -125,44 +121,7 @@ namespace Nitride.EE
 
         #region Data Update
 
-        //private Task DataUpdateTask { get; }
-
-        //private CancellationTokenSource DataUpdateCancellationTokenSource { get; } = new();
-
         private double MinimumTextWidth;
-
-
-        /*
-        public void DataUpdateWorker()
-        {
-            while (true)
-            {
-                if (DataUpdateCancellationTokenSource.IsCancellationRequested)
-                    return;
-
-                if (Data.FrameBuffer.Count > 0 && m_AsyncUpdateUI == false) // && Graphics is not busy!!
-                {
-                    CurrentTraceFrame = Data.FrameBuffer.Dequeue();
-                    MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.TraceColumn);
-
-                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable)
-                    {
-                        if (PersistBitmapFrame is not null)
-                        {
-                            PersistBitmapFrame.PersistBitmapValid = false;
-                        }
-
-                        PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
-                    }
-
-                    m_AsyncUpdateUI = true;
-                }
-                else
-                {
-                    Thread.Sleep(10);
-                }
-            }
-        }*/
 
         protected override void AsyncUpdateUIWorker()
         {

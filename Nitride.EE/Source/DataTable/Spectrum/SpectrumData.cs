@@ -27,6 +27,7 @@ namespace Nitride.EE
         public void Dispose()
         {
             GetFrameCancellationTokenSource.Cancel();
+            while (GetFrameTask.Status == TaskStatus.Running) ;
             FreqTable.Dispose();
         }
 
@@ -134,9 +135,6 @@ namespace Nitride.EE
 
                 FreqTable.Configure(StartFreq, StopFreq, Count);
                 FreqPoints = FreqTable.Rows.Select(n => n.Frequency).OrderBy(n => n).ToArray();
-
-
-
 
                 // Generate Correction Data
 
@@ -314,11 +312,11 @@ namespace Nitride.EE
 
             lock (frame)
             {
-                TraceDetector ft;
-                int traceCount = trace.Data.Count;
+                TraceDetector det;
+                int traceCount = trace.Count;
                 if (traceCount > Count)
                 {
-                    ft = Detector switch
+                    det = Detector switch
                     {
                         TraceDetectorType.NegativePeak => new NegativePeakTraceDetector(trace),
                         TraceDetectorType.Average => new AverageTraceDetector(trace),
@@ -330,15 +328,16 @@ namespace Nitride.EE
                 }
                 else if (traceCount == Count)
                 {
-                    ft = new TraceDetector(trace);
+                    det = new TraceDetector(trace);
                 }
                 else
                 {
-                    ft = new SplineTraceDetector(trace);
+                    det = new SplineTraceDetector(trace);
                 }
 
-                ft.Evaluate(this, frame);
+                //lock()
 
+                det.Evaluate(this, frame);
 
                 if (EnableHisto)
                 {

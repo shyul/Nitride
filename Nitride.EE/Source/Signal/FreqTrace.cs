@@ -25,94 +25,94 @@ namespace Nitride.EE
 
     public class FreqTrace
     {
-        public FreqTrace(int count, double startFreq, double stopFreq)
+        public void Configure(int count, double startFreq, double stopFreq)
         {
             Count = count;
-            for (int i=0; i<count; i++) 
+
+            while (Count > Data.Count) 
             {
                 Data.Add(new FreqPoint());
             }
+            /*
+            while (Count < Data.Count)
+            {
+                Data.RemoveAt(Data.Count - 1);
+            }*/
 
-            Configure(startFreq, stopFreq);
-        }
-
-        public void Configure(double startFreq, double stopFreq)
-        {
             StartFreq = startFreq;
             StopFreq = stopFreq;
             FreqStep = (StopFreq - StartFreq) / (Count - 1D);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Data.Count; i++)
             {
                 Data[i].Frequency = StartFreq + (i * FreqStep);
             }
         }
 
-        public int Count { get; }
+        public int Count { get; private set; }
 
-        public double StartFreq { get; set; }
+        public double StartFreq { get; private set; }
 
-        public double StopFreq { get; set; }
+        public double StopFreq { get; private set; }
 
-        public double FreqStep { get; set; }
+        public double FreqStep { get; private set; }
 
         public List<FreqPoint> Data { get; } = new();
     }
 
     public class SpectrumDatum
     {
-        public SpectrumDatum(int count, double startFreq, double stopFreq, double rate = 1, double startTime = 0)
+        public void Configure(int count, double startFreq, double stopFreq, double rate = 1, double startTime = 0)
         {
-            WaveForm = new WaveForm(count, rate, startTime);
-            FreqTrace = new FreqTrace(count, startFreq, stopFreq);
+
+            WaveForm.Configure(count, rate, startTime);
+            FreqTrace.Configure(count, startFreq, stopFreq);
         }
 
-        /*
-        public double StartFreq { get; set; }
+        public WaveForm WaveForm { get; } = new();
 
-        public double StopFreq { get; set; }
-
-        public double FreqStep { get; set; }
-        */
-
-        public void Configure(double startFreq, double stopFreq, double rate = 1, double startTime = 0)
-        {
-            WaveForm.SampleRate = rate;
-            WaveForm.Start = startTime;
-            FreqTrace.Configure(startFreq, stopFreq);
-        }
-
-        public WaveForm WaveForm { get; }
-
-        public FreqTrace FreqTrace { get; }
+        public FreqTrace FreqTrace { get; } = new();
 
     }
 
     public class RxData
     {
-        public RxData(int numOfCh, int lengthPerCh, double startFreq, double stopFreq, double rate = 1, double startTime = 0) 
+        public RxData(int numOfCh) 
         {
             NumOfCh = numOfCh;
-            SampleCount = lengthPerCh;
 
-            SampleBuffer = new SampleBuffer(NumOfCh * SampleCount * 8);
             SpectrumDatums = new SpectrumDatum[numOfCh];
 
             for (int i = 0; i < numOfCh; i++)
             {
-                SpectrumDatums[i] = new SpectrumDatum(lengthPerCh, startFreq, stopFreq, rate, startTime);
+                SpectrumDatums[i] = new SpectrumDatum();
             }
 
             WaveForms = SpectrumDatums.Select(n => n.WaveForm).ToArray();
+        }
+
+        public void Configure(int lengthPerCh, double startFreq, double stopFreq, double rate = 1, double startTime = 0)
+        {
+            foreach (var d in SpectrumDatums)
+            {
+                d.Configure(lengthPerCh, startFreq, stopFreq, rate, startTime);
+            }
+
+            SampleCount = lengthPerCh;
+
+            if (SampleBuffer is null || SampleBuffer.Length < NumOfCh * SampleCount * 2)
+            {
+                SampleBuffer = new SampleBuffer(NumOfCh * SampleCount * 8);
+            }
         }
 
         public bool IsBusy { get; set; } = false;
 
         private int NumOfCh { get; }
 
-        private int SampleCount { get; }
+        private int SampleCount { get; set; }
 
-        public SampleBuffer SampleBuffer { get; }
+        public SampleBuffer SampleBuffer { get; private set; }
 
         public SpectrumDatum[] SpectrumDatums { get; }
 
@@ -123,7 +123,7 @@ namespace Nitride.EE
             int i, j;
             int pt = 0;
             int num = NumOfCh;
-            int count = (SampleCount * NumOfCh) + offset;
+            int count = (SampleCount * NumOfCh) + offset; // R16 = 1, C32 = 2, C32 Dual = 4
 
             SampleBuffer source = SampleBuffer;
         
@@ -167,7 +167,11 @@ namespace Nitride.EE
                     {
                         for (j = 0; j < num; j++)
                         {
-                            WaveForms[j].Data[pt] = new Complex(source.Sample_D32[i + j].D1, source.Sample_D32[i + j].D2);
+                            double real = (double)source.Sample_D32[i + j].D1 / 1D;
+                            double imag = (double)source.Sample_D32[i + j].D2 / 1D;
+                            var c = WaveForms[j].Data[pt] = new Complex(real, imag);
+                            // WaveForms[j].Data[pt] = new Complex(source.Sample_D32[i + j].D2, source.Sample_D32[i + j].D1);
+                            // Console.WriteLine("c = " + c);
                         }
                         pt++;
                     }

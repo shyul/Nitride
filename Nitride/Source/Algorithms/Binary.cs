@@ -24,7 +24,7 @@ namespace Nitride
         /// <returns></returns>
         public static bool IsPowerOf2(this int value) => (value != 0) && ((value & (value - 1)) == 0);
 
-        public static uint EndianInverse(this uint input, int BitLength)
+        public static uint EndianInverse(this uint input, uint BitLength)
         {
             uint result = 0;
             for (int i = 0; i < BitLength; i++)

@@ -195,9 +195,9 @@ namespace Nitride.Chart
 
                 Chart.HoverIndex = Chart.PixelToIndex(e.X);
 
-                foreach (Area ca in Areas) ca.UpdateLegend();
-
-                Invalidate();
+                //foreach (Area ca in Areas) ca.UpdateLegend();
+                Chart.DataIsUpdated(null);
+                // Invalidate();
             }
         }
 
@@ -234,7 +234,8 @@ namespace Nitride.Chart
 
                     Chart.HoverIndex = Chart.PixelToIndex(e.X);
 
-                    Coordinate();
+                    Chart.DataIsUpdated(null);
+                    //Coordinate();
                 }
             }
         }

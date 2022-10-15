@@ -18,31 +18,16 @@ namespace Nitride.EE
         {
             Trace = trace;
             Data = Trace.Data;
-            //StartFreq = traceData.First().Freq;
-            //StopFreq = traceData.Last().Freq;
-            Count = Trace.Data.Count;
-            //FreqStep = (StopFreq - StartFreq) / (Count - 1);
+            Count = Trace.Count;
         }
 
         public virtual FreqTrace Trace { get; }
 
         public List<FreqPoint> Data { get; }
 
-        public double this[int i] => Trace.Data[i].Magnitude;
+        public double this[int i] => Data[i].Magnitude;
 
         public virtual int Count { get; }
-
-
-        //public double MultiCorr { get; } = 20;
-
-
-
-        /*
-        public virtual double StartFreq { get; }
-
-        public virtual double StopFreq { get; }
-
-        public virtual double FreqStep { get; }*/
 
         public virtual void Evaluate(SpectrumData sd, TraceFrame frame)
         {
@@ -66,6 +51,9 @@ namespace Nitride.EE
             bool isLog = sd.IsLog;
             double high, low, f, d, multi, offset;
             int j = 0;
+
+            double a_h = double.MinValue;
+            double a_l = double.MaxValue;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
@@ -95,11 +83,18 @@ namespace Nitride.EE
                     j++;
                 }
 
-                //Console.WriteLine("h_value = " + high + " | l_value = " + low);
+                // Console.WriteLine("h_value = " + high + " | l_value = " + low);
 
                 prow[frame.MagnitudeColumn] = prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // Peak detection!
-                prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
+                double res = prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
+
+                if (res > a_h) a_h = res;
+                if (res < a_l) a_l = res;
             }
+
+            //Console.WriteLine("a_h = " + a_h + " | a_l = " + a_l);
+
+
         }
     }
 
@@ -317,8 +312,11 @@ namespace Nitride.EE
                 N = Count;
 
                 double[] R = new double[N];
-                X = trace.Data.Select(n => n.Frequency).ToArray();
-                Y = trace.Data.Select(n => n.Magnitude).ToArray();
+
+                var data = Data.Take(Count);
+
+                X = data.Select(n => n.Frequency).ToArray();
+                Y = data.Select(n => n.Magnitude).ToArray();
 
                 TridiagonalMatrix tdm = new(N);
                 double dx1, dy1, dx2, dy2;

@@ -15,6 +15,12 @@ namespace Nitride
     [Serializable, DataContract]
     public class Range<T> : IComparable<T>, IEquatable<T>, IEquatable<Range<T>> where T : IComparable<T>, IEquatable<T>
     {
+        public Range() 
+        {
+            Minimum = default;
+            Maximum = default;
+        }
+
         public Range(T value) => Set(value);
 
         public Range(T min, T max) => Reset(min, max);

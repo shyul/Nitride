@@ -16,34 +16,49 @@ namespace Nitride.EE
 {
     public class WaveForm 
     {
-        public WaveForm(int count, double rate = 1, double start = 0)
+        public void Configure(int count, double rate = 1, double startTime = 0)
         {
-            Data = new Complex[count];
+            Count = count;
+
+            while (Count > Data.Count)
+            {
+                Data.Add(new Complex());
+            }
+
+            /*
+            while (Count < Data.Count)
+            {
+                Data.RemoveAt(Data.Count - 1);
+            }*/
+
             SampleRate = rate;
-            Start = start;
+            StartTime = startTime;
+            Duration = ((Count - 1) / SampleRate);
+            StopTime = StartTime + Duration;
         }
 
-        public double SampleRate { get; set; }
+        public int Count { get; private set; }
 
-        public double Start { get; set; }
+        public double SampleRate { get; private set; }
 
-        public double Duration => ((Count - 1) / SampleRate);
+        public double StartTime { get; private set; }
 
-        public double Stop => Start + Duration;
+        public double Duration { get; private set; }
 
-        public int Count => Data.Length;
+        public double StopTime { get; private set; }
 
-        public Complex[] Data { get; }
+        public List<Complex> Data { get; } = new();
 
         public double Peak => Data.Select(x => x.Magnitude).Max();
 
         public double Rms => Math.Sqrt(Data.Select(x => Math.Pow(x.Magnitude, 2)).Sum() / Count);
 
-        public void CopyData(Complex[] samples)
+        public void CopyData(Complex[] samples, int offset = 0)
         {
-            for (int i = 0; i < samples.Length; i++)
+            int cnt = Math.Min(samples.Length - offset, Count);
+            for (int i = 0; i < cnt; i++)
             {
-                Data[i] = samples[i];
+                Data[i] = samples[i + offset];
             }
         }
 

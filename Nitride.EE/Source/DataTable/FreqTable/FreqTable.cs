@@ -22,9 +22,18 @@ namespace Nitride.EE
         {
             lock (DataLockObject)
             {
-                FreqRows.Clear();
                 FreqStep = (stopFreq - startFreq) / (numOfPts - 1D);
                 StartFreq = startFreq;
+
+                while (Count < numOfPts)
+                {
+                    FreqRows.Add(new FreqRow(this));
+                }
+                
+                while (Count > numOfPts)
+                {
+                    FreqRows.RemoveAt(Count - 1);
+                }
 
                 // Console.WriteLine("startFreq = " + startFreq + " | stopFreq = " + stopFreq + " | numOfPts = " + numOfPts + " | Step = " + FreqStep);
 
@@ -32,43 +41,18 @@ namespace Nitride.EE
                 for (int i = 0; i < numOfPts; i++)
                 {
                     double freq = startFreq + (i * FreqStep);
-                    FreqRows.Add(new FreqRow(freq, pt, this));
+                    var row = FreqRows[i];
+                    row.Frequency = freq;
+                    row.Index = i;
+
+                    //FreqRows.Add(new FreqRow(freq, pt, this));
                     StopFreq = freq;
                     pt++;
                 }
             }
         }
 
-        public void Configure(double startFreq, double stopFreq, double freqStep)
-        {
-            lock (DataLockObject)
-            {
-                FreqRows.Clear();
-                StartFreq = startFreq;
-                FreqStep = freqStep;
-
-                int pt = 0;
-                for (double freq = startFreq; freq <= stopFreq; freq += freqStep)
-                {
-                    FreqRows.Add(new FreqRow(freq, pt, this));
-                    StopFreq = freq;
-                    pt++;
-                }
-            }
-        }
-
-        public double StartFreq { get; protected set; } = double.MaxValue; // => Count > 0 ? Rows.First().X : double.NaN;
-
-        public double StopFreq { get; protected set; } = double.MinValue; // => Count > 0 ? Rows.Last().X : double.NaN;
-
-        public double FreqStep { get; protected set; } = double.MaxValue;
-
-        public List<FreqRow> FreqRows { get; } = new();
-
-        protected Dictionary<double, int> FreqToIndex { get; } = new();
-
-        public bool Contains(double freq) => FreqToIndex.ContainsKey(freq);
-
+        // To be removed!
         public void Sort()
         {
             lock (DataLockObject)
@@ -90,6 +74,39 @@ namespace Nitride.EE
                 }
             }
         }
+
+        /*
+        public void Configure(double startFreq, double stopFreq, double freqStep)
+        {
+            lock (DataLockObject)
+            {
+                FreqRows.Clear();
+                StartFreq = startFreq;
+                FreqStep = freqStep;
+
+                int pt = 0;
+                for (double freq = startFreq; freq <= stopFreq; freq += freqStep)
+                {
+                    FreqRows.Add(new FreqRow(freq, pt, this));
+                    StopFreq = freq;
+                    pt++;
+                }
+            }
+        }
+        */
+        public double StartFreq { get; protected set; } = double.MaxValue; // => Count > 0 ? Rows.First().X : double.NaN;
+
+        public double StopFreq { get; protected set; } = double.MinValue; // => Count > 0 ? Rows.Last().X : double.NaN;
+
+        public double FreqStep { get; protected set; } = double.MaxValue;
+
+        public List<FreqRow> FreqRows { get; } = new();
+
+        protected Dictionary<double, int> FreqToIndex { get; } = new();
+
+        public bool Contains(double freq) => FreqToIndex.ContainsKey(freq);
+
+
 
 
         public override int Count => FreqRows.Count;

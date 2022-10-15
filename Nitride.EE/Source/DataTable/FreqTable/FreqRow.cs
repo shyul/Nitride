@@ -15,22 +15,40 @@ namespace Nitride.EE
 {
     public class FreqRow : DataRow, IComparable<FreqRow>
     {
+        public FreqRow(FreqTable ft)
+        {
+            FreqTable = ft;
+        }
+
         public FreqRow(double freq, int index, FreqTable ft)
         {
             FreqTable = ft;
             Index = index;
             Frequency = freq;
+            /*
             double stepBy2 = ft.FreqStep / 2;
-            FreqRange = new (Frequency - stepBy2, Frequency + stepBy2);
+            FreqRange = new (Frequency - stepBy2, Frequency + stepBy2);*/
         }
 
         public FreqTable FreqTable { get; }
 
         public int Index { get; set; }
 
-        public double Frequency { get; }
+        public double Frequency
+        {
+            get => m_Frequency;
 
-        public Range<double> FreqRange { get; }
+            set
+            {
+                m_Frequency = value;
+                double stepBy2 = FreqTable.FreqStep / 2;
+                FreqRange.Set(m_Frequency - stepBy2, m_Frequency + stepBy2);
+            }
+        }
+
+        private double m_Frequency;
+
+        public Range<double> FreqRange { get; } = new();
 
         public override double X => Frequency;
 

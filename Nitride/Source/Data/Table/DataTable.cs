@@ -35,7 +35,10 @@ namespace Nitride
                 DataConsumers.Clear();
             }
 
-            Clear();
+            lock (DataLockObject)
+            {
+                Clear();
+            }
         }
 
         public object DataLockObject { get; } = new();
