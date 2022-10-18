@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
 using System.Threading;
@@ -127,7 +128,7 @@ namespace Nitride.EE
         {
             while (AsyncUpdateUITask_Cts.IsContinue())
             {
-                if (Data.FrameBuffer.Count > 0 && m_AsyncUpdateUI == false) // && Graphics is not busy!!
+                if (Data is not null && Data.FrameBuffer.Count > 0 && m_AsyncUpdateUI == false) // && Graphics is not busy!!
                 {
                     CurrentTraceFrame = Data.FrameBuffer.Dequeue();
                     MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
