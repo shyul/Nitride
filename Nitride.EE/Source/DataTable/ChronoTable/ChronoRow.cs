@@ -15,17 +15,16 @@ namespace Nitride.EE
 {
     public class ChronoRow : DataRow
     {
-        public ChronoRow(long timeStamp, ChronoTable ct)
+        public ChronoRow(ChronoTable ct)
         {
             Table = ct;
-            TimeStamp = timeStamp;
         }
 
         public ChronoTable Table { get; }
 
-        public long TimeStamp { get; }
+        public int Index { get; set; }
 
-        public override double X => TimeStamp;
+        public override double X => Table.StartTime + (Table.SampleTimeStep * Index);
 
         private Dictionary<ComplexColumn, Complex> ComplexColumnsLUT { get; } = new Dictionary<ComplexColumn, Complex>();
 

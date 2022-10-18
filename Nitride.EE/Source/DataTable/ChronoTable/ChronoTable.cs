@@ -17,14 +17,25 @@ namespace Nitride.EE
     {
         public ChronoTable(int numOfPts)
         {
-            Clear(numOfPts);
+            ConfigureNumberOfPoints(numOfPts);
         }
 
         ~ChronoTable() => Dispose();
 
         public double StartTime { get; set; }
 
-        public double SampleRate { get; set; }
+        public double SampleRate
+        {
+            get => m_SampleRate; set
+            {
+                m_SampleRate = value;
+                SampleTimeStep = 1 / m_SampleRate;
+            }
+        }
+
+        public double m_SampleRate;
+
+        public double SampleTimeStep { get; private set; }
 
         public double Start => Count > 0 ? TimeRows.First().X : double.NaN;
 
@@ -32,7 +43,7 @@ namespace Nitride.EE
 
         private List<ChronoRow> TimeRows { get; } = new();
 
-        public IEnumerable<ChronoRow> Rows => TimeRows.OrderBy(n => n.TimeStamp);
+        public IEnumerable<ChronoRow> Rows => TimeRows.OrderBy(n => n.Index);
 
         public override int Count => m_Count; // TimeRows.Count;
 
@@ -47,15 +58,20 @@ namespace Nitride.EE
             }
         }
 
-        public void Clear(int numOfPts)
+        public void ConfigureNumberOfPoints(int numOfPts)
         {
             lock (TimeRows)
             {
-                m_Count = numOfPts;
-                TimeRows.Clear();
-                for (int i = 0; i < numOfPts; i++)
+                while (TimeRows.Count < numOfPts)
                 {
-                    TimeRows.Add(new ChronoRow(i, this));
+                    TimeRows.Add(new ChronoRow(this));
+                }
+
+                m_Count = numOfPts;
+        
+                for (int i = 0; i < m_Count; i++)
+                {
+                    TimeRows[i].Index = i;
                 }
             }
         }
@@ -79,7 +95,7 @@ namespace Nitride.EE
         public override string GetXAxisLabel(int i)
         {
             //return (this[i].Frequency / 1e6).ToString("0.######") + "MHz";
-            return this[i].TimeStamp.ToString();
+            return this[i].Index.ToString();
         }
     }
 }

@@ -82,7 +82,7 @@ namespace Nitride.EE
         {
             get
             {
-                if (ChronoTable[i] is ChronoRow sp && sp.TimeStamp is long t)
+                if (ChronoTable[i] is ChronoRow sp && sp.X is double t)
                     return t.ToString();
                 else
                     return string.Empty;
@@ -144,7 +144,7 @@ namespace Nitride.EE
                                     //if ((time.Month - 1) % MajorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, time.ToString("MMM-YY")));
                                     //if ((time.Month - 1) % MinorTick.Length == 0) AxisX.TickList.CheckAdd(px, (Importance.Minor, time.ToString("MM")));
 
-                                    long time = ChronoTable[i].TimeStamp;
+                                    double time = ChronoTable[i].X;
 
                                     //if ((freq % tickFreqSpan) < (tickFreqSpan / 10D)) AxisX.TickList.CheckAdd(px, (Importance.Major, freq.ToString()));
                                     if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (time / 1e2).ToString()));

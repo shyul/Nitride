@@ -24,7 +24,7 @@ namespace Nitride.EE
             Dsw = new Complex[length];
         }
 
-        public void UpdataConfiguration(int length = 65536, WindowsType type = WindowsType.FlatTop, double[] winF = null, int[] winParam = null) 
+        public void UpdataConfiguration(int length = 65536, WindowsType type = WindowsType.FlatTop, bool flip = true, double[] winF = null, int[] winParam = null) 
         {
             if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
             {
@@ -49,6 +49,9 @@ namespace Nitride.EE
                 for (uint i = 1; i < n; i++)
                     Wn[i] = Wn[i - 1] * w;
 
+                FlipSpectrum = flip;
+
+                Gain = WinF.Take((int)Length).Sum(); // / Length;
             }
             else
                 throw new ArgumentException("Length must be greater than 4 and power of 2");
@@ -57,7 +60,9 @@ namespace Nitride.EE
 
         }
 
-        public double Gain => WinF.Take((int)Length).Sum() / Length;
+        public double Gain { get; private set; }
+
+        public bool FlipSpectrum { get; private set; } = false;
 
         public uint Length { get; private set; } = 1024;
         public WindowsType WindowType { get; private set; }
@@ -84,8 +89,6 @@ namespace Nitride.EE
             {
                 Dsw[i] = td.Data[(int)(i + startPt)] * WinF[i];
             }
-
-  
 
             //uint maxiwn = 0;
             //StreamWriter sw = null;
@@ -147,14 +150,27 @@ namespace Nitride.EE
             }
             */
 
-            for (k = 0; k < Length; k++)
+            if (FlipSpectrum) 
             {
-                k1 = (int)(k + (Length / 2));
+                for (k = 0; k < Length; k++)
+                {
+                    k1 = (int)(k + (Length / 2));
 
-                if (k1 >= Length) k1 -= (int)Length;
+                    if (k1 >= Length) k1 -= (int)Length;
 
-                fd[k1].Value = Dsw[k.EndianInverse(m)];
+                    fd[k1].Value = Dsw[k.EndianInverse(m)];
+                }
             }
+            else
+            {
+                for (k = 0; k < Length; k++)
+                {
+                    fd[(int)k].Value = Dsw[k.EndianInverse(m)];
+                }
+            }
+
+
+
             /*
             foreach (var pt in fd.Take(32))
             {

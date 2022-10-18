@@ -31,6 +31,22 @@ namespace Nitride.EE
             FreqTable.Dispose();
         }
 
+        public bool PauseUpdate
+        {
+            get => m_PauseUpdate;
+
+            set
+            {
+                Clear();
+                Enable = !value;
+                m_PauseUpdate = value;
+                //FreqTraceBuffer.Clear();
+                //FrameBuffer.Clear();
+            }
+        }
+
+        public bool m_PauseUpdate = false;
+
         #region Basic Settings
 
         public double CenterFreq { get; private set; }
@@ -121,13 +137,13 @@ namespace Nitride.EE
 
         public double[] FreqPoints { get; private set; }
 
-        public void ConfigureRange(double center, double span, int count, double offset)
+        public void ConfigureFreqRange(double center, double span, int numOfPts = 800)
         {
             lock (FreqTable.DataLockObject)
             {
                 //if (count % 2 == 0) count++;
 
-                Count = count;
+                Count = numOfPts;
                 CenterFreq = center;
                 Span = span;
 
@@ -136,16 +152,18 @@ namespace Nitride.EE
                 FreqTable.Configure(StartFreq, StopFreq, Count);
                 FreqPoints = FreqTable.Rows.Select(n => n.Frequency).OrderBy(n => n).ToArray();
 
-                // Generate Correction Data
-
-                for (int i = 0; i < FreqTable.Count; i++)
-                {
-                    FreqRow prow = FreqTable[i];
-                    prow[MultiCorrColumn] = 20;
-                    prow[OffsetCorrColumn] = offset;
-                }
-
                 // Console.WriteLine(FreqPoints.ToStringWithIndex());
+            }
+        }
+
+        public void ConfigureCorrection(double offset, double multiply = 20)
+        {
+            // Generate Correction Data
+            for (int i = 0; i < FreqTable.Count; i++)
+            {
+                FreqRow prow = FreqTable[i];
+                prow[MultiCorrColumn] = multiply;
+                prow[OffsetCorrColumn] = offset;
             }
         }
 
@@ -266,7 +284,7 @@ namespace Nitride.EE
                     return;
                 }
 
-                if (FreqTraceBuffer.Count > 0 && Enable)
+                if (FreqTraceBuffer.Count > 0 && Enable && !PauseUpdate)
                 {
                     if (FrameBuffer.Count < 3)
                     {
@@ -424,7 +442,7 @@ namespace Nitride.EE
                 if (GetFrameCancellationTokenSource.IsCancellationRequested)
                     return;
 
-                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable && EnableHisto)
+                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable && EnableHisto && !PauseUpdate)
                 {
                     GetPersistBitmap(frame);
                     PersistBitmapBuffer.Enqueue(frame);
