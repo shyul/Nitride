@@ -16,28 +16,21 @@ namespace Nitride.EE
 {
     public class WaveForm 
     {
-        public void Configure(int count, double rate = 1, double startTime = 0)
+        public WaveForm(int maxLength)
         {
-            Count = count;
+            Count = maxLength;
+            Data = new Complex[Count];
+        }
 
-            while (Count > Data.Count)
-            {
-                Data.Add(new Complex());
-            }
-
-            /*
-            while (Count < Data.Count)
-            {
-                Data.RemoveAt(Data.Count - 1);
-            }*/
-
+        public void Configure(double rate = 1, double startTime = 0)
+        {
             SampleRate = rate;
             StartTime = startTime;
             Duration = ((Count - 1) / SampleRate);
             StopTime = StartTime + Duration;
         }
 
-        public int Count { get; private set; }
+        public int Count { get; }
 
         public double SampleRate { get; private set; }
 
@@ -47,7 +40,7 @@ namespace Nitride.EE
 
         public double StopTime { get; private set; }
 
-        public List<Complex> Data { get; } = new();
+        public Complex[] Data { get; } 
 
         public double Peak => Data.Select(x => x.Magnitude).Max();
 

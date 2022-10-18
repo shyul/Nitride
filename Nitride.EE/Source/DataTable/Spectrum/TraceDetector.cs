@@ -16,12 +16,12 @@ namespace Nitride.EE
     {
         public TraceDetector(FreqTrace trace)
         {
-            Trace = trace;
-            Data = Trace.Data;
-            Count = Trace.Count;
+            //Trace = trace;
+            Count = trace.Length;
+            Data = trace.Data.Take(Count).ToList();
         }
 
-        public virtual FreqTrace Trace { get; }
+        //public virtual FreqTrace Trace { get; }
 
         public List<FreqPoint> Data { get; }
 

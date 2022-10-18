@@ -96,7 +96,7 @@ namespace Nitride.EE
 
         private SpectrumData Data { get; }
 
-        public void UpdateConfiguration() 
+        public void UpdateConfiguration(double tickStep) 
         {
             MinimumTextWidth = TextRenderer.MeasureText("0.0000MHz", Style[Importance.Major].Font).Width * 1D;
             CoordinatedSize = new Size(0, 0);
@@ -105,7 +105,7 @@ namespace Nitride.EE
             MainAxis.FixedMaximum = Data.Y_Max;
             MainAxis.FixedMinimum = Data.Y_Min;
 
-            MainAxis.TickStep = 10;
+            MainAxis.TickStep = tickStep;
             MainAxis.TickDacades = new double[] { 0.1, 0.2, 0.5, 1 };
         }
 
@@ -195,7 +195,7 @@ namespace Nitride.EE
 
         public override ITable Table => Data.FreqTable;
 
-        public override bool ReadyToShow { get => m_ReadyToShow && CurrentTraceFrame is not null && Table.Count > 0 ; set { m_ReadyToShow = value; } } // && Data.Enable
+        public override bool ReadyToShow { get => m_ReadyToShow && IsActive && CurrentTraceFrame is not null && Table.Count > 0; set { m_ReadyToShow = value; } } // && Data.Enable
 
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };

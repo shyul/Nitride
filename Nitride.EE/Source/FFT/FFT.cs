@@ -17,9 +17,16 @@ namespace Nitride.EE
 {
     public class FFT
     {
-        public FFT(int length = 65536, WindowsType type = WindowsType.FlatTop, double[] winF = null, int[] winParam = null)
+        public FFT(int length = 262144) 
         {
-            if (length > 4 && length.IsPowerOf2())
+            WinF = new double[length];
+            Wn = new Complex[length];
+            Dsw = new Complex[length];
+        }
+
+        public void UpdataConfiguration(int length = 65536, WindowsType type = WindowsType.FlatTop, double[] winF = null, int[] winParam = null) 
+        {
+            if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
             {
                 Length = (uint)length;
 
@@ -31,10 +38,10 @@ namespace Nitride.EE
                         throw new ArgumentException("Custom Window's array length has to match FFT length");
                 }
                 else
-                    WinF = WindowFunction.GetWindow(length, type);
+                    WindowFunction.GetWindow(length, type, ref WinF);
 
                 uint n = Length / 2;
-                Wn = new Complex[n];
+
                 double ang = 2 * Math.PI / Length;
                 Complex w = new(Math.Cos(ang), -Math.Sin(ang));
                 Wn[0] = new(1.0, 0.0);
@@ -42,17 +49,24 @@ namespace Nitride.EE
                 for (uint i = 1; i < n; i++)
                     Wn[i] = Wn[i - 1] * w;
 
-                Dsw = new Complex[Length];
             }
             else
                 throw new ArgumentException("Length must be greater than 4 and power of 2");
+
+            // Console.WriteLine("FFT Win = " + type.ToString() + " | Length = " + length + " | Gain = " + Gain);
+
         }
 
-        public uint Length { get; } = 1024;
+        public double Gain => WinF.Take((int)Length).Sum() / Length;
+
+        public uint Length { get; private set; } = 1024;
         public WindowsType WindowType { get; private set; }
-        public double[] WinF { get; private set; }
-        public Complex[] Wn { get; private set; }
-        public Complex[] Dsw { get; private set; }
+
+        public double[] WinF;// { get; private set; }
+
+        public Complex[] Wn;// { get; private set; }
+
+        public Complex[] Dsw;// { get; private set; }
 
         //public bool FileSaved = false;
 
@@ -71,11 +85,13 @@ namespace Nitride.EE
                 Dsw[i] = td.Data[(int)(i + startPt)] * WinF[i];
             }
 
+  
+
             //uint maxiwn = 0;
             //StreamWriter sw = null;
 
             //if (!FileSaved)
-             //   sw = File.CreateText("B:\\fft.txt");  //null;
+            //   sw = File.CreateText("B:\\fft.txt");  //null;
             /*
             if (!File.Exists("B:\\fft.txt")) 
             {
@@ -124,6 +140,12 @@ namespace Nitride.EE
 
             //FileSaved = true;
             //Console.WriteLine("maxiwn = " + maxiwn);
+            /*
+            foreach (var pt in Dsw.Last(32))
+            {
+                Console.Write("(" + pt + ") ");
+            }
+            */
 
             for (k = 0; k < Length; k++)
             {
@@ -133,6 +155,11 @@ namespace Nitride.EE
 
                 fd[k1].Value = Dsw[k.EndianInverse(m)];
             }
+            /*
+            foreach (var pt in fd.Take(32))
+            {
+                Console.Write("(freq = " + pt.Frequency + " | val = " + pt.Value + ") ");
+            }*/
         }
     }
 }

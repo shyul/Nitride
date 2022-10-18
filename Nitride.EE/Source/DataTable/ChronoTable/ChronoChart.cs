@@ -34,17 +34,30 @@ namespace Nitride.EE
             ChronoTable.AddDataConsumer(this);
             TabName = Name = name;
 
-            AddArea(MainArea = new OscillatorArea(this, "Main", 0.3f)
+            AddArea(Channel1_Area = new OscillatorArea(this, "Ch1 Area", 0.3f)
             {
                 HasXAxisBar = true,
                 Reference = 0,
-                //UpperLimit = 20,
-                //LowerLimit = -20,
+                //UpperLimit = 1717986918,
+                //LowerLimit = -1717986918,
                 //UpperColor = Color.Green,
                 //LowerColor = Color.DarkOrange,
                 //FixedTickStep_Right = 10,
 
             });
+
+            AddArea(Channel2_Area = new OscillatorArea(this, "Ch2 Area", 0.3f)
+            {
+                HasXAxisBar = false,
+                Reference = 0,
+                //UpperLimit = 1717986918,
+                //LowerLimit = -1717986918,
+                //UpperColor = Color.Green,
+                //LowerColor = Color.DarkOrange,
+                //FixedTickStep_Right = 10,
+
+            });
+
             /*
             AddArea(MainArea = new Area(this, "Main", 0.3f)
             {
@@ -61,7 +74,9 @@ namespace Nitride.EE
 
         public ChronoTable ChronoTable { get; private set; }
 
-        public Area MainArea { get; }
+        public Area Channel1_Area { get; }
+
+        public Area Channel2_Area { get; }
 
         public override string this[int i]
         {

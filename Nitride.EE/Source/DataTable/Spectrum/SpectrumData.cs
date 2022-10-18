@@ -138,7 +138,7 @@ namespace Nitride.EE
 
                 // Generate Correction Data
 
-                for (int i = 0 ; i < FreqTable.Count; i++) 
+                for (int i = 0; i < FreqTable.Count; i++)
                 {
                     FreqRow prow = FreqTable[i];
                     prow[MultiCorrColumn] = 20;
@@ -204,7 +204,7 @@ namespace Nitride.EE
 
         public void AppendTrace(FreqTrace trace)
         {
-            if (Enable) 
+            if (Enable)
             {
                 //var frame = GetGetScaledTrace(trace);
 
@@ -226,23 +226,23 @@ namespace Nitride.EE
             PersistBitmapBuffer.Clear();
 
             if (HistoFrames is not null)
-            for (int i = 0; i < HistoFrames.Length; i++)
-            {
-                var frame = HistoFrames[i];
+                for (int i = 0; i < HistoFrames.Length; i++)
+                {
+                    var frame = HistoFrames[i];
 
-                //frame.ClearPersistBuffer();
-                //frame.ClearPersistBitmap();
+                    //frame.ClearPersistBuffer();
+                    //frame.ClearPersistBitmap();
 
-                Parallel.For(0, Count, i => {
-                    FreqRow row = FreqTable[i];
-                    //row.Clear();
+                    Parallel.For(0, Count, i => {
+                        FreqRow row = FreqTable[i];
+                        //row.Clear();
 
-                    row[frame.MagnitudeHighColumn] = double.NaN;
-                    row[frame.MagnitudeLowColumn] = double.NaN;
-                    row[frame.HighPixColumn] = double.NaN;
-                    row[frame.LowPixColumn] = double.NaN;
-                });
-            }
+                        row[frame.MagnitudeHighColumn] = double.NaN;
+                        row[frame.MagnitudeLowColumn] = double.NaN;
+                        row[frame.HighPixColumn] = double.NaN;
+                        row[frame.LowPixColumn] = double.NaN;
+                    });
+                }
         }
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
@@ -264,7 +264,7 @@ namespace Nitride.EE
                 {
                     CurrentTraceFrame = null;
                     return;
-                }  
+                }
 
                 if (FreqTraceBuffer.Count > 0 && Enable)
                 {
@@ -313,7 +313,7 @@ namespace Nitride.EE
             lock (frame)
             {
                 TraceDetector det;
-                int traceCount = trace.Count;
+                int traceCount = trace.Length;
                 if (traceCount > Count)
                 {
                     det = Detector switch
@@ -345,14 +345,14 @@ namespace Nitride.EE
                     // Parallel.For(0, Count, i =>
                     {
                         FreqRow row = FreqTable[i];
-                        
+
                         double h_value = row[frame.MagnitudeHighColumn];
                         double l_value = row[frame.MagnitudeLowColumn];
 
                         if (h_value > Y_Max) h_value = Y_Max;
                         if (l_value < Y_Min) l_value = Y_Min;
 
-                        double full_height = (PersistBufferHeight - 1) / Y_Range;
+                        double full_height = Y_Range > 0 ? (PersistBufferHeight - 1) / Y_Range : 0;
 
                         double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
                         double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
@@ -469,7 +469,7 @@ namespace Nitride.EE
                     }
                 }
                 frame.PersistBitmapValid = true;
-            } 
+            }
         }
 
         #endregion Add Data

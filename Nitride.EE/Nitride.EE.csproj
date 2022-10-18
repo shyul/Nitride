@@ -76,6 +76,7 @@
     <Compile Include="Source\DataTable\ParamTable\S_Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\Z_Parameter.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceFrame.cs" />
+    <Compile Include="Source\Signal\RxData.cs" />
     <Compile Include="Source\Signal\WaveForm.cs" />
     <Compile Include="Source\FFT\FFT.cs" />
     <Compile Include="Source\FFT\WindowFunctions.cs" />
