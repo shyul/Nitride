@@ -297,9 +297,9 @@ namespace Nitride.Chart
                 Point location = new(area.RightCursorX, axisY.ValueToPixel(data));
 
                 if (percent < 0)
-                    DrawLeftPercentCursor(g, data.ToSINumberString("G5").String, percent.ToString("G3") + "%", LowerTextTheme, location);
+                    DrawLeftPercentCursor(g, data.ToUnitPrefixNumber3String("G5").String, percent.ToString("G3") + "%", LowerTextTheme, location);
                 else
-                    DrawLeftPercentCursor(g, data.ToSINumberString("G5").String, percent.ToString("G3") + "%", TextTheme, location);
+                    DrawLeftPercentCursor(g, data.ToUnitPrefixNumber3String("G5").String, percent.ToString("G3") + "%", TextTheme, location);
 
                 /*
                 if (percent < 0)

@@ -121,7 +121,7 @@ namespace Nitride.Chart
 
         }
 
-        public virtual string PixelToString(int pix) => PixelToValue(pix).ToSINumberString("G4").String;
+        public virtual string PixelToString(int pix) => PixelToValue(pix).ToUnitPrefixNumber3String("G4").String;
 
         public double Reference => Area.Reference;
 
@@ -138,7 +138,7 @@ namespace Nitride.Chart
             if (!double.IsNaN(Reference) && (!FixedRange))
             {
                 Range.Insert(Reference);
-                TickList.CheckAdd(Reference, (Importance.Major, Reference.ToSINumberString("0.##").String));
+                TickList.CheckAdd(Reference, (Importance.Major, Reference.ToUnitPrefixNumber3String("0.##").String));
             }
 
             int tickCount = (1.0 * HeightRatio * Area.Height / MinimumTickHeight).ToInt32(); // It needs at least 10 pixel for a tick
@@ -154,7 +154,7 @@ namespace Nitride.Chart
                         double tickVal = Reference;
                         while (tickVal >= Range.Minimum)
                         {
-                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
                             tickVal -= tickStep;
                         }
 
@@ -163,7 +163,7 @@ namespace Nitride.Chart
                         tickVal = Reference;
                         while (tickVal <= Range.Maximum)
                         {
-                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
                             tickVal += tickStep;
                         }
 
@@ -187,7 +187,7 @@ namespace Nitride.Chart
 
                         while (tickVal <= Range.Maximum)
                         {
-                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
                             tickVal += tickStep;
                         }
                     }

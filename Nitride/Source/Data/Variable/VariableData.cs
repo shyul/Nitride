@@ -35,9 +35,19 @@ namespace Nitride
 
         public double Value { get; protected set; }
 
+
+        public double MinimumStep { get; set; } = double.MinValue;
+
         public virtual void Update(string str) 
         {
             Value = str.ToDouble();
+            DataIsUpdated();
+        }
+
+        public void Update(double val)
+        {
+            if (val < MinimumStep) val = MinimumStep;
+            Value = val;
             DataIsUpdated();
         }
 

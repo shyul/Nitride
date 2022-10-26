@@ -275,7 +275,7 @@ namespace Nitride.Chart
                 if (!double.IsNaN(Reference))
                 {
                     axis.Range.Insert(Reference);
-                    axis.TickList.CheckAdd(Reference, (Importance.Major, Reference.ToSINumberString("0.##").String));
+                    axis.TickList.CheckAdd(Reference, (Importance.Major, Reference.ToUnitPrefixNumber3String("0.##").String));
                     Console.WriteLine("Add Reference.");
                 }
 
@@ -296,7 +296,7 @@ namespace Nitride.Chart
 
                         while (tickVal >= axis.Range.Minimum)
                         {
-                            axis.TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            axis.TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
                             tickVal -= tickStep;
                         }
                     }
@@ -315,7 +315,7 @@ namespace Nitride.Chart
 
                         while (tickVal <= axis.Range.Maximum)
                         {
-                            axis.TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToSINumberString("0.##").String));
+                            axis.TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
                             tickVal += tickStep;
                         }
 

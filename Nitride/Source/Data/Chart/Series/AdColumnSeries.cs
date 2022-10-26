@@ -138,7 +138,7 @@ namespace Nitride.Chart
             {
                 int y = area.AxisY(Side).ValueToPixel(data);
                 if (y >= area.Top && y <= area.Bottom)
-                    g.DrawLeftCursor(data.ToSINumberString("G4").String, Main.Theme.Font,
+                    g.DrawLeftCursor(data.ToUnitPrefixNumber3String("G4").String, Main.Theme.Font,
                         (gain < 0) ? LowerTextTheme : TextTheme, new Point(area.RightCursorX, y), 11, 32);
             }
         }

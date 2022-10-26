@@ -50,10 +50,10 @@ namespace Nitride.Chart
             List<(string text, Font font, Brush brush)> labels = new();
 
             double high = table[pt, High_Column];
-            string text_h = !double.IsNaN(high) ? High_Column.Label + ": " + high.ToSINumberString(LegendLabelFormat).String + " " : string.Empty;
+            string text_h = !double.IsNaN(high) ? High_Column.Label + ": " + high.ToUnitPrefixNumber3String(LegendLabelFormat).String + " " : string.Empty;
 
             double low = table[pt, Low_Column];
-            string text_l = !double.IsNaN(low) ? Low_Column.Label + ": " + low.ToSINumberString(LegendLabelFormat).String + " " : string.Empty;
+            string text_l = !double.IsNaN(low) ? Low_Column.Label + ": " + low.ToUnitPrefixNumber3String(LegendLabelFormat).String + " " : string.Empty;
 
             if (text_h.Length > 0) labels.Add((text_h, Main.Theme.Font, Legend.LabelBrush(Theme)));
             if (text_l.Length > 0) labels.Add((text_l, Main.Theme.Font, Legend.LabelBrush(LowTheme)));
@@ -145,11 +145,11 @@ namespace Nitride.Chart
 
                 int h_y = axisY.ValueToPixel(high);
                 if (h_y >= area.Top && h_y <= area.Bottom)
-                    g.DrawLeftCursor(high.ToSINumberString("G5").String, Main.Theme.Font, TextTheme, new Point(x, h_y), 11, 32);
+                    g.DrawLeftCursor(high.ToUnitPrefixNumber3String("G5").String, Main.Theme.Font, TextTheme, new Point(x, h_y), 11, 32);
 
                 int l_y = axisY.ValueToPixel(low);
                 if (l_y >= area.Top && l_y <= area.Bottom)
-                    g.DrawLeftCursor(low.ToSINumberString("G5").String, Main.Theme.Font, LowTextTheme, new Point(x, l_y), 11, 32);
+                    g.DrawLeftCursor(low.ToUnitPrefixNumber3String("G5").String, Main.Theme.Font, LowTextTheme, new Point(x, l_y), 11, 32);
             }
         }
     }

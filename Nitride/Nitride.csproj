@@ -112,7 +112,8 @@
     <Compile Include="Source\Data\Table\Types\ITable.cs" />
     <Compile Include="Source\Data\Table\Types\TableStatus.cs" />
     <Compile Include="Source\Data\TraceDataTable.cs" />
-    <Compile Include="Source\Data\VariableData.cs" />
+    <Compile Include="Source\Data\Variable\VariableData.cs" />
+    <Compile Include="Source\Data\Variable\VariableControl.cs" />
     <Compile Include="Source\Main\Icons.cs" />
     <Compile Include="Source\Main\Main.cs" />
     <Compile Include="Source\Tools\Collections.cs" />

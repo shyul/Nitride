@@ -14,9 +14,9 @@ using System.Runtime.InteropServices;
 
 namespace Nitride.EE
 {
-    public class SpectrumDatum
+    public class FFTDatum
     {
-        public SpectrumDatum(int maxLength)
+        public FFTDatum(int maxLength)
         {
             FFT = new(maxLength);
             WaveForm = new(maxLength);
@@ -38,11 +38,11 @@ namespace Nitride.EE
         {
             NumOfCh = numOfCh;
 
-            SpectrumDatums = new SpectrumDatum[numOfCh];
+            SpectrumDatums = new FFTDatum[numOfCh];
 
             for (int i = 0; i < numOfCh; i++)
             {
-                SpectrumDatums[i] = new SpectrumDatum(maxLength);
+                SpectrumDatums[i] = new FFTDatum(maxLength);
             }
 
             WaveForms = SpectrumDatums.Select(n => n.WaveForm).ToArray();
@@ -57,7 +57,7 @@ namespace Nitride.EE
 
         public SampleBuffer SampleBuffer { get; private set; }
 
-        public SpectrumDatum[] SpectrumDatums { get; }
+        public FFTDatum[] SpectrumDatums { get; }
 
         public WaveForm[] WaveForms { get; }
 

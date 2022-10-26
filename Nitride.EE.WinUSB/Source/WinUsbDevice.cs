@@ -83,7 +83,7 @@ namespace Nitride.EE.WinUSB
                 }
             }
             else
-                Console.WriteLine("Device Not Found");
+                Console.Write(".");
                 
                // throw new Exception("Device Handle is invalid or Device not found.");
 

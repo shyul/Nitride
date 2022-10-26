@@ -320,54 +320,59 @@ namespace Nitride
         /// <summary>
         /// Convert large double number to finance number string
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="d"></param>
         /// <returns></returns>
-        public static (double Number, string String) ToSINumberString(this double input, string format = "")
+        public static (double Number, string String) ToUnitPrefixNumber3String(this double d, string format = "")
         {
-            double num = input;
-            if ((input > -1e-9 && input <= -1e-12) || (input < 1e-9 && input >= 1e-12))
+            double num = d;
+            if (d > -1e-12 && d < 1e-12)
             {
-                num = input * 1e12;
-                return (num, num.ToNumberString(format) + "f");
+                num = d * 1e15;
+                return (num, num.ToNumber3String(format) + "f");
             }
-            else if ((input > -1e-6 && input <= -1e-9) || (input < 1e-6 && input >= 1e-9))
+            if ((d > -1e-9 && d <= -1e-12) || (d < 1e-9 && d >= 1e-12))
             {
-                num = input * 1e9;
-                return (num, num.ToNumberString(format) + "p");
+                num = d * 1e12;
+                return (num, num.ToNumber3String(format) + "p");
             }
-            else if ((input > -1e-3 && input <= -1e-6) || (input < 1e-3 && input >= 1e-6))
+            else if ((d > -1e-6 && d <= -1e-9) || (d < 1e-6 && d >= 1e-9))
             {
-                num = input * 1e6;
-                return (num, num.ToNumberString(format) + "n");
+                num = d * 1e9;
+                return (num, num.ToNumber3String(format) + "n");
             }
-            else if ((input > -1 && input <= -1e-3) || (input < 1 && input >= 1e-3))
+            else if ((d > -1e-3 && d <= -1e-6) || (d < 1e-3 && d >= 1e-6))
             {
-                num = input * 1e3;
-                return (num, num.ToNumberString(format) + "m");
+                num = d * 1e6;
+                return (num, num.ToNumber3String(format) + "μ");
             }
-            else if ((input >= 1e3 && input < 1e6) || (input <= -1e3 && input > -1e6))
+            else if ((d > -1 && d <= -1e-3) || (d < 1 && d >= 1e-3))
             {
-                num = input / 1e3;
-                return (num, num.ToNumberString(format) + "K");
+                num = d * 1e3;
+                return (num, num.ToNumber3String(format) + "m");
             }
-            else if ((input >= 1e6 && input < 1e9) || (input <= -1e6 && input > -1e9))
+            else if ((d >= 1e3 && d < 1e6) || (d <= -1e3 && d > -1e6))
             {
-                num = input / 1e6;
-                return (num, num.ToNumberString(format) + "M");
+                num = d / 1e3;
+                return (num, num.ToNumber3String(format) + "K");
             }
-            else if ((input >= 1e9 && input < 1e12) || (input <= -1e9 && input > -1e12))
+            else if ((d >= 1e6 && d < 1e9) || (d <= -1e6 && d > -1e9))
             {
-                num = input / 1e9;
-                return (num, num.ToNumberString(format) + "G");
+                num = d / 1e6;
+                return (num, num.ToNumber3String(format) + "M");
             }
-            else if (input >= 1e12 || input <= -1e12)
+            else if ((d >= 1e9 && d < 1e12) || (d <= -1e9 && d > -1e12))
             {
-                num = input / 1e12;
-                return (num, num.ToNumberString(format) + "T");
+                num = d / 1e9;
+                return (num, num.ToNumber3String(format) + "G");
+            }
+            else if (d >= 1e12 || d <= -1e12)
+            {
+                num = d / 1e12;
+                return (num, num.ToNumber3String(format) + "T");
             }
             else
             {
-                return (num, input.ToString(format));
+                return (num, d.ToString(format));
             }
         }
 
@@ -376,7 +381,7 @@ namespace Nitride
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string ToNumberString(this double input, string format)
+        public static string ToNumber3String(this double input, string format)
         {
             if (Double.IsNaN(input))
             {
@@ -399,5 +404,58 @@ namespace Nitride
         }
 
 
+        public static (double num, string prefix) ToUnitPrefixNumberString(this double d)
+        {
+            double num = 1;
+            if (d > -1e-12 && d < 1e-12)
+            {
+                num = 1e15;
+                return (num, "f");
+            }
+            if ((d > -1e-9 && d <= -1e-12) || (d < 1e-9 && d >= 1e-12))
+            {
+                num = 1e12;
+                return (num, "p");
+            }
+            else if ((d > -1e-6 && d <= -1e-9) || (d < 1e-6 && d >= 1e-9))
+            {
+                num = 1e9;
+                return (num, "n");
+            }
+            else if ((d > -1e-3 && d <= -1e-6) || (d < 1e-3 && d >= 1e-6))
+            {
+                num = 1e6;
+                return (num, "μ");
+            }
+            else if ((d > -1 && d <= -1e-3) || (d < 1 && d >= 1e-3))
+            {
+                num = 1e3;
+                return (num, "m");
+            }
+            else if ((d >= 1e3 && d < 1e6) || (d <= -1e3 && d > -1e6))
+            {
+                num = 1 / 1e3;
+                return (num, "K");
+            }
+            else if ((d >= 1e6 && d < 1e9) || (d <= -1e6 && d > -1e9))
+            {
+                num = 1 / 1e6;
+                return (num, "M");
+            }
+            else if ((d >= 1e9 && d < 1e12) || (d <= -1e9 && d > -1e12))
+            {
+                num = 1 / 1e9;
+                return (num, "G");
+            }
+            else if (d >= 1e12 || d <= -1e12)
+            {
+                num = 1 / 1e12;
+                return (num, "T");
+            }
+            else
+            {
+                return (num, string.Empty);
+            }
+        }
     }
 }

@@ -192,7 +192,7 @@ namespace Nitride.Chart
 
                 int y = area.AxisY(Side).ValueToPixel(data);
                 if (y >= area.Top && y <= area.Bottom)
-                    g.DrawLeftCursor(data.ToSINumberString("G5").String, Main.Theme.Font,
+                    g.DrawLeftCursor(data.ToUnitPrefixNumber3String("G5").String, Main.Theme.Font,
                         tagTheme, new Point(area.RightCursorX, y), 11, 32);
             }
         }

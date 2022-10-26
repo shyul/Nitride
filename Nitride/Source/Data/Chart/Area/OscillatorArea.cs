@@ -119,13 +119,13 @@ namespace Nitride.Chart
             if (!double.IsNaN(UpperLimit))
             {
                 AxisRight.Range.Insert(UpperLimit);
-                AxisRight.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToSINumberString("0.##").String));
+                AxisRight.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToUnitPrefixNumber3String("0.##").String));
             }
 
             if (!double.IsNaN(LowerLimit))
             {
                 AxisRight.Range.Insert(LowerLimit);
-                AxisRight.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToSINumberString("0.##").String));
+                AxisRight.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToUnitPrefixNumber3String("0.##").String));
             }
             AxisRight.GenerateTicks();
 
@@ -133,13 +133,13 @@ namespace Nitride.Chart
             if (!double.IsNaN(UpperLimit))
             {
                 AxisLeft.Range.Insert(UpperLimit);
-                AxisLeft.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToSINumberString("0.##").String));
+                AxisLeft.TickList.CheckAdd(UpperLimit, (Importance.Major, UpperLimit.ToUnitPrefixNumber3String("0.##").String));
             }
 
             if (!double.IsNaN(LowerLimit))
             {
                 AxisLeft.Range.Insert(LowerLimit);
-                AxisLeft.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToSINumberString("0.##").String));
+                AxisLeft.TickList.CheckAdd(LowerLimit, (Importance.Major, LowerLimit.ToUnitPrefixNumber3String("0.##").String));
             }
             AxisLeft.GenerateTicks();
 
