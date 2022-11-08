@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Nitride.EE
@@ -29,6 +30,8 @@ namespace Nitride.EE
             Duration = ((Count - 1) / SampleRate);
             StopTime = StartTime + Duration;
         }
+
+        public Complex this[int i] => Data[i]; 
 
         public int Count { get; }
 
@@ -65,6 +68,25 @@ namespace Nitride.EE
             {
                 Data[i] = Data[i - 1] * w;
             }
+        }
+
+        public void GetChirp(double fullScale, double[] normFreq)
+        {
+            Data[0] = fullScale * Complex.One;// new Complex(fullScale, 0.0); ImaginaryOne
+
+            for (int i = 1; i < Count; i++)
+            {
+                double ang = 2 * normFreq[i] * Math.PI; // normFreq * Math.PI;// / numPt;
+                Complex w = new(Math.Cos(ang), Math.Sin(ang));
+                Data[i] =  Data[i - 1] * w;
+            }
+            
+            /*
+            for (int i = 0; i < Count; i++)
+            {
+                Data[i] = Complex.Exp(Complex.ImaginaryOne * Math.PI * normFreq[i] * normFreq[i]);
+            }*/
+
         }
     }
 }

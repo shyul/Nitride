@@ -29,7 +29,36 @@ namespace Nitride.EE
 
         public FreqTrace FreqTrace { get; }
 
-        public void Transform() => FFT.Transform(WaveForm, FreqTrace.Data);
+        public bool FlipSpectrum { get;  set; } = false;
+
+        public void Transform() 
+        {
+            FFT.Transform(WaveForm.Data);
+
+            List<FreqPoint> fd = FreqTrace.Data;
+
+            uint k, k1;
+            uint N = FFT.Length;
+            
+            if (FlipSpectrum)
+            {
+                for (k = 0; k < N; k++)
+                {
+                    k1 = (k + (N / 2));
+
+                    if (k1 >= N) k1 -= N;
+
+                    fd[(int)k1].Value = FFT.Dsw[k.EndianInverse(FFT.M)];
+                }
+            }
+            else
+            {
+                for (k = 0; k < N; k++)
+                {
+                    fd[(int)k].Value = FFT.Dsw[k.EndianInverse(FFT.M)];
+                }
+            }
+        }
     }
 
     public class RxData

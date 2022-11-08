@@ -258,6 +258,8 @@ namespace Nitride
 
         public Rectangle EdgeBounds { get; set; }
 
+        public bool UsePrefix { get; set; } = true;
+
         protected virtual void CoordinateLayout()
         {
             ResumeLayout(true);
@@ -268,14 +270,28 @@ namespace Nitride
             int c_x = Margin.Left;
 
             double d = VariableData.Value;
-            var (num, pfx) = d.ToUnitPrefixNumberString();
+            double res;
+            string s;
 
-            Prefix = pfx + VariableData.Unit;
+            if (UsePrefix) 
+            {
+                var (num, pfx) = d.ToUnitPrefixNumberString();
+
+                Prefix = pfx + VariableData.Unit;
+   
+                PrefixGain = num;
+
+                res = d * num;
+                s = res.ToString(Format);
+            }
+            else
+            {
+                Prefix = VariableData.Unit;
+                PrefixGain = 1;
+                s = d.ToString(Format);
+            }
+
             PrefixLocation = new Point(Right - Margin.Right, (Height / 2) + 1);
-            PrefixGain = num;
-
-            double res = d * num;
-            string s = res.ToString(Format);
 
             if (Digits is not null)
             {

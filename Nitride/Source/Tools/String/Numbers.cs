@@ -407,6 +407,10 @@ namespace Nitride
         public static (double num, string prefix) ToUnitPrefixNumberString(this double d)
         {
             double num = 1;
+            if (d == 0) 
+            {
+                return (num, string.Empty);
+            }
             if (d > -1e-12 && d < 1e-12)
             {
                 num = 1e15;

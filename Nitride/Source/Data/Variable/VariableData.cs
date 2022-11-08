@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace Nitride
 {
-    public abstract class VariableData : IDataProvider, IVariable, IDisposable
+    public class VariableData : IDataProvider, IVariable, IDisposable
     {
         ~VariableData() => Dispose();
 
@@ -31,9 +31,13 @@ namespace Nitride
 
         public virtual string Description { get; protected set; }
 
-        public virtual string Unit { get; protected set; }
+        public virtual string Unit { get; set; }
 
         public double Value { get; protected set; }
+
+        public Range<double> Range { get; } = new Range<double>();
+
+        public Action Rectifier;
 
 
         public double MinimumStep { get; set; } = double.MinValue;
@@ -53,9 +57,9 @@ namespace Nitride
 
         public bool IsSubscribe { get; protected set; }
 
-        public abstract bool Subscribe();
+        public virtual bool Subscribe() => false;
 
-        public abstract bool Unsubscribe();
+        public virtual bool Unsubscribe() => false;
 
         public void DataIsUpdated()
         {

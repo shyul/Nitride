@@ -17,14 +17,77 @@ namespace Nitride.EE
 {
     public class FFT
     {
-        public FFT(int length = 262144) 
+        public FFT(int length = 262144)
         {
+            Length = (uint)length;
             WinF = new double[length];
             Wn = new Complex[length];
             Dsw = new Complex[length];
         }
 
-        public void UpdataConfiguration(int length = 65536, WindowsType type = WindowsType.FlatTop, bool flip = true, double[] winF = null, int[] winParam = null) 
+        public void UpdataConfiguration(int length, WindowsType type) //, bool flip)
+        {
+            if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
+            {
+                Length = (uint)length;
+                IsFFT = true;
+                WindowFunction.GetWindow(length, type, ref WinF);
+                Gain = WinF.Take((int)Length).Sum(); // / Length;
+                InitWn();
+            }
+            else
+                throw new ArgumentException("Length must be greater than 4 and power of 2");
+        }
+
+        public void UpdataConfiguration(int length, double[] windowFunction) //, bool flip)
+        {
+            if (length > 4 && length == windowFunction.Length && length <= WinF.Length && length.IsPowerOf2())
+            {
+                Length = (uint)length;
+                IsFFT = true;
+                WinF = windowFunction;
+                Gain = WinF.Take((int)Length).Sum(); // / Length;
+                InitWn();
+            }
+            else
+                throw new ArgumentException("Length must be greater than 4 and power of 2");
+        }
+
+        public void UpdataConfiguration(int length, bool isFFT) //, bool flip)
+        {
+            if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
+            {
+                Length = (uint)length;
+                IsFFT = isFFT;
+
+                for (int i = 0; i < WinF.Length; i++) 
+                {
+                    WinF[i] = 1;
+                }
+
+                Gain = 1; // / Length;
+                InitWn();
+            }
+            else
+                throw new ArgumentException("Length must be greater than 4 and power of 2");
+        }
+
+        public bool IsFFT { get; private set; }
+
+        private void InitWn() 
+        {
+            uint n = Length / 2;
+
+            double ang = 2 * Math.PI / Length;
+            Complex w = IsFFT ? new(Math.Cos(ang), -Math.Sin(ang)) : new(Math.Cos(ang), Math.Sin(ang));
+            Wn[0] = new(1.0, 0.0);
+
+            for (uint i = 1; i < n; i++)
+                Wn[i] = Wn[i - 1] * w;
+        }
+
+        /*
+        public void UpdataConfiguration(int length = 65536, WindowsType type = WindowsType.FlatTop, bool flip = true, double[] winF = null, bool isFft = true)
         {
             if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
             {
@@ -43,7 +106,7 @@ namespace Nitride.EE
                 uint n = Length / 2;
 
                 double ang = 2 * Math.PI / Length;
-                Complex w = new(Math.Cos(ang), -Math.Sin(ang));
+                Complex w = isFft ? new(Math.Cos(ang), -Math.Sin(ang)) : new(Math.Cos(ang), Math.Sin(ang));
                 Wn[0] = new(1.0, 0.0);
 
                 for (uint i = 1; i < n; i++)
@@ -58,36 +121,35 @@ namespace Nitride.EE
 
             // Console.WriteLine("FFT Win = " + type.ToString() + " | Length = " + length + " | Gain = " + Gain);
 
-        }
-
-        public double Gain { get; private set; }
-
-        public bool FlipSpectrum { get; private set; } = false;
+        }*/
 
         public uint Length { get; private set; } = 1024;
-        public WindowsType WindowType { get; private set; }
+        public double Gain { get; private set; }
 
         public double[] WinF;// { get; private set; }
 
         public Complex[] Wn;// { get; private set; }
 
-        public Complex[] Dsw;// { get; private set; }
+        public Complex[] Dsw;// { get; private set; }.
+
+        public uint M { get; private set; }
 
         //public bool FileSaved = false;
 
-        public void Transform(WaveForm td, List<FreqPoint> fd, int startPt = 0)
+        public void Transform(Complex[] td, int startPt = 0) // List<FreqPoint> fd, 
         {
             uint l1 = Length;
             uint l2 = (l1 >> 1); //Length / 2;
             uint m = 0;
             uint w = 1;
-            uint i, j, k, d, ia, ib, iwn;
-            int k1;
+            uint i, j, d, ia, ib, iwn;
+            //int k1;
+            // uint k;
             Complex a, b, wn;
 
             for (i = 0; i < Length; i++)
             {
-                Dsw[i] = td.Data[(int)(i + startPt)] * WinF[i];
+                Dsw[i] = td[(int)(i + startPt)] * WinF[i];
             }
 
             //uint maxiwn = 0;
@@ -115,14 +177,14 @@ namespace Nitride.EE
                     {
                         ia = d + j;
                         ib = ia + l2;
-            
+
 
                         //maxiwn = Math.Max(maxiwn, iwn);
 
                         wn = Wn[iwn];
                         a = Dsw[ia];
                         b = Dsw[ib];
-               
+
                         Dsw[ia] = (a + b);
                         Dsw[ib] = (a - b) * wn;
 
@@ -150,7 +212,20 @@ namespace Nitride.EE
             }
             */
 
-            if (FlipSpectrum) 
+            M = m;
+
+            if (!IsFFT) 
+            {
+                for (i = 0; i < Length; i++)
+                {
+                    Dsw[i] = Dsw[i] / Length;
+                }
+            }
+
+            // return Dsw;
+
+            /*
+            if (FlipSpectrum)
             {
                 for (k = 0; k < Length; k++)
                 {
@@ -168,7 +243,7 @@ namespace Nitride.EE
                     fd[(int)k].Value = Dsw[k.EndianInverse(m)];
                 }
             }
-
+            */
 
 
             /*
