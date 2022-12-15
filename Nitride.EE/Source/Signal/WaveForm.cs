@@ -88,5 +88,143 @@ namespace Nitride.EE
             }*/
 
         }
+
+        public void GetPN(uint real, uint imag, uint mask, double min, double max, int p1 = 9, int p2 = 5) // or 23 / 18
+        {
+            List<double> rl = new(Count);
+            List<double> il = new(Count);
+
+            for (int i = 0; i < 800; i++)
+            {
+                real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1)) & 0x1);
+                imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1)) & 0x1);
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1)) & 0x1);
+                imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1)) & 0x1);
+
+                rl.Add((real & mask));
+                il.Add((imag & mask));
+            }
+
+            double l_avg = (rl.Average() + il.Average()) / 2;
+            double avg = (max - min) / 2;
+            double offset = (l_avg - avg);
+
+            for (int i = 0; i < Count; i++)
+            {
+                rl[i] -= offset;
+                il[i] -= offset;
+            }
+
+            double l_min = Math.Min(rl.Min(), il.Min());
+            double l_max = Math.Max(rl.Max(), il.Max());
+
+
+            double scale = Math.Max(l_max / max, l_min / min);
+
+            Console.WriteLine("offset = " + offset + " | scale = " + scale);
+
+            for (int i = 0; i < Count; i++)
+            {
+                double r = (rl[i]) / scale;
+                double q = (il[i]) / scale;
+
+               // if (r > max) r = max; else if (r < min) r = min;
+               // if (q > max) q = max; else if (q < min) q = min;
+                Console.WriteLine("r = " + r + " | q = " + q);
+
+                Data[i] = new Complex(r, q);
+
+                
+            }
+        }
+
+        public void GetGold(uint real, uint imag, uint mask, double min, double max) // or 23 / 18
+        {
+            List<double> rl = new(Count);
+            List<double> il = new(Count);
+
+            int p1 = 6;
+            int p2 = 5;
+            int p3 = 2;
+            int p4 = 1;
+
+            for (int i = 0; i < 800; i++)
+            {
+                real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
+                imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
+                imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
+
+                rl.Add((real & mask));
+                il.Add((imag & mask));
+            }
+
+            double l_avg = (rl.Average() + il.Average()) / 2;
+            double avg = (max - min) / 2;
+            double offset = (l_avg - avg);
+
+            for (int i = 0; i < Count; i++)
+            {
+                rl[i] -= offset;
+                il[i] -= offset;
+            }
+
+            double l_min = Math.Min(rl.Min(), il.Min());
+            double l_max = Math.Max(rl.Max(), il.Max());
+
+
+            double scale = Math.Max(l_max / max, l_min / min);
+
+            Console.WriteLine("offset = " + offset + " | scale = " + scale);
+
+            for (int i = 0; i < Count; i++)
+            {
+                double r = (rl[i]) / scale;
+                double q = (il[i]) / scale;
+
+                // if (r > max) r = max; else if (r < min) r = min;
+                // if (q > max) q = max; else if (q < min) q = min;
+                Console.WriteLine("r = " + r + " | q = " + q);
+
+                Data[i] = new Complex(r, q);
+
+
+            }
+        }
+
+        /*
+        public void GetPN(uint real, uint imag, uint mask, int p1 = 9, int p2 = 5)
+        {
+            int a, b;
+
+            for (int i = 0; i < 1000; i++)
+            {
+                real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1)) & 0x1);
+                imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1)) & 0x1);
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1)) & 0x1);
+                imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1)) & 0x1);
+
+                a = (int)( real & mask);
+                b = (int)(imag & mask);
+
+
+                Data[i] = new Complex(r, q);
+            }
+        
+
+        }*/
+
     }
 }

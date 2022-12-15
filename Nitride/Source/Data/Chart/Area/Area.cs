@@ -178,19 +178,20 @@ namespace Nitride.Chart
 
         public void RemoveSeries(Series ser)
         {
-            lock (Series)
-            {
-                // Remove legend
-                ser.Legend.Series.Remove(ser);
-
-                if (ser.Legend.Series.Count == 0)
+            if (ser.Legend is Legend ld)
+                lock (Series)
                 {
-                    Legends.Remove(ser.Legend.Name);
-                    ser.Legend = null;
-                }
+                    // Remove legend
+                    ld.Series.Remove(ser);
 
-                m_Series.CheckRemove(ser);
-            }
+                    if (ld.Series.Count == 0)
+                    {
+                        Legends.Remove(ser.Legend.Name);
+                        ld = null;
+                    }
+
+                    m_Series.CheckRemove(ser);
+                }
         }
 
         public virtual void RemoveSeries() => Series.RunEach(ser => RemoveSeries(ser));

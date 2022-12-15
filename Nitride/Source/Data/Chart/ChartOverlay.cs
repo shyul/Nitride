@@ -68,7 +68,7 @@ namespace Nitride.Chart
                             lg.Draw(g, Chart.Table);
                     }
 
-                    if (Chart.HoverIndex > -1)
+                    if (Chart.HoverIndex > -1 && areas.Count() > 0)
                     {
                         // Draw cursor on X Axis
                         int x = Chart.SelectedIndexPixel;

@@ -71,7 +71,13 @@ namespace Nitride
         {
             Console.Write(TabName + ": The Tab is closing");
             AsyncUpdateUITask_Cts.Cancel();
-            HostContainer.Remove(this);
+
+            if (HostContainer is not null)
+            {
+                HostContainer.Remove(this);
+            }
+
+        
             /*
             Dispose();
             while (Disposing) ;*/
