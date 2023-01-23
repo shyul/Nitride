@@ -166,8 +166,8 @@
     <Compile Include="Source\UserInterface\Mosaic\Dock\DockPane\GridDockPane.cs" />
     <Compile Include="Source\UserInterface\Mosaic\Dock\DockPane\SideDockPane.cs" />
     <Compile Include="Source\UserInterface\Mosaic\MosaicForm.cs" />
-    <Compile Include="Source\UserInterface\Mosaic\Old_Form\CaptionBar.cs" />
-    <Compile Include="Source\UserInterface\Mosaic\Old_Form\OldMosaicForm.cs" />
+    <Compile Include="Source\UserInterface\Mosaic\Test\Old_Form\CaptionBar.cs" />
+    <Compile Include="Source\UserInterface\Mosaic\Test\Old_Form\OldMosaicForm.cs" />
     <Compile Include="Source\UserInterface\Mosaic\OrbMenu.cs" />
     <Compile Include="Source\UserInterface\Mosaic\Ribbon\Ribbon.cs" />
     <Compile Include="Source\UserInterface\Mosaic\Ribbon\RibbonTabContextHost.cs" />

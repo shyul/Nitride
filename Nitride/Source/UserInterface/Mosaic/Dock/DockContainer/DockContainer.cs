@@ -186,7 +186,7 @@ namespace Nitride
         /// <summary>
         /// 
         /// </summary>
-        protected virtual ContextDropMenu Menu { get { return OldMosaicForm.ContextDropMenu; } }
+        protected virtual ContextDropMenu Menu => DockCanvas.ContextDropMenu;
 
         /// <summary>
         /// 
@@ -224,7 +224,7 @@ namespace Nitride
             Menu.Clear();
 
             Menu.AddRange(GetTabsMenuItems());
-            Menu.AddSeparator();
+            //Menu.AddSeparator();
 
             // Custom controls are here.
 

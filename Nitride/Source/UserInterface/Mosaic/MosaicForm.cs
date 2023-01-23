@@ -50,21 +50,25 @@ namespace Nitride
             PerformLayout();
         }
 
-        #region Drop Menus ####################################################################### t.b.d
+        #region Drop Menus
 
         public OrbMenu OrbMenu { get; protected set; }
-        public static ContextPane ContextPane { get; } = new();
-        public static ContextDropMenu ContextDropMenu { get; } = new();
-        public void SetActivateOrbMenu(bool isActivate)
+        public ContextPane ContextPane { get; } = new();
+
+        public void ShowOrbMenu(bool isActivate)
         {
             OrbMenu.Visible = isActivate;
-            ContextPane.Show(this, new OrbMenuHost(OrbMenu), new Point(Ribbon.Bounds.Left, Ribbon.Bounds.Bottom));
+            ContextPane.Show(this, new OrbMenuContextHost(OrbMenu), new Point(Ribbon.Bounds.Left, Ribbon.Bounds.Bottom));
         }
 
         #endregion
 
+
+
+
         public Ribbon Ribbon { get; protected set; }
         public DockCanvas DockCanvas { get; protected set; }
+
         public StatusStrip StatusPane { get; protected set; }
 
         public void AddForm(DockForm df) => DockCanvas.AddForm(DockStyle.Fill, 0, df);

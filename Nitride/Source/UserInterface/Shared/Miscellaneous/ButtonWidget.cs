@@ -50,7 +50,43 @@ namespace Nitride
 
         public override Color ForeColor => (Parent != null) ? Parent.ForeColor : Command.Theme.ForeColor;
 
-        public override void Coordinate() { }
+
+        protected Rectangle m_IconRect = Rectangle.Empty;
+
+        protected Rectangle m_LabelRects1 = Rectangle.Empty;
+
+        protected Rectangle m_LabelRects2 = Rectangle.Empty;
+
+        protected string[] m_LabelLines;
+
+        protected int m_LineWidth = 0;
+
+        public void BreakTextLine(int maxWidth, int maxLineCnt)
+        {
+            m_LabelLines = Label.Wordwarp(Main.Theme.Font, maxLineCnt, maxWidth, out m_LineWidth).ToArray();
+        }
+
+        public override void Coordinate() 
+        {
+            BreakTextLine(80, 2);
+            int actualWidth = 36;
+            if (m_LineWidth > actualWidth) actualWidth = m_LineWidth;
+            if (actualWidth < 40) actualWidth = 40;
+            //actualWidth += 6;
+            Size = new Size(actualWidth, 66);
+            //m_IconRect = new Rectangle(0, 0, actualWidth, 40);
+            m_IconRect = new Rectangle((actualWidth - 32) / 2, 3, 32, 32);
+            if (m_LabelLines.Length == 1)
+            {
+                m_LabelRects1 = new Rectangle(0, m_IconRect.Bottom, actualWidth, Height - m_IconRect.Height);
+                m_LabelRects2 = Rectangle.Empty;
+            }
+            else
+            {
+                m_LabelRects1 = new Rectangle(0, m_IconRect.Bottom + 1, actualWidth, (Height - m_IconRect.Height) / 2 - 1);
+                m_LabelRects2 = new Rectangle(0, m_LabelRects1.Bottom - 2, actualWidth, (Height - m_IconRect.Height) / 2 - 1);
+            }
+        }
 
         public override Brush HoverFillBrush { get; protected set; }
 

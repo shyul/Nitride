@@ -45,21 +45,6 @@ namespace Nitride
 
         public int SectionIndex { get; set; } = 0;
 
-        protected Rectangle m_IconRect = Rectangle.Empty;
-
-        protected Rectangle m_LabelRects1 = Rectangle.Empty;
-
-        protected Rectangle m_LabelRects2 = Rectangle.Empty;
-
-        protected string[] m_LabelLines;
-
-        protected int m_LineWidth = 0;
-
-        public void BreakTextLine(int maxWidth, int maxLineCnt)
-        {
-            m_LabelLines = Label.Wordwarp(Main.Theme.Font, maxLineCnt, maxWidth, out m_LineWidth).ToArray();
-        }
-
         public override void Coordinate()
         {
             SuspendLayout();

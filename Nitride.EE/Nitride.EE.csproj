@@ -52,6 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Source\Altium\FPGA\Altera.cs" />
     <Compile Include="Source\Altium\FPGA\FPGA.cs" />
     <Compile Include="Source\Altium\FPGA\FPGABank.cs" />
@@ -131,6 +136,185 @@
       <Name>Nitride</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Adjust_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Adjust_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BeamForm_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BeamForm_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cube_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cube_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cube_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CurveFit_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CurveFit_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DistFit_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DistFit_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EyeDiagram_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EyeDiagram_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fade_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fade_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Feedback_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Feedback_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Feedback_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IP3_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IP3_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Noise_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Noise_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NormalDistribution_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NormalDistribution_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PatchAntenna_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PatchAntenna_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pattern_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pattern_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PCB_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PCB_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PhaseArray_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PhaseArray_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PhaseArray_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PID_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PID_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pulse_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pulse_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Radar_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Radar_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Satellite_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Satellite_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Signal_Inspect_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Signal_Inspect_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Signal_Process_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Signal_Process_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpecAn_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpecAn_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpecAn_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TimeDomain_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TimeDomain_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Track_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Track_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaterFall_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaterFall_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaveCurve_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaveCurve_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaveForm_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaveForm_32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

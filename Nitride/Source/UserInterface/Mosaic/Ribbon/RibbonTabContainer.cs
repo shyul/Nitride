@@ -103,7 +103,7 @@ namespace Nitride
                             {
                                 Rectangle tabRect = rt.TabRect;
                                 // RibbonTabContextHost must be recreated 
-                                OldMosaicForm.ContextPane.Show(MoForm, new RibbonTabContextHost(rt), new Point(Ribbon.Location.X + tabRect.X, Ribbon.Bounds.Bottom));
+                                MoForm.ContextPane.Show(MoForm, new RibbonTabContextHost(rt), new Point(Ribbon.Location.X + tabRect.X, Ribbon.Bounds.Bottom));
                             }
                             else
                                 rt.Focus();
@@ -159,14 +159,14 @@ namespace Nitride
         #region Paint
         protected override void OnPaint(PaintEventArgs pe)
         {
-            if (!(ActiveTab is null))
+            if (ActiveTab is not null)
             {
                 Graphics g = pe.Graphics;
                 g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
                 Rectangle tabRect = ActiveTab.TabRect;
-                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, 0), new Point(OldMosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Left, 0));
-                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(OldMosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Right, 0), new Point(Width, 0));
+                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, 0), new Point(MosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Left, 0));
+                g.DrawLine(Main.Theme.Panel.EdgePen, new Point(MosaicForm.RibbonToLeftWindowEdgeMargin + tabRect.Right, 0), new Point(Width, 0));
             }
         }
         #endregion

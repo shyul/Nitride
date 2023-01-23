@@ -4,26 +4,28 @@
 /// 
 /// ***************************************************************************
 
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Nitride
 {
     [DesignerCategory("Code")]
-    public class OrbMenuHost : ContextHost
+    public class OrbMenuContextHost : ContextHost
     {
-        public OrbMenuHost(OrbMenu om) : base(om)
+        public OrbMenuContextHost(OrbMenu om) : base(om)
         {
             OrbMenu = om;
         }
 
         protected OrbMenu OrbMenu { get; set; }
 
-
         public override void Close()
         {
-
             OrbMenu.MoForm.Invalidate(true);
             /*
             if (RibbonTab != null)
@@ -44,34 +46,98 @@ namespace Nitride
             MoForm = fm;
         }
         #endregion
+
         #region Components
         public MosaicForm MoForm { get; protected set; }
 
-        #endregion
-        #region Control
+        public List<ButtonWidget> ButtonWidgets { get; protected set; } = new();
 
-        #endregion
-        #region Coordinate
-        public Rectangle OrbButtonRect;
-        #endregion
-        #region Paint
-
-
-        public void PaintOrbControl(Graphics g, Font font, SolidBrush br, Color color)
+        public void AddRange(IEnumerable<ButtonWidget> buttons)
         {
-            if (OrbButtonRect != Rectangle.Empty)
+            lock (ButtonWidgets)
             {
-                switch (ButtonMouseState)
+                Controls.Clear();
+
+                ButtonWidgets = buttons.OrderBy(n => n.Order).ToList();
+
+                for (int i = 0; i < ButtonWidgets.Count; i++)
                 {
-                    case (MouseState.Out): g.FillRectangleStyle2010(OrbButtonRect, 0, color, ControlPaint.Light(color, 0.4f)); break;
-                    case (MouseState.Hover): g.FillRectangleStyle2010(OrbButtonRect, 0, ControlPaint.Light(color, 0.1f), ControlPaint.Light(color, 0.5f)); break;
-                    default: g.FillRectangleStyle2010(OrbButtonRect, 0, ControlPaint.Light(color, 0.3f), ControlPaint.Light(color, 0.1f)); break;
+                    ButtonWidget c = ButtonWidgets[i];
+                    c.Order = i;
+                    Controls.Add(c);
                 }
-                //g.DrawString(Description, Theme.FontBold, Theme.LightTextBrush, OrbButtonRect, Theme.TextAlignCenter);
+
+                Coordinate();
             }
+
         }
 
         #endregion
+
+        #region Coordinate
+
+        public const int MaximumWidth = 100;
+
+        public Rectangle OrbButtonRect => MoForm.Ribbon.OrbRect;
+
+        public virtual void Coordinate()
+        {
+            SuspendLayout();
+
+            int x = 0;
+            int y = 0;
+            int x_base = 0;
+
+
+            lock (ButtonWidgets)
+                foreach (ButtonWidget rbc in ButtonWidgets)
+                {
+                    rbc.Coordinate();
+                    rbc.Location = new Point(x, y);
+              
+                    y += rbc.Height;
+                }
+
+
+
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            Coordinate();
+            base.OnResize(e);
+        }
+
+        protected override void OnClientSizeChanged(EventArgs e)
+        {
+            Coordinate();
+            base.OnClientSizeChanged(e);
+        }
+
+        #endregion
+
+        #region Paint
+
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            Graphics g = pe.Graphics;
+
+            // g.FillRectangle(Main.Theme.Panel.EdgeBrush, Bounds);
+
+            g.DrawLine(Main.Theme.Panel.EdgePen, new Point(OrbButtonRect.Width, 0), new Point(Width, 0));
+            g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, 0), new Point(0, Height));
+            g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, Height - 1), new Point(Width, Height - 1));
+            g.DrawLine(Main.Theme.Panel.EdgePen, new Point(Width - 1, 0), new Point(Width - 1, Height));
+
+            int last_y = 0;
+
+
+        }
+
+        #endregion
+
         #region Mouse
         public MouseState ButtonMouseState = MouseState.Out;
         public bool ButtonIsHot

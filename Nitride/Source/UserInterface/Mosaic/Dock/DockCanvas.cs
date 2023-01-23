@@ -63,6 +63,8 @@ namespace Nitride
             base.Dispose(disposing);
         }
 
+        public ContextDropMenu ContextDropMenu { get; } = new();
+
         protected SideDockPane LeftDockPane { get; set; }
         protected SideDockPane RightDockPane { get; set; }
         protected SideDockPane BottomDockPane { get; set; }

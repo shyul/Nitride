@@ -249,6 +249,9 @@ namespace Nitride
             mo.Ribbon.AddRibbonTab(rbtView);
             mo.Ribbon.AddRibbonTab(rbtCharts);
             mo.Ribbon.AddRibbonTab(rbtStrategy);
+
+
+            // mo.OrbMenu.Add(rbtpane);
         }
     }
 }

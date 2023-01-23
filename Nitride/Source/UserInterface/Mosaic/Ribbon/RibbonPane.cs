@@ -63,8 +63,10 @@ namespace Nitride
             }
             base.Dispose(disposing);
         }
+
         public RibbonTabPanel HostPanel { get; protected set; }
-        public bool IsShrink => (HostPanel == null) || HostPanel.IsShrink;
+
+        public bool IsShrink => HostPanel is RibbonTabPanel p && p.IsShrink; //(HostPanel is null) || HostPanel.IsShrink;
 
         /// <summary>
         /// To be fixed with showing internal customization organize window
@@ -79,12 +81,22 @@ namespace Nitride
             base.OnParentChanged(e);
             if (Parent != null)
             {
+                if (Parent is RibbonTabPanel p) 
+                {
+                    HostPanel = p;
+                }
+                else
+                {
+                    throw new Exception("RibbonPane can only be exsiting in IRibbonPanel as Parent: " + Parent.GetType().ToString());
+                }
+
+                /*
                 if ((typeof(RibbonTabPanel)).IsAssignableFrom(Parent.GetType()))
                 {
                     HostPanel = (RibbonTabPanel)Parent;
                 }
                 else
-                    throw new Exception("RibbonPane can only be exsiting in RibbonTabPanel as Parent: " + Parent.GetType().ToString());
+                    throw new Exception("RibbonPane can only be exsiting in RibbonTabPanel as Parent: " + Parent.GetType().ToString());*/
             }
         }
         protected override void OnControlAdded(ControlEventArgs e)
@@ -92,6 +104,7 @@ namespace Nitride
             if (e.Control.GetType().IsAssignableFrom(typeof(Widget)))
                 throw new Exception("RibbonPane can only contain RibbonControl: " +
                     e.Control.GetType().ToString());
+
             base.OnControlAdded(e);
         }
 
@@ -104,40 +117,38 @@ namespace Nitride
             if (Count > 1)
             {
                 RibbonControls.Sort((f1, f2) => f1.Order.CompareTo(f2.Order));
-                for (int i = 0; i < Count; i++) RibbonControls[i].Order = i;
+                
+                for (int i = 0; i < Count; i++)
+                    RibbonControls[i].Order = i;
             }
         }
-        public void Add(IStackable c, int order)
+
+        public void Add(IStackable ist)
         {
-            if (c is Control)
+            lock (RibbonControls)
             {
-                c.Order = order;
-                Add(c);
-            }
-        }
-        public void Add(object c)
-        {
-            if (c is Control && c is IStackable)
-            {
-                lock (RibbonControls)
-                {
-                    if (!RibbonControls.Contains((IStackable)c)) RibbonControls.Add((IStackable)c);
-                    if (!Controls.Contains((Control)c)) Controls.Add((Control)c);
-                    Sort();
-                }
+                if (!RibbonControls.Contains(ist))
+                    RibbonControls.Add(ist);
+
+                if (ist is Control c && !Controls.Contains(c))
+                    Controls.Add(c);
+
+                Sort();
                 Coordinate();
             }
         }
-        public void Remove(object c)
+
+        public void Remove(IStackable ist)
         {
-            if (c is Control && c is IStackable)
+            lock (RibbonControls)
             {
-                lock (RibbonControls)
-                {
-                    if (RibbonControls.Contains((IStackable)c)) RibbonControls.Remove((IStackable)c);
-                    if (Controls.Contains((Control)c)) Controls.Remove((Control)c);
-                    Sort();
-                }
+                if (RibbonControls.Contains(ist))
+                    RibbonControls.Remove(ist);
+
+                if (ist is Control c && Controls.Contains(c))
+                    Controls.Remove(c);
+
+                Sort();
                 Coordinate();
             }
         }
@@ -183,7 +194,7 @@ namespace Nitride
                     }
                 }
 
-                int x = Origin.X;
+                int x = Origin.X + 5;
                 int y = Origin.Y;
                 int x_base = 0;
                 int w = TextRenderer.MeasureText(Name, Font).Width;
@@ -193,7 +204,7 @@ namespace Nitride
                     if (rbc.Importance > Importance.Minor)
                     {
                         rbc.Location = new Point(x, Origin.Y);
-                        x = rbc.Bounds.Right;
+                        x = rbc.Bounds.Right + 5;
                         x_base = x;
                         if (w < x) w = x;
                     }
@@ -201,7 +212,7 @@ namespace Nitride
                     {
                         y = 66 * (1 + (rbc.StackedY * 2)) / ((SectionMaxY[rbc.SectionIndex] + 1) * 2) - 11 + Origin.Y;
                         rbc.Location = new Point(x, y);
-                        x = rbc.Bounds.Right;
+                        x = rbc.Bounds.Right + 5;
                         if (w < x) w = x;
 
                         if (rbc.IsLineEnd)
@@ -215,6 +226,8 @@ namespace Nitride
                             x_base = w;
                         }
                     }
+
+                    //x_base += 2;
                 }
 
                 Width = w + Origin.X;

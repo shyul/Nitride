@@ -85,7 +85,8 @@ namespace Nitride
         #region Control
         protected bool Unlocked
         {
-            get { return DockCanvas.Unlocked; }
+            get => DockCanvas.Unlocked;
+
             set
             {
                 if (MoForm != null)
@@ -156,11 +157,11 @@ namespace Nitride
         private const int m_IconSize = 16;
         private const int m_IconMargin = 3;
         private Rectangle m_EdgeRect = new();
-        private Rectangle m_OrbRect = new();
+        public Rectangle OrbRect { get; protected set; } = new();
 
         private void Coordinate()
         {
-            m_OrbRect = new Rectangle(0, 0, OrbWidth - 2, Height);
+            OrbRect = new Rectangle(0, 0, OrbWidth - 2, Height);
             Btn_Shrink.Bounds = new Rectangle(Width - (m_IconSize + m_IconMargin) * 2 - m_IconMargin, m_IconMargin, m_IconSize, m_IconSize);
             Btn_TabMenu.Bounds = new Rectangle(Width - (m_IconSize + m_IconMargin), m_IconMargin, m_IconSize, m_IconSize);
 
@@ -198,7 +199,7 @@ namespace Nitride
         protected override void OnPaint(PaintEventArgs pe)
         {
             Graphics g = pe.Graphics;
-            g.Clear(Color.Transparent);
+            //g.Clear(Color.Transparent);
             g.SmoothingMode = SmoothingMode.HighQuality;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
@@ -208,17 +209,17 @@ namespace Nitride
             switch (OrbButtonMouseState)
             {
                 case MouseState.Hover:
-                    g.FillRectangleStyle2010(m_OrbRect, 0, OrbHoverDarkColor, OrbHoverLightColor);
+                    g.FillRectangleStyle2010(OrbRect, 0, OrbHoverDarkColor, OrbHoverLightColor);
                     break;
                 case MouseState.Down:
-                    g.FillRectangleStyle2010(m_OrbRect, 0, OrbHoverLightColor, OrbHoverDarkColor);
+                    g.FillRectangleStyle2010(OrbRect, 0, OrbHoverLightColor, OrbHoverDarkColor);
                     break;
                 default:
-                    g.FillRectangleStyle2010(m_OrbRect, 0, OrbDarkColor, OrbLightColor);
+                    g.FillRectangleStyle2010(OrbRect, 0, OrbDarkColor, OrbLightColor);
                     break;
             }
 
-            g.DrawString("File", Main.Theme.FontBold, AppTheme.WhiteBrush, m_OrbRect, AppTheme.TextAlignCenter);
+            g.DrawString("File", Main.Theme.FontBold, AppTheme.WhiteBrush, OrbRect, AppTheme.TextAlignCenter);
 
             lock (Tabs)
                 foreach (var rt in Tabs) // RibbonTabItem
@@ -255,16 +256,10 @@ namespace Nitride
                         g.DrawString(rt.TabName, Font, Main.Theme.DimTextBrush, rt.TabNameRect, AppTheme.TextAlignCenter);
                 }
 
-            //Btn_TabMenu.PaintControl(g, Xu.Properties.Resources.Caption_Bars, Main.Theme.DimTextBrush.Color);
             Btn_TabMenu.PaintControl(g, Main.Theme.DimTextBrush.Color);
 
-            Btn_Shrink.Checked = (ActiveTab == null || IsShrink);
+            Btn_Shrink.Checked = (ActiveTab is null || IsShrink);
             Btn_Shrink.PaintControl(g, Main.Theme.DimTextBrush.Color);
-            /*
-            if (ActiveTab == null || IsShrink)
-                Btn_Shrink.PaintControl(g, Xu.Properties.Resources.Caption_ArrowDown, Main.Theme.DimTextBrush.Color);
-            else
-                Btn_Shrink.PaintControl(g, Xu.Properties.Resources.Caption_ArrowUp, Main.Theme.DimTextBrush.Color);*/
         }
         #endregion
 
@@ -289,7 +284,7 @@ namespace Nitride
                 }
             }
 
-            OrbButtonMouseState = (m_OrbRect.Contains(pt)) ? MouseState.Hover : MouseState.Out;
+            OrbButtonMouseState = (OrbRect.Contains(pt)) ? MouseState.Hover : MouseState.Out;
 
             MouseState = MouseState.Hover;
             Invalidate();
@@ -299,11 +294,11 @@ namespace Nitride
             // Construct a Point type representing the mouse location.
             Point pt = new(e.X, e.Y);
 
-            if (m_OrbRect.Contains(pt))
+            if (OrbRect.Contains(pt))
             {
                 OrbButtonMouseState = MouseState.Out;
                 //m_OrbButtonMouseState = MouseStateType.Down;
-                MoForm.SetActivateOrbMenu(true);
+                MoForm.ShowOrbMenu(true);
             }
             else
             {
@@ -340,7 +335,7 @@ namespace Nitride
             // Construct a Point type representing the mouse location.
             Point pt = new(e.X, e.Y);
 
-            if (OrbButtonMouseState == MouseState.Down && m_OrbRect.Contains(pt))
+            if (OrbButtonMouseState == MouseState.Down && OrbRect.Contains(pt))
             {
                 OrbButtonMouseState = MouseState.Hover;
                 Invalidate();

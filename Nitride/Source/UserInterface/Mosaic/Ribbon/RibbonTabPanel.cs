@@ -12,6 +12,9 @@ using System.Windows.Forms;
 
 namespace Nitride
 {
+
+
+
     /// <summary>
     /// This object will always belong to designated RibbonTab
     /// </summary>
@@ -104,24 +107,14 @@ namespace Nitride
 
         public const int MaximumWidth = 100;
 
-
         public virtual void Coordinate()
         {
             SuspendLayout();
-            // Squeeze each pane first
-
-
-
-
-
-
-            // Then set the coordinates
-            int x = 0, y = 0;
+            // Squeeze each pane first Then set the coordinates
+            int x, y, margin;
             int w = 0, h = 0;
-            int margin = 3;
             if (IsShrink)
             {
-                // margin = 3;
                 x = y = margin = 3;
                 lock (Panes)
                     foreach (RibbonPane pane in Panes)
@@ -157,11 +150,13 @@ namespace Nitride
             ResumeLayout(false);
             PerformLayout();
         }
+
         protected override void OnResize(EventArgs e)
         {
             Coordinate();
             base.OnResize(e);
         }
+
         protected override void OnClientSizeChanged(EventArgs e)
         {
             Coordinate();
@@ -171,10 +166,11 @@ namespace Nitride
         #endregion
 
         #region Paint
+
         protected override void OnPaint(PaintEventArgs pe)
         {
             Graphics g = pe.Graphics;
-
+            
             if (IsShrink)
             {
                 g.DrawLine(Main.Theme.Panel.EdgePen, new Point(TabRect.Width, 0), new Point(Width, 0));
@@ -182,7 +178,7 @@ namespace Nitride
                 g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, Height - 1), new Point(Width, Height - 1));
                 g.DrawLine(Main.Theme.Panel.EdgePen, new Point(Width - 1, 0), new Point(Width - 1, Height));
             }
-
+            
             int last_y = 0;
 
             lock (Panes)
@@ -203,6 +199,7 @@ namespace Nitride
                     }
                 }
         }
+
         #endregion
     }
 }
