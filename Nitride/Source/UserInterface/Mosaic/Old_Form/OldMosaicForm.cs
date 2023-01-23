@@ -16,15 +16,10 @@ using Nitride.WindowsNativeMethods;
 namespace Nitride
 {
     [DesignerCategory("Code")]
-    public class OldMosaicForm : Form
+    public class OldMosaicForm : MosaicForm//Form
     {
-        #region Caption Geometry
-        public const int UpEdgeResizeGripMargin = 8;
-        public const int RibbonToLeftWindowEdgeMargin = 6;
-        public const int RibbonToToolBarMargin = 2;
-        public static int PaneGripMargin = 4;
         public static int CaptionAreaSize = SystemInformation.CaptionHeight + UpEdgeResizeGripMargin; // 31
-        #endregion
+        // public const int RibbonToLeftWindowEdgeMargin = 6;
 
         public int ShowFormMsg { get; private set; }
 
@@ -182,25 +177,14 @@ namespace Nitride
         public ButtonWidget Btn_Close { get; set; }
 
         public CaptionBar CaptionBar { get; protected set; }
-        public OrbMenu OrbMenu { get; protected set; }
-        public Ribbon Ribbon { get; protected set; }
-        public StatusStrip StatusPane { get; protected set; }
-        public DockCanvas DockCanvas { get; protected set; }
+        //public OrbMenu OrbMenu { get; protected set; }
+        //public Ribbon Ribbon { get; protected set; }
+        // public StatusStrip StatusPane { get; protected set; }
+        //public DockCanvas DockCanvas { get; protected set; }
 
-        public void AddForm(DockForm df) => DockCanvas.AddForm(DockStyle.Fill, 0, df);
-        public void AddForm(DockStyle postion, DockForm df) => DockCanvas.AddForm(postion, 0, df);
-        public void AddForm(DockStyle postion, int index, DockForm df) => DockCanvas.AddForm(postion, index, df);
-
-        #region Drop Menus ####################################################################### t.b.d
-        public static ContextPane ContextPane { get; } = new ContextPane();
-        public static ContextDropMenu ContextDropMenu { get; } = new ContextDropMenu();
-        public void SetActivateOrbMenu(bool isActivate)
-        {
-            OrbMenu.Visible = isActivate;
-            ContextPane.Show(this, new OrbMenuHost(OrbMenu), new Point(Ribbon.Bounds.Left, Ribbon.Bounds.Bottom));
-
-        }
-        #endregion
+        //public void AddForm(DockForm df) => DockCanvas.AddForm(DockStyle.Fill, 0, df);
+        //public void AddForm(DockStyle postion, DockForm df) => DockCanvas.AddForm(postion, 0, df);
+        //public void AddForm(DockStyle postion, int index, DockForm df) => DockCanvas.AddForm(postion, index, df);
 
         public bool IsActivated { get; private set; } = false;
 
@@ -238,42 +222,7 @@ namespace Nitride
 
         #region Coordinate
 
-        public bool IsRibbonShrink
-        {
-            get
-            {
-                return m_IsRibbonShrink;
-            }
-            set
-            {
-                m_IsRibbonShrink = value;
-                UpdateShrink();
-                Coordinate();
-            }
-        }
-
-        private bool m_IsRibbonShrink = false;
-
-        private void UpdateShrink()
-        {
-            if (m_IsRibbonShrink)
-            {
-                Ribbon.RibbonContainer.Visible = false;
-                Ribbon.RibbonContainer.Coordinate();
-                Ribbon.RibbonContainer.DeActivate();
-                DockCanvas.Location = new Point(0, Ribbon.Bounds.Bottom);
-            }
-            else
-            {
-                Ribbon.RibbonContainer.Coordinate();
-                Ribbon.RibbonContainer.Visible = true;
-                Ribbon.RibbonContainer.ActivateDefaultTab();
-                DockCanvas.Location = new Point(0, Ribbon.RibbonContainer.Bounds.Bottom);
-            }
-            DockCanvas.Size = new Size(ClientRectangle.Width, ClientRectangle.Height - DockCanvas.Location.Y - StatusPane.Height);
-        }
-
-        protected void Coordinate()
+        protected override void Coordinate()
         {
             SuspendLayout();
 
@@ -299,7 +248,6 @@ namespace Nitride
                 CaptionBar.Bounds = new Rectangle(Ribbon.Bounds.Right + RibbonToToolBarMargin, UpEdgeResizeGripMargin, Width - Ribbon.Bounds.Right - 120 - 17, 31 - UpEdgeResizeGripMargin);
                 Btn_Minimize.Bounds = new Rectangle(ClientRectangle.Right - 120, 8, 40, 23);
                 Btn_Maximize.Bounds = new Rectangle(Btn_Minimize.Bounds.Right, 8, 40, 23);
-                //Btn_Maximize.Icon = Xu.Properties.Resources.Caption_RestoreNormal;
                 Btn_Close.Bounds = new Rectangle(Btn_Maximize.Bounds.Right, 8, 40, 23);
             }
             else
@@ -307,7 +255,6 @@ namespace Nitride
                 CaptionBar.Bounds = new Rectangle(Ribbon.Bounds.Right + RibbonToToolBarMargin, UpEdgeResizeGripMargin, Width - Ribbon.Bounds.Right - 124 - 17, 31 - UpEdgeResizeGripMargin);
                 Btn_Minimize.Bounds = new Rectangle(ClientRectangle.Right - 124, 0, 40, 25);
                 Btn_Maximize.Bounds = new Rectangle(Btn_Minimize.Bounds.Right, 0, 40, 25);
-                //Btn_Maximize.Icon = Xu.Properties.Resources.Caption_Maximize;
                 Btn_Close.Bounds = new Rectangle(Btn_Maximize.Bounds.Right, 0, 40, 25);
             }
 

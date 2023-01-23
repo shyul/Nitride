@@ -1,6 +1,6 @@
 ﻿/// ***************************************************************************
 /// Nitride Shared Libraries and Utilities
-/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// Copyright 2001-2008, 2014-2023 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
 
@@ -39,10 +39,10 @@ namespace Nitride
 
         #region Components
         private IContainer components = null;
-        public OldMosaicForm MoForm { get; protected set; }
+        public MosaicForm MoForm { get; protected set; }
         public RibbonTabContainer RibbonContainer { get; protected set; }
         public List<TabItem> Tabs => RibbonContainer.Tabs;
-        public RibbonTabItem ActiveTab => (RibbonTabItem)RibbonContainer.ActiveTab;
+        public RibbonTabItem ActiveTab => RibbonContainer.ActiveTab as RibbonTabItem;
         public int Count => RibbonContainer.Count;
 
         public void ActivateTab(int index) => RibbonContainer.ActivateTab(index);
@@ -58,15 +58,16 @@ namespace Nitride
             base.OnParentChanged(e);
             if (Parent != null)
             {
-                if ((typeof(OldMosaicForm)).IsAssignableFrom(Parent.GetType()))
+                if (Parent is MosaicForm mo) // (typeof(OldMosaicForm)).IsAssignableFrom(Parent.GetType()))
                 {
-                    MoForm = (OldMosaicForm)Parent;
+                    MoForm = mo;
 
                 }
                 else throw new Exception("Ribbon can only be exsiting in RibbonForm / Parent: " + Parent.GetType().ToString());
             }
             else MoForm = null;
         }
+
         protected virtual void UpdateGraphics()
         {
             if (Parent != null) Parent.Invalidate(true);
@@ -104,12 +105,13 @@ namespace Nitride
         {
             Description = "Ribbon Menu",
             Enabled = true,
-            IconList = new Dictionary<IconType, Dictionary<Size, Bitmap>>() {
+            IconList = new Dictionary<IconType, Dictionary<Size, Bitmap>>()
+            {
 
-                    { IconType.Normal, new Dictionary<Size, Bitmap>() {
-                    { new Size(16, 16), Properties.Resources.Caption_Bars }, } },
+                { IconType.Normal, new Dictionary<Size, Bitmap>() {
+                { new Size(16, 16), Properties.Resources.Caption_Bars }, } },
 
-                },
+            },
             //Action = (IItem sender, string[] args, Progress<Event> progress, CancellationTokenSource cts) => { ShowMenu(); },
         });//= new Click() { Description = "Ribbon Menu", Enabled = true };
 
@@ -119,18 +121,19 @@ namespace Nitride
         {
             Description = "Shrink",
             Enabled = true,
-            IconList = new Dictionary<IconType, Dictionary<Size, Bitmap>>() {
+            IconList = new Dictionary<IconType, Dictionary<Size, Bitmap>>()
+            {
 
-                    { IconType.Normal, new Dictionary<Size, Bitmap>() {
-                    { new Size(16, 16), Properties.Resources.Caption_ArrowUp }, } },
+                { IconType.Normal, new Dictionary<Size, Bitmap>() {
+                { new Size(16, 16), Properties.Resources.Caption_ArrowUp }, } },
 
-                    { IconType.Checked, new Dictionary<Size, Bitmap>() {
-                    { new Size(16, 16), Properties.Resources.Caption_ArrowDown }, } },
+                { IconType.Checked, new Dictionary<Size, Bitmap>() {
+                { new Size(16, 16), Properties.Resources.Caption_ArrowDown }, } },
 
-                    { IconType.CheckedHover, new Dictionary<Size, Bitmap>() {
-                    { new Size(16, 16), Properties.Resources.Caption_ArrowDown }, } },
+                { IconType.CheckedHover, new Dictionary<Size, Bitmap>() {
+                { new Size(16, 16), Properties.Resources.Caption_ArrowDown }, } },
 
-                },
+            },
         });// = new Click() { Description = "Shrink", Enabled = true };
 
         protected MouseState OrbButtonMouseState { get; set; } = MouseState.Out;
@@ -165,14 +168,17 @@ namespace Nitride
             lock (RibbonContainer.Tabs)
                 for (int i = 0; i < Count; i++)
                 {
-                    int baseOffset = offset;
-                    RibbonTabItem rt = (RibbonTabItem)RibbonContainer.Tabs[i];
+                    if (RibbonContainer.Tabs[i] is RibbonTabItem rt)
+                    {
+                        int baseOffset = offset;
+                        // RibbonTabItem rt = (RibbonTabItem)RibbonContainer.Tabs[i];
 
-                    int textWidth = rt.TabNameWidth + m_TabMargin;
-                    if (textWidth < m_MinimumTabWdith) textWidth = m_MinimumTabWdith;
-                    rt.TabNameRect = new Rectangle(offset, m_TabMargin, textWidth, m_TextHeight);
-                    offset += textWidth;
-                    rt.TabRect = new Rectangle(baseOffset, m_EdgeRect.Top, offset - baseOffset, TabHeight);
+                        int textWidth = rt.TabNameWidth + m_TabMargin;
+                        if (textWidth < m_MinimumTabWdith) textWidth = m_MinimumTabWdith;
+                        rt.TabNameRect = new Rectangle(offset, m_TabMargin, textWidth, m_TextHeight);
+                        offset += textWidth;
+                        rt.TabRect = new Rectangle(baseOffset, m_EdgeRect.Top, offset - baseOffset, TabHeight);
+                    }
                 }
         }
 
@@ -215,7 +221,7 @@ namespace Nitride
             g.DrawString("File", Main.Theme.FontBold, AppTheme.WhiteBrush, m_OrbRect, AppTheme.TextAlignCenter);
 
             lock (Tabs)
-                foreach (RibbonTabItem rt in Tabs)
+                foreach (var rt in Tabs) // RibbonTabItem
                 {
                     Rectangle tabRect = rt.TabRect;
                     if (rt == ActiveTab)

@@ -38,7 +38,7 @@ namespace Nitride
         #endregion
 
         #region Components
-        public OldMosaicForm MoForm { get; protected set; }
+        public MosaicForm MoForm { get; protected set; }
         public Ribbon Ribbon { get; protected set; }
         protected bool Unlocked => DockCanvas.Unlocked;
         protected bool IsShrink => MoForm.IsRibbonShrink;
@@ -120,13 +120,12 @@ namespace Nitride
             base.OnParentChanged(e);
             if (Parent != null)
             {
-                //Log.Debug("RibbonTabContainer Parent is: " + Parent.GetType().ToString());
-                if ((typeof(OldMosaicForm)).IsAssignableFrom(Parent.GetType()))
+                if (Parent is MosaicForm mo) // (typeof(OldMosaicForm)).IsAssignableFrom(Parent.GetType()))
                 {
-                    MoForm = (OldMosaicForm)Parent;
+                    MoForm = mo;
+
                 }
-                else
-                    throw new Exception("RibbonContainer can only be exsiting in Ribbon Parent: " + Parent.GetType().ToString());
+                else throw new Exception("Ribbon can only be exsiting in RibbonForm / Parent: " + Parent.GetType().ToString());
             }
             else MoForm = null;
         }

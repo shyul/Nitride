@@ -1,6 +1,6 @@
 ﻿/// ***************************************************************************
 /// Nitride Shared Libraries and Utilities
-/// Copyright 2001-2008, 2014-2021 Xu Li - me@xuli.us
+/// Copyright 2001-2008, 2014-2023 Xu Li - me@xuli.us
 /// 
 /// ***************************************************************************
 
@@ -39,13 +39,13 @@ namespace Nitride
     public class OrbMenu : UserControl
     {
         #region Ctor
-        public OrbMenu(OldMosaicForm fm) // : base()
+        public OrbMenu(MosaicForm fm) // : base()
         {
             MoForm = fm;
         }
         #endregion
         #region Components
-        public OldMosaicForm MoForm { get; protected set; }
+        public MosaicForm MoForm { get; protected set; }
 
         #endregion
         #region Control
