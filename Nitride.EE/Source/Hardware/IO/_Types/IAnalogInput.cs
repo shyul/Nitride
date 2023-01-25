@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IDigitalPin : IPort
+    public interface IAnalogInput : IInstrumentResource
     {
-        bool Value { get; set; }
+        Range<double> Range { get; }
 
-        double Threshold { get; }
+        double Value { get; set; }
     }
 }

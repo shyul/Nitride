@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface ISerialDataInput : IDigitalPin
+    public interface ISerialDataInput : IDigitalInput
     {
         List<bool> Data { get; }
     }

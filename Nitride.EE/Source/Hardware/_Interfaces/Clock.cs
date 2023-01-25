@@ -10,7 +10,7 @@ namespace Nitride.EE
     {
         double Frequency { get; }
 
-        bool IsEnabled { get; }
+        bool Enabled { get; }
     }
 
     public interface IDerivedClock : IClock
@@ -20,8 +20,5 @@ namespace Nitride.EE
         double DivRatio { get; }
     }
 
-    public interface IPllClock : IDerivedClock
-    {
-        bool IsLocked { get; }
-    }
+
 }

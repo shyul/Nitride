@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IPowerSupply
+    public interface IPowerSupply : IInstrument
     {
         Dictionary<string, PowerSupplyChannel> PowerSupplyChannels { get; }
 

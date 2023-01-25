@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IAnalogPin : IPort
+    public interface IFiniteADC : IDataAcquisition, IDataProvider
     {
-        Range<double> Range { get; }
+        double SampleRate { get; set; }
 
-        double Value { get; set; }
+        List<double> Samples { get; set; }
     }
 }

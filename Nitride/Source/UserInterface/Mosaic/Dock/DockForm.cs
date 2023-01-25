@@ -24,7 +24,7 @@ namespace Nitride
         Top = 8,
     }
 
-    [DesignerCategory("Code")]
+    //[DesignerCategory("Code")]
     public abstract class DockForm : TabItem
     {
         #region Ctor

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IFunctionGenerator : IHardwareDevice
+    public interface IFunctionGenerator : IInstrument
     {
         Dictionary<string, FunctionGeneratorChannel> FunctionGeneratorChannels { get; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public class Pin : IDigitalPin
+    public class Pin : IDigitalInput
     {
         public string Name { get; }
 

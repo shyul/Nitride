@@ -70,10 +70,25 @@
     <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceDetectorType.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceDetector.cs" />
+    <Compile Include="Source\Hardware\Components\LMX2572.cs" />
+    <Compile Include="Source\Hardware\Components\LMX2572_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Hardware\Components\LMX2572_Control.Designer.cs">
+      <DependentUpon>LMX2572_Control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Hardware\Instruments\Radio\DigitalTransmitter.cs" />
+    <Compile Include="Source\Hardware\Instruments\Radio\DigitalReceiver.cs" />
+    <Compile Include="Source\Hardware\Instruments\Radio\DownConverter.cs" />
+    <Compile Include="Source\Hardware\Instruments\Radio\LocalOscillator.cs" />
+    <Compile Include="Source\Samples\Stack.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IDataAcquisition.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IInstrument.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IPll.cs" />
     <Compile Include="Source\Samples\SampleDatum.cs" />
-    <Compile Include="Source\Samples\SampleFormat.cs" />
+    <Compile Include="Source\Samples\StackFormat.cs" />
+    <Compile Include="Source\FFT\FFT_Data.cs" />
     <Compile Include="Source\Signal\FreqTrace.cs" />
-    <Compile Include="Source\Samples\SampleBuffer.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumChart.cs" />
     <Compile Include="Source\DataTable\Spectrum\SpectrumData.cs" />
     <Compile Include="Source\DataTable\ParamTable\ComplexFormat.cs" />
@@ -81,14 +96,14 @@
     <Compile Include="Source\DataTable\ParamTable\S_Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\Z_Parameter.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceFrame.cs" />
-    <Compile Include="Source\Signal\RxData.cs" />
+    <Compile Include="Source\Signal\ReceiverData.cs" />
     <Compile Include="Source\Signal\WaveForm.cs" />
     <Compile Include="Source\FFT\FFT.cs" />
     <Compile Include="Source\FFT\WindowFunctions.cs" />
-    <Compile Include="Source\Hardware\Converters\IFiniteADC.cs" />
-    <Compile Include="Source\Hardware\Converters\IFiniteDAC.cs" />
-    <Compile Include="Source\Hardware\Converters\IStreamADC.cs" />
-    <Compile Include="Source\Hardware\Converters\IStreamDAC.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IFiniteADC.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IFiniteDAC.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IStreamADC.cs" />
+    <Compile Include="Source\Hardware\_Interfaces\IStreamDAC.cs" />
     <Compile Include="Source\Hardware\Instruments\FunctionGenerator\FunctionGeneratorArbitraryConfig.cs" />
     <Compile Include="Source\Hardware\Instruments\FunctionGenerator\FunctionGeneratorChannel.cs" />
     <Compile Include="Source\Hardware\Instruments\FunctionGenerator\FunctionGeneratorConfig.cs" />
@@ -118,9 +133,8 @@
     <Compile Include="Source\Hardware\IO\Serial\I2C.cs" />
     <Compile Include="Source\Hardware\IO\Serial\ISpiMaster.cs" />
     <Compile Include="Source\Hardware\IO\TriggerEdge.cs" />
-    <Compile Include="Source\Hardware\IO\_Types\IAnalogPin.cs" />
-    <Compile Include="Source\Hardware\IO\_Types\IDigitalPin.cs" />
-    <Compile Include="Source\Hardware\IO\_Types\IPort.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\IAnalogInput.cs" />
+    <Compile Include="Source\Hardware\IO\_Types\IDigitalInput.cs" />
     <Compile Include="Source\Hardware\IO\_Types\ISerialDataInput.cs" />
     <Compile Include="Source\Hardware\IO\_Types\ITriggerSource.cs" />
     <Compile Include="Source\Hardware\_Interfaces\Clock.cs" />
@@ -140,6 +154,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Hardware\Components\LMX2572_Control.resx">
+      <DependentUpon>LMX2572_Control.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -316,5 +333,6 @@
   <ItemGroup>
     <None Include="Resources\WaveForm_32.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

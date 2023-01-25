@@ -6,22 +6,32 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public class MultimeterChannel : IAnalogPin
+    public class MultimeterChannel : IAnalogInput
     {
         public MultimeterChannel(int chNum, string channelName, IMultimeter dmm)
         {
             ChannelNumber = chNum;
             Name = channelName;
-            Device = dmm;
+            Multimeter = dmm;
         }
 
         public int ChannelNumber { get; }
 
         public string Name { get; }
 
+        public string Label { get; set; }
+
+        public string Description { get; set; }
+
         public bool Enabled { get; set; } = true;
 
-        public IMultimeter Device { get; }
+        public IMultimeter Multimeter { get; }
+
+        public IInstrument Parent => Multimeter;
+
+        public string ResourceName => Parent.ResourceName + "_" + Name;
+
+        public bool IsReady { get; set; }
 
         public Range<double> Range => new(0, 10);
 
@@ -29,13 +39,13 @@ namespace Nitride.EE
 
         public MultimeterConfig Config { get; set; }
 
-        public void WriteSetting() => Device.Multimeter_WriteSetting(Name);
+        public void WriteSetting() => Multimeter.Multimeter_WriteSetting(Name);
 
-        public void ReadSetting() => Device.Multimeter_ReadSetting(Name);
+        public void ReadSetting() => Multimeter.Multimeter_ReadSetting(Name);
 
         public double Value
         {
-            get => Device.Multimeter_Read(Name);
+            get => Multimeter.Multimeter_Read(Name);
 
             set { }
         }

@@ -8,7 +8,7 @@ namespace Nitride.EE
 {
     public class ParallelPort
     {
-        public Dictionary<string, Pin> Pins { get; } = new Dictionary<string, Pin>();
+        public Dictionary<string, Pin> Pins { get; } = new();
 
     }
 }

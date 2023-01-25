@@ -6,38 +6,48 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public class PowerSupplyChannel : IPort
+    public class PowerSupplyChannel : IInstrumentResource
     {
         public PowerSupplyChannel(string channelName, IPowerSupply powerSupply, Range<double> voltageRange, Range<double> currentRange)
         {
             Name = channelName;
-            Device = powerSupply;
+            PowerSupply = powerSupply;
             VoltageRange = voltageRange;
             CurrentRange = currentRange;
         }
 
         public string Name { get; }
 
+        public string Label { get; set; }
+
+        public string Description { get; set; }
+
         public bool Enabled
         {
-            get => Device.PowerSupply_Enabled(Name);
+            get => PowerSupply.PowerSupply_Enabled(Name);
 
             set
             {
                 if (value) 
-                    Device.PowerSupply_ON(Name);
+                    PowerSupply.PowerSupply_ON(Name);
                 else 
-                    Device.PowerSupply_OFF(Name);
+                    PowerSupply.PowerSupply_OFF(Name);
             }
         }
 
-        public IPowerSupply Device { get; }
+        public IPowerSupply PowerSupply { get; }
 
-        public void WriteSetting() => Device.PowerSupply_WriteSetting(Name);
+        public IInstrument Parent => PowerSupply;
 
-        public void ReadSetting() => Device.PowerSupply_ReadSetting(Name);
+        public string ResourceName => Parent.ResourceName + "_" + Name;
 
-        public (double voltage, double current) ReadOutput() => Device.PowerSupply_ReadOutput(Name);
+        public bool IsReady { get; set; }
+
+        public void WriteSetting() => PowerSupply.PowerSupply_WriteSetting(Name);
+
+        public void ReadSetting() => PowerSupply.PowerSupply_ReadSetting(Name);
+
+        public (double voltage, double current) ReadOutput() => PowerSupply.PowerSupply_ReadOutput(Name);
 
         public PowerSupplyMode Mode { get; set; } = PowerSupplyMode.ConstantVoltage;
 
@@ -74,5 +84,7 @@ namespace Nitride.EE
         public Range<double> VoltageRange { get; }
 
         public Range<double> CurrentRange { get; }
+
+
     }
 }

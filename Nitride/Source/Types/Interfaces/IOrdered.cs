@@ -9,18 +9,8 @@ using System.Runtime.Serialization;
 
 namespace Nitride
 {
-    public interface IOrdered
+    public interface IOrdered : IEnabled
     {
-        /// <summary>
-        /// For Identification
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// For Sorting and Task
-        /// </summary>
-        bool Enabled { get; }
-
         /// <summary>
         /// For Sorting and Task
         /// </summary>

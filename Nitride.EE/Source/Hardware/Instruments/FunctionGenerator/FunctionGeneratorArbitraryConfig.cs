@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public class FunctionGeneratorArbitraryConfig : FunctionGeneratorConfig, IFiniteDAC
+    public class FunctionGeneratorArbitraryConfig : FunctionGeneratorConfig
     {
         public FunctionGeneratorArbitraryConfig(FunctionGeneratorChannel channel)
         {
@@ -64,7 +64,7 @@ namespace Nitride.EE
 
         }
 
-        public void Start()
+        public void GetSingle()
         {
 
             Channel.Enabled = true;

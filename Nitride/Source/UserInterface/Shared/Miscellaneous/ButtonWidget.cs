@@ -33,7 +33,14 @@ namespace Nitride
             PerformLayout();
         }
 
-        protected Command Command { get; set; }
+        public Command Command { get; protected set; }
+
+
+        public void SetCommand(Command cmd) 
+        {
+            Command = cmd;
+            Coordinate();
+        }
 
         public virtual void Execute()
         {

@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public class FunctionGeneratorChannel : IPort
+    public class FunctionGeneratorChannel : IInstrumentResource
     {
-        public FunctionGeneratorChannel(int chNum, string channelName, IFunctionGenerator fgen)
+        public FunctionGeneratorChannel(string channelName, IFunctionGenerator fgen)
         {
-            ChannelNumber = chNum;
             Name = channelName;
-            Device = fgen;
+            FunctionGenerator = fgen;
         }
 
-        public int ChannelNumber { get; }
-
         public string Name { get; }
+
+        public string Label { get; set; }
+
+        public string Description { get; set; }
 
         public bool Enabled
         {
@@ -28,20 +29,22 @@ namespace Nitride.EE
                 m_Enabled = value;
 
                 if (m_Enabled)
-                    Device.FunctionGenerator_ON(Name);
+                    FunctionGenerator.FunctionGenerator_ON(Name);
                 else
-                    Device.FunctionGenerator_OFF(Name);
+                    FunctionGenerator.FunctionGenerator_OFF(Name);
             }
         }
 
         private bool m_Enabled = false;
 
-        public IFunctionGenerator Device { get; }
+        public IFunctionGenerator FunctionGenerator { get; }
 
         public FunctionGeneratorConfig Config { get; set; }
 
-        public void WriteSetting() => Device.FunctionGenerator_WriteSetting(Name);
+        public IInstrument Parent => FunctionGenerator;
 
-        public void ReadSetting() => Device.FunctionGenerator_ReadSetting(Name);
+        public string ResourceName => Parent.ResourceName + "_" + Name;
+
+        public bool IsReady { get; set; }
     }
 }

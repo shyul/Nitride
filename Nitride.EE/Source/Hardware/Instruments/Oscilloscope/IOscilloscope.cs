@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IOscilloscope : IHardwareDevice
+    public interface IOscilloscope : IInstrument
     {
         Dictionary<string, OscilloscopeAnalogChannel> OscilloscopeAnalogChannels { get; }
 

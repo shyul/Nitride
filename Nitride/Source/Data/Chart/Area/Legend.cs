@@ -42,6 +42,8 @@ namespace Nitride.Chart
 
         public string Label { get; set; }
 
+        public string Description { get; set; } = string.Empty;
+
         public Importance Importance { get; protected set; }
 
         public bool Enabled { get; set; } = true;

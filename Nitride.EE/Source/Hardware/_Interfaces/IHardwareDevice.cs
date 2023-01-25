@@ -8,9 +8,11 @@ namespace Nitride.EE
 {
     public interface IHardwareDevice : IDisposable
     {
-        void Open();
+        bool Open();
 
         void Close();
+
+        bool IsConnected { get; }
 
         string ResourceName { get; }
     }

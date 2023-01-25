@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IPort
+    public interface IDigitalInput
     {
-        string Name { get; }
+        bool Value { get; set; }
 
-        bool Enabled { get; }
+        double Threshold { get; }
     }
 }

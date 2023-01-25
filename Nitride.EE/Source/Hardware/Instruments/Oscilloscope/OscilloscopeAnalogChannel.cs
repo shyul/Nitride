@@ -13,45 +13,23 @@ namespace Nitride.EE
 
         }
 
-        public override void WriteSetting() => Device.OscilloscopeAnalog_WriteSetting(Name);
+        public override void WriteSetting() => Oscilloscope.OscilloscopeAnalog_WriteSetting(Name);
 
-        public void Start() => Device.Oscilloscope_Run();
+        public void GetSingle() => Oscilloscope.Oscilloscope_Run();
 
-
-        public void DataIsUpdated()
+        public void StartStream()
         {
-            UpdateTime = DateTime.Now;
-            DataConsumers.ForEach(n => n.DataIsUpdated(this));
+
         }
 
-        public DateTime UpdateTime { get; private set; } = DateTime.MinValue;
-
-
-        private List<IDataConsumer> DataConsumers { get; set; } = new List<IDataConsumer>();
-
-        public bool AddDataConsumer(IDataConsumer idk)
+        public void StopStream()
         {
-            if (!DataConsumers.Contains(idk))
-            {
-                DataConsumers.Add(idk);
-                return true;
-            }
-            return false;
+
         }
-
-        public bool RemoveDataConsumer(IDataConsumer idk)
-        {
-            if (DataConsumers.Contains(idk))
-            {
-                DataConsumers.RemoveAll(n => n == idk);
-                return true;
-            }
-            return false;
-        }
-
-
 
         public bool IsReady { get; set; } = true;
+
+        public bool IsBusy { get; set; } = false;
 
         public double VerticalRange
         {
@@ -92,6 +70,7 @@ namespace Nitride.EE
 
 
 
+
         public double TriggerLevel { get; set; }
 
         public double TriggerHysteresis { get; set; }
@@ -99,5 +78,6 @@ namespace Nitride.EE
         public virtual double SampleRate { get; set; } = 500e6;
 
         public List<double> Samples { get; set; }
+
     }
 }

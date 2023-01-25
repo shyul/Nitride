@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IMultimeter
+    public interface IMultimeter : IInstrument
     {
         Dictionary<string, MultimeterChannel> MultimeterChannels { get; }
 

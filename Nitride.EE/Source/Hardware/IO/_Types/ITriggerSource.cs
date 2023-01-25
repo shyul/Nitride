@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface ITriggerSource : IPort
+    public interface ITriggerSource
     {
         TriggerEdge TriggerEdge { get; set; }
     }

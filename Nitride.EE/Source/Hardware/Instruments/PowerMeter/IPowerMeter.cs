@@ -6,12 +6,22 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public interface IPowerMeter
+    public interface IPowerMeter : IInstrument
     {
         Dictionary<string, PowerMeterChannel> PowerMeterChannels { get; }
 
-        void PowerMeter_WriteSetting(string channelName);
+        /*
+        public IEnumerable<IInstrumentResource> Resources => PowerMeterChannels.Select(n => n.Value);
 
-        void PowerMeter_ReadSetting(string channelName);
+        public bool IsConnected { get; set; }
+
+        public string ResourceName { get; set; }
+
+        public abstract bool Open();
+
+        public abstract void Close();
+
+        public abstract void Dispose();
+        */
     }
 }
