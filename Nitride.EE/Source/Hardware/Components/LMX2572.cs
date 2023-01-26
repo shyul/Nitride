@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
@@ -14,133 +13,16 @@ namespace Nitride.EE
             Reference = reference;
 
             // Initialize Registers
-            Regs[125] = 0x2288;
-            Regs[124] = 0x0000;
-            Regs[123] = 0x0000;
-            Regs[122] = 0x0000;
-            Regs[121] = 0x0000;
-            Regs[120] = 0x0000;
-            Regs[119] = 0x0000;
-            Regs[118] = 0x0000;
-            Regs[117] = 0x0000;
-            Regs[116] = 0x0000;
-            Regs[115] = 0x0000;
-            Regs[114] = 0x7802;
-            Regs[113] = 0x0000;
-            Regs[112] = 0x0000;
-            Regs[111] = 0x0000;
-            Regs[110] = 0x0000;
-            Regs[109] = 0x0000;
-            Regs[108] = 0x0000;
-            Regs[107] = 0x0000;
-            Regs[106] = 0x0007;
-            Regs[105] = 0x4440;
-            Regs[104] = 0x2710;
-            Regs[103] = 0x0000;
-            Regs[102] = 0x0000;
-            Regs[101] = 0x0000;
-            Regs[100] = 0x2710;
-            Regs[99] = 0x0000;
-            Regs[98] = 0x0000;
-            Regs[97] = 0x0000;
-            Regs[96] = 0x0000;
-            Regs[95] = 0x0000;
-            Regs[94] = 0x0000;
-            Regs[93] = 0x0000;
-            Regs[92] = 0x0000;
-            Regs[91] = 0x0000;
-            Regs[90] = 0x0000;
-            Regs[89] = 0x0000;
-            Regs[88] = 0x0000;
-            Regs[87] = 0x0000;
-            Regs[86] = 0x0000;
-            Regs[85] = 0xD800;
-            Regs[84] = 0x0001;
-            Regs[83] = 0x0000;
-            Regs[82] = 0x2800;
-            Regs[81] = 0x0000;
-            Regs[80] = 0xCCCC;
-            Regs[79] = 0x004C;
-            Regs[78] = 0x0001;
-            Regs[77] = 0x0000;
-            Regs[76] = 0x000C;
-            Regs[75] = 0x0800;
-            Regs[74] = 0x0000;
-            Regs[73] = 0x003F;
-            Regs[72] = 0x0001;
-            Regs[71] = 0x0081;
-            Regs[70] = 0xC350;
-            Regs[69] = 0x0000;
-            Regs[68] = 0x03E8;
-            Regs[67] = 0x0000;
-            Regs[66] = 0x01F4;
-            Regs[65] = 0x0000;
-            Regs[64] = 0x1388;
-            Regs[63] = 0x0000;
-            Regs[62] = 0x00AF;
-            Regs[61] = 0x00A8;
-            Regs[60] = 0x03E8;
-            Regs[59] = 0x0001;
-            Regs[58] = 0x9001;
-            Regs[57] = 0x0020;
-            Regs[56] = 0x0000;
-            Regs[55] = 0x0000;
-            Regs[54] = 0x0000;
-            Regs[53] = 0x0000;
-            Regs[52] = 0x0421;
-            Regs[51] = 0x0080;
-            Regs[50] = 0x0080;
-            Regs[49] = 0x4180;
-            Regs[48] = 0x03E0;
-            Regs[47] = 0x0300;
-            Regs[46] = 0x07F0;
-            Regs[45] = 0xC622;
-            Regs[44] = 0x1D20;
-            Regs[43] = 0x0000;
-            Regs[42] = 0x0000;
-            Regs[41] = 0x0000;
-            Regs[40] = 0x0000;
-            Regs[39] = 0x0001;
-            Regs[38] = 0x0000;
-            Regs[37] = 0x0105;
-            Regs[36] = 0x0030;
-            Regs[35] = 0x0004; // Constant
-            Regs[34] = 0x0010;
-            Regs[33] = 0x1E01;
-            Regs[32] = 0x05BF;
-            Regs[31] = 0xC3E6;
-            Regs[30] = 0x18A6;
-            Regs[29] = 0x0000;
-            Regs[28] = 0x0488;
-            Regs[27] = 0x0002;
-            Regs[26] = 0x0808;
-            Regs[25] = 0x0624;
-            Regs[24] = 0x071A;
-            Regs[23] = 0x007C;
-            Regs[22] = 0x0001;
-            Regs[21] = 0x0409;
-            Regs[20] = 0x4848;
-            Regs[19] = 0x27B7;
-            Regs[18] = 0x0064;
-            Regs[17] = 0x0096;
-            Regs[16] = 0x0080;
-            Regs[15] = 0x060E;
-            Regs[14] = 0x1878;
-            Regs[13] = 0x4000;
-            Regs[12] = 0x5001;
-            Regs[11] = 0xB018;
-            Regs[10] = 0x10F8;
-            Regs[9] = 0x0004;
-            Regs[8] = 0x2000;
-            Regs[7] = 0x00B2;
-            Regs[6] = 0xC802;
-            Regs[5] = 0x28C8;
-            Regs[4] = 0x0A43;
-            Regs[3] = 0x0782;
-            Regs[2] = 0x0500;
-            Regs[1] = 0x0808;
-            Regs[0] = 0x2198;
+            LoadDefault();
         }
+
+        public Reg16 Regs { get; } = new(126);
+
+        public override double R_Ratio => PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
+        public double RefMultiplyOut => Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
+
+        // public double DivRatio => (EnableRefDoubler ? 2 : 1) / PreR / R_Div * (N_Div + ((double)F_Num / (double)F_Den));
+        // public double Frequency => PFD_Frequency * (N_Div + ((double)F_Num / (double)F_Den)); // VCO: 3.2 GHz ~ 6.4 GHz;
 
         public override bool IsLocked
         {
@@ -152,12 +34,6 @@ namespace Nitride.EE
         {
             get => ((Regs[0x6E] >> 5) & 0x7);
         }
-
-        public override double R_Ratio => PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
-        public double RefMultiplyOut => Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
-
-        // public double DivRatio => (EnableRefDoubler ? 2 : 1) / PreR / R_Div * (N_Div + ((double)F_Num / (double)F_Den));
-        // public double Frequency => PFD_Frequency * (N_Div + ((double)F_Num / (double)F_Den)); // VCO: 3.2 GHz ~ 6.4 GHz;
 
         /// <summary>
         /// RefMultiplyOut > 100 MHz set to 1'b1, <= 100 MHz set to 1'b0;
@@ -460,6 +336,150 @@ namespace Nitride.EE
             }
         }
 
-        public Reg16 Regs { get; } = new(126);
+        public void LoadTICSFile(string reg_text)
+        {
+            //   string reg_text = File.ReadAllText(@"reg.txt");
+
+            using StringReader sr = new(reg_text);
+
+            while (sr.ReadLine() is string rline)
+            {
+                string[] reg_fields = rline.Split('\t');
+                uint reg_value = Convert.ToUInt32(reg_fields[1], 16);
+                byte addr = Convert.ToByte((reg_value >> 16) & 0xFF);
+                ushort data = Convert.ToUInt16(reg_value & 0xFFFF);
+                Regs[addr] = data;
+            }
+        }
+
+        public void LoadDefault()
+        {
+            Regs[125] = 0x2288;
+            Regs[124] = 0x0000;
+            Regs[123] = 0x0000;
+            Regs[122] = 0x0000;
+            Regs[121] = 0x0000;
+            Regs[120] = 0x0000;
+            Regs[119] = 0x0000;
+            Regs[118] = 0x0000;
+            Regs[117] = 0x0000;
+            Regs[116] = 0x0000;
+            Regs[115] = 0x0000;
+            Regs[114] = 0x7802;
+            Regs[113] = 0x0000;
+            Regs[112] = 0x0000;
+            Regs[111] = 0x0000;
+            Regs[110] = 0x0000;
+            Regs[109] = 0x0000;
+            Regs[108] = 0x0000;
+            Regs[107] = 0x0000;
+            Regs[106] = 0x0007;
+            Regs[105] = 0x4440;
+            Regs[104] = 0x2710;
+            Regs[103] = 0x0000;
+            Regs[102] = 0x0000;
+            Regs[101] = 0x0000;
+            Regs[100] = 0x2710;
+            Regs[99] = 0x0000;
+            Regs[98] = 0x0000;
+            Regs[97] = 0x0000;
+            Regs[96] = 0x0000;
+            Regs[95] = 0x0000;
+            Regs[94] = 0x0000;
+            Regs[93] = 0x0000;
+            Regs[92] = 0x0000;
+            Regs[91] = 0x0000;
+            Regs[90] = 0x0000;
+            Regs[89] = 0x0000;
+            Regs[88] = 0x0000;
+            Regs[87] = 0x0000;
+            Regs[86] = 0x0000;
+            Regs[85] = 0xD800;
+            Regs[84] = 0x0001;
+            Regs[83] = 0x0000;
+            Regs[82] = 0x2800;
+            Regs[81] = 0x0000;
+            Regs[80] = 0xCCCC;
+            Regs[79] = 0x004C;
+            Regs[78] = 0x0001;
+            Regs[77] = 0x0000;
+            Regs[76] = 0x000C;
+            Regs[75] = 0x0800;
+            Regs[74] = 0x0000;
+            Regs[73] = 0x003F;
+            Regs[72] = 0x0001;
+            Regs[71] = 0x0081;
+            Regs[70] = 0xC350;
+            Regs[69] = 0x0000;
+            Regs[68] = 0x03E8;
+            Regs[67] = 0x0000;
+            Regs[66] = 0x01F4;
+            Regs[65] = 0x0000;
+            Regs[64] = 0x1388;
+            Regs[63] = 0x0000;
+            Regs[62] = 0x00AF;
+            Regs[61] = 0x00A8;
+            Regs[60] = 0x03E8;
+            Regs[59] = 0x0001;
+            Regs[58] = 0x9001;
+            Regs[57] = 0x0020;
+            Regs[56] = 0x0000;
+            Regs[55] = 0x0000;
+            Regs[54] = 0x0000;
+            Regs[53] = 0x0000;
+            Regs[52] = 0x0421;
+            Regs[51] = 0x0080;
+            Regs[50] = 0x0080;
+            Regs[49] = 0x4180;
+            Regs[48] = 0x03E0;
+            Regs[47] = 0x0300;
+            Regs[46] = 0x07F0;
+            Regs[45] = 0xC622;
+            Regs[44] = 0x1D20;
+            Regs[43] = 0x0000;
+            Regs[42] = 0x0000;
+            Regs[41] = 0x0000;
+            Regs[40] = 0x0000;
+            Regs[39] = 0x0001;
+            Regs[38] = 0x0000;
+            Regs[37] = 0x0105;
+            Regs[36] = 0x0030;
+            Regs[35] = 0x0004; // Constant
+            Regs[34] = 0x0010;
+            Regs[33] = 0x1E01;
+            Regs[32] = 0x05BF;
+            Regs[31] = 0xC3E6;
+            Regs[30] = 0x18A6;
+            Regs[29] = 0x0000;
+            Regs[28] = 0x0488;
+            Regs[27] = 0x0002;
+            Regs[26] = 0x0808;
+            Regs[25] = 0x0624;
+            Regs[24] = 0x071A;
+            Regs[23] = 0x007C;
+            Regs[22] = 0x0001;
+            Regs[21] = 0x0409;
+            Regs[20] = 0x4848;
+            Regs[19] = 0x27B7;
+            Regs[18] = 0x0064;
+            Regs[17] = 0x0096;
+            Regs[16] = 0x0080;
+            Regs[15] = 0x060E;
+            Regs[14] = 0x1878;
+            Regs[13] = 0x4000;
+            Regs[12] = 0x5001;
+            Regs[11] = 0xB018;
+            Regs[10] = 0x10F8;
+            Regs[9] = 0x0004;
+            Regs[8] = 0x2000;
+            Regs[7] = 0x00B2;
+            Regs[6] = 0xC802;
+            Regs[5] = 0x28C8;
+            Regs[4] = 0x0A43;
+            Regs[3] = 0x0782;
+            Regs[2] = 0x0500;
+            Regs[1] = 0x0808;
+            Regs[0] = 0x2198;
+        }
     }
 }

@@ -71,6 +71,13 @@
     <Compile Include="Source\DataTable\Spectrum\TraceDetectorType.cs" />
     <Compile Include="Source\DataTable\Spectrum\TraceDetector.cs" />
     <Compile Include="Source\Hardware\Components\LMX2572.cs" />
+    <Compile Include="Source\Hardware\Components\LMX2820.cs" />
+    <Compile Include="Source\Hardware\Components\LMX2820_Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Hardware\Components\LMX2820_Control.Designer.cs">
+      <DependentUpon>LMX2820_Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Hardware\Components\LMX2572_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -152,6 +159,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Hardware\Components\LMX2820_Control.resx">
+      <DependentUpon>LMX2820_Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Hardware\Components\LMX2572_Control.resx">
       <DependentUpon>LMX2572_Control.cs</DependentUpon>

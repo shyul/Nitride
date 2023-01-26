@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Nitride.EE
 {
-    public partial class LMX2572_Control : UserControl
+    public partial class LMX2820_Control : UserControl
     {
-        public LMX2572_Control(LMX2572 lmx)
+        public LMX2820_Control(LMX2572 lmx)
         {
             LMX2572 = lmx;
             InitializeComponent();

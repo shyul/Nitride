@@ -1,6 +1,6 @@
 ﻿namespace Nitride.EE
 {
-    partial class LMX2572_Control
+    partial class LMX2820_Control
     {
         /// <summary> 
         /// Required designer variable.

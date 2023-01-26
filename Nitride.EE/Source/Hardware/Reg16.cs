@@ -45,5 +45,13 @@ namespace Nitride.EE
                 this[buffer.DU16[i].D1] = buffer.DU16[i].D2;
             }
         }
+
+        public void Print()
+        {
+            foreach (ushort addr in Keys.OrderBy(n => n))
+            {
+                Console.WriteLine(addr.ToString("X") + " = " + this[addr].ToString("X"));
+            }
+        }
     }
 }

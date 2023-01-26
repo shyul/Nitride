@@ -24,7 +24,7 @@ namespace Nitride
         DS64
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct DualShort
     {
         public short D1 { get; set; }
@@ -32,7 +32,7 @@ namespace Nitride
         public short D2 { get; set; }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct DualUShort
     {
         public ushort D1 { get; set; }
@@ -40,7 +40,7 @@ namespace Nitride
         public ushort D2 { get; set; }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
     public struct DualInt
     {
         public int D1 { get; set; }
@@ -48,7 +48,7 @@ namespace Nitride
         public int D2 { get; set; }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
     public struct DualUInt
     {
         public uint D1 { get; set; }
@@ -56,7 +56,7 @@ namespace Nitride
         public uint D2 { get; set; }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct DualLong
     {
         public long D1 { get; set; }
@@ -64,7 +64,7 @@ namespace Nitride
         public long D2 { get; set; }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct DualULong
     {
         public ulong D1 { get; set; }

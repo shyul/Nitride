@@ -19,6 +19,4 @@ namespace Nitride.EE
 
         double DivRatio { get; }
     }
-
-
 }
