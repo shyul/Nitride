@@ -118,6 +118,7 @@
     <Compile Include="Source\Main\Main.cs" />
     <Compile Include="Source\Tools\Collections.cs" />
     <Compile Include="Source\Tools\Reflection.cs" />
+    <Compile Include="Source\Tools\DataBuffer\DataBuffer.cs" />
     <Compile Include="Source\Tools\Serialization\IDataFile.cs" />
     <Compile Include="Source\Tools\Serialization\Serialization.cs" />
     <Compile Include="Source\Tools\String\Numbers.cs" />

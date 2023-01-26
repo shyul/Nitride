@@ -15,7 +15,7 @@ namespace Nitride.EE
 
     public interface IDerivedClock : IClock
     {
-        IClock Source { get; }
+        IClock Reference { get; }
 
         double DivRatio { get; }
     }

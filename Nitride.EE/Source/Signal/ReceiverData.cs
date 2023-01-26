@@ -28,7 +28,7 @@ namespace Nitride.EE
             }
 
             WaveForms = SpectrumDatums.Select(n => n.WaveForm).ToArray();
-            SampleBuffer = new Stack(numOfCh * maxLength * 8);
+            SampleBuffer = new DataBuffer(numOfCh * maxLength * 8);
         }
 
         public bool IsBusy { get; set; } = false;
@@ -37,25 +37,25 @@ namespace Nitride.EE
 
         public int Length { get; set; }
 
-        public Stack SampleBuffer { get; private set; }
+        public DataBuffer SampleBuffer { get; private set; }
 
         public FFT_Data[] SpectrumDatums { get; }
 
         public WaveForm[] WaveForms { get; }
 
-        public void CopyData(StackFormat format, int offset = 0)
+        public void CopyData(DataBufferFormat format, int offset = 0)
         {
             int i, j;
             int pt = 0;
             int num = NumOfCh;
             int count = (Length * NumOfCh) + offset; // R16 = 1, C32 = 2, C32 Dual = 4
 
-            Stack source = SampleBuffer;
+            DataBuffer source = SampleBuffer;
 
             switch (format)
             {
                 default:
-                case StackFormat.R16:
+                case DataBufferFormat.S16:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -66,7 +66,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.C16:
+                case DataBufferFormat.DS16:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -76,7 +76,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.R32:
+                case DataBufferFormat.S32:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -86,7 +86,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.C32:
+                case DataBufferFormat.DS32:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -100,7 +100,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.R64:
+                case DataBufferFormat.S64:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -110,7 +110,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.C64:
+                case DataBufferFormat.DS64:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -201,7 +201,7 @@ namespace Nitride.EE
             }
 
             WaveForms = SpectrumDatums.Select(n => n.WaveForm).ToArray();
-            SampleBuffer = new Stack(numOfCh * maxLength * 8);
+            SampleBuffer = new DataBuffer(numOfCh * maxLength * 8);
         }
 
         public bool IsBusy { get; set; } = false;
@@ -210,25 +210,25 @@ namespace Nitride.EE
 
         public int Length { get; set; }
 
-        public Stack SampleBuffer { get; private set; }
+        public DataBuffer SampleBuffer { get; private set; }
 
         public FFTDatum[] SpectrumDatums { get; }
 
         public WaveForm[] WaveForms { get; }
 
-        public void CopyData(StackFormat format, int offset = 0)
+        public void CopyData(DataBufferFormat format, int offset = 0)
         {
             int i, j;
             int pt = 0;
             int num = NumOfCh;
             int count = (Length * NumOfCh) + offset; // R16 = 1, C32 = 2, C32 Dual = 4
 
-            Stack source = SampleBuffer;
+            DataBuffer source = SampleBuffer;
 
             switch (format)
             {
                 default:
-                case StackFormat.R16:
+                case DataBufferFormat.S16:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -239,7 +239,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.C16:
+                case DataBufferFormat.DS16:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -249,7 +249,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.R32:
+                case DataBufferFormat.S32:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -259,7 +259,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.C32:
+                case DataBufferFormat.DS32:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -273,7 +273,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.R64:
+                case DataBufferFormat.S64:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)
@@ -283,7 +283,7 @@ namespace Nitride.EE
                         pt++;
                     }
                     break;
-                case StackFormat.C64:
+                case DataBufferFormat.DS64:
                     for (i = offset; i < count; i += num)
                     {
                         for (j = 0; j < num; j++)

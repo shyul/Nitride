@@ -13,19 +13,19 @@ namespace Nitride.EE
 
     public abstract class PLL : IPll
     {
-        public virtual bool IsLocked { get; set;  }
+        public virtual bool IsLocked { get; set; }
 
-        public virtual IClock Source { get; set; }
+        public virtual IClock Reference { get; set; }
 
         public virtual double DivRatio => (N_Div + ((double)F_Num * 1D / (double)F_Den)) / R_Ratio;
 
-        public virtual double Frequency => Source.Frequency * DivRatio;
+        public virtual double Frequency => Reference.Frequency * DivRatio;
 
 
 
         public virtual bool Enabled { get; set; }
 
-        public virtual double PhaseDetectFreqency => Source.Frequency / R_Ratio;
+        public virtual double PhaseDetectFreqency => Reference.Frequency / R_Ratio;
 
         public abstract double R_Ratio { get; }
 
@@ -35,11 +35,5 @@ namespace Nitride.EE
 
         public virtual uint F_Den { get; set; }
 
-
-
-
-
     }
-
-
 }

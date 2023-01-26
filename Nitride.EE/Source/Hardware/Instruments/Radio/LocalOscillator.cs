@@ -25,7 +25,7 @@ namespace Nitride.EE
 
         public bool IsLocked => throw new NotImplementedException();
 
-        public IClock Source => throw new NotImplementedException();
+        public IClock Reference => throw new NotImplementedException();
 
         public double DivRatio => throw new NotImplementedException();
 
