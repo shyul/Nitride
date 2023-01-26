@@ -177,6 +177,7 @@
             this.ComboBoxVcoSelect.Name = "ComboBoxVcoSelect";
             this.ComboBoxVcoSelect.Size = new System.Drawing.Size(81, 21);
             this.ComboBoxVcoSelect.TabIndex = 203;
+            this.ComboBoxVcoSelect.Text = "Auto";
             // 
             // LabelVcoFreq
             // 
@@ -224,7 +225,6 @@
             this.CheckBoxRefDoublerEnable.TabIndex = 2;
             this.CheckBoxRefDoublerEnable.Text = "Enable";
             this.CheckBoxRefDoublerEnable.UseVisualStyleBackColor = false;
-            this.CheckBoxRefDoublerEnable.CheckedChanged += new System.EventHandler(this.CheckBoxRfmtLo1RDoubler_CheckedChanged);
             // 
             // TextBoxRMulti
             // 

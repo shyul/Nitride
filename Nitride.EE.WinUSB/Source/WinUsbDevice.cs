@@ -155,7 +155,8 @@ namespace Nitride.EE.WinUSB
             {
                 RequestType = 0xC1,
                 Request = request,
-                Index = 0,
+                IndexL = 0,
+                IndexH = 0, //x2125,
                 Length = dataStageLength,
                 Value = value
             };
@@ -171,7 +172,8 @@ namespace Nitride.EE.WinUSB
             {
                 RequestType = 0x41,
                 Request = request,
-                Index = 3, //x2125,
+                IndexL = 0,
+                IndexH = 0, //x2125,
                 Length = dataStageLength,
                 Value = value
             };
@@ -186,7 +188,8 @@ namespace Nitride.EE.WinUSB
             {
                 RequestType = 0x41,
                 Request = request,
-                Index = 0, //x2125,
+                IndexL = 0,
+                IndexH = 0, //x2125,
                 Length = 0,
                 Value = value
             };
@@ -196,7 +199,7 @@ namespace Nitride.EE.WinUSB
 
         // private byte[] ControlReadBuffer = new byte[1024];
 
-        public T ControlRead<T>(byte request, ushort value, ushort index = 0) // where T : notnull
+        public T ControlRead<T>(byte request, ushort value, byte index = 0) // where T : notnull
         {
             ushort dataStageLength = Convert.ToUInt16(Marshal.SizeOf(typeof(T)));
             byte[] buffer = new byte[dataStageLength];
@@ -206,7 +209,8 @@ namespace Nitride.EE.WinUSB
             {
                 RequestType = 0xC1,
                 Request = request,
-                Index = index,
+                IndexL = 0,
+                IndexH = index,
                 Length = dataStageLength,
                 Value = value
             };
@@ -224,7 +228,7 @@ namespace Nitride.EE.WinUSB
 
         private byte[] ControlWriteBuffer = new byte[1024];
 
-        public bool ControlWrite<T>(byte request, ushort value, T data, ushort index = 0)
+        public bool ControlWrite<T>(byte request, ushort value, T data, byte index = 0)
         {
             ushort dataStageLength = Convert.ToUInt16(data.SerializeBytes(ControlWriteBuffer));
             uint bytesReturned = 0;
@@ -242,7 +246,8 @@ namespace Nitride.EE.WinUSB
             {
                 RequestType = 0x41,
                 Request = request,
-                Index = index, //x2125,
+                IndexL = 0,
+                IndexH = index,
                 Length = dataStageLength,
                 Value = value
             };

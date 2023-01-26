@@ -21,8 +21,6 @@ namespace Nitride.EE
 
         public virtual double Frequency => Reference.Frequency * DivRatio;
 
-
-
         public virtual bool Enabled { get; set; }
 
         public virtual double PhaseDetectFreqency => Reference.Frequency / R_Ratio;

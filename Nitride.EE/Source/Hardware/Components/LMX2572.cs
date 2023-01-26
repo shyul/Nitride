@@ -156,6 +156,12 @@ namespace Nitride.EE
         public override double R_Ratio => PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
         public double RefMultiplyOut => Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
 
+        // public double DivRatio => (EnableRefDoubler ? 2 : 1) / PreR / R_Div * (N_Div + ((double)F_Num / (double)F_Den));
+        // public double Frequency => PFD_Frequency * (N_Div + ((double)F_Num / (double)F_Den)); // VCO: 3.2 GHz ~ 6.4 GHz;
+
+        /// <summary>
+        /// RefMultiplyOut > 100 MHz set to 1'b1, <= 100 MHz set to 1'b0;
+        /// </summary>
         public bool EnableRefMultiH
         {
             get => ((Regs[9] >> 14) & 0x1) == 0x1;

@@ -26,12 +26,16 @@ namespace Nitride
 
         #endregion
 
-        public MosaicForm()
+        public MosaicForm(bool hasRibbon = true)
         {
             SuspendLayout();
 
-            Ribbon = new Ribbon() { Dock = DockStyle.Top };
-            OrbMenu = new OrbMenu(this) { Visible = false };
+            if (hasRibbon) 
+            {
+                Ribbon = new Ribbon() { Dock = DockStyle.Top };
+                OrbMenu = new OrbMenu(this) { Visible = false };
+            }
+
             StatusPane = new StatusStrip();
             DockCanvas = new DockCanvas(); // { Dock = DockStyle.Fill };
 
@@ -41,10 +45,14 @@ namespace Nitride
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             FormBorderStyle = FormBorderStyle.Sizable;
 
-            Controls.Add(Ribbon.RibbonContainer);
+            if (hasRibbon)
+                Controls.Add(Ribbon.RibbonContainer);
+
             Controls.Add(DockCanvas);
             Controls.Add(StatusPane);
-            Controls.Add(Ribbon);
+
+            if (hasRibbon)
+                Controls.Add(Ribbon);
 
             ResumeLayout(false);
             PerformLayout();
@@ -81,12 +89,15 @@ namespace Nitride
         {
             get
             {
-                return m_IsRibbonShrink;
+                return m_IsRibbonShrink || (Ribbon is null);
             }
             set
             {
                 m_IsRibbonShrink = value;
-                UpdateRibbonLocation();
+
+                if (Ribbon is not null)
+                    UpdateRibbonLocation();
+
                 Coordinate();
             }
         }
@@ -114,27 +125,35 @@ namespace Nitride
         {
             SuspendLayout();
 
-            int ribbonWidth = Ribbon.OrbWidth;
-
-            foreach (var rt in Ribbon.Tabs)
+            if (Ribbon is not null)
             {
-                ribbonWidth += rt.TabRect.Width;
-            }
-            ribbonWidth += 60;
+                int ribbonWidth = Ribbon.OrbWidth;
 
-            Ribbon.Bounds = new Rectangle(RibbonToLeftWindowEdgeMargin, UpEdgeResizeGripMargin, ribbonWidth, Ribbon.TabHeight);
-            Ribbon.RibbonContainer.Location = new Point(0, Ribbon.Height);
-            Ribbon.RibbonContainer.Size = new Size(ClientRectangle.Width, Ribbon.PanelHeight);
-            Ribbon.RibbonContainer.Visible = !IsRibbonShrink;
+                foreach (var rt in Ribbon.Tabs)
+                {
+                    ribbonWidth += rt.TabRect.Width;
+                }
+                ribbonWidth += 60;
 
-            //OrbMenu.Location = new Point(Ribbon.Bounds.Left, Ribbon.Bounds.Bottom);
-            if (m_IsRibbonShrink)
-            {
-                DockCanvas.Location = new(0, Ribbon.Height);
+                Ribbon.Bounds = new Rectangle(RibbonToLeftWindowEdgeMargin, UpEdgeResizeGripMargin, ribbonWidth, Ribbon.TabHeight);
+                Ribbon.RibbonContainer.Location = new Point(0, Ribbon.Height);
+                Ribbon.RibbonContainer.Size = new Size(ClientRectangle.Width, Ribbon.PanelHeight);
+                Ribbon.RibbonContainer.Visible = !IsRibbonShrink;
+
+                //OrbMenu.Location = new Point(Ribbon.Bounds.Left, Ribbon.Bounds.Bottom);
+                if (m_IsRibbonShrink)
+                {
+                    DockCanvas.Location = new(0, Ribbon.Height);
+                }
+                else
+                {
+                    DockCanvas.Location = new(0, Ribbon.RibbonContainer.Bounds.Bottom);
+                }
+
             }
             else
             {
-                DockCanvas.Location = new(0, Ribbon.RibbonContainer.Bounds.Bottom);
+                DockCanvas.Location = new(0, 0);
             }
 
             DockCanvas.Size = new Size(ClientRectangle.Width, ClientRectangle.Height - DockCanvas.Location.Y - StatusPane.Height);

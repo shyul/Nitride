@@ -13,8 +13,9 @@ namespace Nitride.EE.WinUSB
 		public byte RequestType;
 		public byte Request;
 		public ushort Value;
-		public ushort Index;
-		public ushort Length;
+		public byte IndexL;
+        public byte IndexH;
+        public ushort Length;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
