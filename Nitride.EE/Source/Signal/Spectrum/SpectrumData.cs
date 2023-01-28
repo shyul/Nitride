@@ -222,7 +222,7 @@ namespace Nitride.EE
 
         public void AppendTrace(FreqTrace trace)
         {
-            if (Enable)
+            if (Enable && !PauseUpdate)
             {
                 if (FreqTraceQueue.Count < 3)
                     FreqTraceQueue.Enqueue(trace);
@@ -374,8 +374,12 @@ namespace Nitride.EE
                         double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
 
                         // Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
-
+                        if (h_pix > 799) h_pix = 800;
+                        else if (h_pix < 0) h_pix = -1;
                         row[frame.HighPixColumn] = h_pix;
+
+                        if (l_pix > 799) l_pix = 800;
+                        else if (l_pix < 0) l_pix = -1;
                         row[frame.LowPixColumn] = l_pix;
                     }//);
 

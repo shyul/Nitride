@@ -68,6 +68,18 @@
     <Compile Include="Source\DataTable\FreqTable\FreqChart.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqRow.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumChannelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Signal\Spectrum\SpectrumChannelForm.Designer.cs">
+      <DependentUpon>SpectrumChannelForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Signal\Spectrum\SpectrumControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Signal\Spectrum\SpectrumControlForm.Designer.cs">
+      <DependentUpon>SpectrumControlForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Signal\Spectrum\SpectrumFFT.cs" />
     <Compile Include="Source\Signal\Spectrum\SpectrumControl.cs" />
     <Compile Include="Source\Signal\Spectrum\SpectrumChannel.cs" />
@@ -171,6 +183,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Hardware\Components\LMX2572_Control.resx">
       <DependentUpon>LMX2572_Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Signal\Spectrum\SpectrumChannelForm.resx">
+      <DependentUpon>SpectrumChannelForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Signal\Spectrum\SpectrumControlForm.resx">
+      <DependentUpon>SpectrumControlForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

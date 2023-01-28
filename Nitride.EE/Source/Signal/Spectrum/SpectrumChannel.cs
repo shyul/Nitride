@@ -7,37 +7,33 @@
 /// 
 /// ***************************************************************************
 
-using Nitride.Business;
-using Nitride.Chart;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using Nitride.Chart;
 
 namespace Nitride.EE
 {
     public class SpectrumChannel
     {
-        public SpectrumChannel(SpectrumControl spc, int i, int poolSize, int maxLength)
+        public SpectrumChannel(SpectrumControl spc, string channel_name, int poolSize, int maxLength)
         {
             SpectrumControl = spc;
             ChronoChart sc = SpectrumControl.SampleChart;
             SpectrumData sd = SpectrumData = new();
-            sd.ConfigureDepth(128, 32, 800); // HistoDepth, Persist Depth, Vertical Bins
-
 
             SpectrumFFT = new(sd, poolSize, maxLength);
 
-            var i_col = Sample_I_Column = new("Ch" + i + " Real ", "FS");
-            var q_col = Sample_Q_Column = new("Ch" + i + " Imag ", "FS");
+            var i_col = Sample_I_Column = new(channel_name + " Real ", " FS");
+            var q_col = Sample_Q_Column = new(channel_name + " Imag ", " FS");
 
-            OscillatorArea sa = SampleChartArea = new(sc, "Ch" + i + " Area", 0.3f)
+            OscillatorArea sa = SampleChartArea = new(sc, channel_name + " Area", 0.3f)
             {
                 HasXAxisBar = true,
                 Reference = 0,
@@ -52,8 +48,8 @@ namespace Nitride.EE
             {
                 Order = 0,
                 Importance = Importance.Minor,
-                Name = "Ch" + i + " Real",
-                LegendName = "Ch" + i + " Real",
+                Name = channel_name + " Real",
+                LegendName = channel_name + " Real",
                 Color = Color.SlateBlue,
                 IsAntialiasing = true,
                 Tension = 0,
@@ -64,8 +60,8 @@ namespace Nitride.EE
             {
                 Order = 0,
                 Importance = Importance.Minor,
-                Name = "Ch" + i + " Imag",
-                LegendName = "Ch" + i + " Imag",
+                Name = channel_name + " Imag",
+                LegendName = channel_name + " Imag",
                 Color = Color.DarkGreen,
                 IsAntialiasing = true,
                 Tension = 0,
@@ -73,7 +69,7 @@ namespace Nitride.EE
             });
 
             sc.AddArea(sa);
-            SpectrumChart = new("Ch" + i + " Spectrum", sd);
+            SpectrumChart = new(channel_name + " Spectrum", sd);
         }
 
         private SpectrumControl SpectrumControl { get; }
@@ -100,9 +96,9 @@ namespace Nitride.EE
 
         public WindowsType WindowsType { get; set; } = WindowsType.FlatTop;
 
-        public bool PersistEnable { get; set; } = true;
-
         public bool EnableHisto { get; set; } = true;
+
+        public bool PersistEnable { get; set; } = true;
 
         public TraceDetectorType TraceDetectorType
         {
@@ -112,11 +108,13 @@ namespace Nitride.EE
 
         public int TracePoint { get; set; } = 800;
 
-        #endregion Properties
+        public double VBW => SpectrumData.FreqStep;
 
+        #endregion Properties
 
         #region X Axis
 
+        // Purely for display purpose
         public double CenterFreq { get; set; } = 187.5e6;
 
         // In general, it should be always smaller than the DSP BW in FFT mode.
@@ -126,10 +124,7 @@ namespace Nitride.EE
 
         public double StopFreq => CenterFreq + (FreqSpan / 2);
 
-        public double VBW => SpectrumData.FreqStep;
-
         public double RBW { get; private set; }
-
 
         #endregion X Axis
 
@@ -146,40 +141,42 @@ namespace Nitride.EE
 
         public double DSP_Gain { get; set; } = 1;
 
-        public void Configure()
+        public void ApplyConfig()
         {
-            SpectrumControl.Pause = true;
+            // SpectrumControl.Pause = true;
+            SpectrumData.PauseUpdate = true;
 
-            double dsp_bw = SpectrumControl.Receiver.Bandwidth; // ***********
+            double dsp_bw = SpectrumControl.Receiver.Bandwidth;
+            double center_freq = CenterFreq;
+            double dsp_startFreq = center_freq - (dsp_bw / 2);
+            double dsp_stopFreq = center_freq + (dsp_bw / 2);
 
             SpectrumData sd = SpectrumData;
             sd.EnableHisto = EnableHisto;
             sd.ConfigureLevel(Reference, Range);
             sd.ConfigureFreqRange(CenterFreq, FreqSpan, TracePoint);
-
-            double center_freq = CenterFreq; // ***********
-            double fft_startFreq = center_freq - (dsp_bw / 2);
-            double fft_stopFreq = center_freq + (dsp_bw / 2);
+            sd.ConfigureDepth(128, 32, 800); // Must set valid tracepoints, HistoDepth, Persist Depth, Vertical Bins
 
             if (SweepMode == SweepMode.FFT)
             {
-                sd.PersistEnable = PersistEnable;
+                SpectrumFFT.Configure(SampleLength, dsp_startFreq, dsp_stopFreq, WindowsType);
+                sd.PersistEnable = PersistEnable & EnableHisto;
                 double gain = 20 * Math.Log10(SpectrumFFT.Gain * DSP_Gain);
                 sd.ConfigureCorrection(-gain, 20);
-                SpectrumFFT.Configure(SampleLength, fft_startFreq, fft_stopFreq, WindowsType);
                 RBW = dsp_bw / SpectrumFFT.Length;
             }
             else
             {
 
-                sd.PersistEnable = false;
 
+                sd.PersistEnable = false;
             }
 
             SpectrumChart.UpdateConfiguration(TickStep);
             SpectrumChart.ShowAll();
 
-            SpectrumControl.Pause = false;
+            // SpectrumControl.Pause = false;
+            SpectrumData.PauseUpdate = false;
         }
 
         #endregion Configuration

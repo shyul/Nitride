@@ -39,13 +39,13 @@ namespace Nitride
         protected override void OnParentChanged(EventArgs e)
         {
             base.OnParentChanged(e);
-            if (Parent != null)
+            if (Parent is not null)
             {
-                Console.WriteLine("### SideDockPane Parent is: " + Parent.GetType().ToString());
+                // Console.WriteLine("### SideDockPane Parent is: " + Parent.GetType().ToString());
                 //if ((typeof(DockCanvas)).IsAssignableFrom(Parent.GetType()))
                 if (Parent is DockCanvas dkc)
                 {
-                    Console.WriteLine("### ### Again SideDockPane Parent is: " + Parent.GetType().ToString());
+                    // Console.WriteLine("### ### Again SideDockPane Parent is: " + Parent.GetType().ToString());
                     DockCanvas = dkc;
                 } // (DockCanvas)Parent;
                 else

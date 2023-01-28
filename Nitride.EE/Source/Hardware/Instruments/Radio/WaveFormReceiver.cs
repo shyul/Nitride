@@ -9,8 +9,10 @@ using Nitride;
 
 namespace Nitride.EE
 {
-    public abstract class WaveFormReceiver : IInstrumentResource
+    public abstract class WaveFormReceiver : IInstrumentResource, IDisposable
     {
+
+
         public IInstrument Parent { get; set; }
 
         public virtual int NumOfCh => 1;
@@ -71,7 +73,7 @@ namespace Nitride.EE
             (HandleFetch_Task is null || HandleFetch_Task.Status != TaskStatus.Running) &&
             (HandleCopy_Task is null || HandleCopy_Task.Status != TaskStatus.Running);
 
-        public bool Pause { get; set; } = false;
+
 
         protected Task HandleFetch_Task { get; set; }
 
@@ -81,25 +83,28 @@ namespace Nitride.EE
 
         protected abstract void HandleCopy();
 
-        public abstract void WriteConfig();
+        public abstract void ApplyConfig();
 
-        public virtual bool GetSingle() 
-        {
-            return false;
-        }
+        public virtual bool IsPause { get; set; } = true;
 
-        public virtual bool StartStream()
-        {
-            return false;
-        }
+        public abstract bool TrigSingle();
 
-        public virtual void StopStream()
+        public abstract bool TrigContinous();
+
+        public abstract void TrigPause();
+
+        public abstract void TrigStop();
+
+        public void Dispose()
         {
-            Handle_CancellationTokenSource.Cancel();
+            if (Handle_CancellationTokenSource is not null)
+            {
+                Handle_CancellationTokenSource.Cancel();
+            }
+
             while (HandleFetch_Task.Status == TaskStatus.Running || HandleCopy_Task.Status == TaskStatus.Running) ;
 
             WaveFormPool.ForEach(n => n.HasUpdatedItem = false);
         }
-
     }
 }

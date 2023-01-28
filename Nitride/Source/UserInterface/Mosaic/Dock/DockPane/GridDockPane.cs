@@ -48,11 +48,11 @@ namespace Nitride
             IsRoot = false;
             if (Parent != null)
             {
-                Console.WriteLine("GridDockPane Parent is: " + Parent.GetType().ToString());
+                // Console.WriteLine("GridDockPane Parent is: " + Parent.GetType().ToString());
                 // if ((typeof(DockCanvas)).IsAssignableFrom(Parent.GetType()))
                 if (Parent is DockCanvas dkc)
                 {
-                    Console.WriteLine("Again GridDockPane Parent is: " + Parent.GetType().ToString());
+                    // Console.WriteLine("Again GridDockPane Parent is: " + Parent.GetType().ToString());
                     Dock = DockStyle.Fill;
                     IsRoot = true;
                     DockCanvas = dkc; // (DockCanvas)Parent;

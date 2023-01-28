@@ -43,7 +43,8 @@ namespace Nitride.EE
 
             for (int i = 0; i < NumOfCh; i++)
             {
-                SpectrumChannel sch = SpectrumChannel[i] = new(this, i, Receiver.PoolSize, Receiver.MaxSampleLength);
+                SpectrumChannel sch = SpectrumChannel[i] = new(this, "SCh" + i.ToString(), Receiver.PoolSize, Receiver.MaxSampleLength);
+                sch.ApplyConfig();
             }
 
             EnableTimeDomain = true;
@@ -62,7 +63,7 @@ namespace Nitride.EE
 
         #region Spectrum
 
-        private SpectrumChannel[] SpectrumChannel { get; }
+        public SpectrumChannel[] SpectrumChannel { get; }
 
         #endregion Spectrum
 
@@ -78,63 +79,13 @@ namespace Nitride.EE
 
         public SweepMode SweepMode { get; set; } = SweepMode.FFT;
 
-        // #1 Configure the Sample Length must be done with everything stopped.
-        public void Configure()
-        {
-            if (Receiver.IsStopped) 
-            {
-                // Set the WaveFormGroup
-                if (SampleLength < Receiver.MaxSampleLength && SampleLength.IsPowerOf2()) 
-                {
-                    Receiver.SampleLength = SampleLength;
-                }
-                else
-                {
-                    throw new Exception("Invalid Sample Length: " + SampleLength);
-                }
-
-                SampleTable.ConfigureNumberOfPoints(SampleLength);
-
-                Config_Receiver();
-                Config_Spectrum();
-            }
-            else
-            {
-                Console.WriteLine("Receiver should be stopped before changing the sample length");
-            }
-        }
-
-        // #2 Can be configured anytime, must update the spectrum settings.
-        public void Config_Receiver() 
-        {
-            // Write DDC configuration...
-            Receiver.WriteConfig();
-            SampleTable.SampleRate = Receiver.SampleRate;
-            Config_Spectrum();
-        }
-
-        // #3 Can be configured anytime
-        public void Config_Spectrum() 
-        {
-            for (int i = 0; i < NumOfCh; i++)
-            {
-                SpectrumChannel sch = SpectrumChannel[i];
-                sch.DSP_Gain = Receiver.DSP_Gain[i];
-                sch.Configure();
-            }
-        }
-
-        #endregion Properties
-
-        #region Methods
-
         public bool Pause
         {
             get => m_Pause;
-            
+
             set
             {
-                Receiver.Pause = value;
+                Receiver.IsPause = value;
 
                 for (int i = 0; i < NumOfCh; i++)
                 {
@@ -148,13 +99,70 @@ namespace Nitride.EE
 
         private bool m_Pause = true;
 
-        public bool GetSingle() => Receiver.GetSingle();
-
-        public bool StartStream() 
+        // #1 Configure the Sample Length must be done with everything stopped.
+        public void ApplyConfig()
         {
-            if (!Receiver.StartStream()) return false;
+            if (Receiver.IsPause)
+            {
+                // Set the WaveFormGroup
+                if (SampleLength <= Receiver.MaxSampleLength && SampleLength.IsPowerOf2())
+                {
+                    Receiver.SampleLength = SampleLength;
+                }
+                else
+                {
+                    throw new Exception("Invalid Sample Length: " + SampleLength);
+                }
+                SampleTable.ConfigureNumberOfPoints(SampleLength);
 
+                ApplyConfig_Receiver();
+                ApplyConfig_Spectrum();
+            }
+            else
+            {
+                Console.WriteLine("Receiver should be stopped before changing the sample length");
+            }
+        }
 
+        // #2 Can be configured anytime, must update the spectrum settings.
+        public void ApplyConfig_Receiver()
+        {
+            // Write DDC configuration...
+            Receiver.ApplyConfig();
+            SampleTable.SampleRate = Receiver.SampleRate;
+            // SampleTable.ConfigureNumberOfPoints(SampleLength);
+            ApplyConfig_Spectrum();
+        }
+
+        // #3 Can be configured anytime
+        public void ApplyConfig_Spectrum()
+        {
+            for (int i = 0; i < NumOfCh; i++)
+            {
+                SpectrumChannel sch = SpectrumChannel[i];
+                sch.DSP_Gain = Receiver.DSP_Gain[i];
+                sch.ApplyConfig();
+            }
+        }
+
+        #endregion Properties
+
+        #region Methods
+
+        public bool GetSingle() => Receiver.TrigSingle();
+
+        public bool StartStream()
+        {
+            // if ()
+
+            Pause = false;
+
+            if (!Receiver.TrigContinous()) return false;
+            /*
+            foreach (var sch in SpectrumChannel)
+            {
+               sch.
+            }*/
 
 
             return true;
@@ -162,7 +170,9 @@ namespace Nitride.EE
 
         public bool StopStream()
         {
+            Receiver.TrigStop();
 
+            Pause = true;
             return false;
         }
 
@@ -174,6 +184,7 @@ namespace Nitride.EE
         /// <param name="wfg">Incoming WaveFormGroup</param>
         public void WaveFormEnqueue(WaveFormGroup wfg)
         {
+            // Console.WriteLine("WaveFormEnqueue");
             ChronoTable ct = SampleTable;
 
             for (int i = 0; i < NumOfCh; i++)
@@ -194,25 +205,26 @@ namespace Nitride.EE
                         Complex c = wf.Data[j];
                         ChronoRow cr = ct[j];
                         (cr[sch.Sample_I_Column], cr[sch.Sample_Q_Column]) = (c.Real, c.Imaginary);
+
+                        // Console.WriteLine(c.ToString());
                     }
                 }
 
                 if (SweepMode == SweepMode.FFT)
                 {
+                    // wf.IsUpdated = false;  // .
                     sch.SpectrumFFT.WaveFormEnqueue(wf);
                 }
                 else
                 {
 
-
-
                 }
-
             }
 
             if (EnableTimeDomain)
             {
                 ct.DataIsUpdated();
+                // Console.WriteLine("ct.DataIsUpdated()");
             }
 
         }

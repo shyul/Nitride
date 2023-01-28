@@ -29,11 +29,18 @@ namespace Nitride.EE
             {
                 FreqTracePool.Add(new FreqTrace(maxLength));
             }
+
+            HandleFFT_CancellationTokenSource = new CancellationTokenSource();
+            HandleFFT_Task = new(() => HandleFFT(), HandleFFT_CancellationTokenSource.Token);
+            HandleFFT_Task.Start();
         }
+
+        ~SpectrumFFT() => Dispose();
 
         public void Dispose()
         {
-            Stop();
+            HandleFFT_CancellationTokenSource.Cancel();
+            while (HandleFFT_Task.Status == TaskStatus.Running) ;
         }
 
         public int PoolSize { get; }
@@ -85,28 +92,6 @@ namespace Nitride.EE
 
         private SpectrumData SpectrumData { get; }
 
-        public bool Start()
-        {
-            if (IsStopped)
-            {
-                HandleFFT_CancellationTokenSource = new CancellationTokenSource();
-                HandleFFT_Task = new(() => HandleFFT(), HandleFFT_CancellationTokenSource.Token);
-                HandleFFT_Task.Start();
-                return true;
-            }
-
-            return false;
-        }
-
-        public void Stop()
-        {
-            HandleFFT_CancellationTokenSource.Cancel();
-            while (HandleFFT_Task.Status == TaskStatus.Running) ;
-            while (WaveFormQueue.Count() > 0)
-                WaveFormQueue.TryDequeue(out var _);
-            // HandleFFT_CancellationTokenSource = null;
-        }
-
         private Task HandleFFT_Task { get; set; }
 
         private CancellationTokenSource HandleFFT_CancellationTokenSource { get; set; }
@@ -119,14 +104,16 @@ namespace Nitride.EE
                 {
                     WaveFormQueue.TryDequeue(out var wf);
 
-                    //if (HandleFFT_CancellationTokenSource is null || cts.IsCancellationRequested)
-                    //goto End;
+                    if (!SpectrumData.PauseUpdate) 
+                    {
+                        trace.Transform(wf.Data); // Here: Trace.IsUpdate = true;
+                        SpectrumData.AppendTrace(trace);
+                    }
 
-                    trace.Transform(wf.Data); // Here: Trace.IsUpdate = true;
-                    wf.IsUpdated = false;
-
-                    SpectrumData.AppendTrace(trace);
+                    wf.IsUpdated = false; // End of WaveForm's data lifecycle.
                 }
+                else
+                    Thread.Sleep(5);
             }
         }
     }

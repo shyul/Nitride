@@ -170,6 +170,10 @@ namespace Nitride.Chart
             {
                 Areas.Add(area);
             }
+            else
+            {
+                Console.WriteLine("Already Contains Area: " + area.Name);
+            }
 
             T ca = (T)Areas.Where(n => n == area).First();
             ca.Order = order;
