@@ -68,8 +68,13 @@
     <Compile Include="Source\DataTable\FreqTable\FreqChart.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqRow.cs" />
     <Compile Include="Source\DataTable\FreqTable\FreqTable.cs" />
-    <Compile Include="Source\DataTable\Spectrum\TraceDetectorType.cs" />
-    <Compile Include="Source\DataTable\Spectrum\TraceDetector.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumFFT.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumControl.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumChannel.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumSweep.cs" />
+    <Compile Include="Source\Signal\Spectrum\SweepMode.cs" />
+    <Compile Include="Source\Signal\Spectrum\TraceDetectorType.cs" />
+    <Compile Include="Source\Signal\Spectrum\TraceDetector.cs" />
     <Compile Include="Source\Hardware\Components\LMX2572.cs" />
     <Compile Include="Source\Hardware\Components\LMX2820.cs" />
     <Compile Include="Source\Hardware\Components\LMX2820_Control.cs">
@@ -85,26 +90,26 @@
       <DependentUpon>LMX2572_Control.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Hardware\Instruments\Radio\DigitalTransmitter.cs" />
-    <Compile Include="Source\Hardware\Instruments\Radio\DigitalReceiver.cs" />
+    <Compile Include="Source\Hardware\Instruments\Radio\WaveFormReceiver.cs" />
     <Compile Include="Source\Hardware\Instruments\Radio\DownConverter.cs" />
     <Compile Include="Source\Hardware\Instruments\Radio\LocalOscillator.cs" />
     <Compile Include="Source\Hardware\Reg16.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IDataAcquisition.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IInstrument.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IPll.cs" />
-    <Compile Include="Source\FFT\FFT_Data.cs" />
-    <Compile Include="Source\Signal\FreqTrace.cs" />
-    <Compile Include="Source\DataTable\Spectrum\SpectrumChart.cs" />
-    <Compile Include="Source\DataTable\Spectrum\SpectrumData.cs" />
+    <Compile Include="Source\Signal\Frequency\FreqPoint.cs" />
+    <Compile Include="Source\Signal\Frequency\FreqTrace.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumChart.cs" />
+    <Compile Include="Source\Signal\Spectrum\SpectrumData.cs" />
     <Compile Include="Source\DataTable\ParamTable\ComplexFormat.cs" />
     <Compile Include="Source\DataTable\ParamTable\Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\S_Parameter.cs" />
     <Compile Include="Source\DataTable\ParamTable\Z_Parameter.cs" />
-    <Compile Include="Source\DataTable\Spectrum\TraceFrame.cs" />
-    <Compile Include="Source\Signal\ReceiverData.cs" />
+    <Compile Include="Source\Signal\Spectrum\TraceFrame.cs" />
+    <Compile Include="Source\Signal\SpecAn\ReceiverData.cs" />
     <Compile Include="Source\Signal\WaveForm.cs" />
-    <Compile Include="Source\FFT\FFT.cs" />
-    <Compile Include="Source\FFT\WindowFunctions.cs" />
+    <Compile Include="Source\Signal\Frequency\FFT.cs" />
+    <Compile Include="Source\Signal\Frequency\WindowFunctions.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IFiniteADC.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IFiniteDAC.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IStreamADC.cs" />
@@ -148,6 +153,7 @@
     <Compile Include="Source\Math\Decade.cs" />
     <Compile Include="Source\Math\Interpolation.cs" />
     <Compile Include="Source\Signal\SignalTool.cs" />
+    <Compile Include="Source\Signal\WaveFormGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nitride\Nitride.csproj">

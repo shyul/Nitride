@@ -224,12 +224,10 @@ namespace Nitride.EE
         {
             if (Enable)
             {
-                //var frame = GetGetScaledTrace(trace);
-
-                if (FreqTraceBuffer.Count < 3)
-                    FreqTraceBuffer.Enqueue(trace);
+                if (FreqTraceQueue.Count < 3)
+                    FreqTraceQueue.Enqueue(trace);
                 else
-                    FreqTraceBuffer.Dequeue();
+                    FreqTraceQueue.Dequeue();
             }
         }
 
@@ -237,7 +235,7 @@ namespace Nitride.EE
         {
             Enable = false;
 
-            FreqTraceBuffer.Clear();
+            FreqTraceQueue.Clear();
             FrameBuffer.Clear();
 
             CurrentTraceFrame = null;
@@ -265,7 +263,7 @@ namespace Nitride.EE
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        private Queue<FreqTrace> FreqTraceBuffer { get; } = new();
+        private Queue<FreqTrace> FreqTraceQueue { get; } = new();
 
         public Queue<TraceFrame> FrameBuffer { get; } = new();
 
@@ -284,11 +282,11 @@ namespace Nitride.EE
                     return;
                 }
 
-                if (FreqTraceBuffer.Count > 0 && Enable && !PauseUpdate)
+                if (FreqTraceQueue.Count > 0 && Enable && !PauseUpdate)
                 {
                     if (FrameBuffer.Count < 3)
                     {
-                        CurrentTraceFrame = GetFrame(FreqTraceBuffer.Dequeue());
+                        CurrentTraceFrame = GetFrame(FreqTraceQueue.Dequeue());
                         FrameBuffer.Enqueue(CurrentTraceFrame);
                     }
                     else if (FrameBuffer.Count > 2)
@@ -353,7 +351,7 @@ namespace Nitride.EE
                     det = new SplineTraceDetector(trace);
                 }
 
-                //lock()
+                trace.IsUpdated = false;
 
                 det.Evaluate(this, frame);
 

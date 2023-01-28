@@ -1,4 +1,10 @@
-﻿using System;
+﻿/// ***************************************************************************
+/// Nitride Shared Libraries and Utilities
+/// Copyright 2001-2008, 2014-2023 Xu Li - me@xuli.us
+/// 
+/// ***************************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

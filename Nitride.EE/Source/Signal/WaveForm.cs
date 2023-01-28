@@ -2,7 +2,7 @@
 /// Nitride Shared Libraries and Utilities
 /// Copyright 2001-2008, 2014-2023 Xu Li - me@xuli.us
 /// 
-/// SampleBuffer
+/// WaveForm
 /// 
 /// ***************************************************************************
 
@@ -10,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Nitride.EE
 {
@@ -31,7 +29,9 @@ namespace Nitride.EE
             StopTime = StartTime + Duration;
         }
 
-        public Complex this[int i] => Data[i]; 
+        public bool IsUpdated { get; set; } = false;
+
+        public Complex this[int i] => Data[i];
 
         public int Count { get; }
 
@@ -48,6 +48,8 @@ namespace Nitride.EE
         public double Peak => Data.Select(x => x.Magnitude).Max();
 
         public double Rms => Math.Sqrt(Data.Select(x => Math.Pow(x.Magnitude, 2)).Sum() / Count);
+
+
 
         public void CopyData(Complex[] samples, int offset = 0)
         {
