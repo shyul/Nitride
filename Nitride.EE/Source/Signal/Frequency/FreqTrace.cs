@@ -27,7 +27,7 @@ namespace Nitride.EE
             }
         }
 
-        public void Configure(int length, double startFreq, double stopFreq, WindowsType winType)
+        public void Configure(int length, double startFreq, double stopFreq, WindowsType winType, bool flip)
         {
             Length = length;
             StartFreq = startFreq;
@@ -40,6 +40,7 @@ namespace Nitride.EE
             }
 
             FFT.UpdataConfiguration(length, winType);
+            FlipSpectrum = flip;
 
             IsUpdated = false;
         }
@@ -50,7 +51,7 @@ namespace Nitride.EE
 
         public FFT FFT { get; }
 
-        public bool FlipSpectrum { get; set; } = false;
+        public bool FlipSpectrum { get; private set; } = false;
 
         public int Length { get; private set; }
 

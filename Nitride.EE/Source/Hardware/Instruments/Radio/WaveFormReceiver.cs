@@ -33,6 +33,8 @@ namespace Nitride.EE
 
         public virtual uint DecimationRate { get; set; }
 
+        public double[] DSP_Gain { get; protected set; }
+
         public virtual double SampleRate => SampleClock.Frequency / DecimationRate;
 
         public virtual double Bandwidth => SampleRate / 2;
@@ -41,7 +43,7 @@ namespace Nitride.EE
 
         public int PoolSize => WaveFormPool.Count;
 
-        public virtual int Length
+        public virtual int SampleLength
         {
             get => WaveFormPool[0].Length;
             set => WaveFormPool.ForEach(n => n.Length = value);
@@ -69,6 +71,8 @@ namespace Nitride.EE
             (HandleFetch_Task is null || HandleFetch_Task.Status != TaskStatus.Running) &&
             (HandleCopy_Task is null || HandleCopy_Task.Status != TaskStatus.Running);
 
+        public bool Pause { get; set; } = false;
+
         protected Task HandleFetch_Task { get; set; }
 
         protected Task HandleCopy_Task { get; set; }
@@ -77,6 +81,7 @@ namespace Nitride.EE
 
         protected abstract void HandleCopy();
 
+        public abstract void WriteConfig();
 
         public virtual bool GetSingle() 
         {

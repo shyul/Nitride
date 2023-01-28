@@ -49,33 +49,33 @@ namespace Nitride.EE
 
         #region Basic Settings
 
-        public double CenterFreq { get; private set; }
-
-        public double Span { get; private set; }
-
         /// <summary>
         /// A.k.a Number of Points
         /// </summary>
-        public int Count
+        public int TracePoint
         {
-            get => m_Count;
+            get => m_TracePointCount;
             private set
             {
                 if (value < 3)
                 {
-                    m_Count = 3;
+                    m_TracePointCount = 3;
                 }
                 else if (value % 2 == 0)
                 {
-                    m_Count = value + 1;
+                    m_TracePointCount = value + 1;
                 }
                 else
                 {
-                    m_Count = value;
+                    m_TracePointCount = value;
                 }
             }
         }
-        private int m_Count = -1;
+        private int m_TracePointCount = -1;
+
+        public double CenterFreq { get; private set; }
+
+        public double Span { get; private set; }
 
         public double StartFreq
         {
@@ -105,8 +105,8 @@ namespace Nitride.EE
 
         public double FreqStep
         {
-            get => Span / (Count - 1);
-            private set => Count = Convert.ToInt32(Math.Ceiling(Span / value));
+            get => Span / (TracePoint - 1);
+            private set => TracePoint = Convert.ToInt32(Math.Ceiling(Span / value));
         }
 
         public TraceDetectorType Detector { get; set; } = TraceDetectorType.Peak;
@@ -143,13 +143,13 @@ namespace Nitride.EE
             {
                 //if (count % 2 == 0) count++;
 
-                Count = numOfPts;
+                TracePoint = numOfPts;
                 CenterFreq = center;
                 Span = span;
 
                 // Console.WriteLine("Count = " + Count);
 
-                FreqTable.Configure(StartFreq, StopFreq, Count);
+                FreqTable.Configure(StartFreq, StopFreq, TracePoint);
                 FreqPoints = FreqTable.Rows.Select(n => n.Frequency).OrderBy(n => n).ToArray();
 
                 // Console.WriteLine(FreqPoints.ToStringWithIndex());
@@ -171,7 +171,7 @@ namespace Nitride.EE
         {
             lock (FreqTable.DataLockObject)
             {
-                if (Count > 2)
+                if (TracePoint > 2)
                 {
                     HistoDepth = depth;
                     PersistDepth = persistDepth;
@@ -181,7 +181,7 @@ namespace Nitride.EE
 
                     for (int i = 0; i < HistoDepth; i++)
                     {
-                        frames.Add(new(i, Count, PersistBufferHeight));
+                        frames.Add(new(i, TracePoint, PersistBufferHeight));
                     }
 
                     HistoFrames = frames.ToArray();
@@ -249,7 +249,7 @@ namespace Nitride.EE
                     //frame.ClearPersistBuffer();
                     //frame.ClearPersistBitmap();
 
-                    Parallel.For(0, Count, i => {
+                    Parallel.For(0, TracePoint, i => {
                         FreqRow row = FreqTable[i];
                         //row.Clear();
 
@@ -330,7 +330,7 @@ namespace Nitride.EE
             {
                 TraceDetector det;
                 int traceCount = trace.Length;
-                if (traceCount > Count)
+                if (traceCount > TracePoint)
                 {
                     det = Detector switch
                     {
@@ -342,7 +342,7 @@ namespace Nitride.EE
                         _ => new PeakTraceDetector(trace),
                     };
                 }
-                else if (traceCount == Count)
+                else if (traceCount == TracePoint)
                 {
                     det = new TraceDetector(trace);
                 }
@@ -357,7 +357,7 @@ namespace Nitride.EE
 
                 if (EnableHisto)
                 {
-                    for (int i = 0; i < Count; i++)
+                    for (int i = 0; i < TracePoint; i++)
                     // Parallel.For(0, Count, i =>
                     {
                         FreqRow row = FreqTable[i];
@@ -388,7 +388,7 @@ namespace Nitride.EE
                     for (int z = 0; z < PersistDepth; z++) // Parallel.For(0, PersistDepth, z =>
                     {
                         TraceFrame histo_frame = HistoFrames[histo_index];
-                        for (int x = 0; x < Count; x++)
+                        for (int x = 0; x < TracePoint; x++)
                         {
                             FreqRow prow = FreqTable[x];
 
@@ -473,7 +473,7 @@ namespace Nitride.EE
 
             lock (frame)
             {
-                for (int x = 0; x < Count; x++)
+                for (int x = 0; x < TracePoint; x++)
                 {
                     for (int y = 0; y < PersistBufferHeight; y++)
                     {

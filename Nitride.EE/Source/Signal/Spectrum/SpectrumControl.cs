@@ -27,7 +27,7 @@ namespace Nitride.EE
         public SpectrumControl(WaveFormReceiver recv)
         {
             Receiver = recv;
-            Length = Receiver.MaxSampleLength;
+            SampleLength = Receiver.MaxSampleLength;
 
             SpectrumChannel = new SpectrumChannel[NumOfCh];
 
@@ -50,7 +50,7 @@ namespace Nitride.EE
             Receiver.WaveFormEnqueue += WaveFormEnqueue;
         }
 
-        private WaveFormReceiver Receiver { get; }
+        public WaveFormReceiver Receiver { get; }
 
         #region SampleChart
 
@@ -70,58 +70,95 @@ namespace Nitride.EE
 
         public int NumOfCh => Receiver.NumOfCh;
 
-        public int Length { get; set; } = 8192;
+        public bool EnableTimeDomain { get; set; } = true;
+
+        public int SampleLength { get; set; } = 8192;
 
         public double SampleRate => Receiver.SampleRate;
 
         public SweepMode SweepMode { get; set; } = SweepMode.FFT;
 
+        // #1 Configure the Sample Length must be done with everything stopped.
         public void Configure()
         {
-            // Stop the stream here
-
-            if (SweepMode == SweepMode.FFT) 
+            if (Receiver.IsStopped) 
             {
-                double bandwidth_req = SpectrumChannel.Select(n => n.FreqSpan).Max();
+                // Set the WaveFormGroup
+                if (SampleLength < Receiver.MaxSampleLength && SampleLength.IsPowerOf2()) 
+                {
+                    Receiver.SampleLength = SampleLength;
+                }
+                else
+                {
+                    throw new Exception("Invalid Sample Length: " + SampleLength);
+                }
 
-                // Check if the required bandwidth is larger than the maximum RX SampleRate
+                SampleTable.ConfigureNumberOfPoints(SampleLength);
 
-                // Get Desirable DSP_BW...
+                Config_Receiver();
+                Config_Spectrum();
             }
             else
             {
-
-            }
-
-
-            // Update DDC rate...cic... fir and so on...
-
-            double dsp_bw = Receiver.Bandwidth; // ***********
-
-            Receiver.Length = Length;
-
-
-
-
-            SampleTable.SampleRate = dsp_bw;
-            SampleTable.ConfigureNumberOfPoints(Length);
-
-            for (int i = 0; i < NumOfCh; i++)
-            {
-                SpectrumChannel sch = SpectrumChannel[i];
-                sch.Configure();
+                Console.WriteLine("Receiver should be stopped before changing the sample length");
             }
         }
 
-        public bool EnableTimeDomain { get; set; }
+        // #2 Can be configured anytime, must update the spectrum settings.
+        public void Config_Receiver() 
+        {
+            // Write DDC configuration...
+            Receiver.WriteConfig();
+            SampleTable.SampleRate = Receiver.SampleRate;
+            Config_Spectrum();
+        }
+
+        // #3 Can be configured anytime
+        public void Config_Spectrum() 
+        {
+            for (int i = 0; i < NumOfCh; i++)
+            {
+                SpectrumChannel sch = SpectrumChannel[i];
+                sch.DSP_Gain = Receiver.DSP_Gain[i];
+                sch.Configure();
+            }
+        }
 
         #endregion Properties
 
         #region Methods
 
+        public bool Pause
+        {
+            get => m_Pause;
+            
+            set
+            {
+                Receiver.Pause = value;
+
+                for (int i = 0; i < NumOfCh; i++)
+                {
+                    SpectrumChannel sch = SpectrumChannel[i];
+                    sch.SpectrumData.PauseUpdate = value;
+                }
+
+                m_Pause = value;
+            }
+        }
+
+        private bool m_Pause = true;
+
         public bool GetSingle() => Receiver.GetSingle();
 
-        public bool StartStream() => Receiver.StartStream();
+        public bool StartStream() 
+        {
+            if (!Receiver.StartStream()) return false;
+
+
+
+
+            return true;
+        }
 
         public bool StopStream()
         {

@@ -3,14 +3,16 @@
 /// Copyright 2001-2008, 2014-2023 Xu Li - me@xuli.us
 /// 
 /// FFTStream
-/// WaveFormReceiver -> WaveForm -> (FreqTrace) SpectrumFFT -> (Frame) SpectrumData -> SpectrumChart
+/// WaveFormReceiver (Buffer -> WaveForm) -> SpectrumFFT (FreqTrace) -> (Frame) SpectrumData -> SpectrumChart
 /// 
 /// ***************************************************************************
 
+using Nitride.Business;
 using Nitride.Chart;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -20,20 +22,18 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    // 1. generate sweep plan
-    // 2. Send each point to SDR and trigger rx event
-    // 3. Pull the data back
-
     public class SpectrumChannel
     {
         public SpectrumChannel(SpectrumControl spc, int i, int poolSize, int maxLength)
         {
             SpectrumControl = spc;
-
             ChronoChart sc = SpectrumControl.SampleChart;
-
             SpectrumData sd = SpectrumData = new();
+            sd.ConfigureDepth(128, 32, 800); // HistoDepth, Persist Depth, Vertical Bins
+
+
             SpectrumFFT = new(sd, poolSize, maxLength);
+
             var i_col = Sample_I_Column = new("Ch" + i + " Real ", "FS");
             var q_col = Sample_Q_Column = new("Ch" + i + " Imag ", "FS");
 
@@ -78,17 +78,15 @@ namespace Nitride.EE
 
         private SpectrumControl SpectrumControl { get; }
 
-
-
         public NumericColumn Sample_I_Column { get; }
 
         public NumericColumn Sample_Q_Column { get; }
 
         public OscillatorArea SampleChartArea { get; }
 
-        public SpectrumFFT SpectrumFFT { get; } // Has Task
+        public SpectrumFFT SpectrumFFT { get; } // Has Task // Configured
 
-        public SpectrumData SpectrumData { get; } // Has Task
+        public SpectrumData SpectrumData { get; } // Has Task. // Configured
 
         public SpectrumChart SpectrumChart { get; } // Has Task
 
@@ -96,36 +94,68 @@ namespace Nitride.EE
 
         public bool Enabled { get; set; } = true;
 
-        public int Length => SpectrumControl.Length;
+        public int SampleLength => SpectrumControl.SampleLength;
 
         public SweepMode SweepMode => SpectrumControl.SweepMode;
 
-        public TraceDetectorType TraceDetectorType { get; set; } = TraceDetectorType.Peak;
+        public WindowsType WindowsType { get; set; } = WindowsType.FlatTop;
 
-        public double CenterFreq { get; set; } = 0; // 187.5e6;
+        public bool PersistEnable { get; set; } = true;
 
-        public double FreqSpan { get; set; }
+        public bool EnableHisto { get; set; } = true;
+
+        public TraceDetectorType TraceDetectorType
+        {
+            get => SpectrumData.Detector;
+            set => SpectrumData.Detector = value;
+        }
+
+        public int TracePoint { get; set; } = 800;
+
+        #endregion Properties
+
+
+        #region X Axis
+
+        public double CenterFreq { get; set; } = 187.5e6;
+
+        // In general, it should be always smaller than the DSP BW in FFT mode.
+        public double FreqSpan { get; set; } = 100e6;
 
         public double StartFreq => CenterFreq - (FreqSpan / 2);
 
         public double StopFreq => CenterFreq + (FreqSpan / 2);
 
-        // public double 
+        public double VBW => SpectrumData.FreqStep;
 
-        public WindowsType WindowsType { get; set; } = WindowsType.FlatTop;
-
-        // private LocalOscillator LocalOscillator { get; }
+        public double RBW { get; private set; }
 
 
+        #endregion X Axis
+
+        #region Y Axis
+        public double Reference { get; set; } = 0;
+
+        public double Range { get; set; } = 130;
+
+        public double TickStep { get; set; } = 10;
+
+        #endregion Y Axis
+
+        #region Configuration
+
+        public double DSP_Gain { get; set; } = 1;
 
         public void Configure()
         {
-            // Fetch Desirable DSP_BW from SpectrumControl
+            SpectrumControl.Pause = true;
 
-            double dsp_bw = 0; // Receiver.Bandwidth; // ***********
+            double dsp_bw = SpectrumControl.Receiver.Bandwidth; // ***********
 
             SpectrumData sd = SpectrumData;
-            sd.Detector = TraceDetectorType;
+            sd.EnableHisto = EnableHisto;
+            sd.ConfigureLevel(Reference, Range);
+            sd.ConfigureFreqRange(CenterFreq, FreqSpan, TracePoint);
 
             double center_freq = CenterFreq; // ***********
             double fft_startFreq = center_freq - (dsp_bw / 2);
@@ -133,8 +163,11 @@ namespace Nitride.EE
 
             if (SweepMode == SweepMode.FFT)
             {
-                SpectrumFFT.Configure(Length, fft_startFreq, fft_stopFreq, WindowsType);
-
+                sd.PersistEnable = PersistEnable;
+                double gain = 20 * Math.Log10(SpectrumFFT.Gain * DSP_Gain);
+                sd.ConfigureCorrection(-gain, 20);
+                SpectrumFFT.Configure(SampleLength, fft_startFreq, fft_stopFreq, WindowsType);
+                RBW = dsp_bw / SpectrumFFT.Length;
             }
             else
             {
@@ -143,9 +176,17 @@ namespace Nitride.EE
 
             }
 
+            SpectrumChart.UpdateConfiguration(TickStep);
+            SpectrumChart.ShowAll();
 
+            SpectrumControl.Pause = false;
         }
 
-        #endregion Properties
+        #endregion Configuration
+
+        // 1. generate sweep plan
+        // 2. Send each point to SDR and trigger rx event
+        // 3. Pull the data back
+
     }
 }

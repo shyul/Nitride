@@ -45,21 +45,18 @@ namespace Nitride.EE
             (HandleFFT_CancellationTokenSource is null || HandleFFT_CancellationTokenSource.IsCancellationRequested) &&
             (HandleFFT_Task is null || HandleFFT_Task.Status != TaskStatus.Running);
 
-        public void Configure(int length, double startFreq, double stopFreq, WindowsType winType)
+        public void Configure(int length, double startFreq, double stopFreq, WindowsType winType) //, bool flip)
         {
             Length = length;
             StartFreq = startFreq;
             StopFreq = stopFreq;
             FreqStep = (StopFreq - StartFreq) / (Length - 1D);
-
-            FreqTracePool.ForEach(n => n.Configure(length, startFreq, stopFreq, winType));
+            FreqTracePool.ForEach(n => n.Configure(length, startFreq, stopFreq, winType, true)); // bool flip = true;
         }
 
-        public bool FlipSpectrum
-        {
-            get => FreqTracePool.First().FlipSpectrum;
-            set => FreqTracePool.ForEach(n => n.FlipSpectrum = value);
-        }
+        public bool FlipSpectrum => FreqTracePool.First().FlipSpectrum;
+
+        public double Gain => FreqTracePool.First().FFT.Gain;
 
         public int Length { get; private set; }
 

@@ -17,19 +17,21 @@ namespace Nitride.EE
     {
         public FFTDatum(int maxLength)
         {
-            FFT = new(maxLength);
+            // FFT = new(maxLength);
             WaveForm = new(maxLength);
             FreqTrace = new(maxLength);
         }
 
         public WaveForm WaveForm { get; }
 
-        public FFT FFT { get; }
+        public FFT FFT => FreqTrace.FFT;
 
         public FreqTrace FreqTrace { get; }
 
-        public bool FlipSpectrum { get; set; } = false;
+        // public bool FlipSpectrum { get; set; } = false;
 
+        public void Transform() => FreqTrace.Transform(WaveForm.Data);
+        /*
         public void Transform()
         {
             FFT.Transform(WaveForm.Data);
@@ -57,7 +59,7 @@ namespace Nitride.EE
                     fd[(int)k].Value = FFT.Dsw[k.EndianInverse(FFT.M)];
                 }
             }
-        }
+        }*/
     }
 
 

@@ -37,6 +37,16 @@ namespace Nitride.EE
 
         public int Length { get; set; }
 
+        public double SampleRate
+        {
+            get => WaveForms.First().SampleRate;
+            
+            set
+            {
+                WaveForms.RunEach(n => n.Configure(value));
+            }
+        }
+
         public WaveForm[] WaveForms { get; }
 
         /// <summary>
