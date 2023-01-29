@@ -50,8 +50,8 @@ namespace Nitride
             Controls.Add(BottomDockPane = new SideDockPane(DockStyle.Bottom));
             Controls.Add(TopDockPane = new SideDockPane(DockStyle.Top));
 
-            AsyncUpdateUITask = new Task(() => AsyncUpdateUIWorker(), AsyncUpdateUITask_Cts.Token);
-            AsyncUpdateUITask.Start();
+            //AsyncUpdateUITask = new Task(() => AsyncUpdateUIWorker(), AsyncUpdateUITask_Cts.Token);
+            //AsyncUpdateUITask.Start();
 
             ResumeLayout(false);
             PerformLayout();
@@ -62,8 +62,7 @@ namespace Nitride
         private IContainer components = null;
         protected override void Dispose(bool disposing)
         {
-
-            AsyncUpdateUITask_Cts.Cancel();
+            //AsyncUpdateUITask_Cts.Cancel();
 
             if (disposing && (components != null))
             {
@@ -80,6 +79,7 @@ namespace Nitride
         protected SideDockPane TopDockPane { get; set; }
         protected GridDockPane CenterDockPane { get; set; }
 
+        /*
         protected Task AsyncUpdateUITask { get; }
 
         protected CancellationTokenSource AsyncUpdateUITask_Cts { get; } = new();
@@ -100,6 +100,8 @@ namespace Nitride
                             df.Invoke(() =>
                             {
                                 df.CoordinateLayout();
+                                df.Invalidate(false);
+                                Thread.Sleep(2);
                             });
                         }
                         catch (Exception e)
@@ -121,6 +123,8 @@ namespace Nitride
                             df.Invoke(() =>
                             {
                                 df.CoordinateLayout();
+                                df.Invalidate(false);
+                                Thread.Sleep(2);
                             });
                         }
                         catch (Exception e)
@@ -142,6 +146,8 @@ namespace Nitride
                             df.Invoke(() =>
                             {
                                 df.CoordinateLayout();
+                                df.Invalidate(false);
+                                Thread.Sleep(2);
                             });
                         }
                         catch (Exception e)
@@ -163,6 +169,8 @@ namespace Nitride
                             df.Invoke(() =>
                             {
                                 df.CoordinateLayout();
+                                df.Invalidate(false);
+                                Thread.Sleep(2);
                             });
                         }
                         catch (Exception e)
@@ -184,6 +192,8 @@ namespace Nitride
                             df.Invoke(() =>
                             {
                                 df.CoordinateLayout();
+                                df.Invalidate(false);
+                                Thread.Sleep(2);
                             });
                         }
                         catch (Exception e)
@@ -195,8 +205,10 @@ namespace Nitride
                     }
                 }
 
+                
                 if (hasUpdate)
                 {
+                    
                     try
                     {
                         this?.Invoke(() =>
@@ -208,13 +220,13 @@ namespace Nitride
                     {
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
-               
+
                     hasUpdate = false;
                 }
                 else
                     Thread.Sleep(5);
             }
-        }
+        }*/
 
         public void AddForm(DockStyle postion, int index, DockForm df)
         {

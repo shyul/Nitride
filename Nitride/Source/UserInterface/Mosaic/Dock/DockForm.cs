@@ -31,12 +31,12 @@ namespace Nitride
         protected DockForm(string formName, bool enableUiUpdate = false) : base(formName)
         {
             Name = formName;
-            /*
+
             if (enableUiUpdate)
             {
                 AsyncUpdateUITask = new Task(() => AsyncUpdateUIWorker(), AsyncUpdateUITask_Cts.Token);
                 AsyncUpdateUITask.Start();
-            }*/
+            }
         }
         #endregion
 
@@ -70,7 +70,9 @@ namespace Nitride
         public override void Close()
         {
             Console.Write(TabName + ": The Tab is closing");
-            // AsyncUpdateUITask_Cts.Cancel();
+
+            AsyncUpdateUITask_Cts.Cancel();
+            while (AsyncUpdateUITask.Status == TaskStatus.Running) ;
 
             if (HostContainer is not null)
             {
@@ -91,13 +93,11 @@ namespace Nitride
 
         protected bool m_ReadyToShow = false;
 
-
-
         public virtual void DataIsUpdated(IDataProvider _) => AsyncUpdateUI = true;
 
         public bool AsyncUpdateUI { get; set; } = false;
 
-        /*
+        
         public readonly Task AsyncUpdateUITask;
 
         public readonly CancellationTokenSource AsyncUpdateUITask_Cts = new();
@@ -113,7 +113,8 @@ namespace Nitride
                         this?.Invoke(() =>
                         {
                             CoordinateLayout();
-                            Invalidate(true);
+                            Invalidate(false);
+                        
                         });
                     }
                     catch(Exception e) 
@@ -122,11 +123,12 @@ namespace Nitride
                     }
 
                     AsyncUpdateUI = false;
+                    // Thread.Sleep(2);
                 }
                 else
                     Thread.Sleep(5);
             }
-        }*/
+        }
 
         #endregion Update UI
 

@@ -72,7 +72,7 @@ namespace Nitride.EE
                 Color = Color.FromArgb(128, 128, 128, 128),
                 IsAntialiasing = true,
                 HasTailTag = false,
-                
+
             };
 
             MainArea.AddSeries(MainLineSeries);
@@ -81,9 +81,10 @@ namespace Nitride.EE
             Location = new Point(0, 0);
             Dock = DockStyle.Fill;
 
+            /*
             HandlePersistBitmap_CancellationTokenSource = new CancellationTokenSource();
             HandlePersistBitmap_Task = new(() => HandlePersistBitmap(), HandlePersistBitmap_CancellationTokenSource.Token);
-            HandlePersistBitmap_Task.Start();
+            HandlePersistBitmap_Task.Start();*/
 
             ResumeLayout(false);
             PerformLayout();
@@ -91,22 +92,22 @@ namespace Nitride.EE
 
         protected override void Dispose(bool disposing)
         {
-            //DataUpdateCancellationTokenSource.Cancel();
-            /*
-            if (AsyncUpdateUITask_Cts is CancellationTokenSource cts && cts.IsContinue()) 
+            // DataUpdateCancellationTokenSource.Cancel();
+
+            if (AsyncUpdateUITask_Cts is CancellationTokenSource cts && cts.IsContinue())
             {
                 cts.Cancel();
-            }*/
+            }
 
-            HandlePersistBitmap_CancellationTokenSource.Cancel();
-            while (HandlePersistBitmap_Task.Status == TaskStatus.Running) ;
+            //HandlePersistBitmap_CancellationTokenSource.Cancel();
+            //while (HandlePersistBitmap_Task.Status == TaskStatus.Running) ;
 
             base.Dispose(disposing);
         }
 
         private SpectrumData Data { get; }
 
-        public void UpdateConfiguration(double tickStep) 
+        public void UpdateConfiguration(double tickStep)
         {
             MinimumTextWidth = TextRenderer.MeasureText("0.0000MHz", Style[Importance.Major].Font).Width * 1D;
             CoordinatedSize = new Size(0, 0);
@@ -133,20 +134,22 @@ namespace Nitride.EE
 
         private double MinimumTextWidth;
 
+        /*
         private Task HandlePersistBitmap_Task { get; set; }
 
         private CancellationTokenSource HandlePersistBitmap_CancellationTokenSource { get; set; }
 
         public bool IsRunning => HandlePersistBitmap_CancellationTokenSource is CancellationTokenSource cts && (!cts.IsCancellationRequested);
 
+        
         public void HandlePersistBitmap()
         {
             while (IsRunning)
             {
-                if (Data is not null && Data.FrameBuffer.Count > 0)// && AsyncUpdateUI == false) // && Graphics is not busy!!
+                if (Data is not null && Data.FrameBuffer.Count > 0 && AsyncUpdateUI == false) // && Graphics is not busy!!
                 {
-                    lock (GraphicsLockObject)
-                    {
+                    //lock (GraphicsLockObject)
+                    //{
                         Data.FrameBuffer.TryDequeue(out var frame);
                         CurrentTraceFrame = frame;
                         //CurrentTraceFrame = Data.FrameBuffer.Dequeue();
@@ -165,7 +168,7 @@ namespace Nitride.EE
                         {
                             PersistBitmapFrame = null;
                         }
-                    }
+                    //}
                     AsyncUpdateUI = true;
                 }
                 else
@@ -173,19 +176,20 @@ namespace Nitride.EE
                     Thread.Sleep(5);
                 }
             }
-        }
+        }*/
 
-        /*
         protected override void AsyncUpdateUIWorker()
         {
             while (AsyncUpdateUITask_Cts.IsContinue())
             {
                 if (Data is not null && Data.FrameBuffer.Count > 0 && AsyncUpdateUI == false) // && Graphics is not busy!!
                 {
-                    CurrentTraceFrame = Data.FrameBuffer.Dequeue();
+                    Data.FrameBuffer.TryDequeue(out var frame);
+                    CurrentTraceFrame = frame;
+                    //CurrentTraceFrame = Data.FrameBuffer.Dequeue();
                     MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
 
-                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable && Data.EnableHisto)
+                    if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable && Data.EnablePersist)
                     {
                         if (PersistBitmapFrame is not null)
                         {
@@ -194,7 +198,7 @@ namespace Nitride.EE
 
                         PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
                     }
-                    else if (!Data.EnableHisto) 
+                    else if (!Data.EnablePersist)
                     {
                         PersistBitmapFrame = null;
                     }
@@ -214,6 +218,7 @@ namespace Nitride.EE
                         {
                             CoordinateLayout();
                             Invalidate(true);
+
                         });
                     }
                     catch (Exception e)
@@ -222,11 +227,14 @@ namespace Nitride.EE
                     }
 
                     AsyncUpdateUI = false;
+                    // Thread.Sleep(2);
                 }
                 else
+                {
                     Thread.Sleep(5);
+                }
             }
-        }*/
+        }
 
         public TraceFrame CurrentTraceFrame { get; private set; }
 
@@ -253,9 +261,14 @@ namespace Nitride.EE
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
-        private Size CoordinatedSize { get; set;  } = new Size(0, 0);
+        private Size CoordinatedSize { get; set; } = new Size(0, 0);
 
         public override void CoordinateOverlay()
+        {
+
+        }
+
+        public override void CoordinateLayout()
         {
             ResumeLayout(true);
             ChartBounds = new Rectangle(
@@ -267,7 +280,6 @@ namespace Nitride.EE
 
             if (ReadyToShow && (CoordinatedSize != Size || AxisX.IndexCount != IndexCount))
             {
-         
                 lock (FreqTable.DataLockObject)
                     lock (GraphicsLockObject)
                     {
@@ -378,7 +390,7 @@ namespace Nitride.EE
                         {
                             g.DrawImage(PersistBitmapFrame.PersistBitmap, MainArea.DataBounds);
                         }
-               
+
                         var areas = Areas.Where(n => n.Enabled && n.Visible).OrderBy(n => n.Order);
 
                         int i = 0;

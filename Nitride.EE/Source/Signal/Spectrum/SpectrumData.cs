@@ -204,13 +204,14 @@ namespace Nitride.EE
             }
         }
 
+        public bool Enable { get; set; }
         public bool EnableHisto { get; set; } = true;
 
         public int HistoIndex { get; private set; }
         public int HistoDepth { get; private set; }
         public TraceFrame[] HistoFrames { get; private set; }
 
-        public bool PersistEnable { get; set; }
+        public bool EnablePersist { get; set; }
         public int PersistDepth { get; private set; }
         public Color[] PersistColor { get; private set; }
         //private int[,] PersistBuffer { get; set; }
@@ -363,7 +364,7 @@ namespace Nitride.EE
 
                 det.Evaluate(this, frame);
 
-                if (EnableHisto)
+                if (EnablePersist)
                 {
                     for (int i = 0; i < TracePoint; i++)
                     // Parallel.For(0, Count, i =>
@@ -456,7 +457,7 @@ namespace Nitride.EE
                 if (GetFrameCancellationTokenSource.IsCancellationRequested)
                     return;
 
-                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable && EnableHisto && !PauseUpdate)
+                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable && EnablePersist && !PauseUpdate)
                 {
                     GetPersistBitmap(frame);
                     PersistBitmapBuffer.Enqueue(frame);
@@ -478,8 +479,6 @@ namespace Nitride.EE
                 }
             }
         }
-
-        public bool Enable { get; set; }
 
         public void GetPersistBitmap(TraceFrame frame)
         {

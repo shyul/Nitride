@@ -160,7 +160,7 @@ namespace Nitride.EE
             if (SweepMode == SweepMode.FFT)
             {
                 SpectrumFFT.Configure(SampleLength, dsp_startFreq, dsp_stopFreq, WindowsType);
-                sd.PersistEnable = PersistEnable & EnableHisto;
+                sd.EnablePersist = PersistEnable & EnableHisto;
                 double gain = 20 * Math.Log10(SpectrumFFT.Gain * DSP_Gain);
                 sd.ConfigureCorrection(-gain, 20);
                 RBW = dsp_bw / SpectrumFFT.Length;
@@ -169,7 +169,7 @@ namespace Nitride.EE
             {
 
 
-                sd.PersistEnable = false;
+                sd.EnablePersist = false;
             }
 
             SpectrumChart.UpdateConfiguration(TickStep);
