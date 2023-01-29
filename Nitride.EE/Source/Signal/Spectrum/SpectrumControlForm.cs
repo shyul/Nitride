@@ -54,6 +54,7 @@ namespace Nitride.EE
             TextBoxBandwidth.Text = sc.Receiver.Bandwidth.ToString();
             CheckBoxEnableTimeDomain.Checked = sc.EnableTimeDomain;
 
+            //SpectrumControl.ApplyConfig_Spectrum();
             foreach (var ch in SpectrumChannelForms)
             {
                 ch.UpdateControls();
@@ -67,6 +68,7 @@ namespace Nitride.EE
             sc.SampleLength = ComboBoxSampleLength.Text.ToInt32();
             sc.Receiver.DecimationRate = TextBoxDecmRate.Text.ToUInt32();
             sc.EnableTimeDomain = CheckBoxEnableTimeDomain.Checked;
+
             UpdateControls();
 
             if (ConfigIsUpdated is not null) ConfigIsUpdated();
@@ -76,10 +78,13 @@ namespace Nitride.EE
         {
             UpdateConfiguration();
             SpectrumControl.ApplyConfig();
+            UpdateControls();
         }
 
         private void BtnTrigContinous_Click(object sender, EventArgs e)
         {
+            // CheckBoxPause.Checked = false;
+            // SpectrumControl.Pause = false;
             SpectrumControl.StartStream();
         }
 

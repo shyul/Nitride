@@ -125,8 +125,6 @@
             // CheckBoxPause
             // 
             this.CheckBoxPause.AutoSize = true;
-            this.CheckBoxPause.Checked = true;
-            this.CheckBoxPause.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckBoxPause.Location = new System.Drawing.Point(103, 230);
             this.CheckBoxPause.Name = "CheckBoxPause";
             this.CheckBoxPause.Size = new System.Drawing.Size(56, 17);
@@ -241,22 +239,21 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox ComboBoxSampleLength;
         private System.Windows.Forms.Button BtnTrigContinous;
         private System.Windows.Forms.Button BtnAdcDataTrigStop;
         private System.Windows.Forms.Label label112;
         private System.Windows.Forms.CheckBox CheckBoxEnableTimeDomain;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ComboBox ComboBoxSweepMode;
         private System.Windows.Forms.CheckBox CheckBoxPause;
         private System.Windows.Forms.Button BtnApplyConfiguration;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox TextBoxSampleRate;
-        private System.Windows.Forms.TextBox TextBoxDecmRate;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox TextBoxBandwidth;
         private System.Windows.Forms.Button BtnTrigSingle;
+        public System.Windows.Forms.ComboBox ComboBoxSampleLength;
+        public System.Windows.Forms.ComboBox ComboBoxSweepMode;
+        public System.Windows.Forms.TextBox TextBoxDecmRate;
     }
 }

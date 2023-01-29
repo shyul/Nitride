@@ -40,7 +40,6 @@ namespace Nitride.EE
         }
     }
 
-
     public class PeakTraceDetector : TraceDetector
     {
         public PeakTraceDetector(FreqTrace trace) : base(trace) { }
@@ -52,8 +51,8 @@ namespace Nitride.EE
             double high, low, f, d, multi, offset;
             int j = 0;
 
-            double a_h = double.MinValue;
-            double a_l = double.MaxValue;
+            //double a_h = double.MinValue;
+            //double a_l = double.MaxValue;
 
             for (int i = 0; i < pixTable.Count; i++)
             {
@@ -88,8 +87,8 @@ namespace Nitride.EE
                 prow[frame.MagnitudeColumn] = prow[frame.MagnitudeHighColumn] = multi * (isLog ? Math.Log10(high) : high) + offset; // Peak detection!
                 double res = prow[frame.MagnitudeLowColumn] = multi * (isLog ? Math.Log10(low) : low) + offset;
 
-                if (res > a_h) a_h = res;
-                if (res < a_l) a_l = res;
+               // if (res > a_h) a_h = res;
+               // if (res < a_l) a_l = res;
             }
 
             //Console.WriteLine("a_h = " + a_h + " | a_l = " + a_l);

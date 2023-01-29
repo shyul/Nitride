@@ -118,7 +118,7 @@ namespace Nitride.EE
         public double CenterFreq { get; set; } = 187.5e6;
 
         // In general, it should be always smaller than the DSP BW in FFT mode.
-        public double FreqSpan { get; set; } = 100e6;
+        public double FreqSpan { get; set; } = 50e6;
 
         public double StartFreq => CenterFreq - (FreqSpan / 2);
 

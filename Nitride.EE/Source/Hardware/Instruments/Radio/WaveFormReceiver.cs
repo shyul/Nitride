@@ -11,8 +11,6 @@ namespace Nitride.EE
 {
     public abstract class WaveFormReceiver : IInstrumentResource, IDisposable
     {
-
-
         public IInstrument Parent { get; set; }
 
         public virtual int NumOfCh => 1;

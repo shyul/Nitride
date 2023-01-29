@@ -28,9 +28,10 @@ namespace Nitride.EE
 
         SpectrumChannel SpectrumChannel { get; }
 
-        public void UpdateControls() 
+        public void UpdateControls()
         {
             SpectrumChannel sch = SpectrumChannel;
+
             TextBoxCenterFreq.Text = sch.CenterFreq.ToString();
             TextBoxFreqSpan.Text = sch.FreqSpan.ToString();
             TextBoxStartFreq.Text = sch.StartFreq.ToString();
