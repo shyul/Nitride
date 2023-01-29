@@ -33,7 +33,7 @@ namespace Nitride
         protected int m_TextHeight = 10;
         protected int m_MaxLineNum = 0;
 
-        protected override void CoordinateLayout()
+        public override void CoordinateLayout()
         {
             ResumeLayout(true);
             m_TextHeight = TextRenderer.MeasureText("Google", Main.Theme.ConsoleFont).Height + 3;

@@ -216,7 +216,7 @@ namespace Nitride
         /// </summary>
         public Rectangle IconRect { get; set; }
 
-        protected virtual void CoordinateLayout()
+        public virtual void CoordinateLayout()
         {
             ResumeLayout(true);
             PerformLayout();

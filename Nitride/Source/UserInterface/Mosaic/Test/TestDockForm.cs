@@ -29,7 +29,7 @@ namespace Nitride
 
         Rectangle rect;
         Rectangle rect2;
-        protected override void CoordinateLayout()
+        public override void CoordinateLayout()
         {
             rect = new Rectangle(10, 10, ClientRectangle.Width - 21, ClientRectangle.Height - 21);
             rect2 = new Rectangle(ClientRectangle.Width / 4, 50 + ClientRectangle.Height / 4, ClientRectangle.Width / 2, ClientRectangle.Height / 2);

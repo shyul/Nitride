@@ -81,6 +81,10 @@ namespace Nitride.EE
             Location = new Point(0, 0);
             Dock = DockStyle.Fill;
 
+            HandlePersistBitmap_CancellationTokenSource = new CancellationTokenSource();
+            HandlePersistBitmap_Task = new(() => HandlePersistBitmap(), HandlePersistBitmap_CancellationTokenSource.Token);
+            HandlePersistBitmap_Task.Start();
+
             ResumeLayout(false);
             PerformLayout();
         }
@@ -88,10 +92,15 @@ namespace Nitride.EE
         protected override void Dispose(bool disposing)
         {
             //DataUpdateCancellationTokenSource.Cancel();
+            /*
             if (AsyncUpdateUITask_Cts is CancellationTokenSource cts && cts.IsContinue()) 
             {
                 cts.Cancel();
-            }
+            }*/
+
+            HandlePersistBitmap_CancellationTokenSource.Cancel();
+            while (HandlePersistBitmap_Task.Status == TaskStatus.Running) ;
+
             base.Dispose(disposing);
         }
 
@@ -124,11 +133,54 @@ namespace Nitride.EE
 
         private double MinimumTextWidth;
 
+        private Task HandlePersistBitmap_Task { get; set; }
+
+        private CancellationTokenSource HandlePersistBitmap_CancellationTokenSource { get; set; }
+
+        public bool IsRunning => HandlePersistBitmap_CancellationTokenSource is CancellationTokenSource cts && (!cts.IsCancellationRequested);
+
+        public void HandlePersistBitmap()
+        {
+            while (IsRunning)
+            {
+                if (Data is not null && Data.FrameBuffer.Count > 0)// && AsyncUpdateUI == false) // && Graphics is not busy!!
+                {
+                    lock (GraphicsLockObject)
+                    {
+                        Data.FrameBuffer.TryDequeue(out var frame);
+                        CurrentTraceFrame = frame;
+                        //CurrentTraceFrame = Data.FrameBuffer.Dequeue();
+                        MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
+
+                        if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable && Data.EnableHisto)
+                        {
+                            if (PersistBitmapFrame is not null)
+                            {
+                                PersistBitmapFrame.PersistBitmapValid = false;
+                            }
+                            PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
+
+                        }
+                        else if (!Data.EnableHisto)
+                        {
+                            PersistBitmapFrame = null;
+                        }
+                    }
+                    AsyncUpdateUI = true;
+                }
+                else
+                {
+                    Thread.Sleep(5);
+                }
+            }
+        }
+
+        /*
         protected override void AsyncUpdateUIWorker()
         {
             while (AsyncUpdateUITask_Cts.IsContinue())
             {
-                if (Data is not null && Data.FrameBuffer.Count > 0 && m_AsyncUpdateUI == false) // && Graphics is not busy!!
+                if (Data is not null && Data.FrameBuffer.Count > 0 && AsyncUpdateUI == false) // && Graphics is not busy!!
                 {
                     CurrentTraceFrame = Data.FrameBuffer.Dequeue();
                     MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
@@ -147,14 +199,14 @@ namespace Nitride.EE
                         PersistBitmapFrame = null;
                     }
 
-                    m_AsyncUpdateUI = true;
+                    AsyncUpdateUI = true;
                 }
                 else
                 {
                     Thread.Sleep(5);
                 }
 
-                if (m_AsyncUpdateUI)
+                if (AsyncUpdateUI)
                 {
                     try
                     {
@@ -169,12 +221,12 @@ namespace Nitride.EE
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
 
-                    m_AsyncUpdateUI = false;
+                    AsyncUpdateUI = false;
                 }
                 else
                     Thread.Sleep(5);
             }
-        }
+        }*/
 
         public TraceFrame CurrentTraceFrame { get; private set; }
 

@@ -31,12 +31,12 @@ namespace Nitride
         protected DockForm(string formName, bool enableUiUpdate = false) : base(formName)
         {
             Name = formName;
-
+            /*
             if (enableUiUpdate)
             {
                 AsyncUpdateUITask = new Task(() => AsyncUpdateUIWorker(), AsyncUpdateUITask_Cts.Token);
                 AsyncUpdateUITask.Start();
-            }
+            }*/
         }
         #endregion
 
@@ -70,7 +70,7 @@ namespace Nitride
         public override void Close()
         {
             Console.Write(TabName + ": The Tab is closing");
-            AsyncUpdateUITask_Cts.Cancel();
+            // AsyncUpdateUITask_Cts.Cancel();
 
             if (HostContainer is not null)
             {
@@ -91,19 +91,22 @@ namespace Nitride
 
         protected bool m_ReadyToShow = false;
 
+
+
+        public virtual void DataIsUpdated(IDataProvider _) => AsyncUpdateUI = true;
+
+        public bool AsyncUpdateUI { get; set; } = false;
+
+        /*
         public readonly Task AsyncUpdateUITask;
 
         public readonly CancellationTokenSource AsyncUpdateUITask_Cts = new();
-
-        public virtual void DataIsUpdated(IDataProvider _) => m_AsyncUpdateUI = true;
-
-        protected bool m_AsyncUpdateUI = false;
 
         protected virtual void AsyncUpdateUIWorker()
         {
             while (AsyncUpdateUITask_Cts.IsContinue())
             {
-                if (m_AsyncUpdateUI)
+                if (AsyncUpdateUI)
                 {
                     try 
                     {
@@ -118,12 +121,12 @@ namespace Nitride
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
 
-                    m_AsyncUpdateUI = false;
+                    AsyncUpdateUI = false;
                 }
                 else
                     Thread.Sleep(5);
             }
-        }
+        }*/
 
         #endregion Update UI
 

@@ -9,6 +9,8 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Nitride
@@ -47,6 +49,10 @@ namespace Nitride
             Controls.Add(RightDockPane = new SideDockPane(DockStyle.Right));
             Controls.Add(BottomDockPane = new SideDockPane(DockStyle.Bottom));
             Controls.Add(TopDockPane = new SideDockPane(DockStyle.Top));
+
+            AsyncUpdateUITask = new Task(() => AsyncUpdateUIWorker(), AsyncUpdateUITask_Cts.Token);
+            AsyncUpdateUITask.Start();
+
             ResumeLayout(false);
             PerformLayout();
         }
@@ -56,6 +62,9 @@ namespace Nitride
         private IContainer components = null;
         protected override void Dispose(bool disposing)
         {
+
+            AsyncUpdateUITask_Cts.Cancel();
+
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -70,6 +79,142 @@ namespace Nitride
         protected SideDockPane BottomDockPane { get; set; }
         protected SideDockPane TopDockPane { get; set; }
         protected GridDockPane CenterDockPane { get; set; }
+
+        protected Task AsyncUpdateUITask { get; }
+
+        protected CancellationTokenSource AsyncUpdateUITask_Cts { get; } = new();
+
+        protected virtual void AsyncUpdateUIWorker()
+        {
+            bool hasUpdate = false;
+
+            while (AsyncUpdateUITask_Cts.IsContinue())
+            {
+                foreach (var dkc in CenterDockPane.DockContainers)
+                {
+                    if (dkc.ActiveTab is DockForm df && df.AsyncUpdateUI)
+                    {
+                        hasUpdate = true;
+                        try
+                        {
+                            df.Invoke(() =>
+                            {
+                                df.CoordinateLayout();
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                        }
+
+                        df.AsyncUpdateUI = false;
+                    }
+                }
+
+                foreach (var dkc in LeftDockPane.DockContainers)
+                {
+                    if (dkc.ActiveTab is DockForm df && df.AsyncUpdateUI)
+                    {
+                        hasUpdate = true;
+                        try
+                        {
+                            df.Invoke(() =>
+                            {
+                                df.CoordinateLayout();
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                        }
+
+                        df.AsyncUpdateUI = false;
+                    }
+                }
+
+                foreach (var dkc in RightDockPane.DockContainers)
+                {
+                    if (dkc.ActiveTab is DockForm df && df.AsyncUpdateUI)
+                    {
+                        hasUpdate = true;
+                        try
+                        {
+                            df.Invoke(() =>
+                            {
+                                df.CoordinateLayout();
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                        }
+
+                        df.AsyncUpdateUI = false;
+                    }
+                }
+
+                foreach (var dkc in BottomDockPane.DockContainers)
+                {
+                    if (dkc.ActiveTab is DockForm df && df.AsyncUpdateUI)
+                    {
+                        hasUpdate = true;
+                        try
+                        {
+                            df.Invoke(() =>
+                            {
+                                df.CoordinateLayout();
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                        }
+
+                        df.AsyncUpdateUI = false;
+                    }
+                }
+
+                foreach (var dkc in TopDockPane.DockContainers)
+                {
+                    if (dkc.ActiveTab is DockForm df && df.AsyncUpdateUI)
+                    {
+                        hasUpdate = true;
+                        try
+                        {
+                            df.Invoke(() =>
+                            {
+                                df.CoordinateLayout();
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                        }
+
+                        df.AsyncUpdateUI = false;
+                    }
+                }
+
+                if (hasUpdate)
+                {
+                    try
+                    {
+                        this?.Invoke(() =>
+                        {
+                            Invalidate(true);
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                    }
+               
+                    hasUpdate = false;
+                }
+                else
+                    Thread.Sleep(5);
+            }
+        }
 
         public void AddForm(DockStyle postion, int index, DockForm df)
         {

@@ -81,6 +81,7 @@ namespace Nitride.EE
                 {
                     WaveFormQueue.TryDequeue(out var wfo);
                     wfo.IsUpdated = false;
+                    // Console.WriteLine("SpectrumFFT Overflow!");
                 }
                 WaveFormQueue.Enqueue(wf);
             }
@@ -98,6 +99,9 @@ namespace Nitride.EE
 
         private void HandleFFT()
         {
+            int cnt = 0;
+            DateTime time = DateTime.Now;
+
             while (IsRunning)
             {
                 if (WaveFormQueue.Count > 0 && FreqTracePool.Where(n => !n.IsUpdated).FirstOrDefault() is FreqTrace trace)
@@ -111,9 +115,19 @@ namespace Nitride.EE
                     }
 
                     wf.IsUpdated = false; // End of WaveForm's data lifecycle.
+                    cnt++;
                 }
                 else
                     Thread.Sleep(5);
+
+                if (cnt == 50)
+                {
+                    TimeSpan span = DateTime.Now - time;
+                    double fps = cnt / span.TotalSeconds;
+                    Console.WriteLine("FFT: " + fps.ToString("0.###") + " fps");
+                    time = DateTime.Now;
+                    cnt = 0;
+                }
             }
         }
     }

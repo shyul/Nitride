@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -225,9 +225,15 @@ namespace Nitride.EE
             if (Enable && !PauseUpdate)
             {
                 if (FreqTraceQueue.Count < 3)
+                {
                     FreqTraceQueue.Enqueue(trace);
+                }
                 else
-                    FreqTraceQueue.Dequeue();
+                {
+                    FreqTraceQueue.TryDequeue(out var tr);
+                    tr.IsUpdated = false;
+                    Console.WriteLine("SpectrumData Overflow!");
+                }
             }
         }
 
@@ -235,8 +241,11 @@ namespace Nitride.EE
         {
             Enable = false;
 
-            FreqTraceQueue.Clear();
-            FrameBuffer.Clear();
+            while (FreqTraceQueue.Count > 0)
+                FreqTraceQueue.TryDequeue(out var _);
+
+            while (FrameBuffer.Count > 0)
+                FrameBuffer.TryDequeue(out var _);
 
             CurrentTraceFrame = null;
             PersistBitmapBuffer.Clear();
@@ -263,9 +272,9 @@ namespace Nitride.EE
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
 
-        private Queue<FreqTrace> FreqTraceQueue { get; } = new();
+        private ConcurrentQueue<FreqTrace> FreqTraceQueue { get; } = new();
 
-        public Queue<TraceFrame> FrameBuffer { get; } = new();
+        public ConcurrentQueue<TraceFrame> FrameBuffer { get; } = new();
 
         private Task GetFrameTask { get; }
 
@@ -286,13 +295,14 @@ namespace Nitride.EE
                 {
                     if (FrameBuffer.Count < 3)
                     {
-                        CurrentTraceFrame = GetFrame(FreqTraceQueue.Dequeue());
+                        FreqTraceQueue.TryDequeue(out var tr);
+                        CurrentTraceFrame = GetFrame(tr);
                         FrameBuffer.Enqueue(CurrentTraceFrame);
                     }
                     else if (FrameBuffer.Count > 2)
                     {
                         Console.WriteLine("FrameBuffer overflow!");
-                        FrameBuffer.Dequeue();
+                        FrameBuffer.TryDequeue(out var _);
                     }
 
                     if (cnt == 50)
@@ -312,8 +322,6 @@ namespace Nitride.EE
                     Thread.Sleep(10);
                 }
             }
-
-
         }
 
         public bool IsLog { get; } = true;
@@ -372,7 +380,7 @@ namespace Nitride.EE
 
                         double h_pix = Math.Round(full_height * (Y_Max - h_value), MidpointRounding.AwayFromZero);
                         double l_pix = Math.Round(full_height * (Y_Max - l_value), MidpointRounding.AwayFromZero);
-                        
+
                         /*
                         if (h_pix >= 800 || h_pix < 0)
                             Console.WriteLine("h_value = " + h_value + " | l_value = " + l_value + " | h_pix = " + h_pix + " | l_pix = " + l_pix);
@@ -457,7 +465,7 @@ namespace Nitride.EE
                     {
                         TimeSpan span = DateTime.Now - time;
                         double fps = 50 / span.TotalSeconds;
-                        Console.WriteLine("Time for PersistBitmap: " + fps.ToString("0.###") + " fps");
+                        Console.WriteLine("PersistBitmap: " + fps.ToString("0.###") + " fps");
                         time = DateTime.Now;
                         cnt = 0;
                     }

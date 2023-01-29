@@ -81,6 +81,7 @@ namespace Nitride.EE
         {
             UpdateConfiguration();
             SpectrumChannel.ApplyConfig();
+            UpdateControls();
         }
 
         private void CheckBoxPause_CheckedChanged(object sender, EventArgs e)

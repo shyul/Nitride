@@ -56,7 +56,7 @@ namespace Nitride
         #endregion
 
         #region Coordinate
-        protected override void CoordinateLayout()
+        public override void CoordinateLayout()
         {
             if (!IsShrink)
             {

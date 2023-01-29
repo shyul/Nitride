@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Nitride
@@ -33,6 +34,8 @@ namespace Nitride
                 };
         }
         #endregion
+
+
 
         #region Components
 
@@ -72,15 +75,12 @@ namespace Nitride
             base.OnParentChanged(e);
             if (!(Parent is null))
             {
-                //if ((typeof(DockPane)).IsAssignableFrom(Parent.GetType()))
                 if (Parent is DockPane dkp)
                 {
-                    HostDockPane = dkp; // (DockPane)Parent;
+                    HostDockPane = dkp;
                 }
-                // else if ((typeof(DockCanvas)).IsAssignableFrom(Parent.GetType()))
                 else if (Parent is DockCanvas)// dkc)
                 {
-                    //Log.Debug("Containers is assigned to Mosaic now!");
                     HostDockPane = null;
                 }
                 else

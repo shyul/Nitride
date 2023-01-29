@@ -111,7 +111,7 @@ namespace Nitride.GridView
                 lock (GraphicsLockObject)
                     CoordinateRows();
 
-                m_AsyncUpdateUI = true; // real time update
+                AsyncUpdateUI = true; // real time update
             }
         }
 
@@ -132,7 +132,7 @@ namespace Nitride.GridView
                     StopPt = 0;
                 }
 
-            m_AsyncUpdateUI = true; // async update
+            AsyncUpdateUI = true; // async update
         }
 
         public virtual void PointerSnapToNextTick()
@@ -152,7 +152,7 @@ namespace Nitride.GridView
                     StopPt = 0;
                 }
 
-            m_AsyncUpdateUI = true;
+            AsyncUpdateUI = true;
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace Nitride.GridView
 
         public virtual Dictionary<int, (int Y, int Height)> RowBounds { get; } = new Dictionary<int, (int Y, int Height)>();
 
-        protected override void CoordinateLayout()
+        public override void CoordinateLayout()
         {
             ResumeLayout(true);
 

@@ -93,7 +93,7 @@ namespace Nitride.Chart
                 }
             }
 
-            m_AsyncUpdateUI = true;
+            AsyncUpdateUI = true;
         }
 
         public virtual void Zoom(int num)
@@ -137,7 +137,7 @@ namespace Nitride.Chart
                 StopPt = 0;
             }
 
-            m_AsyncUpdateUI = true; // async update
+            AsyncUpdateUI = true; // async update
         }
 
         public virtual void PointerSnapToNextTick()
@@ -148,7 +148,7 @@ namespace Nitride.Chart
                 StopPt = LastIndexMax + 1;
             }
 
-            m_AsyncUpdateUI = true;
+            AsyncUpdateUI = true;
         }
 
         protected ChartOverlay Overlay { get; }
@@ -251,7 +251,7 @@ namespace Nitride.Chart
 
         public abstract void CoordinateOverlay();
 
-        protected override void CoordinateLayout()
+        public override void CoordinateLayout()
         {
             ResumeLayout(true);
             if (ReadyToShow && Table is ITable)
