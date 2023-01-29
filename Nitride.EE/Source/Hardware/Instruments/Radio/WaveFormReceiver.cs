@@ -37,6 +37,8 @@ namespace Nitride.EE
 
         public virtual double SampleRate => SampleClock.Frequency / DecimationRate;
 
+        public virtual double SampleTime => SampleLength / SampleRate;
+
         public virtual double Bandwidth => SampleRate / 2;
 
         public virtual double MaxBandwidth => SampleClock.Frequency / 2;

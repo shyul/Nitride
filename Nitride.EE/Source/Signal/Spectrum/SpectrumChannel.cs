@@ -110,6 +110,12 @@ namespace Nitride.EE
 
         public double VBW => SpectrumData.FreqStep;
 
+        public int HistoDepth { get; set; } = 128;
+
+        public int PersistDepth { get;  set; } = 32;
+
+        public int PersistHeight { get; set; } = 800;
+
         #endregion Properties
 
         #region X Axis
@@ -153,9 +159,10 @@ namespace Nitride.EE
 
             SpectrumData sd = SpectrumData;
             sd.EnableHisto = EnableHisto;
+            sd.ConfigureHistoDepth(HistoDepth, TracePoint, PersistHeight);
+            sd.ConfigurePersist(PersistDepth);
             sd.ConfigureLevel(Reference, Range);
-            sd.ConfigureFreqRange(CenterFreq, FreqSpan, TracePoint);
-            sd.ConfigureDepth(128, 32, 800); // Must set valid tracepoints, HistoDepth, Persist Depth, Vertical Bins
+            sd.ConfigureFreqRange(CenterFreq, FreqSpan);
 
             if (SweepMode == SweepMode.FFT)
             {

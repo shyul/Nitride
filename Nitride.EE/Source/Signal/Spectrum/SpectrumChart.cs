@@ -217,16 +217,14 @@ namespace Nitride.EE
                         this?.Invoke(() =>
                         {
                             CoordinateLayout();
-                            Invalidate(true);
-
+                            Invalidate(false);
+                            AsyncUpdateUI = false;
                         });
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
-
-                    AsyncUpdateUI = false;
                     // Thread.Sleep(2);
                 }
                 else

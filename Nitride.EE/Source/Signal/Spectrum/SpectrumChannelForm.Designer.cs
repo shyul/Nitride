@@ -63,6 +63,12 @@
             this.TextBoxFftGain = new System.Windows.Forms.TextBox();
             this.BtnApplyConfiguration = new System.Windows.Forms.Button();
             this.CheckBoxPause = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.TextBoxPersistBufferHeight = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.TextBoxHistoDepth = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.TextBoxPersistDepth = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // TextBoxCenterFreq
@@ -300,7 +306,7 @@
             this.CheckBoxEnable.AutoSize = true;
             this.CheckBoxEnable.Checked = true;
             this.CheckBoxEnable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxEnable.Location = new System.Drawing.Point(261, 115);
+            this.CheckBoxEnable.Location = new System.Drawing.Point(280, 188);
             this.CheckBoxEnable.Name = "CheckBoxEnable";
             this.CheckBoxEnable.Size = new System.Drawing.Size(59, 17);
             this.CheckBoxEnable.TabIndex = 232;
@@ -312,7 +318,7 @@
             this.CheckBoxEnableHisto.AutoSize = true;
             this.CheckBoxEnableHisto.Checked = true;
             this.CheckBoxEnableHisto.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxEnableHisto.Location = new System.Drawing.Point(261, 141);
+            this.CheckBoxEnableHisto.Location = new System.Drawing.Point(280, 214);
             this.CheckBoxEnableHisto.Name = "CheckBoxEnableHisto";
             this.CheckBoxEnableHisto.Size = new System.Drawing.Size(109, 17);
             this.CheckBoxEnableHisto.TabIndex = 233;
@@ -324,7 +330,7 @@
             this.CheckBoxEnablePersist.AutoSize = true;
             this.CheckBoxEnablePersist.Checked = true;
             this.CheckBoxEnablePersist.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxEnablePersist.Location = new System.Drawing.Point(261, 167);
+            this.CheckBoxEnablePersist.Location = new System.Drawing.Point(280, 240);
             this.CheckBoxEnablePersist.Name = "CheckBoxEnablePersist";
             this.CheckBoxEnablePersist.Size = new System.Drawing.Size(93, 17);
             this.CheckBoxEnablePersist.TabIndex = 234;
@@ -351,7 +357,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(424, 149);
+            this.label14.Location = new System.Drawing.Point(424, 161);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 13);
             this.label14.TabIndex = 238;
@@ -360,7 +366,7 @@
             // 
             // TextBoxDspGain
             // 
-            this.TextBoxDspGain.Location = new System.Drawing.Point(484, 145);
+            this.TextBoxDspGain.Location = new System.Drawing.Point(484, 157);
             this.TextBoxDspGain.Name = "TextBoxDspGain";
             this.TextBoxDspGain.ReadOnly = true;
             this.TextBoxDspGain.Size = new System.Drawing.Size(93, 20);
@@ -369,7 +375,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(427, 174);
+            this.label15.Location = new System.Drawing.Point(427, 186);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(51, 13);
             this.label15.TabIndex = 240;
@@ -378,7 +384,7 @@
             // 
             // TextBoxFftGain
             // 
-            this.TextBoxFftGain.Location = new System.Drawing.Point(484, 171);
+            this.TextBoxFftGain.Location = new System.Drawing.Point(484, 183);
             this.TextBoxFftGain.Name = "TextBoxFftGain";
             this.TextBoxFftGain.ReadOnly = true;
             this.TextBoxFftGain.Size = new System.Drawing.Size(93, 20);
@@ -405,11 +411,71 @@
             this.CheckBoxPause.UseVisualStyleBackColor = true;
             this.CheckBoxPause.CheckedChanged += new System.EventHandler(this.CheckBoxPause_CheckedChanged);
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(227, 93);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(70, 13);
+            this.label16.TabIndex = 244;
+            this.label16.Text = "Persist Y Axis";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TextBoxPersistBufferHeight
+            // 
+            this.TextBoxPersistBufferHeight.Location = new System.Drawing.Point(303, 90);
+            this.TextBoxPersistBufferHeight.Name = "TextBoxPersistBufferHeight";
+            this.TextBoxPersistBufferHeight.Size = new System.Drawing.Size(80, 20);
+            this.TextBoxPersistBufferHeight.TabIndex = 243;
+            this.TextBoxPersistBufferHeight.Text = "800";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(234, 119);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(63, 13);
+            this.label17.TabIndex = 246;
+            this.label17.Text = "Histo Depth";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TextBoxHistoDepth
+            // 
+            this.TextBoxHistoDepth.Location = new System.Drawing.Point(303, 116);
+            this.TextBoxHistoDepth.Name = "TextBoxHistoDepth";
+            this.TextBoxHistoDepth.Size = new System.Drawing.Size(80, 20);
+            this.TextBoxHistoDepth.TabIndex = 245;
+            this.TextBoxHistoDepth.Text = "128";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(227, 145);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(70, 13);
+            this.label18.TabIndex = 248;
+            this.label18.Text = "Persist Depth";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TextBoxPersistDepth
+            // 
+            this.TextBoxPersistDepth.Location = new System.Drawing.Point(303, 142);
+            this.TextBoxPersistDepth.Name = "TextBoxPersistDepth";
+            this.TextBoxPersistDepth.Size = new System.Drawing.Size(80, 20);
+            this.TextBoxPersistDepth.TabIndex = 247;
+            this.TextBoxPersistDepth.Text = "32";
+            // 
             // SpectrumChannelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(591, 270);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.TextBoxPersistDepth);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.TextBoxHistoDepth);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.TextBoxPersistBufferHeight);
             this.Controls.Add(this.CheckBoxPause);
             this.Controls.Add(this.BtnApplyConfiguration);
             this.Controls.Add(this.label15);
@@ -488,5 +554,11 @@
         private System.Windows.Forms.TextBox TextBoxFftGain;
         private System.Windows.Forms.Button BtnApplyConfiguration;
         private System.Windows.Forms.CheckBox CheckBoxPause;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox TextBoxPersistBufferHeight;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox TextBoxHistoDepth;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox TextBoxPersistDepth;
     }
 }

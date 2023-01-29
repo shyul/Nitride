@@ -54,6 +54,10 @@ namespace Nitride.EE
 
             TextBoxDspGain.Text = sch.DSP_Gain.ToString();
             TextBoxFftGain.Text = sch.SpectrumFFT.Gain.ToString();
+
+            TextBoxHistoDepth.Text = sch.HistoDepth.ToString();
+            TextBoxPersistDepth.Text = sch.PersistDepth.ToString();
+            TextBoxPersistBufferHeight.Text = sch.PersistHeight.ToString();
         }
 
         public void UpdateConfiguration()
@@ -73,6 +77,10 @@ namespace Nitride.EE
             sch.TraceDetectorType = ComboBoxDetectorType.Text.ParseEnum<TraceDetectorType>();
 
             sch.TracePoint = TextBoxTracePoints.Text.ToInt32();
+
+            sch.HistoDepth = TextBoxHistoDepth.Text.ToInt32();
+            sch.PersistDepth = TextBoxPersistDepth.Text.ToInt32();
+            sch.PersistHeight = TextBoxPersistBufferHeight.Text.ToInt32();
 
             UpdateControls();
         }

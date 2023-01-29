@@ -114,7 +114,7 @@ namespace Nitride
                         {
                             CoordinateLayout();
                             Invalidate(false);
-                        
+                            AsyncUpdateUI = false;
                         });
                     }
                     catch(Exception e) 
@@ -122,7 +122,7 @@ namespace Nitride
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
 
-                    AsyncUpdateUI = false;
+  
                     // Thread.Sleep(2);
                 }
                 else

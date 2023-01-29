@@ -44,6 +44,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.TextBoxBandwidth = new System.Windows.Forms.TextBox();
             this.BtnTrigSingle = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TextBoxSampleTime = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ComboBoxSampleLength
@@ -61,7 +63,7 @@
             this.BtnTrigContinous.BackColor = System.Drawing.Color.GreenYellow;
             this.BtnTrigContinous.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnTrigContinous.ForeColor = System.Drawing.Color.Green;
-            this.BtnTrigContinous.Location = new System.Drawing.Point(12, 224);
+            this.BtnTrigContinous.Location = new System.Drawing.Point(12, 275);
             this.BtnTrigContinous.Name = "BtnTrigContinous";
             this.BtnTrigContinous.Size = new System.Drawing.Size(85, 26);
             this.BtnTrigContinous.TabIndex = 114;
@@ -73,7 +75,7 @@
             // 
             this.BtnAdcDataTrigStop.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnAdcDataTrigStop.ForeColor = System.Drawing.Color.Red;
-            this.BtnAdcDataTrigStop.Location = new System.Drawing.Point(244, 224);
+            this.BtnAdcDataTrigStop.Location = new System.Drawing.Point(244, 275);
             this.BtnAdcDataTrigStop.Name = "BtnAdcDataTrigStop";
             this.BtnAdcDataTrigStop.Size = new System.Drawing.Size(77, 26);
             this.BtnAdcDataTrigStop.TabIndex = 115;
@@ -95,7 +97,7 @@
             this.CheckBoxEnableTimeDomain.AutoSize = true;
             this.CheckBoxEnableTimeDomain.Checked = true;
             this.CheckBoxEnableTimeDomain.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxEnableTimeDomain.Location = new System.Drawing.Point(114, 147);
+            this.CheckBoxEnableTimeDomain.Location = new System.Drawing.Point(114, 198);
             this.CheckBoxEnableTimeDomain.Name = "CheckBoxEnableTimeDomain";
             this.CheckBoxEnableTimeDomain.Size = new System.Drawing.Size(124, 17);
             this.CheckBoxEnableTimeDomain.TabIndex = 233;
@@ -125,7 +127,7 @@
             // CheckBoxPause
             // 
             this.CheckBoxPause.AutoSize = true;
-            this.CheckBoxPause.Location = new System.Drawing.Point(103, 230);
+            this.CheckBoxPause.Location = new System.Drawing.Point(103, 281);
             this.CheckBoxPause.Name = "CheckBoxPause";
             this.CheckBoxPause.Size = new System.Drawing.Size(56, 17);
             this.CheckBoxPause.TabIndex = 244;
@@ -135,7 +137,7 @@
             // 
             // BtnApplyConfiguration
             // 
-            this.BtnApplyConfiguration.Location = new System.Drawing.Point(119, 170);
+            this.BtnApplyConfiguration.Location = new System.Drawing.Point(119, 221);
             this.BtnApplyConfiguration.Name = "BtnApplyConfiguration";
             this.BtnApplyConfiguration.Size = new System.Drawing.Size(119, 26);
             this.BtnApplyConfiguration.TabIndex = 243;
@@ -202,7 +204,7 @@
             this.BtnTrigSingle.BackColor = System.Drawing.Color.PaleTurquoise;
             this.BtnTrigSingle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnTrigSingle.ForeColor = System.Drawing.Color.Teal;
-            this.BtnTrigSingle.Location = new System.Drawing.Point(165, 224);
+            this.BtnTrigSingle.Location = new System.Drawing.Point(165, 275);
             this.BtnTrigSingle.Name = "BtnTrigSingle";
             this.BtnTrigSingle.Size = new System.Drawing.Size(73, 26);
             this.BtnTrigSingle.TabIndex = 251;
@@ -210,11 +212,31 @@
             this.BtnTrigSingle.UseVisualStyleBackColor = false;
             this.BtnTrigSingle.Click += new System.EventHandler(this.BtnTrigSingle_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(57, 147);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 13);
+            this.label3.TabIndex = 253;
+            this.label3.Text = "Sample Time";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TextBoxSampleTime
+            // 
+            this.TextBoxSampleTime.Location = new System.Drawing.Point(131, 144);
+            this.TextBoxSampleTime.Name = "TextBoxSampleTime";
+            this.TextBoxSampleTime.ReadOnly = true;
+            this.TextBoxSampleTime.Size = new System.Drawing.Size(107, 20);
+            this.TextBoxSampleTime.TabIndex = 252;
+            // 
             // SpectrumControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(330, 260);
+            this.ClientSize = new System.Drawing.Size(337, 312);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.TextBoxSampleTime);
             this.Controls.Add(this.BtnTrigSingle);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TextBoxBandwidth);
@@ -255,5 +277,7 @@
         public System.Windows.Forms.ComboBox ComboBoxSampleLength;
         public System.Windows.Forms.ComboBox ComboBoxSweepMode;
         public System.Windows.Forms.TextBox TextBoxDecmRate;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox TextBoxSampleTime;
     }
 }

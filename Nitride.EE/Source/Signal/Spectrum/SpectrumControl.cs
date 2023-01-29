@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Drawing;
 using System.Linq;
 using System.Net.Security;
@@ -191,6 +192,7 @@ namespace Nitride.EE
             {
                 WaveForm wf = wfg.WaveForms[i];
                 SpectrumChannel sch = SpectrumChannel[i];
+                double dsp_gain = sch.DSP_Gain;
 
                 if (!sch.Enabled) // If the channel is disabled
                 {
@@ -204,7 +206,7 @@ namespace Nitride.EE
                     {
                         Complex c = wf.Data[j];
                         ChronoRow cr = ct[j];
-                        (cr[sch.Sample_I_Column], cr[sch.Sample_Q_Column]) = (c.Real, c.Imaginary);
+                        (cr[sch.Sample_I_Column], cr[sch.Sample_Q_Column]) = (c.Real / dsp_gain, c.Imaginary / dsp_gain);
 
                         // Console.WriteLine(c.ToString());
                     }

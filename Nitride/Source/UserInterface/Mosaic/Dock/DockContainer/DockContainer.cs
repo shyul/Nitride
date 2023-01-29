@@ -35,8 +35,6 @@ namespace Nitride
         }
         #endregion
 
-
-
         #region Components
 
         public DockPane HostDockPane { get; private set; }

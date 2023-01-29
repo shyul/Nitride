@@ -137,13 +137,13 @@ namespace Nitride.EE
 
         public double[] FreqPoints { get; private set; }
 
-        public void ConfigureFreqRange(double center, double span, int numOfPts = 800)
+        public void ConfigureFreqRange(double center, double span)
         {
             lock (FreqTable.DataLockObject)
             {
                 //if (count % 2 == 0) count++;
 
-                TracePoint = numOfPts;
+    
                 CenterFreq = center;
                 Span = span;
 
@@ -167,40 +167,48 @@ namespace Nitride.EE
             }
         }
 
-        public void ConfigureDepth(int depth, int persistDepth = 64, int height = 1000)
+        public void ConfigureHistoDepth(int depth, int numOfPts = 800, int height = 1000)
         {
-            lock (FreqTable.DataLockObject)
+            if (depth != HistoDepth || numOfPts != TracePoint || PersistBufferHeight != height)
             {
-                if (TracePoint > 2)
+                lock (FreqTable.DataLockObject)
                 {
-                    HistoDepth = depth;
-                    PersistDepth = persistDepth;
+                    TracePoint = numOfPts;
                     PersistBufferHeight = height;
 
-                    List<TraceFrame> frames = new();
-
-                    for (int i = 0; i < HistoDepth; i++)
+                    if (TracePoint > 2)
                     {
-                        frames.Add(new(i, TracePoint, PersistBufferHeight));
+                        if (depth != HistoDepth) 
+                        {
+                            HistoFrames = new TraceFrame[depth];
+                            HistoDepth = depth;
+                        }
+
+                        //List <TraceFrame> frames = new();
+                        for (int i = 0; i < HistoDepth; i++)
+                        {
+                            HistoFrames[i] = new(i, TracePoint, PersistBufferHeight);
+                            //frames.Add(new(i, TracePoint, PersistBufferHeight));
+                        }
+                        //HistoFrames = frames.ToArray();
                     }
-
-                    HistoFrames = frames.ToArray();
-
-                    /*
-                    List<Color> persistColor = new();
-                    // int colorStep = 256 / PersistDepth;
-                    for (int i = 0; i < PersistDepth; i++)
-                    {
-                        //persistColor.Add(Color.FromArgb((colorStep * (i + 1) - 1), 96, 96, 96));
-                        persistColor.Add(ColorTool.GetGradient(Color.FromArgb(96, 60, 119, 177), Color.FromArgb(128, 254, 135, 149), i * 1.0D / PersistDepth));
-                    }*/
-                    PersistColor = ColorTool.GetThermalGradient(PersistDepth, 58); // persistColor.ToArray();
-                    //PersistBuffer = new int[Count, PersistBufferHeight];
-                    //PersistBitmap = new(Count, PersistBufferHeight);
-
                 }
 
-                HistoIndex = 0;
+                GC.Collect();
+            }
+
+            HistoIndex = 0;
+        }
+
+        public void ConfigurePersist(int persistDepth = 64)
+        {
+            if (persistDepth != PersistDepth)
+            {
+                lock (FreqTable.DataLockObject)
+                {
+                    PersistDepth = persistDepth;
+                    PersistColor = ColorTool.GetThermalGradient(PersistDepth, 58);
+                }
             }
         }
 

@@ -33,37 +33,6 @@ namespace Nitride.EE
             ChronoTable.Status = TableStatus.Loading;
             ChronoTable.AddDataConsumer(this);
             TabName = Name = name;
-            /*
-            AddArea(Channel1_Area = new OscillatorArea(this, "Ch1 Area", 0.3f)
-            {
-                HasXAxisBar = true,
-                Reference = 0,
-                //UpperLimit = 1717986918,
-                //LowerLimit = -1717986918,
-                //UpperColor = Color.Green,
-                //LowerColor = Color.DarkOrange,
-                //FixedTickStep_Right = 10,
-
-            });
-
-            AddArea(Channel2_Area = new OscillatorArea(this, "Ch2 Area", 0.3f)
-            {
-                HasXAxisBar = false,
-                Reference = 0,
-                //UpperLimit = 1717986918,
-                //LowerLimit = -1717986918,
-                //UpperColor = Color.Green,
-                //LowerColor = Color.DarkOrange,
-                //FixedTickStep_Right = 10,
-
-            });
-            */
-            /*
-            AddArea(MainArea = new Area(this, "Main", 0.3f)
-            {
-                HasXAxisBar = true,
-            });*/
-
             EnableChartShift = true;// false;
 
             ResumeLayout(false);
@@ -73,10 +42,6 @@ namespace Nitride.EE
         public override int RightBlankAreaWidth => 0;
 
         public ChronoTable ChronoTable { get; private set; }
-
-        //public Area Channel1_Area { get; }
-
-        //public Area Channel2_Area { get; }
 
         public override string this[int i]
         {
@@ -96,7 +61,12 @@ namespace Nitride.EE
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
-        public override void CoordinateOverlay()
+        public override void CoordinateOverlay() 
+        {
+        
+        }
+
+        public override void CoordinateLayout()
         {
             ResumeLayout(true);
             ChartBounds = new Rectangle(
