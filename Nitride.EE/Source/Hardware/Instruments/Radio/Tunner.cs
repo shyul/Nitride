@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nitride.EE
 {
-    public class LocalOscillator : IPll, IInstrumentResource
+    public class Tunner : IPll, IInstrumentResource
     {
         public IInstrument Parent { get; set; }
 

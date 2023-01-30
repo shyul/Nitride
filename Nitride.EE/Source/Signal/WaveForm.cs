@@ -17,15 +17,19 @@ namespace Nitride.EE
     {
         public WaveForm(int maxLength)
         {
-            Count = maxLength;
+            Length = Count = maxLength;
             Data = new Complex[Count];
         }
 
-        public void Configure(double rate = 1, double startTime = 0)
+        public void Configure(int length, double rate = 1, double startTime = 0)
         {
+            if (length > Count) throw new Exception("WaveForm length: " + length + " > Count: " + Count);
+
+            Length = length;
+
             SampleRate = rate;
             StartTime = startTime;
-            Duration = ((Count - 1) / SampleRate);
+            Duration = ((Length - 1) / SampleRate);
             StopTime = StartTime + Duration;
         }
 
@@ -43,13 +47,17 @@ namespace Nitride.EE
 
         public double StopTime { get; private set; }
 
+        public int Length { get; private set; }
+
         public Complex[] Data { get; } 
 
-        public double Peak => Data.Select(x => x.Magnitude).Max();
+        public double Max => Data.Take(Length).Select(x => x.Magnitude).Max();
+        
+        public double Min => Data.Take(Length).Select(x => x.Magnitude).Min();
 
-        public double Rms => Math.Sqrt(Data.Select(x => Math.Pow(x.Magnitude, 2)).Sum() / Count);
+        public double Rms => Math.Sqrt(Data.Take(Length).Select(x => Math.Pow(x.Magnitude, 2)).Sum() / Length);
 
-
+        public double Mean => Data.Take(Length).Select(x => x.Magnitude).Average(); 
 
         public void CopyData(Complex[] samples, int offset = 0)
         {

@@ -12,7 +12,7 @@ namespace Nitride.EE
 
         public bool IsUpSide { get; set; }
 
-        public LocalOscillator LocalOscillator { get; set; }
+        public Tunner LocalOscillator { get; set; }
 
         public WaveFormReceiver Receiver { get; set; }
 

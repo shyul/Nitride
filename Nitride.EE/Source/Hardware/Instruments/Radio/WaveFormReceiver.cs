@@ -17,6 +17,8 @@ namespace Nitride.EE
 
         public abstract int MaxSampleLength { get; }
 
+        public int PoolSize => WaveFormPool.Count;
+
         public string ResourceName { get; set; }
 
         public bool IsReady { get; set; }
@@ -43,13 +45,13 @@ namespace Nitride.EE
 
         public virtual double MaxBandwidth => SampleClock.Frequency / 2;
 
-        public int PoolSize => WaveFormPool.Count;
+        public virtual int SampleLength { get; set; }
 
-        public virtual int SampleLength
-        {
-            get => WaveFormPool[0].Length;
-            set => WaveFormPool.ForEach(n => n.Length = value);
-        }
+        /*
+    {
+        get => WaveFormPool[0].Length;
+        set => WaveFormPool.ForEach(n => n.Length = value);
+    }*/
 
         protected List<WaveFormGroup> WaveFormPool { get; set; } = new();
 

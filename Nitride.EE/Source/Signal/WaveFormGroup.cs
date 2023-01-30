@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace Nitride.EE
 {
@@ -24,7 +25,7 @@ namespace Nitride.EE
                 WaveForms[i] = new WaveForm(maxLength);
             }
 
-            Length = maxLength;
+            // Length = maxLength;
         }
 
         public bool HasUpdatedItem
@@ -35,8 +36,15 @@ namespace Nitride.EE
 
         public int NumOfCh => WaveForms.Length;
 
-        public int Length { get; set; }
+        public int Length => WaveForms.First().Length;
 
+        public double SampleRate => WaveForms.First().SampleRate;
+
+        public void Configure(int length, double rate = 1, double startTime = 0)
+        {
+            WaveForms.RunEach(n => n.Configure(length, rate, startTime));
+        }
+        /*
         public double SampleRate
         {
             get => WaveForms.First().SampleRate;
@@ -45,7 +53,7 @@ namespace Nitride.EE
             {
                 WaveForms.RunEach(n => n.Configure(value));
             }
-        }
+        }*/
 
         public WaveForm[] WaveForms { get; }
 

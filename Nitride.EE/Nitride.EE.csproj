@@ -104,7 +104,7 @@
     <Compile Include="Source\Hardware\Instruments\Radio\DigitalTransmitter.cs" />
     <Compile Include="Source\Hardware\Instruments\Radio\WaveFormReceiver.cs" />
     <Compile Include="Source\Hardware\Instruments\Radio\DownConverter.cs" />
-    <Compile Include="Source\Hardware\Instruments\Radio\LocalOscillator.cs" />
+    <Compile Include="Source\Hardware\Instruments\Radio\Tunner.cs" />
     <Compile Include="Source\Hardware\Reg16.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IDataAcquisition.cs" />
     <Compile Include="Source\Hardware\_Interfaces\IInstrument.cs" />

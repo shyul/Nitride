@@ -214,18 +214,18 @@ namespace Nitride.EE
                 {
                     try
                     {
+                        CoordinateLayout();
                         this?.Invoke(() =>
                         {
-                            CoordinateLayout();
                             Invalidate(false);
-                            AsyncUpdateUI = false;
                         });
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
-                    // Thread.Sleep(2);
+
+                    AsyncUpdateUI = false;
                 }
                 else
                 {

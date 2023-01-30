@@ -97,7 +97,8 @@ namespace Nitride
 
         public bool AsyncUpdateUI { get; set; } = false;
 
-        
+        public int AsyncUpdateDeley { get; set; } = 1;
+
         public readonly Task AsyncUpdateUITask;
 
         public readonly CancellationTokenSource AsyncUpdateUITask_Cts = new();
@@ -108,13 +109,13 @@ namespace Nitride
             {
                 if (AsyncUpdateUI)
                 {
-                    try 
+                    try
                     {
+                        CoordinateLayout();
                         this?.Invoke(() =>
                         {
-                            CoordinateLayout();
                             Invalidate(false);
-                            AsyncUpdateUI = false;
+                   
                         });
                     }
                     catch(Exception e) 
@@ -122,8 +123,8 @@ namespace Nitride
                         Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
                     }
 
-  
-                    // Thread.Sleep(2);
+                    AsyncUpdateUI = false;
+                    Thread.Sleep(AsyncUpdateDeley);
                 }
                 else
                     Thread.Sleep(5);
