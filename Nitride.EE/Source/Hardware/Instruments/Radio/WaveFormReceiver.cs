@@ -47,12 +47,6 @@ namespace Nitride.EE
 
         public virtual int SampleLength { get; set; }
 
-        /*
-    {
-        get => WaveFormPool[0].Length;
-        set => WaveFormPool.ForEach(n => n.Length = value);
-    }*/
-
         protected List<WaveFormGroup> WaveFormPool { get; set; } = new();
 
         public Action<WaveFormGroup> WaveFormEnqueue { get; set; }

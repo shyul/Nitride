@@ -44,12 +44,14 @@ namespace Nitride.EE
 
         public ChronoTable ChronoTable { get; private set; }
 
+        public Func<double, string> CursorLabel { get; set; } = (double d) => d.ToString();
+
         public override string this[int i]
         {
             get
             {
                 if (ChronoTable[i] is ChronoRow sp && sp.X is double t)
-                    return t.ToString();
+                    return CursorLabel(t);
                 else
                     return string.Empty;
             }

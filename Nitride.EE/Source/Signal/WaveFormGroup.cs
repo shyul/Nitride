@@ -24,8 +24,6 @@ namespace Nitride.EE
             {
                 WaveForms[i] = new WaveForm(maxLength);
             }
-
-            // Length = maxLength;
         }
 
         public bool HasUpdatedItem
@@ -44,16 +42,6 @@ namespace Nitride.EE
         {
             WaveForms.RunEach(n => n.Configure(length, rate, startTime));
         }
-        /*
-        public double SampleRate
-        {
-            get => WaveForms.First().SampleRate;
-            
-            set
-            {
-                WaveForms.RunEach(n => n.Configure(value));
-            }
-        }*/
 
         public WaveForm[] WaveForms { get; }
 

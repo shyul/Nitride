@@ -29,7 +29,8 @@ namespace Nitride
             {
                 try
                 {
-                    return column is NumericColumn ic && NumericColumnsLUT.ContainsKey(ic) ? NumericColumnsLUT[ic] : double.NaN;
+                    lock (NumericColumnsLUT)
+                        return column is NumericColumn ic && NumericColumnsLUT.ContainsKey(ic) ? NumericColumnsLUT[ic] : double.NaN;
                 }
                 catch (Exception e)
                 {
@@ -43,10 +44,11 @@ namespace Nitride
             {
                 try
                 {
-                    if (double.IsNaN(value) && NumericColumnsLUT.ContainsKey(column))
-                        NumericColumnsLUT.Remove(column);
-                    else
-                        NumericColumnsLUT[column] = value;
+                    lock (NumericColumnsLUT)
+                        if (double.IsNaN(value) && NumericColumnsLUT.ContainsKey(column))
+                            NumericColumnsLUT.Remove(column);
+                        else
+                            NumericColumnsLUT[column] = value;
                 }
                 catch (Exception e)
                 {
