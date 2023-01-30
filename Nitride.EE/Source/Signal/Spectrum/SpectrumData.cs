@@ -213,8 +213,8 @@ namespace Nitride.EE
         }
 
         public bool Enable { get; set; }
-        public bool EnableHisto { get; set; } = true;
 
+        public bool EnableHisto { get; set; } = true;
         public int HistoIndex { get; private set; }
         public int HistoDepth { get; private set; }
         public TraceFrame[] HistoFrames { get; private set; }
@@ -222,27 +222,29 @@ namespace Nitride.EE
         public bool EnablePersist { get; set; }
         public int PersistDepth { get; private set; }
         public Color[] PersistColor { get; private set; }
-        //private int[,] PersistBuffer { get; set; }
         public int PersistBufferHeight { get; private set; }
 
         #endregion Data
 
         #region Add Data
 
-        public void AppendTrace(FreqTrace trace)
+        public void RemoveStaleFreqTrace() 
         {
+            while (FreqTraceQueue.Count > 2)
+            {
+                FreqTraceQueue.TryDequeue(out var tr);
+                tr.IsUpdated = false;
+                // Console.WriteLine("SpectrumData Overflow!");
+            }
+        }
+
+        public void FreqTraceEnqueue(FreqTrace trace)
+        {
+            RemoveStaleFreqTrace();
+
             if (Enable && !PauseUpdate)
             {
-                if (FreqTraceQueue.Count < 3)
-                {
-                    FreqTraceQueue.Enqueue(trace);
-                }
-                else
-                {
-                    FreqTraceQueue.TryDequeue(out var tr);
-                    tr.IsUpdated = false;
-                    Console.WriteLine("SpectrumData Overflow!");
-                }
+                FreqTraceQueue.Enqueue(trace);
             }
         }
 

@@ -27,33 +27,38 @@ namespace Nitride
         {
             get
             {
+                lock (NumericColumnsLUT)
+                    return column is NumericColumn ic && NumericColumnsLUT.ContainsKey(ic) ? NumericColumnsLUT[ic] : double.NaN;
+                /*
                 try
                 {
-                    lock (NumericColumnsLUT)
-                        return column is NumericColumn ic && NumericColumnsLUT.ContainsKey(ic) ? NumericColumnsLUT[ic] : double.NaN;
+
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("DataRow Read Error: " + e.Message);
                 }
 
-                return double.NaN;
+                return double.NaN;*/
             }
 
             set
             {
+                lock (NumericColumnsLUT)
+                    if (double.IsNaN(value) && NumericColumnsLUT.ContainsKey(column))
+                        NumericColumnsLUT.Remove(column);
+                    else
+                        NumericColumnsLUT[column] = value;
+
+                /*
                 try
                 {
-                    lock (NumericColumnsLUT)
-                        if (double.IsNaN(value) && NumericColumnsLUT.ContainsKey(column))
-                            NumericColumnsLUT.Remove(column);
-                        else
-                            NumericColumnsLUT[column] = value;
+
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("DataRow Write Error: " + e.Message);
-                }
+                }*/
             }
         }
 

@@ -75,14 +75,15 @@ namespace Nitride.EE
 
         public void WaveFormEnqueue(WaveForm wf)
         {
+            while (WaveFormQueue.Count >= PoolSize - 1)
+            {
+                WaveFormQueue.TryDequeue(out var wfo);
+                wfo.IsUpdated = false;
+                // Console.WriteLine("SpectrumFFT Overflow!");
+            }
+
             if (IsRunning)
             {
-                if (WaveFormQueue.Count >= PoolSize - 1)
-                {
-                    WaveFormQueue.TryDequeue(out var wfo);
-                    wfo.IsUpdated = false;
-                    // Console.WriteLine("SpectrumFFT Overflow!");
-                }
                 WaveFormQueue.Enqueue(wf);
             }
         }
@@ -104,21 +105,30 @@ namespace Nitride.EE
 
             while (IsRunning)
             {
-                if (WaveFormQueue.Count > 0 && FreqTracePool.Where(n => !n.IsUpdated).FirstOrDefault() is FreqTrace trace)
+                if (WaveFormQueue.IsEmpty) 
                 {
-                    WaveFormQueue.TryDequeue(out var wf);
-
-                    if (!SpectrumData.PauseUpdate) 
-                    {
-                        trace.Transform(wf.Data); // Here: Trace.IsUpdate = true;
-                        SpectrumData.AppendTrace(trace);
-                    }
-
-                    wf.IsUpdated = false; // End of WaveForm's data lifecycle.
-                    cnt++;
-                }
-                else
                     Thread.Sleep(5);
+                    continue;
+                }
+
+                if (FreqTracePool.Where(n => !n.IsUpdated).FirstOrDefault() is FreqTrace trace)
+                {
+                    if (WaveFormQueue.TryDequeue(out var wf))
+                    {
+                        if (!SpectrumData.PauseUpdate)
+                        {
+                            trace.Transform(wf.Data); // Here: Trace.IsUpdate = true;
+                            SpectrumData.FreqTraceEnqueue(trace);
+                        }
+
+                        wf.IsUpdated = false; // End of WaveForm's data lifecycle.
+                        cnt++;
+                    } 
+                }
+                else 
+                {
+                    SpectrumData.RemoveStaleFreqTrace();
+                }
 
                 if (cnt == 50)
                 {
