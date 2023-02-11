@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\FTD2XX_NET.cs" />
+    <Compile Include="Source\FTDI.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nitride.EE\Nitride.EE.csproj">

@@ -18,7 +18,7 @@ namespace Nitride.EE
         {
             Reference = reference;
 
-            // Initialize Registers
+            // Initialize Default Registers
             LoadDefault();
         }
 

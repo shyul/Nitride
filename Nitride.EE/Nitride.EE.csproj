@@ -364,6 +364,11 @@
   <ItemGroup>
     <None Include="Resources\WaveForm_32.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\LMX2820_Block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LMX2820_BD.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

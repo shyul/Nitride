@@ -5,14 +5,14 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.IO;
- using Nitride;
+using Nitride;
 
 namespace Nitride.EE.FTDI
 {
     /// <summary>
     /// Class wrapper for FTD2XX.DLL
     /// </summary>
-    public class FTDI
+    public partial class FTDI
     {
         #region CONSTRUCTOR_DESTRUCTOR
         // constructor
@@ -7066,7 +7066,7 @@ namespace Nitride.EE.FTDI
             Console.WriteLine("\nConfigure port for MPSSE use ...");
             status |= ResetDevice();
             status |= GetRxBytesAvailable(ref rxByteCount);
-            if(status == FT_STATUS.FT_OK && rxByteCount > 0) 
+            if (status == FT_STATUS.FT_OK && rxByteCount > 0)
             {
                 Read(out string _, rxByteCount, ref rxByteCount);
             }

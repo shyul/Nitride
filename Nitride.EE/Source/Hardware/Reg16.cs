@@ -17,6 +17,8 @@ namespace Nitride.EE
             }
         }
 
+        public int Length => Count;
+
         public byte[] Serialize(IEnumerable<ushort> addr_list)
         {
             var sorted_list = addr_list.Where(n => ContainsKey(n)).OrderByDescending(n => n);

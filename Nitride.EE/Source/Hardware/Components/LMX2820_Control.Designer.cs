@@ -28,10 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LMX2572_Control));
             this.LabelVcoLock = new System.Windows.Forms.Label();
-            this.LabelChDivider = new System.Windows.Forms.Label();
-            this.ComboBoxChDivider = new System.Windows.Forms.ComboBox();
+            this.LabelChADivider = new System.Windows.Forms.Label();
+            this.ComboBoxChADivider = new System.Windows.Forms.ComboBox();
             this.LabelRfoutAMux = new System.Windows.Forms.Label();
             this.LabelVcoSelect = new System.Windows.Forms.Label();
             this.ComboBoxRfoutAMux = new System.Windows.Forms.ComboBox();
@@ -48,7 +47,6 @@
             this.Label_Mash_Reset_Counter = new System.Windows.Forms.Label();
             this.TextBoxPfdDlySel = new System.Windows.Forms.TextBox();
             this.TextBoxRfoutAPower = new System.Windows.Forms.TextBox();
-            this.Label_PFD_DLY_SEL = new System.Windows.Forms.Label();
             this.CheckBoxRfoutAEnable = new System.Windows.Forms.CheckBox();
             this.TextBoxMashSeed = new System.Windows.Forms.TextBox();
             this.Label_MashSeed = new System.Windows.Forms.Label();
@@ -64,17 +62,25 @@
             this.TextBoxRfoutAFreq = new System.Windows.Forms.TextBox();
             this.ComboBoxChargePumpCurrent = new System.Windows.Forms.ComboBox();
             this.GroupBoxCalibration = new System.Windows.Forms.GroupBox();
-            this.CheckBox_QUICK_RECAL_EN = new System.Windows.Forms.CheckBox();
-            this.Label_CAL_CLK_DIV = new System.Windows.Forms.Label();
+            this.ButtonInstantCalibration = new System.Windows.Forms.Button();
+            this.TextBox_INSTCAL_PLL_NUM = new System.Windows.Forms.TextBox();
+            this.Label_INSTCAL_PLL_NUM = new System.Windows.Forms.Label();
+            this.TextBox_INSTCAL_DLY = new System.Windows.Forms.TextBox();
+            this.Label_INSTCAL_DLY = new System.Windows.Forms.Label();
+            this.CheckBox_INSTCAL_DBLR_EN = new System.Windows.Forms.CheckBox();
+            this.CheckBox_DBLR_CAL_EN = new System.Windows.Forms.CheckBox();
+            this.CheckBox_INSTCAL_SKIP_ACAL = new System.Windows.Forms.CheckBox();
             this.TextBox_CAL_CLK_DIV = new System.Windows.Forms.TextBox();
+            this.CheckBox_INSTCAL_EN = new System.Windows.Forms.CheckBox();
+            this.Label_CAL_CLK_DIV = new System.Windows.Forms.Label();
+            this.TextBox_VCO_CAPCTRL = new System.Windows.Forms.TextBox();
+            this.CheckBox_QUICK_RECAL_EN = new System.Windows.Forms.CheckBox();
             this.Label_FCAL_HPFD_ADJ = new System.Windows.Forms.Label();
             this.TextBox_FCAL_HPFD_ADJ = new System.Windows.Forms.TextBox();
             this.Label_FCAL_LPFD_ADJ = new System.Windows.Forms.Label();
             this.TextBox_FCAL_LPFD_ADJ = new System.Windows.Forms.TextBox();
-            this.GroupBoxRfoutA = new System.Windows.Forms.GroupBox();
             this.LabelRfoutAPower = new System.Windows.Forms.Label();
             this.LabelRfoutAFreq = new System.Windows.Forms.Label();
-            this.GroupBoxRfoutB = new System.Windows.Forms.GroupBox();
             this.LabelRfoutBPower = new System.Windows.Forms.Label();
             this.LabelRfoutBFreq = new System.Windows.Forms.Label();
             this.ComboBoxRfoutBMux = new System.Windows.Forms.ComboBox();
@@ -83,9 +89,37 @@
             this.LabelRfoutBMux = new System.Windows.Forms.Label();
             this.TextBoxRfoutBFreq = new System.Windows.Forms.TextBox();
             this.CheckBoxSyncEnable = new System.Windows.Forms.CheckBox();
+            this.ComboBoxChBDivider = new System.Windows.Forms.ComboBox();
+            this.LabelChBDivider = new System.Windows.Forms.Label();
+            this.CheckBox_FCAL_EN = new System.Windows.Forms.CheckBox();
+            this.GroupBoxVcoCalibration = new System.Windows.Forms.GroupBox();
+            this.CheckBox_VCO_CAPCTRL_FORCE = new System.Windows.Forms.CheckBox();
+            this.Label_ACAL_CMP_DLY = new System.Windows.Forms.Label();
+            this.TextBox_ACAL_CMP_DLY = new System.Windows.Forms.TextBox();
+            this.CheckBox_PFD_DLY_MANUAL = new System.Windows.Forms.CheckBox();
+            this.LabelRfoutBPhaseShift = new System.Windows.Forms.Label();
+            this.TextBoxRfoutBPhaseShift = new System.Windows.Forms.TextBox();
+            this.LabelRfoutAPhaseShift = new System.Windows.Forms.Label();
+            this.TextBoxRfoutAPhaseShift = new System.Windows.Forms.TextBox();
+            this.CheckBox_LOOPBACK = new System.Windows.Forms.CheckBox();
+            this.TextBoxPhaseShift = new System.Windows.Forms.TextBox();
+            this.LabelPhaseShift = new System.Windows.Forms.Label();
+            this.GroupBoxPhaseSync = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.LabelMashResetDelay = new System.Windows.Forms.Label();
+            this.TextBoxMashResetDelay = new System.Windows.Forms.TextBox();
+            this.GroupBoxTemperature = new System.Windows.Forms.GroupBox();
+            this.CheckBoxEnableTemp = new System.Windows.Forms.CheckBox();
+            this.TextBoxTemperature = new System.Windows.Forms.TextBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.BtnCommit = new System.Windows.Forms.Button();
+            this.BtnUpdateUI = new System.Windows.Forms.Button();
+            this.BtnLoadTICS = new System.Windows.Forms.Button();
+            this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.GroupBoxCalibration.SuspendLayout();
-            this.GroupBoxRfoutA.SuspendLayout();
-            this.GroupBoxRfoutB.SuspendLayout();
+            this.GroupBoxVcoCalibration.SuspendLayout();
+            this.GroupBoxPhaseSync.SuspendLayout();
+            this.GroupBoxTemperature.SuspendLayout();
             this.SuspendLayout();
             // 
             // LabelVcoLock
@@ -93,44 +127,43 @@
             this.LabelVcoLock.BackColor = System.Drawing.Color.Transparent;
             this.LabelVcoLock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LabelVcoLock.ForeColor = System.Drawing.Color.Red;
-            this.LabelVcoLock.Location = new System.Drawing.Point(847, 82);
+            this.LabelVcoLock.Location = new System.Drawing.Point(850, 84);
             this.LabelVcoLock.Name = "LabelVcoLock";
             this.LabelVcoLock.Size = new System.Drawing.Size(57, 13);
             this.LabelVcoLock.TabIndex = 178;
             this.LabelVcoLock.Text = "Unlock";
             this.LabelVcoLock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // LabelChDivider
+            // LabelChADivider
             // 
-            this.LabelChDivider.Location = new System.Drawing.Point(1005, 159);
-            this.LabelChDivider.Name = "LabelChDivider";
-            this.LabelChDivider.Size = new System.Drawing.Size(67, 13);
-            this.LabelChDivider.TabIndex = 220;
-            this.LabelChDivider.Text = "Ch Divider";
-            this.LabelChDivider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LabelChADivider.Location = new System.Drawing.Point(1002, 73);
+            this.LabelChADivider.Name = "LabelChADivider";
+            this.LabelChADivider.Size = new System.Drawing.Size(70, 13);
+            this.LabelChADivider.TabIndex = 220;
+            this.LabelChADivider.Text = "Ch A Divider";
+            this.LabelChADivider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ComboBoxChDivider
+            // ComboBoxChADivider
             // 
-            this.ComboBoxChDivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ComboBoxChDivider.FormattingEnabled = true;
-            this.ComboBoxChDivider.Items.AddRange(new object[] {
+            this.ComboBoxChADivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxChADivider.FormattingEnabled = true;
+            this.ComboBoxChADivider.Items.AddRange(new object[] {
             "2",
             "4",
             "8",
             "16",
             "32",
             "64",
-            "128",
-            "256"});
-            this.ComboBoxChDivider.Location = new System.Drawing.Point(1005, 201);
-            this.ComboBoxChDivider.Name = "ComboBoxChDivider";
-            this.ComboBoxChDivider.Size = new System.Drawing.Size(67, 21);
-            this.ComboBoxChDivider.TabIndex = 219;
-            this.ComboBoxChDivider.Text = "2";
+            "128"});
+            this.ComboBoxChADivider.Location = new System.Drawing.Point(1005, 116);
+            this.ComboBoxChADivider.Name = "ComboBoxChADivider";
+            this.ComboBoxChADivider.Size = new System.Drawing.Size(67, 21);
+            this.ComboBoxChADivider.TabIndex = 219;
+            this.ComboBoxChADivider.Text = "2";
             // 
             // LabelRfoutAMux
             // 
-            this.LabelRfoutAMux.Location = new System.Drawing.Point(81, 14);
+            this.LabelRfoutAMux.Location = new System.Drawing.Point(1112, 81);
             this.LabelRfoutAMux.Name = "LabelRfoutAMux";
             this.LabelRfoutAMux.Size = new System.Drawing.Size(62, 13);
             this.LabelRfoutAMux.TabIndex = 201;
@@ -141,7 +174,7 @@
             // 
             this.LabelVcoSelect.AutoSize = true;
             this.LabelVcoSelect.BackColor = System.Drawing.Color.Transparent;
-            this.LabelVcoSelect.Location = new System.Drawing.Point(813, 185);
+            this.LabelVcoSelect.Location = new System.Drawing.Point(816, 181);
             this.LabelVcoSelect.Name = "LabelVcoSelect";
             this.LabelVcoSelect.Size = new System.Drawing.Size(37, 13);
             this.LabelVcoSelect.TabIndex = 206;
@@ -154,8 +187,9 @@
             this.ComboBoxRfoutAMux.FormattingEnabled = true;
             this.ComboBoxRfoutAMux.Items.AddRange(new object[] {
             "Divider",
-            "VCO"});
-            this.ComboBoxRfoutAMux.Location = new System.Drawing.Point(81, 31);
+            "VCO",
+            "Doubler"});
+            this.ComboBoxRfoutAMux.Location = new System.Drawing.Point(1112, 97);
             this.ComboBoxRfoutAMux.Name = "ComboBoxRfoutAMux";
             this.ComboBoxRfoutAMux.Size = new System.Drawing.Size(62, 21);
             this.ComboBoxRfoutAMux.TabIndex = 197;
@@ -166,24 +200,24 @@
             this.ComboBoxVcoSelect.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ComboBoxVcoSelect.FormattingEnabled = true;
             this.ComboBoxVcoSelect.Items.AddRange(new object[] {
-            "Auto",
             "VCO1",
             "VCO2",
             "VCO3",
             "VCO4",
             "VCO5",
-            "VCO6"});
-            this.ComboBoxVcoSelect.Location = new System.Drawing.Point(856, 181);
+            "VCO6",
+            "VCO7"});
+            this.ComboBoxVcoSelect.Location = new System.Drawing.Point(859, 177);
             this.ComboBoxVcoSelect.Name = "ComboBoxVcoSelect";
             this.ComboBoxVcoSelect.Size = new System.Drawing.Size(81, 21);
             this.ComboBoxVcoSelect.TabIndex = 203;
-            this.ComboBoxVcoSelect.Text = "Auto";
+            this.ComboBoxVcoSelect.Text = "VCO1";
             // 
             // LabelVcoFreq
             // 
             this.LabelVcoFreq.AutoSize = true;
             this.LabelVcoFreq.BackColor = System.Drawing.Color.Transparent;
-            this.LabelVcoFreq.Location = new System.Drawing.Point(847, 104);
+            this.LabelVcoFreq.Location = new System.Drawing.Point(850, 106);
             this.LabelVcoFreq.Name = "LabelVcoFreq";
             this.LabelVcoFreq.Size = new System.Drawing.Size(60, 13);
             this.LabelVcoFreq.TabIndex = 217;
@@ -192,7 +226,7 @@
             // 
             // TextBoxVcoFreq
             // 
-            this.TextBoxVcoFreq.Location = new System.Drawing.Point(816, 123);
+            this.TextBoxVcoFreq.Location = new System.Drawing.Point(819, 125);
             this.TextBoxVcoFreq.Name = "TextBoxVcoFreq";
             this.TextBoxVcoFreq.ReadOnly = true;
             this.TextBoxVcoFreq.Size = new System.Drawing.Size(121, 22);
@@ -239,7 +273,7 @@
             this.CheckBoxMashResetN.AutoSize = true;
             this.CheckBoxMashResetN.BackColor = System.Drawing.Color.Transparent;
             this.CheckBoxMashResetN.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.CheckBoxMashResetN.Location = new System.Drawing.Point(618, 265);
+            this.CheckBoxMashResetN.Location = new System.Drawing.Point(570, 294);
             this.CheckBoxMashResetN.Name = "CheckBoxMashResetN";
             this.CheckBoxMashResetN.Size = new System.Drawing.Size(39, 31);
             this.CheckBoxMashResetN.TabIndex = 209;
@@ -251,7 +285,7 @@
             this.CheckBoxMashSeedEnable.AutoSize = true;
             this.CheckBoxMashSeedEnable.BackColor = System.Drawing.Color.Transparent;
             this.CheckBoxMashSeedEnable.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.CheckBoxMashSeedEnable.Location = new System.Drawing.Point(576, 265);
+            this.CheckBoxMashSeedEnable.Location = new System.Drawing.Point(528, 294);
             this.CheckBoxMashSeedEnable.Name = "CheckBoxMashSeedEnable";
             this.CheckBoxMashSeedEnable.Size = new System.Drawing.Size(36, 31);
             this.CheckBoxMashSeedEnable.TabIndex = 208;
@@ -260,7 +294,7 @@
             // 
             // TextBoxMashResetCounter
             // 
-            this.TextBoxMashResetCounter.Location = new System.Drawing.Point(638, 332);
+            this.TextBoxMashResetCounter.Location = new System.Drawing.Point(132, 44);
             this.TextBoxMashResetCounter.Name = "TextBoxMashResetCounter";
             this.TextBoxMashResetCounter.Size = new System.Drawing.Size(103, 22);
             this.TextBoxMashResetCounter.TabIndex = 205;
@@ -269,7 +303,7 @@
             // 
             this.Label_Mash_Reset_Counter.AutoSize = true;
             this.Label_Mash_Reset_Counter.BackColor = System.Drawing.Color.Transparent;
-            this.Label_Mash_Reset_Counter.Location = new System.Drawing.Point(552, 336);
+            this.Label_Mash_Reset_Counter.Location = new System.Drawing.Point(46, 47);
             this.Label_Mash_Reset_Counter.Name = "Label_Mash_Reset_Counter";
             this.Label_Mash_Reset_Counter.Size = new System.Drawing.Size(80, 13);
             this.Label_Mash_Reset_Counter.TabIndex = 207;
@@ -278,7 +312,7 @@
             // 
             // TextBoxPfdDlySel
             // 
-            this.TextBoxPfdDlySel.Location = new System.Drawing.Point(638, 360);
+            this.TextBoxPfdDlySel.Location = new System.Drawing.Point(590, 258);
             this.TextBoxPfdDlySel.Name = "TextBoxPfdDlySel";
             this.TextBoxPfdDlySel.ReadOnly = true;
             this.TextBoxPfdDlySel.Size = new System.Drawing.Size(103, 22);
@@ -287,27 +321,16 @@
             // 
             // TextBoxRfoutAPower
             // 
-            this.TextBoxRfoutAPower.Location = new System.Drawing.Point(73, 60);
+            this.TextBoxRfoutAPower.Location = new System.Drawing.Point(1184, 96);
             this.TextBoxRfoutAPower.Name = "TextBoxRfoutAPower";
             this.TextBoxRfoutAPower.Size = new System.Drawing.Size(70, 22);
             this.TextBoxRfoutAPower.TabIndex = 192;
             this.TextBoxRfoutAPower.Text = "0";
             // 
-            // Label_PFD_DLY_SEL
-            // 
-            this.Label_PFD_DLY_SEL.AutoSize = true;
-            this.Label_PFD_DLY_SEL.BackColor = System.Drawing.Color.Transparent;
-            this.Label_PFD_DLY_SEL.Location = new System.Drawing.Point(561, 365);
-            this.Label_PFD_DLY_SEL.Name = "Label_PFD_DLY_SEL";
-            this.Label_PFD_DLY_SEL.Size = new System.Drawing.Size(71, 13);
-            this.Label_PFD_DLY_SEL.TabIndex = 204;
-            this.Label_PFD_DLY_SEL.Text = "PFD_DLY_SEL";
-            this.Label_PFD_DLY_SEL.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // CheckBoxRfoutAEnable
             // 
             this.CheckBoxRfoutAEnable.AutoSize = true;
-            this.CheckBoxRfoutAEnable.Location = new System.Drawing.Point(14, 33);
+            this.CheckBoxRfoutAEnable.Location = new System.Drawing.Point(1193, 185);
             this.CheckBoxRfoutAEnable.Name = "CheckBoxRfoutAEnable";
             this.CheckBoxRfoutAEnable.Size = new System.Drawing.Size(61, 17);
             this.CheckBoxRfoutAEnable.TabIndex = 191;
@@ -316,7 +339,7 @@
             // 
             // TextBoxMashSeed
             // 
-            this.TextBoxMashSeed.Location = new System.Drawing.Point(638, 304);
+            this.TextBoxMashSeed.Location = new System.Drawing.Point(590, 334);
             this.TextBoxMashSeed.Name = "TextBoxMashSeed";
             this.TextBoxMashSeed.Size = new System.Drawing.Size(103, 22);
             this.TextBoxMashSeed.TabIndex = 198;
@@ -325,7 +348,7 @@
             // 
             this.Label_MashSeed.AutoSize = true;
             this.Label_MashSeed.BackColor = System.Drawing.Color.Transparent;
-            this.Label_MashSeed.Location = new System.Drawing.Point(569, 309);
+            this.Label_MashSeed.Location = new System.Drawing.Point(521, 339);
             this.Label_MashSeed.Name = "Label_MashSeed";
             this.Label_MashSeed.Size = new System.Drawing.Size(63, 13);
             this.Label_MashSeed.TabIndex = 200;
@@ -336,7 +359,7 @@
             // 
             this.Label_Mash_Order.AutoSize = true;
             this.Label_Mash_Order.BackColor = System.Drawing.Color.Transparent;
-            this.Label_Mash_Order.Location = new System.Drawing.Point(564, 238);
+            this.Label_Mash_Order.Location = new System.Drawing.Point(516, 234);
             this.Label_Mash_Order.Name = "Label_Mash_Order";
             this.Label_Mash_Order.Size = new System.Drawing.Size(68, 13);
             this.Label_Mash_Order.TabIndex = 190;
@@ -351,40 +374,39 @@
             "INT",
             "1",
             "2",
-            "3",
-            "4"});
-            this.ComboBoxMashOrder.Location = new System.Drawing.Point(638, 235);
+            "3"});
+            this.ComboBoxMashOrder.Location = new System.Drawing.Point(590, 231);
             this.ComboBoxMashOrder.Name = "ComboBoxMashOrder";
             this.ComboBoxMashOrder.Size = new System.Drawing.Size(103, 21);
             this.ComboBoxMashOrder.TabIndex = 189;
             // 
             // BtnCalVco
             // 
-            this.BtnCalVco.Location = new System.Drawing.Point(816, 218);
+            this.BtnCalVco.Location = new System.Drawing.Point(26, 166);
             this.BtnCalVco.Name = "BtnCalVco";
-            this.BtnCalVco.Size = new System.Drawing.Size(121, 22);
+            this.BtnCalVco.Size = new System.Drawing.Size(192, 22);
             this.BtnCalVco.TabIndex = 188;
-            this.BtnCalVco.Text = "Cal VCO";
+            this.BtnCalVco.Text = "Calibrate VCO";
             this.BtnCalVco.UseVisualStyleBackColor = true;
             this.BtnCalVco.Click += new System.EventHandler(this.BtnCalVco_Click);
             // 
             // TextBoxFDen
             // 
-            this.TextBoxFDen.Location = new System.Drawing.Point(663, 151);
+            this.TextBoxFDen.Location = new System.Drawing.Point(615, 150);
             this.TextBoxFDen.Name = "TextBoxFDen";
             this.TextBoxFDen.Size = new System.Drawing.Size(78, 22);
             this.TextBoxFDen.TabIndex = 186;
             // 
             // TextBoxFNum
             // 
-            this.TextBoxFNum.Location = new System.Drawing.Point(663, 114);
+            this.TextBoxFNum.Location = new System.Drawing.Point(615, 114);
             this.TextBoxFNum.Name = "TextBoxFNum";
             this.TextBoxFNum.Size = new System.Drawing.Size(78, 22);
             this.TextBoxFNum.TabIndex = 184;
             // 
             // TextBoxNDiv
             // 
-            this.TextBoxNDiv.Location = new System.Drawing.Point(567, 134);
+            this.TextBoxNDiv.Location = new System.Drawing.Point(518, 134);
             this.TextBoxNDiv.Name = "TextBoxNDiv";
             this.TextBoxNDiv.Size = new System.Drawing.Size(74, 22);
             this.TextBoxNDiv.TabIndex = 182;
@@ -402,12 +424,13 @@
             this.CheckBoxManualVcoSelect.AutoSize = true;
             this.CheckBoxManualVcoSelect.BackColor = System.Drawing.Color.Transparent;
             this.CheckBoxManualVcoSelect.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.CheckBoxManualVcoSelect.Location = new System.Drawing.Point(829, 158);
+            this.CheckBoxManualVcoSelect.Location = new System.Drawing.Point(832, 156);
             this.CheckBoxManualVcoSelect.Name = "CheckBoxManualVcoSelect";
             this.CheckBoxManualVcoSelect.Size = new System.Drawing.Size(98, 17);
             this.CheckBoxManualVcoSelect.TabIndex = 224;
             this.CheckBoxManualVcoSelect.Text = "Manual Select";
             this.CheckBoxManualVcoSelect.UseVisualStyleBackColor = false;
+            this.CheckBoxManualVcoSelect.CheckedChanged += new System.EventHandler(this.CheckBoxManualVcoSelect_CheckedChanged);
             // 
             // TextBoxReferenceFreq
             // 
@@ -419,7 +442,7 @@
             // 
             // TextBoxRfoutAFreq
             // 
-            this.TextBoxRfoutAFreq.Location = new System.Drawing.Point(43, 88);
+            this.TextBoxRfoutAFreq.Location = new System.Drawing.Point(1155, 23);
             this.TextBoxRfoutAFreq.Name = "TextBoxRfoutAFreq";
             this.TextBoxRfoutAFreq.ReadOnly = true;
             this.TextBoxRfoutAFreq.Size = new System.Drawing.Size(100, 22);
@@ -431,75 +454,182 @@
             this.ComboBoxChargePumpCurrent.FormattingEnabled = true;
             this.ComboBoxChargePumpCurrent.Items.AddRange(new object[] {
             "Tri-State",
-            "0.625 mA",
-            "1.25 mA",
-            "1.875 mA",
-            "2.5 mA",
-            "3.125 mA",
-            "3.75 mA",
-            "4.375 mA",
-            "5 mA",
-            "5.625 mA",
-            "6.25 mA",
-            "6.875 mA"});
+            "1.4 mA",
+            "2.8 mA",
+            "4.2 mA",
+            "5.6 mA",
+            "7 mA",
+            "8.4 mA",
+            "9.8 mA",
+            "11.2 mA",
+            "12.6 mA",
+            "14 mA",
+            "15.4 mA"});
             this.ComboBoxChargePumpCurrent.Location = new System.Drawing.Point(619, 52);
             this.ComboBoxChargePumpCurrent.Name = "ComboBoxChargePumpCurrent";
             this.ComboBoxChargePumpCurrent.Size = new System.Drawing.Size(70, 21);
             this.ComboBoxChargePumpCurrent.TabIndex = 7;
-            this.ComboBoxChargePumpCurrent.Text = "6.875 mA";
+            this.ComboBoxChargePumpCurrent.Text = "15.4 mA";
             // 
             // GroupBoxCalibration
             // 
-            this.GroupBoxCalibration.Controls.Add(this.CheckBox_QUICK_RECAL_EN);
-            this.GroupBoxCalibration.Controls.Add(this.Label_CAL_CLK_DIV);
+            this.GroupBoxCalibration.Controls.Add(this.ButtonInstantCalibration);
+            this.GroupBoxCalibration.Controls.Add(this.TextBox_INSTCAL_PLL_NUM);
+            this.GroupBoxCalibration.Controls.Add(this.Label_INSTCAL_PLL_NUM);
+            this.GroupBoxCalibration.Controls.Add(this.TextBox_INSTCAL_DLY);
+            this.GroupBoxCalibration.Controls.Add(this.Label_INSTCAL_DLY);
+            this.GroupBoxCalibration.Controls.Add(this.CheckBox_INSTCAL_DBLR_EN);
+            this.GroupBoxCalibration.Controls.Add(this.CheckBox_DBLR_CAL_EN);
+            this.GroupBoxCalibration.Controls.Add(this.CheckBox_INSTCAL_SKIP_ACAL);
             this.GroupBoxCalibration.Controls.Add(this.TextBox_CAL_CLK_DIV);
-            this.GroupBoxCalibration.Controls.Add(this.Label_FCAL_HPFD_ADJ);
-            this.GroupBoxCalibration.Controls.Add(this.TextBox_FCAL_HPFD_ADJ);
-            this.GroupBoxCalibration.Controls.Add(this.Label_FCAL_LPFD_ADJ);
-            this.GroupBoxCalibration.Controls.Add(this.TextBox_FCAL_LPFD_ADJ);
-            this.GroupBoxCalibration.Location = new System.Drawing.Point(292, 114);
+            this.GroupBoxCalibration.Controls.Add(this.CheckBox_INSTCAL_EN);
+            this.GroupBoxCalibration.Controls.Add(this.Label_CAL_CLK_DIV);
+            this.GroupBoxCalibration.Location = new System.Drawing.Point(225, 96);
             this.GroupBoxCalibration.Name = "GroupBoxCalibration";
-            this.GroupBoxCalibration.Size = new System.Drawing.Size(217, 138);
+            this.GroupBoxCalibration.Size = new System.Drawing.Size(250, 208);
             this.GroupBoxCalibration.TabIndex = 230;
             this.GroupBoxCalibration.TabStop = false;
             this.GroupBoxCalibration.Text = "Calibration";
             // 
-            // CheckBox_QUICK_RECAL_EN
+            // ButtonInstantCalibration
             // 
-            this.CheckBox_QUICK_RECAL_EN.AutoSize = true;
-            this.CheckBox_QUICK_RECAL_EN.BackColor = System.Drawing.Color.Transparent;
-            this.CheckBox_QUICK_RECAL_EN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.CheckBox_QUICK_RECAL_EN.Location = new System.Drawing.Point(50, 114);
-            this.CheckBox_QUICK_RECAL_EN.Name = "CheckBox_QUICK_RECAL_EN";
-            this.CheckBox_QUICK_RECAL_EN.Size = new System.Drawing.Size(114, 17);
-            this.CheckBox_QUICK_RECAL_EN.TabIndex = 240;
-            this.CheckBox_QUICK_RECAL_EN.Text = "QUICK_RECAL_EN";
-            this.CheckBox_QUICK_RECAL_EN.UseVisualStyleBackColor = false;
+            this.ButtonInstantCalibration.Location = new System.Drawing.Point(19, 168);
+            this.ButtonInstantCalibration.Name = "ButtonInstantCalibration";
+            this.ButtonInstantCalibration.Size = new System.Drawing.Size(216, 22);
+            this.ButtonInstantCalibration.TabIndex = 252;
+            this.ButtonInstantCalibration.Text = "Instant Calibration";
+            this.ButtonInstantCalibration.UseVisualStyleBackColor = true;
+            this.ButtonInstantCalibration.Click += new System.EventHandler(this.ButtonInstantCalibration_Click);
+            // 
+            // TextBox_INSTCAL_PLL_NUM
+            // 
+            this.TextBox_INSTCAL_PLL_NUM.Location = new System.Drawing.Point(132, 108);
+            this.TextBox_INSTCAL_PLL_NUM.Name = "TextBox_INSTCAL_PLL_NUM";
+            this.TextBox_INSTCAL_PLL_NUM.Size = new System.Drawing.Size(103, 22);
+            this.TextBox_INSTCAL_PLL_NUM.TabIndex = 250;
+            // 
+            // Label_INSTCAL_PLL_NUM
+            // 
+            this.Label_INSTCAL_PLL_NUM.AutoSize = true;
+            this.Label_INSTCAL_PLL_NUM.BackColor = System.Drawing.Color.Transparent;
+            this.Label_INSTCAL_PLL_NUM.Location = new System.Drawing.Point(26, 111);
+            this.Label_INSTCAL_PLL_NUM.Name = "Label_INSTCAL_PLL_NUM";
+            this.Label_INSTCAL_PLL_NUM.Size = new System.Drawing.Size(100, 13);
+            this.Label_INSTCAL_PLL_NUM.TabIndex = 251;
+            this.Label_INSTCAL_PLL_NUM.Text = "INSTCAL_PLL_NUM";
+            this.Label_INSTCAL_PLL_NUM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TextBox_INSTCAL_DLY
+            // 
+            this.TextBox_INSTCAL_DLY.Location = new System.Drawing.Point(132, 80);
+            this.TextBox_INSTCAL_DLY.Name = "TextBox_INSTCAL_DLY";
+            this.TextBox_INSTCAL_DLY.Size = new System.Drawing.Size(103, 22);
+            this.TextBox_INSTCAL_DLY.TabIndex = 248;
+            // 
+            // Label_INSTCAL_DLY
+            // 
+            this.Label_INSTCAL_DLY.AutoSize = true;
+            this.Label_INSTCAL_DLY.BackColor = System.Drawing.Color.Transparent;
+            this.Label_INSTCAL_DLY.Location = new System.Drawing.Point(56, 83);
+            this.Label_INSTCAL_DLY.Name = "Label_INSTCAL_DLY";
+            this.Label_INSTCAL_DLY.Size = new System.Drawing.Size(70, 13);
+            this.Label_INSTCAL_DLY.TabIndex = 249;
+            this.Label_INSTCAL_DLY.Text = "INSTCAL_DLY";
+            this.Label_INSTCAL_DLY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // CheckBox_INSTCAL_DBLR_EN
+            // 
+            this.CheckBox_INSTCAL_DBLR_EN.AutoSize = true;
+            this.CheckBox_INSTCAL_DBLR_EN.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_INSTCAL_DBLR_EN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_INSTCAL_DBLR_EN.Location = new System.Drawing.Point(118, 47);
+            this.CheckBox_INSTCAL_DBLR_EN.Name = "CheckBox_INSTCAL_DBLR_EN";
+            this.CheckBox_INSTCAL_DBLR_EN.Size = new System.Drawing.Size(117, 17);
+            this.CheckBox_INSTCAL_DBLR_EN.TabIndex = 247;
+            this.CheckBox_INSTCAL_DBLR_EN.Text = "INSTCAL_DBLR_EN";
+            this.CheckBox_INSTCAL_DBLR_EN.UseVisualStyleBackColor = false;
+            // 
+            // CheckBox_DBLR_CAL_EN
+            // 
+            this.CheckBox_DBLR_CAL_EN.AutoSize = true;
+            this.CheckBox_DBLR_CAL_EN.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_DBLR_CAL_EN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_DBLR_CAL_EN.Location = new System.Drawing.Point(10, 47);
+            this.CheckBox_DBLR_CAL_EN.Name = "CheckBox_DBLR_CAL_EN";
+            this.CheckBox_DBLR_CAL_EN.Size = new System.Drawing.Size(95, 17);
+            this.CheckBox_DBLR_CAL_EN.TabIndex = 246;
+            this.CheckBox_DBLR_CAL_EN.Text = "DBLR_CAL_EN";
+            this.CheckBox_DBLR_CAL_EN.UseVisualStyleBackColor = false;
+            // 
+            // CheckBox_INSTCAL_SKIP_ACAL
+            // 
+            this.CheckBox_INSTCAL_SKIP_ACAL.AutoSize = true;
+            this.CheckBox_INSTCAL_SKIP_ACAL.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_INSTCAL_SKIP_ACAL.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_INSTCAL_SKIP_ACAL.Location = new System.Drawing.Point(111, 24);
+            this.CheckBox_INSTCAL_SKIP_ACAL.Name = "CheckBox_INSTCAL_SKIP_ACAL";
+            this.CheckBox_INSTCAL_SKIP_ACAL.Size = new System.Drawing.Size(124, 17);
+            this.CheckBox_INSTCAL_SKIP_ACAL.TabIndex = 245;
+            this.CheckBox_INSTCAL_SKIP_ACAL.Text = "INSTCAL_SKIP_ACAL";
+            this.CheckBox_INSTCAL_SKIP_ACAL.UseVisualStyleBackColor = false;
+            // 
+            // TextBox_CAL_CLK_DIV
+            // 
+            this.TextBox_CAL_CLK_DIV.Location = new System.Drawing.Point(132, 136);
+            this.TextBox_CAL_CLK_DIV.Name = "TextBox_CAL_CLK_DIV";
+            this.TextBox_CAL_CLK_DIV.ReadOnly = true;
+            this.TextBox_CAL_CLK_DIV.Size = new System.Drawing.Size(103, 22);
+            this.TextBox_CAL_CLK_DIV.TabIndex = 238;
+            // 
+            // CheckBox_INSTCAL_EN
+            // 
+            this.CheckBox_INSTCAL_EN.AutoSize = true;
+            this.CheckBox_INSTCAL_EN.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_INSTCAL_EN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_INSTCAL_EN.Location = new System.Drawing.Point(19, 24);
+            this.CheckBox_INSTCAL_EN.Name = "CheckBox_INSTCAL_EN";
+            this.CheckBox_INSTCAL_EN.Size = new System.Drawing.Size(86, 17);
+            this.CheckBox_INSTCAL_EN.TabIndex = 244;
+            this.CheckBox_INSTCAL_EN.Text = "INSTCAL_EN";
+            this.CheckBox_INSTCAL_EN.UseVisualStyleBackColor = false;
+            this.CheckBox_INSTCAL_EN.CheckedChanged += new System.EventHandler(this.CheckBox_INSTCAL_EN_CheckedChanged);
             // 
             // Label_CAL_CLK_DIV
             // 
             this.Label_CAL_CLK_DIV.AutoSize = true;
             this.Label_CAL_CLK_DIV.BackColor = System.Drawing.Color.Transparent;
-            this.Label_CAL_CLK_DIV.Location = new System.Drawing.Point(25, 80);
+            this.Label_CAL_CLK_DIV.Location = new System.Drawing.Point(54, 139);
             this.Label_CAL_CLK_DIV.Name = "Label_CAL_CLK_DIV";
             this.Label_CAL_CLK_DIV.Size = new System.Drawing.Size(72, 13);
             this.Label_CAL_CLK_DIV.TabIndex = 239;
             this.Label_CAL_CLK_DIV.Text = "CAL_CLK_DIV";
             this.Label_CAL_CLK_DIV.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // TextBox_CAL_CLK_DIV
+            // TextBox_VCO_CAPCTRL
             // 
-            this.TextBox_CAL_CLK_DIV.Location = new System.Drawing.Point(103, 77);
-            this.TextBox_CAL_CLK_DIV.Name = "TextBox_CAL_CLK_DIV";
-            this.TextBox_CAL_CLK_DIV.ReadOnly = true;
-            this.TextBox_CAL_CLK_DIV.Size = new System.Drawing.Size(102, 22);
-            this.TextBox_CAL_CLK_DIV.TabIndex = 238;
+            this.TextBox_VCO_CAPCTRL.Location = new System.Drawing.Point(151, 132);
+            this.TextBox_VCO_CAPCTRL.Name = "TextBox_VCO_CAPCTRL";
+            this.TextBox_VCO_CAPCTRL.ReadOnly = true;
+            this.TextBox_VCO_CAPCTRL.Size = new System.Drawing.Size(83, 22);
+            this.TextBox_VCO_CAPCTRL.TabIndex = 241;
+            // 
+            // CheckBox_QUICK_RECAL_EN
+            // 
+            this.CheckBox_QUICK_RECAL_EN.AutoSize = true;
+            this.CheckBox_QUICK_RECAL_EN.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_QUICK_RECAL_EN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_QUICK_RECAL_EN.Location = new System.Drawing.Point(100, 25);
+            this.CheckBox_QUICK_RECAL_EN.Name = "CheckBox_QUICK_RECAL_EN";
+            this.CheckBox_QUICK_RECAL_EN.Size = new System.Drawing.Size(114, 17);
+            this.CheckBox_QUICK_RECAL_EN.TabIndex = 240;
+            this.CheckBox_QUICK_RECAL_EN.Text = "QUICK_RECAL_EN";
+            this.CheckBox_QUICK_RECAL_EN.UseVisualStyleBackColor = false;
             // 
             // Label_FCAL_HPFD_ADJ
             // 
             this.Label_FCAL_HPFD_ADJ.AutoSize = true;
             this.Label_FCAL_HPFD_ADJ.BackColor = System.Drawing.Color.Transparent;
-            this.Label_FCAL_HPFD_ADJ.Location = new System.Drawing.Point(8, 52);
+            this.Label_FCAL_HPFD_ADJ.Location = new System.Drawing.Point(3, 79);
             this.Label_FCAL_HPFD_ADJ.Name = "Label_FCAL_HPFD_ADJ";
             this.Label_FCAL_HPFD_ADJ.Size = new System.Drawing.Size(89, 13);
             this.Label_FCAL_HPFD_ADJ.TabIndex = 237;
@@ -508,17 +638,17 @@
             // 
             // TextBox_FCAL_HPFD_ADJ
             // 
-            this.TextBox_FCAL_HPFD_ADJ.Location = new System.Drawing.Point(103, 49);
+            this.TextBox_FCAL_HPFD_ADJ.Location = new System.Drawing.Point(98, 76);
             this.TextBox_FCAL_HPFD_ADJ.Name = "TextBox_FCAL_HPFD_ADJ";
             this.TextBox_FCAL_HPFD_ADJ.ReadOnly = true;
-            this.TextBox_FCAL_HPFD_ADJ.Size = new System.Drawing.Size(102, 22);
+            this.TextBox_FCAL_HPFD_ADJ.Size = new System.Drawing.Size(136, 22);
             this.TextBox_FCAL_HPFD_ADJ.TabIndex = 236;
             // 
             // Label_FCAL_LPFD_ADJ
             // 
             this.Label_FCAL_LPFD_ADJ.AutoSize = true;
             this.Label_FCAL_LPFD_ADJ.BackColor = System.Drawing.Color.Transparent;
-            this.Label_FCAL_LPFD_ADJ.Location = new System.Drawing.Point(11, 24);
+            this.Label_FCAL_LPFD_ADJ.Location = new System.Drawing.Point(6, 51);
             this.Label_FCAL_LPFD_ADJ.Name = "Label_FCAL_LPFD_ADJ";
             this.Label_FCAL_LPFD_ADJ.Size = new System.Drawing.Size(86, 13);
             this.Label_FCAL_LPFD_ADJ.TabIndex = 235;
@@ -527,33 +657,17 @@
             // 
             // TextBox_FCAL_LPFD_ADJ
             // 
-            this.TextBox_FCAL_LPFD_ADJ.Location = new System.Drawing.Point(103, 21);
+            this.TextBox_FCAL_LPFD_ADJ.Location = new System.Drawing.Point(98, 48);
             this.TextBox_FCAL_LPFD_ADJ.Name = "TextBox_FCAL_LPFD_ADJ";
             this.TextBox_FCAL_LPFD_ADJ.ReadOnly = true;
-            this.TextBox_FCAL_LPFD_ADJ.Size = new System.Drawing.Size(102, 22);
+            this.TextBox_FCAL_LPFD_ADJ.Size = new System.Drawing.Size(136, 22);
             this.TextBox_FCAL_LPFD_ADJ.TabIndex = 234;
-            // 
-            // GroupBoxRfoutA
-            // 
-            this.GroupBoxRfoutA.Controls.Add(this.LabelRfoutAPower);
-            this.GroupBoxRfoutA.Controls.Add(this.LabelRfoutAFreq);
-            this.GroupBoxRfoutA.Controls.Add(this.ComboBoxRfoutAMux);
-            this.GroupBoxRfoutA.Controls.Add(this.CheckBoxRfoutAEnable);
-            this.GroupBoxRfoutA.Controls.Add(this.TextBoxRfoutAPower);
-            this.GroupBoxRfoutA.Controls.Add(this.LabelRfoutAMux);
-            this.GroupBoxRfoutA.Controls.Add(this.TextBoxRfoutAFreq);
-            this.GroupBoxRfoutA.Location = new System.Drawing.Point(1112, 10);
-            this.GroupBoxRfoutA.Name = "GroupBoxRfoutA";
-            this.GroupBoxRfoutA.Size = new System.Drawing.Size(151, 117);
-            this.GroupBoxRfoutA.TabIndex = 231;
-            this.GroupBoxRfoutA.TabStop = false;
-            this.GroupBoxRfoutA.Text = "RFOUT A";
             // 
             // LabelRfoutAPower
             // 
             this.LabelRfoutAPower.AutoSize = true;
             this.LabelRfoutAPower.BackColor = System.Drawing.Color.Transparent;
-            this.LabelRfoutAPower.Location = new System.Drawing.Point(28, 63);
+            this.LabelRfoutAPower.Location = new System.Drawing.Point(1197, 80);
             this.LabelRfoutAPower.Name = "LabelRfoutAPower";
             this.LabelRfoutAPower.Size = new System.Drawing.Size(39, 13);
             this.LabelRfoutAPower.TabIndex = 228;
@@ -564,34 +678,18 @@
             // 
             this.LabelRfoutAFreq.AutoSize = true;
             this.LabelRfoutAFreq.BackColor = System.Drawing.Color.Transparent;
-            this.LabelRfoutAFreq.Location = new System.Drawing.Point(7, 91);
+            this.LabelRfoutAFreq.Location = new System.Drawing.Point(1119, 26);
             this.LabelRfoutAFreq.Name = "LabelRfoutAFreq";
             this.LabelRfoutAFreq.Size = new System.Drawing.Size(30, 13);
             this.LabelRfoutAFreq.TabIndex = 227;
             this.LabelRfoutAFreq.Text = "Freq";
             this.LabelRfoutAFreq.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // GroupBoxRfoutB
-            // 
-            this.GroupBoxRfoutB.Controls.Add(this.LabelRfoutBPower);
-            this.GroupBoxRfoutB.Controls.Add(this.LabelRfoutBFreq);
-            this.GroupBoxRfoutB.Controls.Add(this.ComboBoxRfoutBMux);
-            this.GroupBoxRfoutB.Controls.Add(this.CheckBoxRfoutBEnable);
-            this.GroupBoxRfoutB.Controls.Add(this.TextBoxRfoutBPower);
-            this.GroupBoxRfoutB.Controls.Add(this.LabelRfoutBMux);
-            this.GroupBoxRfoutB.Controls.Add(this.TextBoxRfoutBFreq);
-            this.GroupBoxRfoutB.Location = new System.Drawing.Point(1112, 293);
-            this.GroupBoxRfoutB.Name = "GroupBoxRfoutB";
-            this.GroupBoxRfoutB.Size = new System.Drawing.Size(151, 117);
-            this.GroupBoxRfoutB.TabIndex = 232;
-            this.GroupBoxRfoutB.TabStop = false;
-            this.GroupBoxRfoutB.Text = "RFOUT B";
-            // 
             // LabelRfoutBPower
             // 
             this.LabelRfoutBPower.AutoSize = true;
             this.LabelRfoutBPower.BackColor = System.Drawing.Color.Transparent;
-            this.LabelRfoutBPower.Location = new System.Drawing.Point(28, 63);
+            this.LabelRfoutBPower.Location = new System.Drawing.Point(1197, 292);
             this.LabelRfoutBPower.Name = "LabelRfoutBPower";
             this.LabelRfoutBPower.Size = new System.Drawing.Size(39, 13);
             this.LabelRfoutBPower.TabIndex = 228;
@@ -602,7 +700,7 @@
             // 
             this.LabelRfoutBFreq.AutoSize = true;
             this.LabelRfoutBFreq.BackColor = System.Drawing.Color.Transparent;
-            this.LabelRfoutBFreq.Location = new System.Drawing.Point(7, 91);
+            this.LabelRfoutBFreq.Location = new System.Drawing.Point(1119, 339);
             this.LabelRfoutBFreq.Name = "LabelRfoutBFreq";
             this.LabelRfoutBFreq.Size = new System.Drawing.Size(30, 13);
             this.LabelRfoutBFreq.TabIndex = 227;
@@ -616,8 +714,8 @@
             this.ComboBoxRfoutBMux.Items.AddRange(new object[] {
             "Divider",
             "VCO",
-            "SysRef"});
-            this.ComboBoxRfoutBMux.Location = new System.Drawing.Point(81, 31);
+            "Doubler"});
+            this.ComboBoxRfoutBMux.Location = new System.Drawing.Point(1112, 308);
             this.ComboBoxRfoutBMux.Name = "ComboBoxRfoutBMux";
             this.ComboBoxRfoutBMux.Size = new System.Drawing.Size(62, 21);
             this.ComboBoxRfoutBMux.TabIndex = 197;
@@ -626,7 +724,7 @@
             // CheckBoxRfoutBEnable
             // 
             this.CheckBoxRfoutBEnable.AutoSize = true;
-            this.CheckBoxRfoutBEnable.Location = new System.Drawing.Point(14, 33);
+            this.CheckBoxRfoutBEnable.Location = new System.Drawing.Point(1193, 220);
             this.CheckBoxRfoutBEnable.Name = "CheckBoxRfoutBEnable";
             this.CheckBoxRfoutBEnable.Size = new System.Drawing.Size(61, 17);
             this.CheckBoxRfoutBEnable.TabIndex = 191;
@@ -635,7 +733,7 @@
             // 
             // TextBoxRfoutBPower
             // 
-            this.TextBoxRfoutBPower.Location = new System.Drawing.Point(73, 60);
+            this.TextBoxRfoutBPower.Location = new System.Drawing.Point(1184, 308);
             this.TextBoxRfoutBPower.Name = "TextBoxRfoutBPower";
             this.TextBoxRfoutBPower.Size = new System.Drawing.Size(70, 22);
             this.TextBoxRfoutBPower.TabIndex = 192;
@@ -643,7 +741,7 @@
             // 
             // LabelRfoutBMux
             // 
-            this.LabelRfoutBMux.Location = new System.Drawing.Point(81, 14);
+            this.LabelRfoutBMux.Location = new System.Drawing.Point(1112, 292);
             this.LabelRfoutBMux.Name = "LabelRfoutBMux";
             this.LabelRfoutBMux.Size = new System.Drawing.Size(62, 13);
             this.LabelRfoutBMux.TabIndex = 201;
@@ -652,7 +750,7 @@
             // 
             // TextBoxRfoutBFreq
             // 
-            this.TextBoxRfoutBFreq.Location = new System.Drawing.Point(43, 88);
+            this.TextBoxRfoutBFreq.Location = new System.Drawing.Point(1155, 336);
             this.TextBoxRfoutBFreq.Name = "TextBoxRfoutBFreq";
             this.TextBoxRfoutBFreq.ReadOnly = true;
             this.TextBoxRfoutBFreq.Size = new System.Drawing.Size(100, 22);
@@ -662,30 +760,350 @@
             // 
             this.CheckBoxSyncEnable.AutoSize = true;
             this.CheckBoxSyncEnable.BackColor = System.Drawing.Color.Transparent;
-            this.CheckBoxSyncEnable.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.CheckBoxSyncEnable.Location = new System.Drawing.Point(663, 265);
+            this.CheckBoxSyncEnable.Location = new System.Drawing.Point(29, 21);
             this.CheckBoxSyncEnable.Name = "CheckBoxSyncEnable";
-            this.CheckBoxSyncEnable.Size = new System.Drawing.Size(67, 31);
+            this.CheckBoxSyncEnable.Size = new System.Drawing.Size(82, 17);
             this.CheckBoxSyncEnable.TabIndex = 233;
             this.CheckBoxSyncEnable.Text = "Phase Sync";
             this.CheckBoxSyncEnable.UseVisualStyleBackColor = false;
             // 
-            // LMX2572_Control
+            // ComboBoxChBDivider
+            // 
+            this.ComboBoxChBDivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxChBDivider.FormattingEnabled = true;
+            this.ComboBoxChBDivider.Items.AddRange(new object[] {
+            "2",
+            "4",
+            "8",
+            "16",
+            "32",
+            "64",
+            "128"});
+            this.ComboBoxChBDivider.Location = new System.Drawing.Point(1005, 297);
+            this.ComboBoxChBDivider.Name = "ComboBoxChBDivider";
+            this.ComboBoxChBDivider.Size = new System.Drawing.Size(67, 21);
+            this.ComboBoxChBDivider.TabIndex = 234;
+            this.ComboBoxChBDivider.Text = "2";
+            // 
+            // LabelChBDivider
+            // 
+            this.LabelChBDivider.Location = new System.Drawing.Point(1002, 331);
+            this.LabelChBDivider.Name = "LabelChBDivider";
+            this.LabelChBDivider.Size = new System.Drawing.Size(70, 13);
+            this.LabelChBDivider.TabIndex = 235;
+            this.LabelChBDivider.Text = "Ch B Divider";
+            this.LabelChBDivider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // CheckBox_FCAL_EN
+            // 
+            this.CheckBox_FCAL_EN.AutoSize = true;
+            this.CheckBox_FCAL_EN.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_FCAL_EN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_FCAL_EN.Location = new System.Drawing.Point(24, 25);
+            this.CheckBox_FCAL_EN.Name = "CheckBox_FCAL_EN";
+            this.CheckBox_FCAL_EN.Size = new System.Drawing.Size(70, 17);
+            this.CheckBox_FCAL_EN.TabIndex = 243;
+            this.CheckBox_FCAL_EN.Text = "FCAL_EN";
+            this.CheckBox_FCAL_EN.UseVisualStyleBackColor = false;
+            // 
+            // GroupBoxVcoCalibration
+            // 
+            this.GroupBoxVcoCalibration.Controls.Add(this.CheckBox_VCO_CAPCTRL_FORCE);
+            this.GroupBoxVcoCalibration.Controls.Add(this.Label_ACAL_CMP_DLY);
+            this.GroupBoxVcoCalibration.Controls.Add(this.TextBox_ACAL_CMP_DLY);
+            this.GroupBoxVcoCalibration.Controls.Add(this.BtnCalVco);
+            this.GroupBoxVcoCalibration.Controls.Add(this.TextBox_FCAL_LPFD_ADJ);
+            this.GroupBoxVcoCalibration.Controls.Add(this.Label_FCAL_LPFD_ADJ);
+            this.GroupBoxVcoCalibration.Controls.Add(this.CheckBox_FCAL_EN);
+            this.GroupBoxVcoCalibration.Controls.Add(this.TextBox_VCO_CAPCTRL);
+            this.GroupBoxVcoCalibration.Controls.Add(this.TextBox_FCAL_HPFD_ADJ);
+            this.GroupBoxVcoCalibration.Controls.Add(this.Label_FCAL_HPFD_ADJ);
+            this.GroupBoxVcoCalibration.Controls.Add(this.CheckBox_QUICK_RECAL_EN);
+            this.GroupBoxVcoCalibration.Location = new System.Drawing.Point(724, 213);
+            this.GroupBoxVcoCalibration.Name = "GroupBoxVcoCalibration";
+            this.GroupBoxVcoCalibration.Size = new System.Drawing.Size(240, 197);
+            this.GroupBoxVcoCalibration.TabIndex = 236;
+            this.GroupBoxVcoCalibration.TabStop = false;
+            this.GroupBoxVcoCalibration.Text = "VCO Calibration";
+            // 
+            // CheckBox_VCO_CAPCTRL_FORCE
+            // 
+            this.CheckBox_VCO_CAPCTRL_FORCE.AutoSize = true;
+            this.CheckBox_VCO_CAPCTRL_FORCE.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_VCO_CAPCTRL_FORCE.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_VCO_CAPCTRL_FORCE.Location = new System.Drawing.Point(6, 135);
+            this.CheckBox_VCO_CAPCTRL_FORCE.Name = "CheckBox_VCO_CAPCTRL_FORCE";
+            this.CheckBox_VCO_CAPCTRL_FORCE.Size = new System.Drawing.Size(139, 17);
+            this.CheckBox_VCO_CAPCTRL_FORCE.TabIndex = 248;
+            this.CheckBox_VCO_CAPCTRL_FORCE.Text = "VCO_CAPCTRL_FORCE";
+            this.CheckBox_VCO_CAPCTRL_FORCE.UseVisualStyleBackColor = false;
+            this.CheckBox_VCO_CAPCTRL_FORCE.CheckedChanged += new System.EventHandler(this.CheckBox_VCO_CAPCTRL_FORCE_CheckedChanged);
+            // 
+            // Label_ACAL_CMP_DLY
+            // 
+            this.Label_ACAL_CMP_DLY.AutoSize = true;
+            this.Label_ACAL_CMP_DLY.BackColor = System.Drawing.Color.Transparent;
+            this.Label_ACAL_CMP_DLY.Location = new System.Drawing.Point(8, 107);
+            this.Label_ACAL_CMP_DLY.Name = "Label_ACAL_CMP_DLY";
+            this.Label_ACAL_CMP_DLY.Size = new System.Drawing.Size(83, 13);
+            this.Label_ACAL_CMP_DLY.TabIndex = 245;
+            this.Label_ACAL_CMP_DLY.Text = "ACAL_CMP_DLY";
+            this.Label_ACAL_CMP_DLY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TextBox_ACAL_CMP_DLY
+            // 
+            this.TextBox_ACAL_CMP_DLY.Location = new System.Drawing.Point(97, 104);
+            this.TextBox_ACAL_CMP_DLY.Name = "TextBox_ACAL_CMP_DLY";
+            this.TextBox_ACAL_CMP_DLY.Size = new System.Drawing.Size(137, 22);
+            this.TextBox_ACAL_CMP_DLY.TabIndex = 244;
+            // 
+            // CheckBox_PFD_DLY_MANUAL
+            // 
+            this.CheckBox_PFD_DLY_MANUAL.AutoSize = true;
+            this.CheckBox_PFD_DLY_MANUAL.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_PFD_DLY_MANUAL.Location = new System.Drawing.Point(514, 261);
+            this.CheckBox_PFD_DLY_MANUAL.Name = "CheckBox_PFD_DLY_MANUAL";
+            this.CheckBox_PFD_DLY_MANUAL.Size = new System.Drawing.Size(68, 17);
+            this.CheckBox_PFD_DLY_MANUAL.TabIndex = 237;
+            this.CheckBox_PFD_DLY_MANUAL.Text = "PFD_DLY";
+            this.CheckBox_PFD_DLY_MANUAL.UseVisualStyleBackColor = false;
+            this.CheckBox_PFD_DLY_MANUAL.CheckedChanged += new System.EventHandler(this.CheckBox_PFD_DLY_MANUAL_CheckedChanged);
+            // 
+            // LabelRfoutBPhaseShift
+            // 
+            this.LabelRfoutBPhaseShift.AutoSize = true;
+            this.LabelRfoutBPhaseShift.BackColor = System.Drawing.Color.Transparent;
+            this.LabelRfoutBPhaseShift.Location = new System.Drawing.Point(1112, 367);
+            this.LabelRfoutBPhaseShift.Name = "LabelRfoutBPhaseShift";
+            this.LabelRfoutBPhaseShift.Size = new System.Drawing.Size(37, 13);
+            this.LabelRfoutBPhaseShift.TabIndex = 239;
+            this.LabelRfoutBPhaseShift.Text = "Phase";
+            this.LabelRfoutBPhaseShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TextBoxRfoutBPhaseShift
+            // 
+            this.TextBoxRfoutBPhaseShift.Location = new System.Drawing.Point(1155, 364);
+            this.TextBoxRfoutBPhaseShift.Name = "TextBoxRfoutBPhaseShift";
+            this.TextBoxRfoutBPhaseShift.ReadOnly = true;
+            this.TextBoxRfoutBPhaseShift.Size = new System.Drawing.Size(100, 22);
+            this.TextBoxRfoutBPhaseShift.TabIndex = 238;
+            // 
+            // LabelRfoutAPhaseShift
+            // 
+            this.LabelRfoutAPhaseShift.AutoSize = true;
+            this.LabelRfoutAPhaseShift.BackColor = System.Drawing.Color.Transparent;
+            this.LabelRfoutAPhaseShift.Location = new System.Drawing.Point(1112, 54);
+            this.LabelRfoutAPhaseShift.Name = "LabelRfoutAPhaseShift";
+            this.LabelRfoutAPhaseShift.Size = new System.Drawing.Size(37, 13);
+            this.LabelRfoutAPhaseShift.TabIndex = 241;
+            this.LabelRfoutAPhaseShift.Text = "Phase";
+            this.LabelRfoutAPhaseShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TextBoxRfoutAPhaseShift
+            // 
+            this.TextBoxRfoutAPhaseShift.Location = new System.Drawing.Point(1155, 51);
+            this.TextBoxRfoutAPhaseShift.Name = "TextBoxRfoutAPhaseShift";
+            this.TextBoxRfoutAPhaseShift.ReadOnly = true;
+            this.TextBoxRfoutAPhaseShift.Size = new System.Drawing.Size(100, 22);
+            this.TextBoxRfoutAPhaseShift.TabIndex = 240;
+            // 
+            // CheckBox_LOOPBACK
+            // 
+            this.CheckBox_LOOPBACK.AutoSize = true;
+            this.CheckBox_LOOPBACK.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_LOOPBACK.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_LOOPBACK.Location = new System.Drawing.Point(715, 94);
+            this.CheckBox_LOOPBACK.Name = "CheckBox_LOOPBACK";
+            this.CheckBox_LOOPBACK.Size = new System.Drawing.Size(81, 17);
+            this.CheckBox_LOOPBACK.TabIndex = 242;
+            this.CheckBox_LOOPBACK.Text = "LOOPBACK";
+            this.CheckBox_LOOPBACK.UseVisualStyleBackColor = false;
+            // 
+            // TextBoxPhaseShift
+            // 
+            this.TextBoxPhaseShift.Location = new System.Drawing.Point(590, 362);
+            this.TextBoxPhaseShift.Name = "TextBoxPhaseShift";
+            this.TextBoxPhaseShift.ReadOnly = true;
+            this.TextBoxPhaseShift.Size = new System.Drawing.Size(103, 22);
+            this.TextBoxPhaseShift.TabIndex = 243;
+            // 
+            // LabelPhaseShift
+            // 
+            this.LabelPhaseShift.AutoSize = true;
+            this.LabelPhaseShift.BackColor = System.Drawing.Color.Transparent;
+            this.LabelPhaseShift.Location = new System.Drawing.Point(520, 365);
+            this.LabelPhaseShift.Name = "LabelPhaseShift";
+            this.LabelPhaseShift.Size = new System.Drawing.Size(64, 13);
+            this.LabelPhaseShift.TabIndex = 244;
+            this.LabelPhaseShift.Text = "Phase Shift";
+            this.LabelPhaseShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // GroupBoxPhaseSync
+            // 
+            this.GroupBoxPhaseSync.Controls.Add(this.checkBox1);
+            this.GroupBoxPhaseSync.Controls.Add(this.LabelMashResetDelay);
+            this.GroupBoxPhaseSync.Controls.Add(this.TextBoxMashResetDelay);
+            this.GroupBoxPhaseSync.Controls.Add(this.TextBoxMashResetCounter);
+            this.GroupBoxPhaseSync.Controls.Add(this.CheckBoxSyncEnable);
+            this.GroupBoxPhaseSync.Controls.Add(this.Label_Mash_Reset_Counter);
+            this.GroupBoxPhaseSync.Location = new System.Drawing.Point(225, 310);
+            this.GroupBoxPhaseSync.Name = "GroupBoxPhaseSync";
+            this.GroupBoxPhaseSync.Size = new System.Drawing.Size(250, 100);
+            this.GroupBoxPhaseSync.TabIndex = 245;
+            this.GroupBoxPhaseSync.TabStop = false;
+            this.GroupBoxPhaseSync.Text = "Phase Sync";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox1.Location = new System.Drawing.Point(132, 21);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(80, 17);
+            this.checkBox1.TabIndex = 247;
+            this.checkBox1.Text = "Sync Input";
+            this.checkBox1.UseVisualStyleBackColor = false;
+            // 
+            // LabelMashResetDelay
+            // 
+            this.LabelMashResetDelay.AutoSize = true;
+            this.LabelMashResetDelay.BackColor = System.Drawing.Color.Transparent;
+            this.LabelMashResetDelay.Location = new System.Drawing.Point(60, 75);
+            this.LabelMashResetDelay.Name = "LabelMashResetDelay";
+            this.LabelMashResetDelay.Size = new System.Drawing.Size(66, 13);
+            this.LabelMashResetDelay.TabIndex = 246;
+            this.LabelMashResetDelay.Text = "Reset Delay";
+            this.LabelMashResetDelay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TextBoxMashResetDelay
+            // 
+            this.TextBoxMashResetDelay.Location = new System.Drawing.Point(132, 72);
+            this.TextBoxMashResetDelay.Name = "TextBoxMashResetDelay";
+            this.TextBoxMashResetDelay.ReadOnly = true;
+            this.TextBoxMashResetDelay.Size = new System.Drawing.Size(103, 22);
+            this.TextBoxMashResetDelay.TabIndex = 245;
+            // 
+            // GroupBoxTemperature
+            // 
+            this.GroupBoxTemperature.Controls.Add(this.CheckBoxEnableTemp);
+            this.GroupBoxTemperature.Controls.Add(this.TextBoxTemperature);
+            this.GroupBoxTemperature.Location = new System.Drawing.Point(10, 96);
+            this.GroupBoxTemperature.Name = "GroupBoxTemperature";
+            this.GroupBoxTemperature.Size = new System.Drawing.Size(200, 51);
+            this.GroupBoxTemperature.TabIndex = 246;
+            this.GroupBoxTemperature.TabStop = false;
+            this.GroupBoxTemperature.Text = "Chip Temperature";
+            // 
+            // CheckBoxEnableTemp
+            // 
+            this.CheckBoxEnableTemp.AutoSize = true;
+            this.CheckBoxEnableTemp.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBoxEnableTemp.Location = new System.Drawing.Point(11, 23);
+            this.CheckBoxEnableTemp.Name = "CheckBoxEnableTemp";
+            this.CheckBoxEnableTemp.Size = new System.Drawing.Size(61, 17);
+            this.CheckBoxEnableTemp.TabIndex = 239;
+            this.CheckBoxEnableTemp.Text = "Enable";
+            this.CheckBoxEnableTemp.UseVisualStyleBackColor = false;
+            // 
+            // TextBoxTemperature
+            // 
+            this.TextBoxTemperature.Location = new System.Drawing.Point(78, 21);
+            this.TextBoxTemperature.Name = "TextBoxTemperature";
+            this.TextBoxTemperature.ReadOnly = true;
+            this.TextBoxTemperature.Size = new System.Drawing.Size(103, 22);
+            this.TextBoxTemperature.TabIndex = 238;
+            this.TextBoxTemperature.Text = "1";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox2.Location = new System.Drawing.Point(730, 181);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(65, 17);
+            this.checkBox2.TabIndex = 247;
+            this.checkBox2.Text = "Div By 2";
+            this.checkBox2.UseVisualStyleBackColor = false;
+            // 
+            // BtnCommit
+            // 
+            this.BtnCommit.Location = new System.Drawing.Point(19, 352);
+            this.BtnCommit.Name = "BtnCommit";
+            this.BtnCommit.Size = new System.Drawing.Size(93, 23);
+            this.BtnCommit.TabIndex = 248;
+            this.BtnCommit.Text = "Commit";
+            this.BtnCommit.UseVisualStyleBackColor = true;
+            this.BtnCommit.Click += new System.EventHandler(this.BtnCommit_Click);
+            // 
+            // BtnUpdateUI
+            // 
+            this.BtnUpdateUI.Location = new System.Drawing.Point(19, 381);
+            this.BtnUpdateUI.Name = "BtnUpdateUI";
+            this.BtnUpdateUI.Size = new System.Drawing.Size(93, 23);
+            this.BtnUpdateUI.TabIndex = 249;
+            this.BtnUpdateUI.Text = "Update UI";
+            this.BtnUpdateUI.UseVisualStyleBackColor = true;
+            this.BtnUpdateUI.Click += new System.EventHandler(this.BtnUpdateUI_Click);
+            // 
+            // BtnLoadTICS
+            // 
+            this.BtnLoadTICS.Location = new System.Drawing.Point(19, 323);
+            this.BtnLoadTICS.Name = "BtnLoadTICS";
+            this.BtnLoadTICS.Size = new System.Drawing.Size(93, 23);
+            this.BtnLoadTICS.TabIndex = 250;
+            this.BtnLoadTICS.Text = "Load TICS";
+            this.BtnLoadTICS.UseVisualStyleBackColor = true;
+            this.BtnLoadTICS.Click += new System.EventHandler(this.BtnLoadTICS_Click);
+            // 
+            // OpenFileDialog
+            // 
+            this.OpenFileDialog.FileName = "OpenFileDialog";
+            // 
+            // LMX2820_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImage = global::Nitride.EE.Properties.Resources.LMX2820_BD;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Controls.Add(this.CheckBoxSyncEnable);
-            this.Controls.Add(this.GroupBoxRfoutB);
-            this.Controls.Add(this.GroupBoxRfoutA);
+            this.Controls.Add(this.LabelRfoutAFreq);
+            this.Controls.Add(this.LabelRfoutAPower);
+            this.Controls.Add(this.TextBoxRfoutAFreq);
+            this.Controls.Add(this.LabelRfoutAMux);
+            this.Controls.Add(this.ComboBoxRfoutAMux);
+            this.Controls.Add(this.LabelRfoutBFreq);
+            this.Controls.Add(this.LabelRfoutBPower);
+            this.Controls.Add(this.TextBoxRfoutBFreq);
+            this.Controls.Add(this.TextBoxRfoutAPower);
+            this.Controls.Add(this.CheckBoxRfoutAEnable);
+            this.Controls.Add(this.BtnLoadTICS);
+            this.Controls.Add(this.BtnUpdateUI);
+            this.Controls.Add(this.TextBoxRfoutBPower);
+            this.Controls.Add(this.CheckBoxRfoutBEnable);
+            this.Controls.Add(this.ComboBoxRfoutBMux);
+            this.Controls.Add(this.BtnCommit);
+            this.Controls.Add(this.LabelRfoutBMux);
+            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.GroupBoxTemperature);
+            this.Controls.Add(this.GroupBoxPhaseSync);
+            this.Controls.Add(this.LabelPhaseShift);
+            this.Controls.Add(this.TextBoxPhaseShift);
+            this.Controls.Add(this.CheckBox_LOOPBACK);
+            this.Controls.Add(this.LabelRfoutAPhaseShift);
+            this.Controls.Add(this.TextBoxRfoutAPhaseShift);
+            this.Controls.Add(this.LabelRfoutBPhaseShift);
+            this.Controls.Add(this.TextBoxRfoutBPhaseShift);
+            this.Controls.Add(this.CheckBox_PFD_DLY_MANUAL);
+            this.Controls.Add(this.GroupBoxVcoCalibration);
+            this.Controls.Add(this.LabelChBDivider);
+            this.Controls.Add(this.ComboBoxChBDivider);
             this.Controls.Add(this.GroupBoxCalibration);
             this.Controls.Add(this.ComboBoxChargePumpCurrent);
             this.Controls.Add(this.TextBoxReferenceFreq);
             this.Controls.Add(this.CheckBoxManualVcoSelect);
             this.Controls.Add(this.LabelVcoLock);
-            this.Controls.Add(this.LabelChDivider);
-            this.Controls.Add(this.ComboBoxChDivider);
+            this.Controls.Add(this.LabelChADivider);
+            this.Controls.Add(this.ComboBoxChADivider);
             this.Controls.Add(this.LabelVcoSelect);
             this.Controls.Add(this.ComboBoxVcoSelect);
             this.Controls.Add(this.LabelVcoFreq);
@@ -696,29 +1114,27 @@
             this.Controls.Add(this.TextBoxRMulti);
             this.Controls.Add(this.CheckBoxMashResetN);
             this.Controls.Add(this.CheckBoxMashSeedEnable);
-            this.Controls.Add(this.TextBoxMashResetCounter);
-            this.Controls.Add(this.Label_Mash_Reset_Counter);
             this.Controls.Add(this.TextBoxPfdDlySel);
-            this.Controls.Add(this.Label_PFD_DLY_SEL);
             this.Controls.Add(this.TextBoxMashSeed);
             this.Controls.Add(this.Label_MashSeed);
             this.Controls.Add(this.Label_Mash_Order);
             this.Controls.Add(this.ComboBoxMashOrder);
-            this.Controls.Add(this.BtnCalVco);
             this.Controls.Add(this.TextBoxFDen);
             this.Controls.Add(this.TextBoxFNum);
             this.Controls.Add(this.TextBoxNDiv);
             this.Controls.Add(this.TextBoxRDiv);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "LMX2572_Control";
+            this.Name = "LMX2820_Control";
             this.Size = new System.Drawing.Size(1272, 419);
             this.GroupBoxCalibration.ResumeLayout(false);
             this.GroupBoxCalibration.PerformLayout();
-            this.GroupBoxRfoutA.ResumeLayout(false);
-            this.GroupBoxRfoutA.PerformLayout();
-            this.GroupBoxRfoutB.ResumeLayout(false);
-            this.GroupBoxRfoutB.PerformLayout();
+            this.GroupBoxVcoCalibration.ResumeLayout(false);
+            this.GroupBoxVcoCalibration.PerformLayout();
+            this.GroupBoxPhaseSync.ResumeLayout(false);
+            this.GroupBoxPhaseSync.PerformLayout();
+            this.GroupBoxTemperature.ResumeLayout(false);
+            this.GroupBoxTemperature.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -752,16 +1168,13 @@
         private System.Windows.Forms.Label Label_Mash_Reset_Counter;
         private System.Windows.Forms.TextBox TextBoxMashResetCounter;
         private System.Windows.Forms.TextBox TextBoxPfdDlySel;
-        private System.Windows.Forms.Label Label_PFD_DLY_SEL;
         private System.Windows.Forms.Label Label_MashSeed;
         private System.Windows.Forms.TextBox TextBoxMashSeed;
         private System.Windows.Forms.Label Label_Mash_Order;
         private System.Windows.Forms.ComboBox ComboBoxMashOrder;
 
-        private System.Windows.Forms.Label LabelChDivider;
-        private System.Windows.Forms.ComboBox ComboBoxChDivider;
-
-        private System.Windows.Forms.GroupBox GroupBoxRfoutA;
+        private System.Windows.Forms.Label LabelChADivider;
+        private System.Windows.Forms.ComboBox ComboBoxChADivider;
         private System.Windows.Forms.Label LabelRfoutAMux;
         private System.Windows.Forms.ComboBox ComboBoxRfoutAMux;
         private System.Windows.Forms.Label LabelRfoutAPower;
@@ -769,8 +1182,6 @@
         private System.Windows.Forms.Label LabelRfoutAFreq;
         private System.Windows.Forms.TextBox TextBoxRfoutAFreq;
         private System.Windows.Forms.CheckBox CheckBoxRfoutAEnable;
-
-        private System.Windows.Forms.GroupBox GroupBoxRfoutB;
         private System.Windows.Forms.Label LabelRfoutBMux;
         private System.Windows.Forms.ComboBox ComboBoxRfoutBMux;
         private System.Windows.Forms.Label LabelRfoutBPower;
@@ -787,5 +1198,42 @@
         private System.Windows.Forms.Label Label_FCAL_LPFD_ADJ;
         private System.Windows.Forms.TextBox TextBox_FCAL_LPFD_ADJ;
         private System.Windows.Forms.CheckBox CheckBox_QUICK_RECAL_EN;
+        private System.Windows.Forms.TextBox TextBox_VCO_CAPCTRL;
+        private System.Windows.Forms.ComboBox ComboBoxChBDivider;
+        private System.Windows.Forms.Label LabelChBDivider;
+        private System.Windows.Forms.CheckBox CheckBox_DBLR_CAL_EN;
+        private System.Windows.Forms.CheckBox CheckBox_INSTCAL_SKIP_ACAL;
+        private System.Windows.Forms.CheckBox CheckBox_INSTCAL_EN;
+        private System.Windows.Forms.CheckBox CheckBox_FCAL_EN;
+        private System.Windows.Forms.GroupBox GroupBoxVcoCalibration;
+        private System.Windows.Forms.CheckBox CheckBox_PFD_DLY_MANUAL;
+        private System.Windows.Forms.CheckBox CheckBox_INSTCAL_DBLR_EN;
+        private System.Windows.Forms.Button ButtonInstantCalibration;
+        private System.Windows.Forms.TextBox TextBox_INSTCAL_PLL_NUM;
+        private System.Windows.Forms.Label Label_INSTCAL_PLL_NUM;
+        private System.Windows.Forms.TextBox TextBox_INSTCAL_DLY;
+        private System.Windows.Forms.Label Label_INSTCAL_DLY;
+        private System.Windows.Forms.Label LabelRfoutBPhaseShift;
+        private System.Windows.Forms.TextBox TextBoxRfoutBPhaseShift;
+        private System.Windows.Forms.Label LabelRfoutAPhaseShift;
+        private System.Windows.Forms.TextBox TextBoxRfoutAPhaseShift;
+        private System.Windows.Forms.CheckBox CheckBox_LOOPBACK;
+        private System.Windows.Forms.TextBox TextBoxPhaseShift;
+        private System.Windows.Forms.Label LabelPhaseShift;
+        private System.Windows.Forms.GroupBox GroupBoxPhaseSync;
+        private System.Windows.Forms.Label LabelMashResetDelay;
+        private System.Windows.Forms.TextBox TextBoxMashResetDelay;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.GroupBox GroupBoxTemperature;
+        private System.Windows.Forms.CheckBox CheckBoxEnableTemp;
+        private System.Windows.Forms.TextBox TextBoxTemperature;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label Label_ACAL_CMP_DLY;
+        private System.Windows.Forms.TextBox TextBox_ACAL_CMP_DLY;
+        private System.Windows.Forms.CheckBox CheckBox_VCO_CAPCTRL_FORCE;
+        private System.Windows.Forms.Button BtnCommit;
+        private System.Windows.Forms.Button BtnUpdateUI;
+        private System.Windows.Forms.Button BtnLoadTICS;
+        private System.Windows.Forms.OpenFileDialog OpenFileDialog;
     }
 }

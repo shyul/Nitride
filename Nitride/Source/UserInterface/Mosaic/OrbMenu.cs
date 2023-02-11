@@ -86,7 +86,7 @@ namespace Nitride
 
             int x = 0;
             int y = 0;
-            int x_base = 0;
+            // int x_base = 0;
 
 
             lock (ButtonWidgets)
@@ -131,7 +131,7 @@ namespace Nitride
             g.DrawLine(Main.Theme.Panel.EdgePen, new Point(0, Height - 1), new Point(Width, Height - 1));
             g.DrawLine(Main.Theme.Panel.EdgePen, new Point(Width - 1, 0), new Point(Width - 1, Height));
 
-            int last_y = 0;
+            // int last_y = 0;
 
 
         }

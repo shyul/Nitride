@@ -25,6 +25,8 @@ namespace Nitride.EE
 
         public virtual double PhaseDetectFreqency => Reference.Frequency / R_Ratio;
 
+        public virtual double VcoFrequency => Reference.Frequency * DivRatio;
+
         public abstract double R_Ratio { get; }
 
         public virtual uint N_Div { get; set; }

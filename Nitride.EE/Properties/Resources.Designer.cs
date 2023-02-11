@@ -263,6 +263,16 @@ namespace Nitride.EE.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap LMX2820_BD {
+            get {
+                object obj = ResourceManager.GetObject("LMX2820_BD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Noise_24 {
             get {
                 object obj = ResourceManager.GetObject("Noise_24", resourceCulture);
