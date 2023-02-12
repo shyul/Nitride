@@ -171,7 +171,7 @@ namespace Nitride.EE
             lo.INSTCAL_PLL_NUM = TextBox_INSTCAL_PLL_NUM.Text.ToUInt32(0);
             lo.ACAL_CMP_DLY = TextBox_ACAL_CMP_DLY.Text.ToUInt32(10);
 
-            lo.INSTCAL_DLY = TextBox_INSTCAL_DLY.Text.ToUInt32(0x1F4);
+            //lo.INSTCAL_DLY = TextBox_INSTCAL_DLY.Text.ToUInt32(0x1F4);
             lo.QUICK_RECAL_EN = CheckBox_QUICK_RECAL_EN.Checked;
 
             lo.VCO_CAPCTRL_FORCE = CheckBox_VCO_CAPCTRL_FORCE.Checked;
@@ -181,8 +181,11 @@ namespace Nitride.EE
                 lo.VCO_CAPCTRL = TextBox_VCO_CAPCTRL.Text.ToUInt32(0xBF);
             }
 
+            lo.Phase_Sync_Enable = CheckBoxSyncEnable.Checked;
+            lo.PSYNC_Pin_Enable = CheckBoxPsyncPin.Checked;
+
             lo.TempSense_Enable = CheckBoxEnableTemp.Checked;
-     
+
             if (lo.Reference.Enabled && !double.IsNaN(lo.Reference.Frequency))
             {
                 lo.Commit(); // lo.EnableRefMultiH = (lo.RefMultiplyOut > 100e6);
@@ -397,6 +400,14 @@ namespace Nitride.EE
                 2 => "Fosc ≤ 800 MHz",
                 _ => "Other"
             };
+
+            CheckBoxSyncEnable.Checked = lo.Phase_Sync_Enable;
+            CheckBoxPsyncPin.Checked = lo.PSYNC_Pin_Enable;
+
+
+            TextBoxPhaseShift.Text = lo.Phase_Shift.ToString("0.#####") + " °";
+            TextBoxRfoutAPhaseShift.Text = lo.Ch_A_Phase.ToString("0.#####") + " °";
+            TextBoxRfoutBPhaseShift.Text = lo.Ch_B_Phase.ToString("0.#####") + " °";
 
             CheckBoxEnableTemp.Checked = lo.TempSense_Enable;
             TextBoxTemperature.Text = lo.TempSense.ToString("0.##") + " °C";

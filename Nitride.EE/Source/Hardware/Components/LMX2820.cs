@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 
 namespace Nitride.EE
@@ -45,14 +46,11 @@ namespace Nitride.EE
             }
         }
 
-        public void Commit() 
-        {
-            // Auto settings...
-        
-        }
+
 
         public void InstantCalibration()
         {
+            Commit();
             REG_WR(45);
             REG_WR(44);
             REG_WR(43); // PLL NUM
@@ -71,6 +69,7 @@ namespace Nitride.EE
 
         public void VcoCalibration()
         {
+            Commit();
             REG_WR(43); // PLL NUM
             REG_WR(42);
             REG_WR(39); // PLL DEN
@@ -103,10 +102,78 @@ namespace Nitride.EE
         }
 
         // public bool LOOPBACK_EN // R34
+        public const double T = 2.5 * 0.47 / 0.47;
+
+        public double Fosc => Reference.Frequency;
+
+        public double Fsm => Fosc / Math.Pow(2, CAL_CLK_DIV);
+
+        public void Commit()
+        {
+            Console.WriteLine("PreR = " + PreR + " | R_Div = " + R_Div + " | ReferenceMulti = " + ReferenceMulti + " | EnableRefDoubler = " + (EnableRefDoubler ? 2 : 1) + " | R_Ratio = " + R_Ratio + " | PhaseDetectFreqency = " + PhaseDetectFreqency);
+
+            // Auto settings...
+            if (Fosc > 800e6) 
+            {
+                CAL_CLK_DIV = 3;
+            }
+            else if (Fosc <= 800e6 && Fosc > 400e6)
+            {
+                CAL_CLK_DIV = 2;
+            }
+            else if (Fosc <= 400e6 && Fosc > 200e6)
+            {
+                CAL_CLK_DIV = 1;
+            }
+            else
+            {
+                CAL_CLK_DIV = 0;
+            }
+
+            INSTCAL_DLY = Convert.ToUInt32(Math.Round((T * Fsm / 1e6), MidpointRounding.AwayFromZero));
 
 
-        public override double R_Ratio => PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
-        public double RefMultiplyOut => Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
+            if (PhaseDetectFreqency <= 100e6) 
+            {
+                FCAL_HPFD_ADJ = 0;
+            }
+            else if (PhaseDetectFreqency > 100e6 && PhaseDetectFreqency <= 150e6) 
+            {
+                FCAL_HPFD_ADJ = 1;
+            }
+            else if (PhaseDetectFreqency > 150e6 && PhaseDetectFreqency <= 200e6)
+            {
+                FCAL_HPFD_ADJ = 2;
+            }
+            else
+            {
+                FCAL_HPFD_ADJ = 3;
+            }
+
+            if (PhaseDetectFreqency >= 10e6)
+            {
+                FCAL_LPFD_ADJ = 0;
+            }
+            else if (PhaseDetectFreqency >= 5e6 && PhaseDetectFreqency < 10e6)
+            {
+                FCAL_LPFD_ADJ = 1;
+            }
+            else if (PhaseDetectFreqency >= 2.5e6 && PhaseDetectFreqency < 5e6)
+            {
+                FCAL_LPFD_ADJ = 2;
+            }
+            else
+            {
+                FCAL_LPFD_ADJ = 3;
+            }
+
+            //Console.WriteLine("T * Fsm = " + (T * Fsm / 1e6).ToString());
+            //Console.WriteLine("INSTCAL_DLY = " + INSTCAL_DLY.ToString());
+        }
+
+        public override double R_Ratio => 1.0D * PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
+
+        public double RefMultiplyOut => 1.0D * Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
 
         // public double DivRatio => (EnableRefDoubler ? 2 : 1) / PreR / R_Div * (N_Div + ((double)F_Num / (double)F_Den));
         // public double Frequency => PFD_Frequency * (N_Div + ((double)F_Num / (double)F_Den)); // VCO: 3.2 GHz ~ 6.4 GHz;
@@ -368,10 +435,58 @@ namespace Nitride.EE
             }
         }
 
+        public bool Phase_Sync_Enable
+        {
+            get => ((Regs[1] >> 15) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[1] |= ((0x1) << 15) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[1] &= (~((0x1) << 15)) & 0xFFFF;
+                }
+            }
+        }
 
         public double TempSense
         {
-            get => (0.85 * (uint)((Regs[76]) & 0x7F)) - 415;
+            get => (1 * ((Regs[76]) & 0x7F));// - 415;
+        }
+
+
+
+        public double Phase_Shift => Mash_Seed_Enable ? 360 * Mash_Seed / F_Den : 0;
+
+        public double Ch_A_Phase
+        {
+            get
+            {
+                return RFOutA_Mux switch
+                {
+                    0 => Phase_Shift / Math.Pow(2, (Ch_Div_A + 1)),
+                    1 => Phase_Shift,
+                    2 => Phase_Shift * 2,
+                    _ => 0
+                };
+            }
+        }
+
+        public double Ch_B_Phase
+        {
+            get
+            {
+                return RFOutB_Mux switch
+                {
+                    0 => Phase_Shift / Math.Pow(2, (Ch_Div_B + 1)),
+                    1 => Phase_Shift,
+                    2 => Phase_Shift * 2,
+                    _ => 0
+                };
+            }
         }
 
         public double Ch_A_Frequency
@@ -548,6 +663,8 @@ namespace Nitride.EE
             }
         }
 
+
+
         public bool INSTCAL_EN
         {
             get => ((Regs[1] >> 0) & 0x1) == 0x1;
@@ -589,7 +706,7 @@ namespace Nitride.EE
             set
             {
                 Regs[2] &= (~((0x7FF) << 1)) & 0xFFFF;
-                Regs[0] |= (ushort)((value & 0x7FF) << 1);
+                Regs[2] |= (ushort)((value & 0x7FF) << 1);
             }
         }
 

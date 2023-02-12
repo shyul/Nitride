@@ -105,13 +105,13 @@
             this.TextBoxPhaseShift = new System.Windows.Forms.TextBox();
             this.LabelPhaseShift = new System.Windows.Forms.Label();
             this.GroupBoxPhaseSync = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.CheckBoxPsyncPin = new System.Windows.Forms.CheckBox();
             this.LabelMashResetDelay = new System.Windows.Forms.Label();
             this.TextBoxMashResetDelay = new System.Windows.Forms.TextBox();
             this.GroupBoxTemperature = new System.Windows.Forms.GroupBox();
             this.CheckBoxEnableTemp = new System.Windows.Forms.CheckBox();
             this.TextBoxTemperature = new System.Windows.Forms.TextBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.CheckBox_LOOPBACK_Div2 = new System.Windows.Forms.CheckBox();
             this.BtnCommit = new System.Windows.Forms.Button();
             this.BtnUpdateUI = new System.Windows.Forms.Button();
             this.BtnLoadTICS = new System.Windows.Forms.Button();
@@ -700,7 +700,7 @@
             // 
             this.LabelRfoutBFreq.AutoSize = true;
             this.LabelRfoutBFreq.BackColor = System.Drawing.Color.Transparent;
-            this.LabelRfoutBFreq.Location = new System.Drawing.Point(1119, 339);
+            this.LabelRfoutBFreq.Location = new System.Drawing.Point(1119, 342);
             this.LabelRfoutBFreq.Name = "LabelRfoutBFreq";
             this.LabelRfoutBFreq.Size = new System.Drawing.Size(30, 13);
             this.LabelRfoutBFreq.TabIndex = 227;
@@ -750,7 +750,7 @@
             // 
             // TextBoxRfoutBFreq
             // 
-            this.TextBoxRfoutBFreq.Location = new System.Drawing.Point(1155, 336);
+            this.TextBoxRfoutBFreq.Location = new System.Drawing.Point(1155, 339);
             this.TextBoxRfoutBFreq.Name = "TextBoxRfoutBFreq";
             this.TextBoxRfoutBFreq.ReadOnly = true;
             this.TextBoxRfoutBFreq.Size = new System.Drawing.Size(100, 22);
@@ -873,7 +873,7 @@
             // 
             this.LabelRfoutBPhaseShift.AutoSize = true;
             this.LabelRfoutBPhaseShift.BackColor = System.Drawing.Color.Transparent;
-            this.LabelRfoutBPhaseShift.Location = new System.Drawing.Point(1112, 367);
+            this.LabelRfoutBPhaseShift.Location = new System.Drawing.Point(1112, 370);
             this.LabelRfoutBPhaseShift.Name = "LabelRfoutBPhaseShift";
             this.LabelRfoutBPhaseShift.Size = new System.Drawing.Size(37, 13);
             this.LabelRfoutBPhaseShift.TabIndex = 239;
@@ -882,7 +882,7 @@
             // 
             // TextBoxRfoutBPhaseShift
             // 
-            this.TextBoxRfoutBPhaseShift.Location = new System.Drawing.Point(1155, 364);
+            this.TextBoxRfoutBPhaseShift.Location = new System.Drawing.Point(1155, 367);
             this.TextBoxRfoutBPhaseShift.Name = "TextBoxRfoutBPhaseShift";
             this.TextBoxRfoutBPhaseShift.ReadOnly = true;
             this.TextBoxRfoutBPhaseShift.Size = new System.Drawing.Size(100, 22);
@@ -940,7 +940,7 @@
             // 
             // GroupBoxPhaseSync
             // 
-            this.GroupBoxPhaseSync.Controls.Add(this.checkBox1);
+            this.GroupBoxPhaseSync.Controls.Add(this.CheckBoxPsyncPin);
             this.GroupBoxPhaseSync.Controls.Add(this.LabelMashResetDelay);
             this.GroupBoxPhaseSync.Controls.Add(this.TextBoxMashResetDelay);
             this.GroupBoxPhaseSync.Controls.Add(this.TextBoxMashResetCounter);
@@ -953,16 +953,16 @@
             this.GroupBoxPhaseSync.TabStop = false;
             this.GroupBoxPhaseSync.Text = "Phase Sync";
             // 
-            // checkBox1
+            // CheckBoxPsyncPin
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox1.Location = new System.Drawing.Point(132, 21);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 247;
-            this.checkBox1.Text = "Sync Input";
-            this.checkBox1.UseVisualStyleBackColor = false;
+            this.CheckBoxPsyncPin.AutoSize = true;
+            this.CheckBoxPsyncPin.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBoxPsyncPin.Location = new System.Drawing.Point(141, 21);
+            this.CheckBoxPsyncPin.Name = "CheckBoxPsyncPin";
+            this.CheckBoxPsyncPin.Size = new System.Drawing.Size(80, 17);
+            this.CheckBoxPsyncPin.TabIndex = 247;
+            this.CheckBoxPsyncPin.Text = "Sync Input";
+            this.CheckBoxPsyncPin.UseVisualStyleBackColor = false;
             // 
             // LabelMashResetDelay
             // 
@@ -1014,17 +1014,17 @@
             this.TextBoxTemperature.TabIndex = 238;
             this.TextBoxTemperature.Text = "1";
             // 
-            // checkBox2
+            // CheckBox_LOOPBACK_Div2
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox2.Location = new System.Drawing.Point(730, 181);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(65, 17);
-            this.checkBox2.TabIndex = 247;
-            this.checkBox2.Text = "Div By 2";
-            this.checkBox2.UseVisualStyleBackColor = false;
+            this.CheckBox_LOOPBACK_Div2.AutoSize = true;
+            this.CheckBox_LOOPBACK_Div2.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox_LOOPBACK_Div2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheckBox_LOOPBACK_Div2.Location = new System.Drawing.Point(730, 181);
+            this.CheckBox_LOOPBACK_Div2.Name = "CheckBox_LOOPBACK_Div2";
+            this.CheckBox_LOOPBACK_Div2.Size = new System.Drawing.Size(65, 17);
+            this.CheckBox_LOOPBACK_Div2.TabIndex = 247;
+            this.CheckBox_LOOPBACK_Div2.Text = "Div By 2";
+            this.CheckBox_LOOPBACK_Div2.UseVisualStyleBackColor = false;
             // 
             // BtnCommit
             // 
@@ -1083,7 +1083,7 @@
             this.Controls.Add(this.ComboBoxRfoutBMux);
             this.Controls.Add(this.BtnCommit);
             this.Controls.Add(this.LabelRfoutBMux);
-            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.CheckBox_LOOPBACK_Div2);
             this.Controls.Add(this.GroupBoxTemperature);
             this.Controls.Add(this.GroupBoxPhaseSync);
             this.Controls.Add(this.LabelPhaseShift);
@@ -1223,11 +1223,11 @@
         private System.Windows.Forms.GroupBox GroupBoxPhaseSync;
         private System.Windows.Forms.Label LabelMashResetDelay;
         private System.Windows.Forms.TextBox TextBoxMashResetDelay;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox CheckBoxPsyncPin;
         private System.Windows.Forms.GroupBox GroupBoxTemperature;
         private System.Windows.Forms.CheckBox CheckBoxEnableTemp;
         private System.Windows.Forms.TextBox TextBoxTemperature;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox CheckBox_LOOPBACK_Div2;
         private System.Windows.Forms.Label Label_ACAL_CMP_DLY;
         private System.Windows.Forms.TextBox TextBox_ACAL_CMP_DLY;
         private System.Windows.Forms.CheckBox CheckBox_VCO_CAPCTRL_FORCE;
