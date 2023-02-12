@@ -66,7 +66,9 @@ Command List:
 
         }
 
-        public Dictionary<string, PowerSupplyChannel> PowerSupplyChannels { get; } = new();
+
+
+        public bool IsConnected => throw new NotImplementedException();
 
         public void PowerSupply_ON(string channelName = "all")
         {
@@ -97,5 +99,10 @@ Command List:
         {
             return (0, 0);
         }
+
+        public Dictionary<string, PowerSupplyChannel> PowerSupplyChannels { get; } = new();
+
+        public IEnumerable<IInstrumentResource> Resources => throw new NotImplementedException();
+
     }
 }

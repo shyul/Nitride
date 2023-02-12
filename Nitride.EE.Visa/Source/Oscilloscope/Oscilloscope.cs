@@ -20,11 +20,15 @@ namespace Nitride.EE.Visa
             Dispose();
         }
 
-        public override void Open()
+        public override bool Open()
         {
-            base.Open();
+            return base.Open();
 
         }
+
+        public IEnumerable<IInstrumentResource> Resources => throw new NotImplementedException();
+
+        public bool IsConnected => throw new NotImplementedException();
 
         public Dictionary<string, OscilloscopeAnalogChannel> OscilloscopeAnalogChannels { get; } = new();
 

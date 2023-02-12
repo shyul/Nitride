@@ -35,7 +35,7 @@ namespace Nitride.EE.Visa
 
         public string DeviceVersion { get; private set; } = "Unknown";
 
-        public virtual void Open()
+        public virtual bool Open()
         {
             try
             {
@@ -70,6 +70,8 @@ namespace Nitride.EE.Visa
                 Console.WriteLine("Connected: " + VendorName + " | " + Model + " | " + SerialNumber + " | " + DeviceVersion);
                 // Send message connection is established
             }
+
+            return true;
         }
 
         public virtual void Close() => Session?.Dispose();

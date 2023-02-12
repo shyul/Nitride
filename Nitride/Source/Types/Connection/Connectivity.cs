@@ -33,6 +33,7 @@ namespace Nitride
         Timeout = 3,
     }
 
+    /*
     public static class HttpClientTools
     {
         public static bool Connected(string url) 
@@ -93,5 +94,5 @@ namespace Nitride
             await download.CopyToAsync(destination, 81920, cancellationToken);
             progress.Report(1);
         }
-    }
+    }*/
 }

@@ -20,6 +20,10 @@ namespace Nitride.EE.Visa
 
         }
 
+        public IEnumerable<IInstrumentResource> Resources => throw new NotImplementedException();
+
+        public bool IsConnected => throw new NotImplementedException();
+
         public Dictionary<string, MultimeterChannel> MultimeterChannels { get; } = new();
 
         public void Multimeter_WriteSetting(string channelName)

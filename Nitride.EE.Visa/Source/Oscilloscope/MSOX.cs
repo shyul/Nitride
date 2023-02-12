@@ -15,9 +15,9 @@ namespace Nitride.EE.Visa
             //Reset();
         }
 
-        public override void Open()
+        public override bool Open()
         {
-            base.Open();
+            return base.Open();
 
         }
 
@@ -82,7 +82,7 @@ namespace Nitride.EE.Visa
             // VOLT:OFFS
 
 
-            Write("WGEN" + ch.ChannelNumber.ToString(), param);
+            Write("WGEN" + ch.Name, param);
         }
     }
 }

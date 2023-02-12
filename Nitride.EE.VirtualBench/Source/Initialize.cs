@@ -37,7 +37,7 @@ namespace Nitride.EE.VirtualBench
             OscilloscopeAnalogChannels[OscilloscopeAnalogChannel2Name] = new OscilloscopeAnalogChannel(2, OscilloscopeAnalogChannel2Name, this);
 
             Status = (NiVB_Status)NiFGEN_Initialize(Handle, ResourceName, true, out NiFGEN_Handle);
-            FunctionGeneratorChannels[FunctionGeneratorChannelName] = new FunctionGeneratorChannel(1, FunctionGeneratorChannelName, this);
+            FunctionGeneratorChannels[FunctionGeneratorChannelName] = new FunctionGeneratorChannel(FunctionGeneratorChannelName, this);
 
             Status = (NiVB_Status)NiPS_Initialize(Handle, ResourceName, true, out NiPS_Handle);
             PowerSupplyChannels[PowerSupplyP6VName] = new PowerSupplyChannel(PowerSupplyP6VName, this, new Range<double>(0, 6), new Range<double>(0, 1));

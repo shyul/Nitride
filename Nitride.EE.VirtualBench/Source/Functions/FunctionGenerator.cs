@@ -11,11 +11,25 @@ namespace Nitride.EE.VirtualBench
 {
     public partial class NiVB : IFunctionGenerator
     {
+        public IEnumerable<IInstrumentResource> Resources => throw new NotImplementedException();
+
+        public bool IsConnected => throw new NotImplementedException();
+
+
+
+
+
+
+
+
+
         public Dictionary<string, FunctionGeneratorChannel> FunctionGeneratorChannels { get; } = new();
 
         public const string FunctionGeneratorChannelName = "fgen1";
 
         public FunctionGeneratorChannel FunctionGeneratorChannel => FunctionGeneratorChannels[FunctionGeneratorChannelName];
+
+
 
         public void FunctionGenerator_WriteSetting(string channelName)
         {
@@ -274,6 +288,11 @@ namespace Nitride.EE.VirtualBench
             [MarshalAs(UnmanagedType.LPStr)] string deviceName,
             [MarshalAs(UnmanagedType.LPStr)] string password,
             out IntPtr calibrationHandle);
+
+        bool IHardwareDevice.Open()
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion DLL Export
     }

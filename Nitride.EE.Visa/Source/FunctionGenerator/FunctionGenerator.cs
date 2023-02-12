@@ -20,11 +20,17 @@ namespace Nitride.EE.Visa
             Dispose();
         }
 
-        public override void Open()
+        public IEnumerable<IInstrumentResource> Resources => throw new NotImplementedException();
+
+        public bool IsConnected => throw new NotImplementedException();
+
+        public override bool Open()
         {
             base.Open();
-            FunctionGeneratorChannels[Channel1Name] = new FunctionGeneratorChannel(1, Channel1Name, this);
-            FunctionGeneratorChannels[Channel2Name] = new FunctionGeneratorChannel(2, Channel2Name, this);
+            FunctionGeneratorChannels[Channel1Name] = new FunctionGeneratorChannel(Channel1Name, this);
+            FunctionGeneratorChannels[Channel2Name] = new FunctionGeneratorChannel(Channel2Name, this);
+
+            return true;
         }
 
         public Dictionary<string, FunctionGeneratorChannel> FunctionGeneratorChannels { get; } = new();
@@ -38,13 +44,13 @@ namespace Nitride.EE.Visa
         public void FunctionGenerator_OFF(string channelName)
         {
             var ch = FunctionGeneratorChannels[channelName];
-            Write("OUTP" + ch.ChannelNumber.ToString() + " OFF");
+            Write("OUTP" + ch.Name + " OFF");
         }
 
         public void FunctionGenerator_ON(string channelName)
         {
             var ch = FunctionGeneratorChannels[channelName];
-            Write("OUTP" + ch.ChannelNumber.ToString() + " ON");
+            Write("OUTP" + ch.Name + " ON");
         }
 
         public void FunctionGenerator_WriteSetting(string channelName)
@@ -55,7 +61,7 @@ namespace Nitride.EE.Visa
 
             if (config is FunctionGeneratorArbitraryConfig cfgArb)
             {
-                Write("SOUR" + ch.ChannelNumber.ToString() + ":DATA:VOL:CLE");
+                Write("SOUR" + ch.Name + ":DATA:VOL:CLE");
 
                 List<double> list = new List<double>() { 0, 0, 0, 0.8, -0.5, 1.25, -1.0, 1.5, -1.8, 1.1, -2.6, 1.1, -1.8, 1.5, -1.0, 1.25, -0.5, 0.8, 0, 0, 0 };
                 double peak = list.Select(n => Math.Abs(n)).Max();
@@ -110,14 +116,14 @@ namespace Nitride.EE.Visa
                 throw new Exception("Unsupported WaveFormType: " + config.GetType().FullName);
             };
 
-            Write("SOUR" + ch.ChannelNumber.ToString(), param);
+            Write("SOUR" + ch.Name, param);
         }
 
         public void FunctionGenerator_ReadSetting(string channelName)
         {
             var ch = FunctionGeneratorChannels[channelName];
 
-            string function = Query("SOUR" + ch.ChannelNumber.ToString() + ":FUNC?").Trim();
+            string function = Query("SOUR" + ch.Name + ":FUNC?").Trim();
 
             switch (function)
             {
@@ -126,10 +132,10 @@ namespace Nitride.EE.Visa
                         ch.Config = new FunctionGeneratorSineWaveConfig();
 
                     var cfgSine = ch.Config as FunctionGeneratorSineWaveConfig;
-                    cfgSine.Frequency = Query("SOUR" + ch.ChannelNumber.ToString() + ":FREQ?").ToDouble();
-                    cfgSine.Amplitude = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT?").ToDouble();
-                    cfgSine.DcOffset = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT:OFFS?").ToDouble();
-                    cfgSine.Phase = Query("SOUR" + ch.ChannelNumber.ToString() + ":PHAS?").ToDouble();
+                    cfgSine.Frequency = Query("SOUR" + ch.Name + ":FREQ?").ToDouble();
+                    cfgSine.Amplitude = Query("SOUR" + ch.Name + ":VOLT?").ToDouble();
+                    cfgSine.DcOffset = Query("SOUR" + ch.Name + ":VOLT:OFFS?").ToDouble();
+                    cfgSine.Phase = Query("SOUR" + ch.Name + ":PHAS?").ToDouble();
                     break;
 
                 case "SQU":
@@ -137,11 +143,11 @@ namespace Nitride.EE.Visa
                         ch.Config = new FunctionGeneratorSquareWaveConfig();
 
                     var cfgSquare = ch.Config as FunctionGeneratorSquareWaveConfig;
-                    cfgSquare.Frequency = Query("SOUR" + ch.ChannelNumber.ToString() + ":FREQ?").ToDouble();
-                    cfgSquare.Amplitude = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT?").ToDouble();
-                    cfgSquare.DcOffset = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT:OFFS?").ToDouble();
-                    cfgSquare.Phase = Query("SOUR" + ch.ChannelNumber.ToString() + ":PHAS?").ToDouble();
-                    cfgSquare.DutyCycle = Query("SOUR" + ch.ChannelNumber.ToString() + ":FUNC:SQU:DCYC?").ToDouble();
+                    cfgSquare.Frequency = Query("SOUR" + ch.Name + ":FREQ?").ToDouble();
+                    cfgSquare.Amplitude = Query("SOUR" + ch.Name + ":VOLT?").ToDouble();
+                    cfgSquare.DcOffset = Query("SOUR" + ch.Name + ":VOLT:OFFS?").ToDouble();
+                    cfgSquare.Phase = Query("SOUR" + ch.Name + ":PHAS?").ToDouble();
+                    cfgSquare.DutyCycle = Query("SOUR" + ch.Name + ":FUNC:SQU:DCYC?").ToDouble();
                     break;
 
                 case "RAMP":
@@ -149,11 +155,11 @@ namespace Nitride.EE.Visa
                         ch.Config = new FunctionGeneratorTriangleWaveConfig();
                     
                     var cfgTrian = ch.Config as FunctionGeneratorTriangleWaveConfig;
-                    cfgTrian.Frequency = Query("SOUR" + ch.ChannelNumber.ToString() + ":FREQ?").ToDouble();
-                    cfgTrian.Amplitude = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT?").ToDouble();
-                    cfgTrian.DcOffset = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT:OFFS?").ToDouble();
-                    cfgTrian.Phase = Query("SOUR" + ch.ChannelNumber.ToString() + ":PHAS?").ToDouble();
-                    cfgTrian.DutyCycle = Query("SOUR" + ch.ChannelNumber.ToString() + ":FUNC:RAMP:SYMM?").ToDouble();
+                    cfgTrian.Frequency = Query("SOUR" + ch.Name + ":FREQ?").ToDouble();
+                    cfgTrian.Amplitude = Query("SOUR" + ch.Name + ":VOLT?").ToDouble();
+                    cfgTrian.DcOffset = Query("SOUR" + ch.Name + ":VOLT:OFFS?").ToDouble();
+                    cfgTrian.Phase = Query("SOUR" + ch.Name + ":PHAS?").ToDouble();
+                    cfgTrian.DutyCycle = Query("SOUR" + ch.Name + ":FUNC:RAMP:SYMM?").ToDouble();
                     break;
 
                 case "DC":
@@ -161,7 +167,7 @@ namespace Nitride.EE.Visa
                         ch.Config = new FunctionGeneratorDcConfig();
 
                     var cfgDc = ch.Config as FunctionGeneratorDcConfig;
-                    cfgDc.DcOffset = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT:OFFS?").ToDouble();
+                    cfgDc.DcOffset = Query("SOUR" + ch.Name + ":VOLT:OFFS?").ToDouble();
                     break;
 
                 case "ARB":
@@ -169,7 +175,7 @@ namespace Nitride.EE.Visa
                         ch.Config = new FunctionGeneratorArbitraryConfig(ch);
 
                     var cfgArb = ch.Config as FunctionGeneratorArbitraryConfig;
-                    cfgArb.DcOffset = Query("SOUR" + ch.ChannelNumber.ToString() + ":VOLT:OFFS?").ToDouble();
+                    cfgArb.DcOffset = Query("SOUR" + ch.Name + ":VOLT:OFFS?").ToDouble();
                     break;
 
                 default: throw new Exception("Unknown Function: " + function);
