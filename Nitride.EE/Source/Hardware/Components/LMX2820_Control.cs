@@ -187,6 +187,15 @@ namespace Nitride.EE
                 LabelVcoLock.ForeColor = Color.Red;
             }
 
+            if (lo.PowerDown)
+            {
+                BtnPowerDown.Text = "Power Up";
+            }
+            else
+            {
+                BtnPowerDown.Text = "Power Down";
+            }
+
             // LabelVcoLock.Text = lo.IsLocked ? "Locked" : "Unlock";
             // LabelVcoLock.ForeColor = lo.IsLocked ? Color.Green : Color.Red;
 
@@ -521,6 +530,26 @@ namespace Nitride.EE
             LMX2820.InstantCalibration();
         }
 
+        private void BtnReset_Click(object sender, EventArgs e)
+        {
+            LMX2820.Reset = true; // Self Clearing
+            LMX2820.BulkWrite(new ushort[] { 0 }, LMX2820.Regs);
+        }
 
+        private void BtnPowerDown_Click(object sender, EventArgs e)
+        {
+            if (LMX2820.PowerDown) 
+            {
+                LMX2820.PowerDown = false;
+                BtnPowerDown.Text = "Power Down";
+            }
+            else
+            {
+                LMX2820.PowerDown = true;
+                BtnPowerDown.Text = "Power Up";
+            }
+
+            LMX2820.BulkWrite(new ushort[] { 0 }, LMX2820.Regs);
+        }
     }
 }

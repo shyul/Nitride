@@ -36,19 +36,17 @@ namespace Nitride.EE.FTDI
 
         private uint Write_Buffer(int pt)
         {
-            Console.WriteLine("SPI Total Bytes = " + pt);
-
             uint numBytes = 0;
             FT_STATUS status = Write(TxBuffer, pt, ref numBytes);
 
-            if (status != FT_STATUS.FT_OK)
+            if (status != FT_STATUS.FT_OK || numBytes != pt)
             {
-                Console.WriteLine("Write Error! " + numBytes);
+                Console.WriteLine("SPI Write Error! " + numBytes);
                 return 0;
             }
             else
             {
-                Console.WriteLine("Write Bytes Count: " + numBytes);// + " | Data = " + Convert.ToString(TxBuffer[1], 2));
+                Console.WriteLine("SPI Write Bytes Count: " + numBytes); // + " | Data = " + Convert.ToString(TxBuffer[1], 2));
             }
 
             return numBytes;
@@ -57,23 +55,24 @@ namespace Nitride.EE.FTDI
         private uint Read_Buffer(int count)
         {
             uint numBytes = 0;
+            FT_STATUS status = FT_STATUS.FT_OK;
 
             while (numBytes < count)
             {
                 Thread.Sleep(10);
-                GetRxBytesAvailable(ref numBytes);
+                status = GetRxBytesAvailable(ref numBytes);
             }
 
-            FT_STATUS status = Read(RxBuffer, numBytes, ref numBytes);
+            status |= Read(RxBuffer, numBytes, ref numBytes);
 
             if (status != FT_STATUS.FT_OK)
             {
-                Console.WriteLine("Read Error! " + numBytes);
+                Console.WriteLine("SPI Read Error! " + numBytes);
                 return 0;
             }
             else
             {
-                Console.WriteLine("Read Bytes Count: " + numBytes + " | Data = " + Convert.ToString(RxBuffer[0], 2) + " | " + Convert.ToString(RxBuffer[1], 2));
+                Console.WriteLine("SPI Read Bytes Count: " + numBytes); // + " | Data = " + Convert.ToString(RxBuffer[0], 2) + " | " + Convert.ToString(RxBuffer[1], 2));
             }
 
             return numBytes;
@@ -123,7 +122,6 @@ namespace Nitride.EE.FTDI
             Write_Buffer(pt);
         }
 
-
         private int SET_LE_LOW(int pt)
         {
             DBUS &= (~(1 << 3)) & 0xFF;
@@ -139,7 +137,6 @@ namespace Nitride.EE.FTDI
 
         private int SET_LE_HIGH(int pt)
         {
-            
             DBUS |= (1 << 3) & 0xFF;
             DBUS_DIR |= (1 << 3) & 0xFF;
             return DBUS_WR(pt);
@@ -151,7 +148,7 @@ namespace Nitride.EE.FTDI
             return pt + 3;*/
         }
 
-        private int SPI_WRITE_SINGLE(int pt, byte addr, ushort data) // data.Length
+        private int SPI_WRITE_SINGLE_A8D16(int pt, byte addr, ushort data) // data.Length
         {
             // 3 Bytes SPI Write Read
             TxBuffer[pt] = 0x11; // Data Out Only, Bytes, OUT Clock -VE
@@ -164,23 +161,21 @@ namespace Nitride.EE.FTDI
             return pt + 6;
         }
 
-        public void SPI_WRITE_REG(ushort[] addr, Reg16 reg) // data.Length
+        public void SPI_WRITE_REG_A8D16(ushort[] addr, Reg16 reg) // data.Length
         {
             int pt = 0;
-
             foreach (var a in addr)
             {
                 pt = SET_LE_HIGH(pt);
                 pt = SET_LE_LOW(pt);
-                pt = SPI_WRITE_SINGLE(pt, Convert.ToByte(a & 0xFF), reg[a]);
+                pt = SPI_WRITE_SINGLE_A8D16(pt, Convert.ToByte(a & 0xFF), reg[a]);
                 pt = SET_LE_HIGH(pt);
                 pt = SET_LE_HIGH(pt);
             }
-
             Write_Buffer(pt);
         }
 
-        public void SPI_WRITE_ALL(Reg16 reg)
+        public void SPI_WRITE_ALL_A8D16(Reg16 reg)
         {
             int pt = 0;
             pt = SET_LE_HIGH(pt);
@@ -209,7 +204,7 @@ namespace Nitride.EE.FTDI
             Write_Buffer(pt);
         }
 
-        private int SPI_READ_SINGLE(int pt, byte addr) // data.Length
+        private int SPI_READ_SINGLE_A8D16(int pt, byte addr) // data.Length
         {
             // 3 Bytes SPI Write Read
             TxBuffer[pt] = 0x31;
@@ -222,7 +217,7 @@ namespace Nitride.EE.FTDI
             return pt + 6;
         }
 
-        public void SPI_READ_REG(ushort[] addr, Reg16 reg) // data.Length
+        public void SPI_READ_REG_A8D16(ushort[] addr, Reg16 reg) // data.Length
         {
             int pt = 0;
 
@@ -230,7 +225,7 @@ namespace Nitride.EE.FTDI
             {
                 pt = SET_LE_HIGH(pt);
                 pt = SET_LE_LOW(pt);
-                pt = SPI_READ_SINGLE(pt, Convert.ToByte(a & 0xFF));
+                pt = SPI_READ_SINGLE_A8D16(pt, Convert.ToByte(a & 0xFF));
                 pt = SET_LE_HIGH(pt);
                 pt = SET_LE_HIGH(pt);
             }
@@ -247,7 +242,7 @@ namespace Nitride.EE.FTDI
             }
         }
 
-        public void SPI_READ_ALL(Reg16 reg)
+        public void SPI_READ_ALL_A8D16(Reg16 reg)
         {
             int pt = 0;
             pt = SET_LE_HIGH(pt);

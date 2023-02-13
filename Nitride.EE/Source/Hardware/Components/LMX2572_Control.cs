@@ -158,6 +158,15 @@ namespace Nitride.EE
                 LabelVcoLock.ForeColor = Color.Red;
             }
 
+            if (lo.PowerDown)
+            {
+                BtnPowerDown.Text = "Power Up";
+            }
+            else
+            {
+                BtnPowerDown.Text = "Power Down";
+            }
+
             // LabelVcoLock.Text = lo.IsLocked ? "Locked" : "Unlock";
             // LabelVcoLock.ForeColor = lo.IsLocked ? Color.Green : Color.Red;
 
@@ -350,10 +359,14 @@ namespace Nitride.EE
         private void BtnCommit_Click(object sender, EventArgs e)
         {
             Commit();
+
+            if (LMX2572.WriteAll is not null)
+                LMX2572.WriteAll();
         }
 
         private void BtnUpdateUI_Click(object sender, EventArgs e)
         {
+            LMX2572.ReadStatus();
             UpdateUI();
         }
 
@@ -396,6 +409,28 @@ namespace Nitride.EE
         {
             Commit();
             LMX2572.VcoCalibration();
+        }
+
+        private void BtnReset_Click(object sender, EventArgs e)
+        {
+            LMX2572.Reset = true; // Self Clearing
+            LMX2572.BulkWrite(new ushort[] { 0 }, LMX2572.Regs);
+        }
+
+        private void BtnPowerDown_Click(object sender, EventArgs e)
+        {
+            if (LMX2572.PowerDown)
+            {
+                LMX2572.PowerDown = false;
+                BtnPowerDown.Text = "Power Down";
+            }
+            else
+            {
+                LMX2572.PowerDown = true;
+                BtnPowerDown.Text = "Power Up";
+            }
+
+            LMX2572.BulkWrite(new ushort[] { 0 }, LMX2572.Regs);
         }
     }
 }

@@ -70,8 +70,8 @@
             this.CheckBox_INSTCAL_DBLR_EN = new System.Windows.Forms.CheckBox();
             this.CheckBox_DBLR_CAL_EN = new System.Windows.Forms.CheckBox();
             this.CheckBox_INSTCAL_SKIP_ACAL = new System.Windows.Forms.CheckBox();
-            this.TextBox_CAL_CLK_DIV = new System.Windows.Forms.TextBox();
             this.CheckBox_INSTCAL_EN = new System.Windows.Forms.CheckBox();
+            this.TextBox_CAL_CLK_DIV = new System.Windows.Forms.TextBox();
             this.Label_CAL_CLK_DIV = new System.Windows.Forms.Label();
             this.TextBox_VCO_CAPCTRL = new System.Windows.Forms.TextBox();
             this.CheckBox_QUICK_RECAL_EN = new System.Windows.Forms.CheckBox();
@@ -116,6 +116,8 @@
             this.BtnUpdateUI = new System.Windows.Forms.Button();
             this.BtnLoadTICS = new System.Windows.Forms.Button();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.BtnReset = new System.Windows.Forms.Button();
+            this.BtnPowerDown = new System.Windows.Forms.Button();
             this.GroupBoxCalibration.SuspendLayout();
             this.GroupBoxVcoCalibration.SuspendLayout();
             this.GroupBoxPhaseSync.SuspendLayout();
@@ -572,14 +574,6 @@
             this.CheckBox_INSTCAL_SKIP_ACAL.Text = "INSTCAL_SKIP_ACAL";
             this.CheckBox_INSTCAL_SKIP_ACAL.UseVisualStyleBackColor = false;
             // 
-            // TextBox_CAL_CLK_DIV
-            // 
-            this.TextBox_CAL_CLK_DIV.Location = new System.Drawing.Point(982, 379);
-            this.TextBox_CAL_CLK_DIV.Name = "TextBox_CAL_CLK_DIV";
-            this.TextBox_CAL_CLK_DIV.ReadOnly = true;
-            this.TextBox_CAL_CLK_DIV.Size = new System.Drawing.Size(90, 22);
-            this.TextBox_CAL_CLK_DIV.TabIndex = 238;
-            // 
             // CheckBox_INSTCAL_EN
             // 
             this.CheckBox_INSTCAL_EN.AutoSize = true;
@@ -592,6 +586,14 @@
             this.CheckBox_INSTCAL_EN.Text = "INSTCAL_EN";
             this.CheckBox_INSTCAL_EN.UseVisualStyleBackColor = false;
             this.CheckBox_INSTCAL_EN.CheckedChanged += new System.EventHandler(this.CheckBox_INSTCAL_EN_CheckedChanged);
+            // 
+            // TextBox_CAL_CLK_DIV
+            // 
+            this.TextBox_CAL_CLK_DIV.Location = new System.Drawing.Point(982, 379);
+            this.TextBox_CAL_CLK_DIV.Name = "TextBox_CAL_CLK_DIV";
+            this.TextBox_CAL_CLK_DIV.ReadOnly = true;
+            this.TextBox_CAL_CLK_DIV.Size = new System.Drawing.Size(90, 22);
+            this.TextBox_CAL_CLK_DIV.TabIndex = 238;
             // 
             // Label_CAL_CLK_DIV
             // 
@@ -1060,12 +1062,34 @@
             // 
             this.OpenFileDialog.FileName = "OpenFileDialog";
             // 
+            // BtnReset
+            // 
+            this.BtnReset.Location = new System.Drawing.Point(19, 252);
+            this.BtnReset.Name = "BtnReset";
+            this.BtnReset.Size = new System.Drawing.Size(93, 23);
+            this.BtnReset.TabIndex = 251;
+            this.BtnReset.Text = "Reset";
+            this.BtnReset.UseVisualStyleBackColor = true;
+            this.BtnReset.Click += new System.EventHandler(this.BtnReset_Click);
+            // 
+            // BtnPowerDown
+            // 
+            this.BtnPowerDown.Location = new System.Drawing.Point(19, 281);
+            this.BtnPowerDown.Name = "BtnPowerDown";
+            this.BtnPowerDown.Size = new System.Drawing.Size(93, 23);
+            this.BtnPowerDown.TabIndex = 252;
+            this.BtnPowerDown.Text = "Power Down";
+            this.BtnPowerDown.UseVisualStyleBackColor = true;
+            this.BtnPowerDown.Click += new System.EventHandler(this.BtnPowerDown_Click);
+            // 
             // LMX2820_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Nitride.EE.Properties.Resources.LMX2820_BD;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Controls.Add(this.BtnPowerDown);
+            this.Controls.Add(this.BtnReset);
             this.Controls.Add(this.LabelRfoutAFreq);
             this.Controls.Add(this.LabelRfoutAPower);
             this.Controls.Add(this.TextBoxRfoutAFreq);
@@ -1237,5 +1261,7 @@
         private System.Windows.Forms.Button BtnUpdateUI;
         private System.Windows.Forms.Button BtnLoadTICS;
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
+        private System.Windows.Forms.Button BtnReset;
+        private System.Windows.Forms.Button BtnPowerDown;
     }
 }

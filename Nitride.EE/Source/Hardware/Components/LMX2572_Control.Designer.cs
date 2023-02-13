@@ -99,6 +99,8 @@
             this.TextBoxMashResetCounter = new System.Windows.Forms.TextBox();
             this.CheckBoxSyncEnable = new System.Windows.Forms.CheckBox();
             this.Label_Mash_Reset_Counter = new System.Windows.Forms.Label();
+            this.BtnPowerDown = new System.Windows.Forms.Button();
+            this.BtnReset = new System.Windows.Forms.Button();
             this.GroupBoxVcoCalibration.SuspendLayout();
             this.GroupBoxPhaseSync.SuspendLayout();
             this.SuspendLayout();
@@ -847,12 +849,34 @@
             this.Label_Mash_Reset_Counter.Text = "Reset Counter";
             this.Label_Mash_Reset_Counter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // BtnPowerDown
+            // 
+            this.BtnPowerDown.Location = new System.Drawing.Point(19, 282);
+            this.BtnPowerDown.Name = "BtnPowerDown";
+            this.BtnPowerDown.Size = new System.Drawing.Size(93, 23);
+            this.BtnPowerDown.TabIndex = 264;
+            this.BtnPowerDown.Text = "Power Down";
+            this.BtnPowerDown.UseVisualStyleBackColor = true;
+            this.BtnPowerDown.Click += new System.EventHandler(this.BtnPowerDown_Click);
+            // 
+            // BtnReset
+            // 
+            this.BtnReset.Location = new System.Drawing.Point(19, 253);
+            this.BtnReset.Name = "BtnReset";
+            this.BtnReset.Size = new System.Drawing.Size(93, 23);
+            this.BtnReset.TabIndex = 263;
+            this.BtnReset.Text = "Reset";
+            this.BtnReset.UseVisualStyleBackColor = true;
+            this.BtnReset.Click += new System.EventHandler(this.BtnReset_Click);
+            // 
             // LMX2572_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Nitride.EE.Properties.Resources.LMX2572_BD;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Controls.Add(this.BtnPowerDown);
+            this.Controls.Add(this.BtnReset);
             this.Controls.Add(this.GroupBoxPhaseSync);
             this.Controls.Add(this.Label_CAL_CLK_DIV);
             this.Controls.Add(this.LabelRfoutAPhaseShift);
@@ -996,5 +1020,7 @@
         private System.Windows.Forms.TextBox TextBoxMashResetCounter;
         private System.Windows.Forms.CheckBox CheckBoxSyncEnable;
         private System.Windows.Forms.Label Label_Mash_Reset_Counter;
+        private System.Windows.Forms.Button BtnPowerDown;
+        private System.Windows.Forms.Button BtnReset;
     }
 }

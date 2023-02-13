@@ -168,6 +168,40 @@ namespace Nitride.EE
             //Console.WriteLine("INSTCAL_DLY = " + INSTCAL_DLY.ToString());
         }
 
+        public bool PowerDown
+        {
+            get => ((Regs[0] >> 0) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[0] |= ((0x1) << 0) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[0] &= (~((0x1) << 0)) & 0xFFFF;
+                }
+            }
+        }
+
+        public bool Reset
+        {
+            get => ((Regs[0] >> 1) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[0] |= ((0x1) << 1) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[0] &= (~((0x1) << 1)) & 0xFFFF;
+                }
+            }
+        }
+
         public override double R_Ratio => 1.0D * PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
 
         public double RefMultiplyOut => 1.0D * Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;

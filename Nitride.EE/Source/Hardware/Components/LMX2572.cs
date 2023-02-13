@@ -24,52 +24,33 @@ namespace Nitride.EE
 
         public Reg16 Regs { get; } = new(126);
 
-        public Func<int, ushort> SPI_RD;
+        public Action WriteAll { get; set; }
 
-        public Action<int, ushort> SPI_WR;
+        public Action ReadAll { get; set; }
 
-        private void REG_RD(byte addr)
-        {
-            if (SPI_RD is not null)
-            {
-                Regs[addr] = SPI_RD(addr);
-            }
-        }
+        public Action<ushort[], Reg16> BulkWrite { get; set; }
 
-        private void REG_WR(byte addr)
-        {
-            if (SPI_WR is not null)
-            {
-                SPI_WR(addr, Regs[addr]);
-            }
-        }
+        public Action<ushort[], Reg16> BulkRead { get; set; }
+
+        public readonly static ushort[] VcoCalibrationAddr = new ushort[] { 43, 42, 39, 38, 36, 32, 23, 22, 20, 10, 6, 2, 1, 0 };
 
         public void VcoCalibration()
         {
             Commit();
-            /*
-            REG_WR(43); // PLL NUM
-            REG_WR(42);
-            REG_WR(39); // PLL DEN
-            REG_WR(38);
-            REG_WR(36); // PLL N
-            REG_WR(32); // OUT DIV
-            REG_WR(23); // VCO SEL FORCE
-            REG_WR(22); // VCO SEL 
-            REG_WR(20); // VCO DACISET
-            REG_WR(10); // VCO DAC FORCE / CAPCTRL FORCE
-            REG_WR(6); // ACAL_DELAY
-            REG_WR(2);
-            REG_WR(1);
-            REG_WR(0);*/
+            if (BulkWrite is not null)
+            {
+                BulkWrite(VcoCalibrationAddr, Regs);
+            }
         }
 
+        public readonly static ushort[] StatusAddr = new ushort[] { 110, 111, 112 };
 
         public void ReadStatus()
         {
-            REG_RD(110);
-            REG_RD(111);
-            REG_RD(112);
+            if (BulkRead is not null)
+            {
+                BulkRead(StatusAddr, Regs);
+            }
         }
 
         public double Fosc => Reference.Frequency;
@@ -163,6 +144,40 @@ namespace Nitride.EE
             }
             else
                 throw new Exception("VCO Frequency is too high: " + VcoFrequency);
+        }
+
+        public bool PowerDown
+        {
+            get => ((Regs[0] >> 0) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[0] |= ((0x1) << 0) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[0] &= (~((0x1) << 0)) & 0xFFFF;
+                }
+            }
+        }
+
+        public bool Reset
+        {
+            get => ((Regs[0] >> 1) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[0] |= ((0x1) << 1) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[0] &= (~((0x1) << 1)) & 0xFFFF;
+                }
+            }
         }
 
         public override double R_Ratio => 1.0D * PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
