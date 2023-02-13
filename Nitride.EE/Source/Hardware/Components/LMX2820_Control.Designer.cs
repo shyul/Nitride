@@ -125,7 +125,7 @@
             // LabelVcoLock
             // 
             this.LabelVcoLock.BackColor = System.Drawing.Color.Transparent;
-            this.LabelVcoLock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelVcoLock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.LabelVcoLock.ForeColor = System.Drawing.Color.Red;
             this.LabelVcoLock.Location = new System.Drawing.Point(850, 84);
             this.LabelVcoLock.Name = "LabelVcoLock";
@@ -145,7 +145,7 @@
             // 
             // ComboBoxChADivider
             // 
-            this.ComboBoxChADivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxChADivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxChADivider.FormattingEnabled = true;
             this.ComboBoxChADivider.Items.AddRange(new object[] {
             "2",
@@ -163,9 +163,10 @@
             // 
             // LabelRfoutAMux
             // 
-            this.LabelRfoutAMux.Location = new System.Drawing.Point(1112, 81);
+            this.LabelRfoutAMux.AutoSize = true;
+            this.LabelRfoutAMux.Location = new System.Drawing.Point(1128, 81);
             this.LabelRfoutAMux.Name = "LabelRfoutAMux";
-            this.LabelRfoutAMux.Size = new System.Drawing.Size(62, 13);
+            this.LabelRfoutAMux.Size = new System.Drawing.Size(30, 13);
             this.LabelRfoutAMux.TabIndex = 201;
             this.LabelRfoutAMux.Text = "Path";
             this.LabelRfoutAMux.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -174,7 +175,7 @@
             // 
             this.LabelVcoSelect.AutoSize = true;
             this.LabelVcoSelect.BackColor = System.Drawing.Color.Transparent;
-            this.LabelVcoSelect.Location = new System.Drawing.Point(816, 181);
+            this.LabelVcoSelect.Location = new System.Drawing.Point(813, 179);
             this.LabelVcoSelect.Name = "LabelVcoSelect";
             this.LabelVcoSelect.Size = new System.Drawing.Size(37, 13);
             this.LabelVcoSelect.TabIndex = 206;
@@ -183,7 +184,7 @@
             // 
             // ComboBoxRfoutAMux
             // 
-            this.ComboBoxRfoutAMux.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxRfoutAMux.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxRfoutAMux.FormattingEnabled = true;
             this.ComboBoxRfoutAMux.Items.AddRange(new object[] {
             "Divider",
@@ -197,7 +198,7 @@
             // 
             // ComboBoxVcoSelect
             // 
-            this.ComboBoxVcoSelect.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxVcoSelect.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxVcoSelect.FormattingEnabled = true;
             this.ComboBoxVcoSelect.Items.AddRange(new object[] {
             "VCO1",
@@ -207,7 +208,7 @@
             "VCO5",
             "VCO6",
             "VCO7"});
-            this.ComboBoxVcoSelect.Location = new System.Drawing.Point(859, 177);
+            this.ComboBoxVcoSelect.Location = new System.Drawing.Point(856, 176);
             this.ComboBoxVcoSelect.Name = "ComboBoxVcoSelect";
             this.ComboBoxVcoSelect.Size = new System.Drawing.Size(81, 21);
             this.ComboBoxVcoSelect.TabIndex = 203;
@@ -217,7 +218,7 @@
             // 
             this.LabelVcoFreq.AutoSize = true;
             this.LabelVcoFreq.BackColor = System.Drawing.Color.Transparent;
-            this.LabelVcoFreq.Location = new System.Drawing.Point(850, 106);
+            this.LabelVcoFreq.Location = new System.Drawing.Point(847, 105);
             this.LabelVcoFreq.Name = "LabelVcoFreq";
             this.LabelVcoFreq.Size = new System.Drawing.Size(60, 13);
             this.LabelVcoFreq.TabIndex = 217;
@@ -226,7 +227,7 @@
             // 
             // TextBoxVcoFreq
             // 
-            this.TextBoxVcoFreq.Location = new System.Drawing.Point(819, 125);
+            this.TextBoxVcoFreq.Location = new System.Drawing.Point(816, 125);
             this.TextBoxVcoFreq.Name = "TextBoxVcoFreq";
             this.TextBoxVcoFreq.ReadOnly = true;
             this.TextBoxVcoFreq.Size = new System.Drawing.Size(121, 22);
@@ -368,7 +369,7 @@
             // 
             // ComboBoxMashOrder
             // 
-            this.ComboBoxMashOrder.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxMashOrder.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxMashOrder.FormattingEnabled = true;
             this.ComboBoxMashOrder.Items.AddRange(new object[] {
             "INT",
@@ -392,7 +393,7 @@
             // 
             // TextBoxFDen
             // 
-            this.TextBoxFDen.Location = new System.Drawing.Point(615, 150);
+            this.TextBoxFDen.Location = new System.Drawing.Point(615, 151);
             this.TextBoxFDen.Name = "TextBoxFDen";
             this.TextBoxFDen.Size = new System.Drawing.Size(78, 22);
             this.TextBoxFDen.TabIndex = 186;
@@ -450,7 +451,7 @@
             // 
             // ComboBoxChargePumpCurrent
             // 
-            this.ComboBoxChargePumpCurrent.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxChargePumpCurrent.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxChargePumpCurrent.FormattingEnabled = true;
             this.ComboBoxChargePumpCurrent.Items.AddRange(new object[] {
             "Tri-State",
@@ -481,15 +482,13 @@
             this.GroupBoxCalibration.Controls.Add(this.CheckBox_INSTCAL_DBLR_EN);
             this.GroupBoxCalibration.Controls.Add(this.CheckBox_DBLR_CAL_EN);
             this.GroupBoxCalibration.Controls.Add(this.CheckBox_INSTCAL_SKIP_ACAL);
-            this.GroupBoxCalibration.Controls.Add(this.TextBox_CAL_CLK_DIV);
             this.GroupBoxCalibration.Controls.Add(this.CheckBox_INSTCAL_EN);
-            this.GroupBoxCalibration.Controls.Add(this.Label_CAL_CLK_DIV);
             this.GroupBoxCalibration.Location = new System.Drawing.Point(225, 96);
             this.GroupBoxCalibration.Name = "GroupBoxCalibration";
             this.GroupBoxCalibration.Size = new System.Drawing.Size(250, 208);
             this.GroupBoxCalibration.TabIndex = 230;
             this.GroupBoxCalibration.TabStop = false;
-            this.GroupBoxCalibration.Text = "Calibration";
+            this.GroupBoxCalibration.Text = "Instant Calibration";
             // 
             // ButtonInstantCalibration
             // 
@@ -575,10 +574,10 @@
             // 
             // TextBox_CAL_CLK_DIV
             // 
-            this.TextBox_CAL_CLK_DIV.Location = new System.Drawing.Point(132, 136);
+            this.TextBox_CAL_CLK_DIV.Location = new System.Drawing.Point(982, 379);
             this.TextBox_CAL_CLK_DIV.Name = "TextBox_CAL_CLK_DIV";
             this.TextBox_CAL_CLK_DIV.ReadOnly = true;
-            this.TextBox_CAL_CLK_DIV.Size = new System.Drawing.Size(103, 22);
+            this.TextBox_CAL_CLK_DIV.Size = new System.Drawing.Size(90, 22);
             this.TextBox_CAL_CLK_DIV.TabIndex = 238;
             // 
             // CheckBox_INSTCAL_EN
@@ -598,7 +597,7 @@
             // 
             this.Label_CAL_CLK_DIV.AutoSize = true;
             this.Label_CAL_CLK_DIV.BackColor = System.Drawing.Color.Transparent;
-            this.Label_CAL_CLK_DIV.Location = new System.Drawing.Point(54, 139);
+            this.Label_CAL_CLK_DIV.Location = new System.Drawing.Point(991, 362);
             this.Label_CAL_CLK_DIV.Name = "Label_CAL_CLK_DIV";
             this.Label_CAL_CLK_DIV.Size = new System.Drawing.Size(72, 13);
             this.Label_CAL_CLK_DIV.TabIndex = 239;
@@ -709,7 +708,7 @@
             // 
             // ComboBoxRfoutBMux
             // 
-            this.ComboBoxRfoutBMux.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxRfoutBMux.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxRfoutBMux.FormattingEnabled = true;
             this.ComboBoxRfoutBMux.Items.AddRange(new object[] {
             "Divider",
@@ -741,9 +740,10 @@
             // 
             // LabelRfoutBMux
             // 
-            this.LabelRfoutBMux.Location = new System.Drawing.Point(1112, 292);
+            this.LabelRfoutBMux.AutoSize = true;
+            this.LabelRfoutBMux.Location = new System.Drawing.Point(1128, 292);
             this.LabelRfoutBMux.Name = "LabelRfoutBMux";
-            this.LabelRfoutBMux.Size = new System.Drawing.Size(62, 13);
+            this.LabelRfoutBMux.Size = new System.Drawing.Size(30, 13);
             this.LabelRfoutBMux.TabIndex = 201;
             this.LabelRfoutBMux.Text = "Path";
             this.LabelRfoutBMux.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -769,7 +769,7 @@
             // 
             // ComboBoxChBDivider
             // 
-            this.ComboBoxChBDivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ComboBoxChBDivider.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxChBDivider.FormattingEnabled = true;
             this.ComboBoxChBDivider.Items.AddRange(new object[] {
             "2",
@@ -1074,6 +1074,8 @@
             this.Controls.Add(this.LabelRfoutBFreq);
             this.Controls.Add(this.LabelRfoutBPower);
             this.Controls.Add(this.TextBoxRfoutBFreq);
+            this.Controls.Add(this.TextBox_CAL_CLK_DIV);
+            this.Controls.Add(this.Label_CAL_CLK_DIV);
             this.Controls.Add(this.TextBoxRfoutAPower);
             this.Controls.Add(this.CheckBoxRfoutAEnable);
             this.Controls.Add(this.BtnLoadTICS);
@@ -1124,7 +1126,7 @@
             this.Controls.Add(this.TextBoxNDiv);
             this.Controls.Add(this.TextBoxRDiv);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Name = "LMX2820_Control";
             this.Size = new System.Drawing.Size(1272, 419);
             this.GroupBoxCalibration.ResumeLayout(false);

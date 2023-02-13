@@ -26,31 +26,26 @@ namespace Nitride.EE
 
         public Reg16 Regs { get; } = new(123);
 
-        public Func<int, ushort> SPI_RD;
+        public Action WriteAll { get; set; }
 
-        public Action<int, ushort> SPI_WR;
+        public Action ReadAll { get; set; }
 
-        private void REG_RD(byte addr)
-        {
-            if (SPI_RD is not null)
-            {
-                Regs[addr] = SPI_RD(addr);
-            }
-        }
+        public Action<ushort[], Reg16> BulkWrite { get; set; }
 
-        private void REG_WR(byte addr)
-        {
-            if (SPI_WR is not null)
-            {
-                SPI_WR(addr, Regs[addr]);
-            }
-        }
+        public Action<ushort[], Reg16> BulkRead { get; set; }
 
-
+        public readonly static ushort[] InstantCalibrationAddr = new ushort[] { 45, 44, 43, 42, 39, 38, 36, 32, 18, 17, 6, 2, 1, 0 };
 
         public void InstantCalibration()
         {
             Commit();
+
+            if (BulkWrite is not null)
+            {
+                BulkWrite(InstantCalibrationAddr, Regs);
+            }
+
+            /*
             REG_WR(45);
             REG_WR(44);
             REG_WR(43); // PLL NUM
@@ -65,11 +60,20 @@ namespace Nitride.EE
             REG_WR(2);
             REG_WR(1);
             REG_WR(0);
+            */
         }
+
+        public readonly static ushort[] VcoCalibrationAddr = new ushort[] { 43, 42, 39, 38, 36, 32, 23, 22, 20, 10, 6, 2, 1, 0 };
 
         public void VcoCalibration()
         {
             Commit();
+            if (BulkWrite is not null)
+            {
+                BulkWrite(VcoCalibrationAddr, Regs);
+            }
+
+            /*
             REG_WR(43); // PLL NUM
             REG_WR(42);
             REG_WR(39); // PLL DEN
@@ -84,24 +88,19 @@ namespace Nitride.EE
             REG_WR(2);
             REG_WR(1);
             REG_WR(0);
+            */
         }
+
+        public readonly static ushort[] StatusAddr = new ushort[] { 74, 75, 76 };
 
         public void ReadStatus()
         {
-            REG_RD(74);
+            if (BulkRead is not null)
+            {
+                BulkRead(StatusAddr, Regs);
+            }
         }
 
-        public void ReadAll()
-        {
-
-        }
-
-        public void WriteAll()
-        {
-
-        }
-
-        // public bool LOOPBACK_EN // R34
         public const double T = 2.5 * 0.47 / 0.47;
 
         public double Fosc => Reference.Frequency;
@@ -112,7 +111,6 @@ namespace Nitride.EE
         {
             Console.WriteLine("PreR = " + PreR + " | R_Div = " + R_Div + " | ReferenceMulti = " + ReferenceMulti + " | EnableRefDoubler = " + (EnableRefDoubler ? 2 : 1) + " | R_Ratio = " + R_Ratio + " | PhaseDetectFreqency = " + PhaseDetectFreqency);
 
-            // Auto settings...
             if (Fosc > 800e6) 
             {
                 CAL_CLK_DIV = 3;
@@ -131,7 +129,6 @@ namespace Nitride.EE
             }
 
             INSTCAL_DLY = Convert.ToUInt32(Math.Round((T * Fsm / 1e6), MidpointRounding.AwayFromZero));
-
 
             if (PhaseDetectFreqency <= 100e6) 
             {
@@ -254,35 +251,6 @@ namespace Nitride.EE
             }
         }
 
-        public bool LD_Continuous
-        {
-            get => ((Regs[17] >> 6) & 0x1) == 0x1;
-
-            set
-            {
-                if (value)
-                {
-                    Regs[17] |= ((0x1) << 6) & 0xFFFF;
-                }
-                else
-                {
-                    Regs[17] &= (~((0x1) << 6)) & 0xFFFF;
-                }
-            }
-        }
-
-        public ushort LD_Delay
-        {
-            get => Regs[18];
-            set => Regs[18] = value;
-        }
-
-        public bool TempSense_Enable
-        {
-            get => ((Regs[19] >> 3) & 0x3) == 0x3;
-            set => Regs[19] = (ushort)((0x109 << 5) + (value ? (0x3 << 3) : 0x0));
-        }
-
         public override uint N_Div
         {
             get => (ushort)(Regs[36] & 0x7FFF);
@@ -383,7 +351,34 @@ namespace Nitride.EE
 
 
 
+        public bool LD_Continuous
+        {
+            get => ((Regs[17] >> 6) & 0x1) == 0x1;
 
+            set
+            {
+                if (value)
+                {
+                    Regs[17] |= ((0x1) << 6) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[17] &= (~((0x1) << 6)) & 0xFFFF;
+                }
+            }
+        }
+
+        public ushort LD_Delay
+        {
+            get => Regs[18];
+            set => Regs[18] = value;
+        }
+
+        public bool TempSense_Enable
+        {
+            get => ((Regs[19] >> 3) & 0x3) == 0x3;
+            set => Regs[19] = (ushort)((0x109 << 5) + (value ? (0x3 << 3) : 0x0));
+        }
 
 
 
@@ -426,11 +421,11 @@ namespace Nitride.EE
             {
                 if (value)
                 {
-                    Regs[35] &= (~((0x1) << 5)) & 0xFFFF;
+                    Regs[68] &= (~((0x1) << 5)) & 0xFFFF;
                 }
                 else
                 {
-                    Regs[35] |= ((0x1) << 5) & 0xFFFF;
+                    Regs[68] |= ((0x1) << 5) & 0xFFFF;
                 }
             }
         }
@@ -851,8 +846,6 @@ namespace Nitride.EE
 
         public void LoadTICSFile(string reg_text)
         {
-            //   string reg_text = File.ReadAllText(@"reg.txt");
-
             using StringReader sr = new(reg_text);
 
             while (sr.ReadLine() is string rline)

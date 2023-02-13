@@ -22,11 +22,10 @@ namespace Nitride.EE
 
         public LMX2820 LMX2820 { get; }
 
-
-
         public void Commit()
         {
             var lo = LMX2820;
+
             lo.EnableRefDoubler = CheckBoxRefDoublerEnable.Checked;
             lo.PreR = TextBoxPreR.Text.ToUInt32(1);
 
@@ -90,26 +89,6 @@ namespace Nitride.EE
                     _ => 1,
                 };
             }
-
-            /*
-            if (ComboBoxVcoSelect.Text.ToUpper().Contains("AUTO"))
-            {
-                lo.VcoSel_Force = false;
-            }
-            else
-            {
-                lo.VcoSel_Force = true;
-                lo.VcoSel = ComboBoxVcoSelect.Text switch
-                {
-                    "VCO1" => 1,
-                    "VCO2" => 2,
-                    "VCO3" => 3,
-                    "VCO4" => 4,
-                    "VCO5" => 5,
-                    "VCO6" => 6,
-                    _ => 1,
-                };
-            }*/
 
             lo.Ch_Div_A = ComboBoxChADivider.Text switch
             {
@@ -188,7 +167,7 @@ namespace Nitride.EE
 
             if (lo.Reference.Enabled && !double.IsNaN(lo.Reference.Frequency))
             {
-                lo.Commit(); // lo.EnableRefMultiH = (lo.RefMultiplyOut > 100e6);
+                lo.Commit();
                 UpdateUI();
             }
         }
@@ -204,9 +183,12 @@ namespace Nitride.EE
             }
             else
             {
-                LabelVcoLock.Text = "Unlocked";
+                LabelVcoLock.Text = "Unlock";
                 LabelVcoLock.ForeColor = Color.Red;
             }
+
+            // LabelVcoLock.Text = lo.IsLocked ? "Locked" : "Unlock";
+            // LabelVcoLock.ForeColor = lo.IsLocked ? Color.Green : Color.Red;
 
             var (ref_num, ref_pre) = lo.Reference.Frequency.ToUnitPrefixNumberString();
             TextBoxReferenceFreq.Text = (lo.Reference.Frequency * ref_num) + " " + ref_pre + "Hz"; 
@@ -246,8 +228,6 @@ namespace Nitride.EE
             CheckBoxMashSeedEnable.Checked = lo.Mash_Seed_Enable;
             CheckBoxMashResetN.Checked = lo.Mash_Reset_N;
 
-
-
             ComboBoxChargePumpCurrent.Text = lo.CPG switch
             {
                 0x0 => "Tri-State",
@@ -264,7 +244,6 @@ namespace Nitride.EE
                 15 => "15.4 mA",
                 _ => "Invalid"
             };
-
 
             CheckBoxManualVcoSelect.Checked = lo.VcoSel_Force;
 
@@ -323,8 +302,8 @@ namespace Nitride.EE
             CheckBoxRfoutBEnable.Checked = lo.RFOutB_Enable;
             TextBoxRfoutAPower.Text = lo.RFOutA_Level.ToString();
             TextBoxRfoutBPower.Text = lo.RFOutB_Level.ToString();
-            LabelVcoLock.Text = lo.IsLocked ? "Locked" : "Unlock";
-            LabelVcoLock.ForeColor = lo.IsLocked ? Color.Green : Color.Red;
+
+
 
 
             CheckBox_INSTCAL_EN.Checked = lo.INSTCAL_EN;
@@ -433,10 +412,14 @@ namespace Nitride.EE
         private void BtnCommit_Click(object sender, EventArgs e)
         {
             Commit();
+
+            if (LMX2820.WriteAll is not null)
+                LMX2820.WriteAll();
         }
 
         private void BtnUpdateUI_Click(object sender, EventArgs e)
         {
+            LMX2820.ReadStatus();
             UpdateUI();
         }
 
@@ -492,8 +475,6 @@ namespace Nitride.EE
                 TextBox_INSTCAL_PLL_NUM.Enabled = false;
                 lo.INSTCAL_EN = false;
             }
-
-           
         }
 
         private void CheckBox_PFD_DLY_MANUAL_CheckedChanged(object sender, EventArgs e)

@@ -24,8 +24,150 @@ namespace Nitride.EE
 
         public Reg16 Regs { get; } = new(126);
 
-        public override double R_Ratio => PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
-        public double RefMultiplyOut => Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
+        public Func<int, ushort> SPI_RD;
+
+        public Action<int, ushort> SPI_WR;
+
+        private void REG_RD(byte addr)
+        {
+            if (SPI_RD is not null)
+            {
+                Regs[addr] = SPI_RD(addr);
+            }
+        }
+
+        private void REG_WR(byte addr)
+        {
+            if (SPI_WR is not null)
+            {
+                SPI_WR(addr, Regs[addr]);
+            }
+        }
+
+        public void VcoCalibration()
+        {
+            Commit();
+            /*
+            REG_WR(43); // PLL NUM
+            REG_WR(42);
+            REG_WR(39); // PLL DEN
+            REG_WR(38);
+            REG_WR(36); // PLL N
+            REG_WR(32); // OUT DIV
+            REG_WR(23); // VCO SEL FORCE
+            REG_WR(22); // VCO SEL 
+            REG_WR(20); // VCO DACISET
+            REG_WR(10); // VCO DAC FORCE / CAPCTRL FORCE
+            REG_WR(6); // ACAL_DELAY
+            REG_WR(2);
+            REG_WR(1);
+            REG_WR(0);*/
+        }
+
+
+        public void ReadStatus()
+        {
+            REG_RD(110);
+            REG_RD(111);
+            REG_RD(112);
+        }
+
+        public double Fosc => Reference.Frequency;
+
+        public double Fsm => Fosc / Math.Pow(2, CAL_CLK_DIV);
+
+        public void Commit()
+        {
+            Console.WriteLine("PreR = " + PreR + " | R_Div = " + R_Div + " | ReferenceMulti = " + ReferenceMulti + " | EnableRefDoubler = " + (EnableRefDoubler ? 2 : 1) + " | R_Ratio = " + R_Ratio + " | PhaseDetectFreqency = " + PhaseDetectFreqency);
+
+            EnableRefMultiH = (RefMultiplyOut > 100e6);
+
+            if (Fosc > 200e6)
+            {
+                CAL_CLK_DIV = 1;
+            }
+            else
+            {
+                CAL_CLK_DIV = 0;
+            }
+
+            if (PhaseDetectFreqency <= 37.5e6)
+            {
+                FCAL_HPFD_ADJ = 0;
+            }
+            else if (PhaseDetectFreqency > 37.5e6 && PhaseDetectFreqency <= 75e6)
+            {
+                FCAL_HPFD_ADJ = 1;
+            }
+            else if (PhaseDetectFreqency > 75e6 && PhaseDetectFreqency <= 100e6)
+            {
+                FCAL_HPFD_ADJ = 2;
+            }
+            else
+            {
+                FCAL_HPFD_ADJ = 3;
+            }
+
+            if (PhaseDetectFreqency >= 10e6)
+            {
+                FCAL_LPFD_ADJ = 0;
+            }
+            else if (PhaseDetectFreqency >= 5e6 && PhaseDetectFreqency < 10e6)
+            {
+                FCAL_LPFD_ADJ = 1;
+            }
+            else if (PhaseDetectFreqency >= 2.5e6 && PhaseDetectFreqency < 5e6)
+            {
+                FCAL_LPFD_ADJ = 2;
+            }
+            else
+            {
+                FCAL_LPFD_ADJ = 3;
+            }
+
+            if (VcoFrequency < 4e9)
+            {
+                PFD_DLY_SEL = Mash_Order switch
+                {
+                    0 when N_Div >= 20 => 0,
+                    1 when N_Div >= 25 => 1,
+                    2 when N_Div >= 26 => 1,
+                    3 when N_Div >= 32 => 2,
+                    4 when N_Div >= 44 => 4,
+                    _ => throw new Exception("N_Div is too low: " + N_Div + "VCO Frequency: " + VcoFrequency),
+                };
+            }
+            else if (VcoFrequency >= 4e9 && VcoFrequency < 4.9e9)
+            {
+                PFD_DLY_SEL = Mash_Order switch
+                {
+                    0 when N_Div >= 24 => 1,
+                    1 when N_Div >= 29 => 2,
+                    2 when N_Div >= 30 => 2,
+                    3 when N_Div >= 32 => 2,
+                    4 when N_Div >= 44 => 4,
+                    _ => throw new Exception("N_Div is too low: " + N_Div + "VCO Frequency: " + VcoFrequency),
+                };
+            }
+            else if (VcoFrequency >= 4.9e9 && VcoFrequency <= 6.4e9)
+            {
+                PFD_DLY_SEL = Mash_Order switch
+                {
+                    0 when N_Div >= 24 => 1,
+                    1 when N_Div >= 29 => 2,
+                    2 when N_Div >= 30 => 2,
+                    3 when N_Div >= 36 => 3,
+                    4 when N_Div >= 48 => 5,
+                    _ => throw new Exception("N_Div is too low: " + N_Div + "VCO Frequency: " + VcoFrequency),
+                };
+            }
+            else
+                throw new Exception("VCO Frequency is too high: " + VcoFrequency);
+        }
+
+        public override double R_Ratio => 1.0D * PreR * R_Div / (ReferenceMulti * (EnableRefDoubler ? 2 : 1));
+
+        public double RefMultiplyOut => 1.0D * Reference.Frequency * (EnableRefDoubler ? 2 : 1) * ReferenceMulti / PreR;
 
         // public double DivRatio => (EnableRefDoubler ? 2 : 1) / PreR / R_Div * (N_Div + ((double)F_Num / (double)F_Den));
         // public double Frequency => PFD_Frequency * (N_Div + ((double)F_Num / (double)F_Den)); // VCO: 3.2 GHz ~ 6.4 GHz;
@@ -108,6 +250,17 @@ namespace Nitride.EE
             {
                 Regs[11] &= (~((0xFF) << 4)) & 0xFFFF;
                 Regs[11] |= (ushort)((value & 0xFF) << 4);
+            }
+        }
+
+        public uint CPG
+        {
+            get => (uint)(Regs[14] >> 3) & 0xF;
+
+            set
+            {
+                Regs[14] = 0x30 << 7;
+                Regs[14] |= (ushort)((value & 0xF) << 3);
             }
         }
 
@@ -214,16 +367,7 @@ namespace Nitride.EE
             }
         }
 
-        public uint PFD_DLY_SEL
-        {
-            get => (uint)(Regs[0x25] >> 8) & 0x3F;
 
-            set
-            {
-                Regs[0x25] &= (~((0x3F) << 8)) & 0xFFFF;
-                Regs[0x25] |= (ushort)((value & 0x3F) << 8);
-            }
-        }
 
         public uint VcoSel
         {
@@ -342,10 +486,204 @@ namespace Nitride.EE
             }
         }
 
+        public bool PSYNC_Pin_Enable
+        {
+            get => ((Regs[58] >> 15) & 0x1) == 0x0;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[58] &= (~((0x1) << 15)) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[58] |= ((0x1) << 15) & 0xFFFF;
+                }
+            }
+        }
+
+        public bool Phase_Sync_Enable
+        {
+            get => ((Regs[0] >> 14) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[0] |= ((0x1) << 14) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[0] &= (~((0x1) << 14)) & 0xFFFF;
+                }
+            }
+        }
+
+        public double Phase_Shift => Mash_Seed_Enable ? 360 * Mash_Seed / F_Den : 0;
+
+        public double Ch_A_Phase
+        {
+            get
+            {
+                return RFOutA_Mux switch
+                {
+                    0 => Phase_Shift / Math.Pow(2, (Ch_Div + 1)),
+                    1 => Phase_Shift,
+                    _ => double.NaN,
+                };
+            }
+        }
+
+        public double Ch_B_Phase
+        {
+            get
+            {
+                return RFOutB_Mux switch
+                {
+                    0 => Phase_Shift / Math.Pow(2, (Ch_Div + 1)),
+                    1 => Phase_Shift,
+                    _ => double.NaN,
+                };
+            }
+        }
+
+        public double Ch_A_Frequency
+        {
+            get
+            {
+                return RFOutA_Mux switch
+                {
+                    0 => VcoFrequency / Math.Pow(2, (Ch_Div + 1)),
+                    1 => VcoFrequency,
+                    _ => double.NaN,
+                };
+            }
+        }
+
+        public double Ch_B_Frequency
+        {
+            get
+            {
+                return RFOutB_Mux switch
+                {
+                    0 => VcoFrequency / Math.Pow(2, (Ch_Div + 1)),
+                    1 => VcoFrequency,
+                    _ => double.NaN,
+                };
+            }
+        }
+
+        public bool FCAL_EN
+        {
+            get => ((Regs[0] >> 3) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[0] |= ((0x1) << 3) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[0] &= (~((0x1) << 3)) & 0xFFFF;
+                }
+            }
+        }
+
+        public bool QUICK_RECAL_EN
+        {
+            get => ((Regs[78] >> 9) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[78] |= ((0x1) << 9) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[78] &= (~((0x1) << 9)) & 0xFFFF;
+                }
+            }
+        }
+
+        public bool VCO_CAPCTRL_FORCE
+        {
+            get => ((Regs[8] >> 11) & 0x1) == 0x1;
+
+            set
+            {
+                if (value)
+                {
+                    Regs[8] |= ((0x1) << 11) & 0xFFFF;
+                }
+                else
+                {
+                    Regs[8] &= (~((0x1) << 11)) & 0xFFFF;
+                }
+            }
+        }
+
+        public uint VCO_CAPCTRL
+        {
+            get => (uint)(Regs[19]) & 0xFF;
+
+            set
+            {
+                Regs[19] = 0x27 << 8;
+                Regs[19] |= (ushort)((value & 0xFF) << 0);
+            }
+        }
+
+        public uint VCO_CAPCTRL_RD => (uint)(Regs[111] >> 0) & 0xFF;
+
+        public uint PFD_DLY_SEL
+        {
+            get => (uint)(Regs[0x25] >> 8) & 0x3F;
+
+            set
+            {
+                Regs[0x25] &= (~((0x3F) << 8)) & 0xFFFF;
+                Regs[0x25] |= (ushort)((value & 0x3F) << 8);
+            }
+        }
+
+        public uint FCAL_LPFD_ADJ
+        {
+            get => (uint)(Regs[0] >> 5) & 0x3;
+
+            set
+            {
+                Regs[0] &= (~((0x3) << 5)) & 0xFFFF;
+                Regs[0] |= (ushort)((value & 0x3) << 5);
+            }
+        }
+
+        public uint FCAL_HPFD_ADJ
+        {
+            get => (uint)(Regs[0] >> 7) & 0x3;
+
+            set
+            {
+                Regs[0] &= (~((0x3) << 7)) & 0xFFFF;
+                Regs[0] |= (ushort)((value & 0x3) << 7);
+            }
+        }
+
+        public uint CAL_CLK_DIV
+        {
+            get => (uint)(Regs[1] >> 0) & 0x7;
+
+            set
+            {
+                Regs[1] = 0x101 << 3;
+                Regs[1] |= (ushort)((value & 0x7) << 0);
+            }
+        }
+
         public void LoadTICSFile(string reg_text)
         {
-            //   string reg_text = File.ReadAllText(@"reg.txt");
-
             using StringReader sr = new(reg_text);
 
             while (sr.ReadLine() is string rline)
