@@ -38,9 +38,9 @@ namespace Nitride.EE
             UpdateControls();
         }
 
-        SpectrumControl SpectrumControl { get; }
+        public SpectrumControl SpectrumControl { get; }
 
-        SpectrumChannelForm[] SpectrumChannelForms { get; }
+        public SpectrumChannelForm[] SpectrumChannelForms { get; }
 
         public Action ConfigIsUpdated;
 

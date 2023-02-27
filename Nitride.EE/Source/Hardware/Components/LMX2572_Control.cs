@@ -170,7 +170,7 @@ namespace Nitride.EE
             // LabelVcoLock.Text = lo.IsLocked ? "Locked" : "Unlock";
             // LabelVcoLock.ForeColor = lo.IsLocked ? Color.Green : Color.Red;
 
-            var (ref_num, ref_pre) = lo.Reference.Frequency.ToUnitPrefixNumberString();
+            var (ref_num, ref_pre) = lo.Reference.Frequency.ToUnitPostfixNumberString();
             TextBoxReferenceFreq.Text = (lo.Reference.Frequency * ref_num) + " " + ref_pre + "Hz";
 
             CheckBoxRefDoublerEnable.Checked = lo.EnableRefDoubler;
@@ -182,18 +182,18 @@ namespace Nitride.EE
             TextBoxFDen.Text = lo.F_Den.ToString();
 
             // TextBoxPfdFreq.Text = lo.PhaseDetectFreqency.ToString();
-            var (pdf_num, pdf_pre) = lo.PhaseDetectFreqency.ToUnitPrefixNumberString();
+            var (pdf_num, pdf_pre) = lo.PhaseDetectFreqency.ToUnitPostfixNumberString();
             TextBoxPfdFreq.Text = (lo.PhaseDetectFreqency * pdf_num) + " " + pdf_pre + "Hz";
 
             // TextBoxVcoFreq.Text = lo.Frequency.ToString();
-            var (vco_num, vco_pre) = lo.VcoFrequency.ToUnitPrefixNumberString();
+            var (vco_num, vco_pre) = lo.VcoFrequency.ToUnitPostfixNumberString();
             TextBoxVcoFreq.Text = (lo.VcoFrequency * vco_num) + " " + vco_pre + "Hz";
 
 
-            var (cha_num, cha_pre) = lo.Ch_A_Frequency.ToUnitPrefixNumberString();
+            var (cha_num, cha_pre) = lo.Ch_A_Frequency.ToUnitPostfixNumberString();
             TextBoxRfoutAFreq.Text = (lo.Ch_A_Frequency * cha_num) + " " + cha_pre + "Hz";
 
-            var (chb_num, chb_pre) = lo.Ch_B_Frequency.ToUnitPrefixNumberString();
+            var (chb_num, chb_pre) = lo.Ch_B_Frequency.ToUnitPostfixNumberString();
             TextBoxRfoutBFreq.Text = (lo.Ch_B_Frequency * chb_num) + " " + chb_pre + "Hz";
 
             ComboBoxMashOrder.Text = lo.Mash_Order switch
@@ -379,11 +379,12 @@ namespace Nitride.EE
                 string reg_text = File.ReadAllText(OpenFileDialog.FileName);
 
                 lo.LoadTICSFile(reg_text);
-
+                lo.Regs.Print();
+                /*
                 for (ushort i = 0; i < lo.Regs.Length; i++)
                 {
                     Console.WriteLine("Regs[" + i.ToString() + "] = 0x" + lo.Regs[i].ToString("X") + ";");
-                }
+                }*/
             }
 
             UpdateUI();

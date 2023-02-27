@@ -403,8 +403,18 @@ namespace Nitride
             }
         }
 
+        public static string ToFeetNmString(this double d, string format = "0.###")
+        {
+            return (d <= 8000) ? d.ToString(format) + " feet" : (d / 6076.11549).ToString(format) + " nm";
+        }
 
-        public static (double num, string prefix) ToUnitPrefixNumberString(this double d)
+        public static string ToUnitPostfixString(this double d, string format = "0.###")
+        {
+            var (num, postfix) = d.ToUnitPostfixNumberString();
+            return (d * num).ToString(format) + " " + postfix;
+        }
+
+        public static (double num, string postfix) ToUnitPostfixNumberString(this double d)
         {
             double num = 1;
             if (d == 0) 

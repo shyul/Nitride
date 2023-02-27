@@ -68,13 +68,13 @@ namespace Nitride.EE
             }
         }
 
-        public void GetSineWave(double fullScale, double normFreq)
+        public void GetSineWave(double fullScale = 65535, double normFreq = 1)
         {
             double ang = 2 * normFreq * Math.PI; // normFreq * Math.PI;// / numPt;
             Complex w = new(Math.Cos(ang), Math.Sin(ang));
             Data[0] = new Complex(fullScale, 0.0);
 
-            for (int i = 1; i < Count; i++)
+            for (int i = 1; i < Length; i++)
             {
                 Data[i] = Data[i - 1] * w;
             }
@@ -82,9 +82,9 @@ namespace Nitride.EE
 
         public void GetChirp(double fullScale, double[] normFreq)
         {
-            Data[0] = fullScale * Complex.One;// new Complex(fullScale, 0.0); ImaginaryOne
+            Data[0] = fullScale * Complex.One;
 
-            for (int i = 1; i < Count; i++)
+            for (int i = 1; i < Length; i++)
             {
                 double ang = 2 * normFreq[i] * Math.PI; // normFreq * Math.PI;// / numPt;
                 Complex w = new(Math.Cos(ang), Math.Sin(ang));
@@ -101,16 +101,16 @@ namespace Nitride.EE
 
         public void GetPN(uint real, uint imag, uint mask, double min, double max, int p1 = 9, int p2 = 5) // or 23 / 18
         {
-            List<double> rl = new(Count);
-            List<double> il = new(Count);
-
+            List<double> rl = new(Length);
+            List<double> il = new(Length);
+            /*
             for (int i = 0; i < 800; i++)
             {
                 real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1)) & 0x1);
                 imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1)) & 0x1);
-            }
+            }*/
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Length; i++)
             {
                 real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1)) & 0x1);
                 imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1)) & 0x1);
@@ -123,7 +123,7 @@ namespace Nitride.EE
             double avg = (max - min) / 2;
             double offset = (l_avg - avg);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Length; i++)
             {
                 rl[i] -= offset;
                 il[i] -= offset;
@@ -135,27 +135,26 @@ namespace Nitride.EE
 
             double scale = Math.Max(l_max / max, l_min / min);
 
-            Console.WriteLine("offset = " + offset + " | scale = " + scale);
+            // Console.WriteLine("offset = " + offset + " | scale = " + scale);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Length / 2; i++)
             {
-                double r = (rl[i]) / scale;
-                double q = (il[i]) / scale;
+                double r = (rl[i + (Length / 2)]) / scale;
+                double q = (il[i + (Length / 2)]) / scale;
 
                // if (r > max) r = max; else if (r < min) r = min;
                // if (q > max) q = max; else if (q < min) q = min;
-                Console.WriteLine("r = " + r + " | q = " + q);
+                // Console.WriteLine("r = " + r + " | q = " + q);
 
-                Data[i] = new Complex(r, q);
-
-                
+                Data[Length - 1 - i] = Data[i] = new Complex(r, q);
+                // new Complex(r, q);
             }
         }
 
         public void GetGold(uint real, uint imag, uint mask, double min, double max) // or 23 / 18
         {
-            List<double> rl = new(Count);
-            List<double> il = new(Count);
+            List<double> rl = new(Length);
+            List<double> il = new(Length);
 
             int p1 = 6;
             int p2 = 5;
@@ -168,7 +167,7 @@ namespace Nitride.EE
                 imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
             }
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Length; i++)
             {
                 real = ((real & 0x7FFFFFFF) << 1) + ((((real >> (p1 - 1)) & 0x1) ^ ((real >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
                 imag = ((imag & 0x7FFFFFFF) << 1) + ((((imag >> (p1 - 1)) & 0x1) ^ ((imag >> (p2 - 1)) & 0x1) ^ ((real >> (p3 - 1)) & 0x1) ^ ((real >> (p4 - 1)) & 0x1)) & 0x1);
@@ -181,7 +180,7 @@ namespace Nitride.EE
             double avg = (max - min) / 2;
             double offset = (l_avg - avg);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Length; i++)
             {
                 rl[i] -= offset;
                 il[i] -= offset;
@@ -195,7 +194,7 @@ namespace Nitride.EE
 
             Console.WriteLine("offset = " + offset + " | scale = " + scale);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Length; i++)
             {
                 double r = (rl[i]) / scale;
                 double q = (il[i]) / scale;

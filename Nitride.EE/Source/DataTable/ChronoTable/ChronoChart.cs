@@ -44,7 +44,9 @@ namespace Nitride.EE
 
         public ChronoTable ChronoTable { get; private set; }
 
-        public Func<double, string> CursorLabel { get; set; } = (double d) => d.ToString();
+        public Func<double, string> CursorLabel { get; set; } = (double d) => d.ToUnitPostfixString("#.##");// d.ToString();
+
+        public Func<double, string> AxisLabel { get; set; } = (double d) => d.ToUnitPostfixString("#.##");
 
         public override string this[int i]
         {
@@ -121,7 +123,7 @@ namespace Nitride.EE
                                     double time = ChronoTable[i].X;
 
                                     //if ((freq % tickFreqSpan) < (tickFreqSpan / 10D)) AxisX.TickList.CheckAdd(px, (Importance.Major, freq.ToString()));
-                                    if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, (time / 1e2).ToString()));
+                                    if (i % tickStep == 0) AxisX.TickList.CheckAdd(px, (Importance.Major, AxisLabel(time)));
                                 }
 
                                 px++;

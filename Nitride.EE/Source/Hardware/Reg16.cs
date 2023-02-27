@@ -52,7 +52,8 @@ namespace Nitride.EE
         {
             foreach (ushort addr in Keys.OrderBy(n => n))
             {
-                Console.WriteLine(addr.ToString("X") + " = " + this[addr].ToString("X"));
+                // Console.WriteLine(addr.ToString("X") + " = " + this[addr].ToString("X"));
+                Console.WriteLine("Regs[" + addr.ToString() + "] = 0x" + this[addr].ToString("X") + ";");
             }
         }
     }

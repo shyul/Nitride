@@ -418,10 +418,13 @@ namespace Nitride.EE
 
             set
             {
-                Regs[75] &= (~((0x1F) << 6)) & 0xFFFF;
+                Regs[75] = (1 << 11);
+                // Regs[75] &= (~((0x1F) << 6)) & 0xFFFF;
                 Regs[75] |= (ushort)((value & 0x1F) << 6);
             }
         }
+
+        public double Ch_Div_Val => Math.Pow(2.0, (Ch_Div + 1.0));
 
         public bool RFOutA_Enable
         {
@@ -543,7 +546,7 @@ namespace Nitride.EE
             {
                 return RFOutA_Mux switch
                 {
-                    0 => Phase_Shift / Math.Pow(2, (Ch_Div + 1)),
+                    0 => Phase_Shift / Ch_Div_Val,
                     1 => Phase_Shift,
                     _ => double.NaN,
                 };
@@ -556,7 +559,7 @@ namespace Nitride.EE
             {
                 return RFOutB_Mux switch
                 {
-                    0 => Phase_Shift / Math.Pow(2, (Ch_Div + 1)),
+                    0 => Phase_Shift / Ch_Div_Val,
                     1 => Phase_Shift,
                     _ => double.NaN,
                 };
@@ -567,9 +570,10 @@ namespace Nitride.EE
         {
             get
             {
+                // Console.WriteLine("VcoFrequency = " + VcoFrequency + " | Ch_Div = " + Ch_Div + " | Div = " + Math.Pow(2, (Ch_Div + 1)));
                 return RFOutA_Mux switch
                 {
-                    0 => VcoFrequency / Math.Pow(2, (Ch_Div + 1)),
+                    0 => VcoFrequency / Ch_Div_Val, //Math.Pow(2, (Ch_Div + 1)),
                     1 => VcoFrequency,
                     _ => double.NaN,
                 };
@@ -580,9 +584,10 @@ namespace Nitride.EE
         {
             get
             {
+                // Console.WriteLine("VcoFrequency = " + VcoFrequency + " | Ch_Div = " + Ch_Div + " | Div = " + Math.Pow(2, (Ch_Div + 1)));
                 return RFOutB_Mux switch
                 {
-                    0 => VcoFrequency / Math.Pow(2, (Ch_Div + 1)),
+                    0 => VcoFrequency / Ch_Div_Val, //Math.Pow(2, (Ch_Div + 1)),
                     1 => VcoFrequency,
                     _ => double.NaN,
                 };

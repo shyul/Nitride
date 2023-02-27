@@ -86,43 +86,6 @@ namespace Nitride.EE
                 Wn[i] = Wn[i - 1] * w;
         }
 
-        /*
-        public void UpdataConfiguration(int length = 65536, WindowsType type = WindowsType.FlatTop, bool flip = true, double[] winF = null, bool isFft = true)
-        {
-            if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
-            {
-                Length = (uint)length;
-
-                if (type == WindowsType.Custom)
-                {
-                    if (winF?.Length == length)
-                        WinF = winF;
-                    else
-                        throw new ArgumentException("Custom Window's array length has to match FFT length");
-                }
-                else
-                    WindowFunction.GetWindow(length, type, ref WinF);
-
-                uint n = Length / 2;
-
-                double ang = 2 * Math.PI / Length;
-                Complex w = isFft ? new(Math.Cos(ang), -Math.Sin(ang)) : new(Math.Cos(ang), Math.Sin(ang));
-                Wn[0] = new(1.0, 0.0);
-
-                for (uint i = 1; i < n; i++)
-                    Wn[i] = Wn[i - 1] * w;
-
-                FlipSpectrum = flip;
-
-                Gain = WinF.Take((int)Length).Sum(); // / Length;
-            }
-            else
-                throw new ArgumentException("Length must be greater than 4 and power of 2");
-
-            // Console.WriteLine("FFT Win = " + type.ToString() + " | Length = " + length + " | Gain = " + Gain);
-
-        }*/
-
         public uint Length { get; private set; } = 1024;
         public double Gain { get; private set; }
 
@@ -143,13 +106,26 @@ namespace Nitride.EE
             uint m = 0;
             uint w = 1;
             uint i, j, d, ia, ib, iwn;
-            //int k1;
-            // uint k;
+            int k;
+
             Complex a, b, wn;
 
             for (i = 0; i < Length; i++)
             {
-                Dsw[i] = td[(int)(i + startPt)] * WinF[i];
+                k = (int)i + startPt;
+
+                if (k < 0)
+                {
+                    Dsw[i] = td[0] * WinF[i];
+                }
+                else if (k >= td.Length)
+                {
+                    Dsw[i] = td[td.Length - 1] * WinF[i];
+                }
+                else
+                {
+                    Dsw[i] = td[k] * WinF[i]; // Dsw[i] = td[(int)(i + startPt)] * WinF[i];
+                }
             }
 
             //uint maxiwn = 0;
@@ -251,6 +227,61 @@ namespace Nitride.EE
             {
                 Console.Write("(freq = " + pt.Frequency + " | val = " + pt.Value + ") ");
             }*/
+        }
+
+        public void Transform(Complex[] td)
+        {
+            uint l1 = Length;
+            uint l2 = (l1 >> 1);
+            uint m = 0;
+            uint w = 1;
+            uint i, j, d, ia, ib, iwn;
+
+            Complex a, b, wn;
+
+            for (i = 0; i < Length; i++)
+            {
+                Dsw[i] = td[(int)(i)] * WinF[i];
+            }
+
+            // Transform Radix-2
+            while (l2 >= 1)
+            {
+                for (i = 0; i < w; i++)
+                {
+                    d = i * l1;
+                    iwn = 0;
+                    for (j = 0; j < l2; j++)
+                    {
+                        ia = d + j;
+                        ib = ia + l2;
+
+                        wn = Wn[iwn];
+                        a = Dsw[ia];
+                        b = Dsw[ib];
+
+                        Dsw[ia] = (a + b);
+                        Dsw[ib] = (a - b) * wn;
+
+                        iwn += w;
+                    }
+                }
+
+                l1 >>= 1;
+                l2 = (l1 >> 1);
+                m++;
+                w <<= 1;
+            }
+
+            M = m;
+
+            if (!IsFFT)
+            {
+                for (i = 0; i < Length; i++)
+                {
+                    Dsw[i] = Dsw[i] / Length;
+                }
+            }
         }
     }
 }

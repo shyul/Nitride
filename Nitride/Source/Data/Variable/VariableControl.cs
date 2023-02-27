@@ -275,7 +275,7 @@ namespace Nitride
 
             if (UsePrefix) 
             {
-                var (num, pfx) = d.ToUnitPrefixNumberString();
+                var (num, pfx) = d.ToUnitPostfixNumberString();
 
                 Prefix = pfx + VariableData.Unit;
    

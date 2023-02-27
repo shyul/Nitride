@@ -249,7 +249,7 @@ namespace Nitride.Chart
 
         public virtual Rectangle ChartBounds { get; protected set; }
 
-        public abstract void CoordinateOverlay();
+        public virtual void CoordinateOverlay() { }
 
         public override void CoordinateLayout()
         {

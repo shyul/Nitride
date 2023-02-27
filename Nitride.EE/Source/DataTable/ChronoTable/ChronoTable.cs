@@ -15,6 +15,11 @@ namespace Nitride.EE
 {
     public class ChronoTable : DataTable, IComplexTable
     {
+        public ChronoTable() 
+        {
+        
+        }
+
         public ChronoTable(int numOfPts)
         {
             ConfigureNumberOfPoints(numOfPts);
@@ -22,7 +27,7 @@ namespace Nitride.EE
 
         ~ChronoTable() => Dispose();
 
-        public double StartTime { get; set; }
+        public double StartTime { get; set; } = 0;
 
         public double SampleRate
         {
@@ -72,6 +77,7 @@ namespace Nitride.EE
                 for (int i = 0; i < m_Count; i++)
                 {
                     TimeRows[i].Index = i;
+                    //TimeRows[i].X = 
                 }
             }
         }
