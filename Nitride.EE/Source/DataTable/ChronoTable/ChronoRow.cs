@@ -26,6 +26,12 @@ namespace Nitride.EE
 
         public override double X => Table.StartTime + (Table.SampleTimeStep * Index);
 
+        public override void Clear() 
+        {
+            base.Clear();
+            ComplexColumnsLUT.Clear();
+        }
+
         private Dictionary<ComplexColumn, Complex> ComplexColumnsLUT { get; } = new Dictionary<ComplexColumn, Complex>();
 
         public Complex this[ComplexColumn column]

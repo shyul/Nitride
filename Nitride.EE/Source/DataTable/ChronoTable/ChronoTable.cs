@@ -77,7 +77,7 @@ namespace Nitride.EE
                 for (int i = 0; i < m_Count; i++)
                 {
                     TimeRows[i].Index = i;
-                    //TimeRows[i].X = 
+                    TimeRows[i].Clear();
                 }
             }
         }

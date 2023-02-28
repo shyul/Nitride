@@ -32,6 +32,18 @@ namespace Nitride
         public short D2 { get; set; }
     }
 
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
+    public struct QuadShort
+    {
+        public short D1 { get; set; }
+
+        public short D2 { get; set; }
+
+        public short D3 { get; set; }
+
+        public short D4 { get; set; }
+    }
+
     [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct DualUShort
     {
@@ -46,6 +58,18 @@ namespace Nitride
         public int D1 { get; set; }
 
         public int D2 { get; set; }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
+    public struct QuadInt
+    {
+        public int D1 { get; set; }
+
+        public int D2 { get; set; }
+
+        public int D3 { get; set; }
+
+        public int D4 { get; set; }
     }
 
     [StructLayout(LayoutKind.Sequential, Size = 8)]
@@ -103,6 +127,9 @@ namespace Nitride
         public DualUShort[] DU16;
 
         [FieldOffset(0)]
+        public QuadShort[] QS16; //  public (short D1, short D2)[] DS16;
+
+        [FieldOffset(0)]
         public int[] S32;
 
         [FieldOffset(0)]
@@ -110,6 +137,9 @@ namespace Nitride
 
         [FieldOffset(0)]
         public DualInt[] DS32; // public (int D1, int D2)[] DS32;
+
+        [FieldOffset(0)]
+        public QuadInt[] QS32; // public (int D1, int D2, int D3, int D4)[] QS32;
 
         [FieldOffset(0)]
         public DualUInt[] DU32; // public (int D1, int D2)[] DS32;
