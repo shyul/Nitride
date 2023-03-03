@@ -403,9 +403,19 @@ namespace Nitride
             }
         }
 
-        public static string ToFeetNmString(this double d, string format = "0.###")
+        public static string ToMeterKmString(this double d, string format1 = "0.###", string format2 = "0.###")
         {
-            return (d <= 8000) ? d.ToString(format) + " feet" : (d / 6076.11549).ToString(format) + " nm";
+            return (d < 1000) ? d.ToString(format1) + " m" : (d / 1000).ToString(format2) + " km";
+        }
+
+        public static string ToFeetMileString(this double d, string format1 = "0.###", string format2 = "0.###")
+        {
+            return (d < 5280) ? d.ToString(format1) + " ft" : (d / 5280).ToString(format2) + " mi";
+        }
+
+        public static string ToFeetNmString(this double d, string format1 = "0.###", string format2 = "0.###")
+        {
+            return (d <= 8000) ? d.ToString(format1) + " ft" : (d / 6076.11549).ToString(format2) + " nm";
         }
 
         public static string ToUnitPostfixString(this double d, string format = "0.###")
