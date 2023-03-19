@@ -66,12 +66,6 @@ namespace Nitride.EE
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };
 
-
-        public override void CoordinateOverlay() 
-        {
-        
-        }
-
         public override void CoordinateLayout()
         {
             ResumeLayout(true);

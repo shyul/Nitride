@@ -65,8 +65,6 @@ namespace Nitride.Chart
 
         public virtual int IndexCount { get; set; } = 295;
 
-        private int MaximumBlankPoints => (0.3f * IndexCount).ToInt32();
-
         public bool EnableChartShift { get; set; } = true;
 
         /// <summary>
@@ -77,15 +75,15 @@ namespace Nitride.Chart
         {
             lock (GraphicsLockObject)
             {
-                int limit = MaximumBlankPoints;
+                // int limit = MaximumBlankPoints;
 
-                if (StopPt + num - DataCount >= limit)
+                if (StopPt + num > DataCount)
                 {
-                    StopPt = DataCount + limit;
+                    StopPt = DataCount;
                 }
-                else if (StartPt + num <= -limit)
+                else if (StartPt + num < 0)
                 {
-                    StopPt = StartPt + IndexCount - limit;
+                    StopPt = IndexCount - num -1;
                 }
                 else
                 {

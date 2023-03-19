@@ -2,7 +2,7 @@
 /// Shared Libraries and Quick Utilities
 /// GPL 2001-2007, 2014-2021 Xu Li - me@xuli.us
 /// 
-/// Data Serializations and Reflection
+/// Header Serializations and Reflection
 /// 
 /// Code Author: Xu Li
 /// 

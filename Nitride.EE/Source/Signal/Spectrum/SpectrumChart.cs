@@ -146,25 +146,25 @@ namespace Nitride.EE
         {
             while (IsRunning)
             {
-                if (Data is not null && Data.FrameBuffer.Count > 0 && AsyncUpdateUI == false) // && Graphics is not busy!!
+                if (Header is not null && Header.FrameBuffer.Count > 0 && AsyncUpdateUI == false) // && Graphics is not busy!!
                 {
                     //lock (GraphicsLockObject)
                     //{
-                        Data.FrameBuffer.TryDequeue(out var frame);
+                        Header.FrameBuffer.TryDequeue(out var frame);
                         CurrentTraceFrame = frame;
-                        //CurrentTraceFrame = Data.FrameBuffer.Dequeue();
+                        //CurrentTraceFrame = Header.FrameBuffer.Dequeue();
                         MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
 
-                        if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable && Data.EnableHisto)
+                        if (Header.PersistBitmapBuffer.Count > 0 && Header.Enable && Header.EnableHisto)
                         {
                             if (PersistBitmapFrame is not null)
                             {
                                 PersistBitmapFrame.PersistBitmapValid = false;
                             }
-                            PersistBitmapFrame = Data.PersistBitmapBuffer.Dequeue();
+                            PersistBitmapFrame = Header.PersistBitmapBuffer.Dequeue();
 
                         }
-                        else if (!Data.EnableHisto)
+                        else if (!Header.EnableHisto)
                         {
                             PersistBitmapFrame = null;
                         }
@@ -186,7 +186,7 @@ namespace Nitride.EE
                 {
                     Data.FrameBuffer.TryDequeue(out var frame);
                     CurrentTraceFrame = frame;
-                    //CurrentTraceFrame = Data.FrameBuffer.Dequeue();
+                    //CurrentTraceFrame = Header.FrameBuffer.Dequeue();
                     MainLineSeries.AssignMainDataColumn(CurrentTraceFrame.MagnitudeColumn);
 
                     if (Data.PersistBitmapBuffer.Count > 0 && Data.Enable && Data.EnablePersist)
@@ -254,7 +254,7 @@ namespace Nitride.EE
 
         public override ITable Table => Data.FreqTable;
 
-        public override bool ReadyToShow { get => m_ReadyToShow && IsActive && CurrentTraceFrame is not null && Table.Count > 0; set { m_ReadyToShow = value; } } // && Data.Enable
+        public override bool ReadyToShow { get => m_ReadyToShow && IsActive && CurrentTraceFrame is not null && Table.Count > 0; set { m_ReadyToShow = value; } } // && Header.Enable
 
         public double[] TickDacades { get; set; } = new double[]
             { 0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1 };

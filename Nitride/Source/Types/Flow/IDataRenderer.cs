@@ -20,7 +20,7 @@ namespace Nitride
         int LastIndexMax { get; }
 
         /// <summary>
-        /// Force Anchor the Data Renderer to show the end points 
+        /// Force Anchor the Header Renderer to show the end points 
         /// </summary>
         void PointerSnapToEnd();
 

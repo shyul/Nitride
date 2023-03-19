@@ -46,7 +46,7 @@ namespace Nitride.EE.FTDI
             }
             else
             {
-                Console.WriteLine("SPI Write Bytes Count: " + numBytes); // + " | Data = " + Convert.ToString(TxBuffer[1], 2));
+                Console.WriteLine("SPI Write Bytes Count: " + numBytes); // + " | Header = " + Convert.ToString(TxBuffer[1], 2));
             }
 
             return numBytes;
@@ -72,7 +72,7 @@ namespace Nitride.EE.FTDI
             }
             else
             {
-                Console.WriteLine("SPI Read Bytes Count: " + numBytes); // + " | Data = " + Convert.ToString(RxBuffer[0], 2) + " | " + Convert.ToString(RxBuffer[1], 2));
+                Console.WriteLine("SPI Read Bytes Count: " + numBytes); // + " | Header = " + Convert.ToString(RxBuffer[0], 2) + " | " + Convert.ToString(RxBuffer[1], 2));
             }
 
             return numBytes;
@@ -151,12 +151,12 @@ namespace Nitride.EE.FTDI
         private int SPI_WRITE_SINGLE_A8D16(int pt, byte addr, ushort data) // data.Length
         {
             // 3 Bytes SPI Write Read
-            TxBuffer[pt] = 0x11; // Data Out Only, Bytes, OUT Clock -VE
+            TxBuffer[pt] = 0x11; // Header Out Only, Bytes, OUT Clock -VE
             TxBuffer[pt + 1] = 3 - 1; // Length L
             TxBuffer[pt + 2] = 0; // Length H
             TxBuffer[pt + 3] = Convert.ToByte(addr & 0x7F); // Addr and R/nW
-            TxBuffer[pt + 4] = Convert.ToByte(data >> 8); // Data H
-            TxBuffer[pt + 5] = Convert.ToByte(data & 0xFF); // Data L
+            TxBuffer[pt + 4] = Convert.ToByte(data >> 8); // Header H
+            TxBuffer[pt + 5] = Convert.ToByte(data & 0xFF); // Header L
 
             return pt + 6;
         }
@@ -184,7 +184,7 @@ namespace Nitride.EE.FTDI
             ushort length_1 = Convert.ToUInt16((reg.Count * 2) & 0xFFFF); // Length - 1 (+1) initial addr byte
             byte inital_addr = Convert.ToByte(((reg.OrderByDescending(n => n.Key).First().Key) & 0x7F) + (0 << 7));
 
-            TxBuffer[pt] = 0x11; // Data Out Only, Bytes, OUT Clock -VE
+            TxBuffer[pt] = 0x11; // Header Out Only, Bytes, OUT Clock -VE
             TxBuffer[pt + 1] = Convert.ToByte(length_1 & 0xFF); // Length L
             TxBuffer[pt + 2] = Convert.ToByte((length_1 >> 8) & 0xFF); // Length H
             TxBuffer[pt + 3] = inital_addr;
@@ -194,8 +194,8 @@ namespace Nitride.EE.FTDI
             foreach (var pair in reg.OrderByDescending(n => n.Key))
             {
                 ushort data = pair.Value;
-                TxBuffer[pt] = Convert.ToByte(data >> 8); // Data H
-                TxBuffer[pt + 1] = Convert.ToByte(data & 0xFF); // Data L
+                TxBuffer[pt] = Convert.ToByte(data >> 8); // Header H
+                TxBuffer[pt + 1] = Convert.ToByte(data & 0xFF); // Header L
                 pt += 2;
             }
 
@@ -261,8 +261,8 @@ namespace Nitride.EE.FTDI
             foreach (var pair in reg.OrderByDescending(n => n.Key))
             {
                 // ushort data = pair.Value;
-                TxBuffer[pt] = 0x0; // Data H
-                TxBuffer[pt + 1] = 0x0; // Data L
+                TxBuffer[pt] = 0x0; // Header H
+                TxBuffer[pt + 1] = 0x0; // Header L
                 pt += 2;
             }
 
@@ -293,8 +293,8 @@ namespace Nitride.EE.FTDI
             TxBuffer[4] = 2; // Length L
             TxBuffer[5] = 0x0; // Length H
             TxBuffer[6] = Convert.ToByte(addr & 0x7F); // Addr and R/nW
-            TxBuffer[7] = Convert.ToByte(data >> 8); // Data H
-            TxBuffer[8] = Convert.ToByte(data & 0xFF); // Data L
+            TxBuffer[7] = Convert.ToByte(data >> 8); // Header H
+            TxBuffer[8] = Convert.ToByte(data & 0xFF); // Header L
 
             // Set LE high
             TxBuffer[9] = 0x80;
@@ -311,7 +311,7 @@ namespace Nitride.EE.FTDI
             }
             else
             {
-                Console.WriteLine("Write Bytes Count: " + numBytes);// + " | Data = " + Convert.ToString(TxBuffer[1], 2));
+                Console.WriteLine("Write Bytes Count: " + numBytes);// + " | Header = " + Convert.ToString(TxBuffer[1], 2));
             }
         }
 
@@ -327,8 +327,8 @@ namespace Nitride.EE.FTDI
             TxBuffer[4] = 2; // Length L
             TxBuffer[5] = 0x0; // Length H
             TxBuffer[6] = Convert.ToByte((addr & 0x7F) + (1 << 7)); // Addr and R/nW
-            TxBuffer[7] = 0x0; // Data H
-            TxBuffer[8] = 0x0; // Data L
+            TxBuffer[7] = 0x0; // Header H
+            TxBuffer[8] = 0x0; // Header L
 
             // Set LE high
             TxBuffer[9] = 0x80;
@@ -345,7 +345,7 @@ namespace Nitride.EE.FTDI
             }
             else
             {
-                Console.WriteLine("Write Bytes Count: " + numBytes);// + " | Data = " + Convert.ToString(TxBuffer[1], 2));
+                Console.WriteLine("Write Bytes Count: " + numBytes);// + " | Header = " + Convert.ToString(TxBuffer[1], 2));
             }
 
             numBytes = 0;
@@ -365,7 +365,7 @@ namespace Nitride.EE.FTDI
             }
             else
             {
-                Console.WriteLine("Read Bytes Count: " + numBytes + " | Data = " + Convert.ToString(RxBuffer[0], 2) + " | " + Convert.ToString(RxBuffer[1], 2));
+                Console.WriteLine("Read Bytes Count: " + numBytes + " | Header = " + Convert.ToString(RxBuffer[0], 2) + " | " + Convert.ToString(RxBuffer[1], 2));
             }
 
             return Convert.ToUInt16((RxBuffer[1] << 8) + RxBuffer[2]);

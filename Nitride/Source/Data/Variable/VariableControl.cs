@@ -154,7 +154,7 @@ namespace Nitride
     }
 
     // Define Max Digits, like 15 places? Depends on the INCR
-    // Data Represented align T. G, M, K
+    // Header Represented align T. G, M, K
      
     public class VariableControlDigit
     {

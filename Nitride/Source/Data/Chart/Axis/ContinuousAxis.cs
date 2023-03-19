@@ -123,7 +123,8 @@ namespace Nitride.Chart
 
         public virtual string PixelToString(int pix) => PixelToValue(pix).ToUnitPrefixNumber3String("G4").String;
 
-        public double Reference => Area.Reference;
+        public double Reference { get => double.IsNaN(m_Reference) ? Area.Reference : m_Reference; set => m_Reference = value; }
+        public double m_Reference = double.NaN;
 
         public double TickStep { get; set; } = double.NaN;
 

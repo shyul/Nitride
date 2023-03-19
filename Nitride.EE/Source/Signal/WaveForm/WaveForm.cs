@@ -94,7 +94,7 @@ namespace Nitride.EE
             /*
             for (int i = 0; i < Count; i++)
             {
-                Data[i] = Complex.Exp(Complex.ImaginaryOne * Math.PI * normFreq[i] * normFreq[i]);
+                Header[i] = Complex.Exp(Complex.ImaginaryOne * Math.PI * normFreq[i] * normFreq[i]);
             }*/
 
         }
@@ -131,12 +131,16 @@ namespace Nitride.EE
 
             double l_min = Math.Min(rl.Min(), il.Min());
             double l_max = Math.Max(rl.Max(), il.Max());
-
-
             double scale = Math.Max(l_max / max, l_min / min);
-
             // Console.WriteLine("offset = " + offset + " | scale = " + scale);
 
+            for (int i = 0; i < Length; i++)
+            {
+                double r = rl[i] / scale;
+                double q = il[i] / scale;
+                Data[i] = new Complex(r, q);
+            }
+            /*
             for (int i = 0; i < Length / 2; i++)
             {
                 double r = (rl[i + (Length / 2)]) / scale;
@@ -148,7 +152,7 @@ namespace Nitride.EE
 
                 Data[Length - 1 - i] = Data[i] = new Complex(r, q);
                 // new Complex(r, q);
-            }
+            }*/
         }
 
         public void GetGold(uint real, uint imag, uint mask, double min, double max) // or 23 / 18
@@ -229,7 +233,7 @@ namespace Nitride.EE
                 b = (int)(imag & mask);
 
 
-                Data[i] = new Complex(r, q);
+                Header[i] = new Complex(r, q);
             }
         
 

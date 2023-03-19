@@ -783,7 +783,7 @@ namespace Nitride.WindowsNativeMethods
         /// </summary>
         public const int COPY = 0x0301;
         /// <summary>
-        /// An application sends a WM_PASTE message to an edit control or combo box to copy the current content of the clipboard to the edit control at the current caret position. Data is inserted only if the clipboard contains data in CF_TEXT format. 
+        /// An application sends a WM_PASTE message to an edit control or combo box to copy the current content of the clipboard to the edit control at the current caret position. Header is inserted only if the clipboard contains data in CF_TEXT format. 
         /// </summary>
         public const int PASTE = 0x0302;
         /// <summary>

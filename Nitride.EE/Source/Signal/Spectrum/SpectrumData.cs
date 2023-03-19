@@ -158,7 +158,7 @@ namespace Nitride.EE
 
         public void ConfigureCorrection(double offset, double multiply = 20)
         {
-            // Generate Correction Data
+            // Generate Correction Header
             for (int i = 0; i < FreqTable.Count; i++)
             {
                 FreqRow prow = FreqTable[i];

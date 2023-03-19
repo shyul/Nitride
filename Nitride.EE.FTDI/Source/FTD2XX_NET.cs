@@ -511,7 +511,7 @@ namespace Nitride.EE.FTDI
             /// </summary>
             public const byte FT_CTS = 0x10;
             /// <summary>
-            /// Data Set Ready (DSR) modem status
+            /// Header Set Ready (DSR) modem status
             /// </summary>
             public const byte FT_DSR = 0x20;
             /// <summary>
@@ -519,7 +519,7 @@ namespace Nitride.EE.FTDI
             /// </summary>
             public const byte FT_RI = 0x40;
             /// <summary>
-            /// Data Carrier Detect (DCD) modem status
+            /// Header Carrier Detect (DCD) modem status
             /// </summary>
             public const byte FT_DCD = 0x80;
         }
@@ -615,7 +615,7 @@ namespace Nitride.EE.FTDI
         public class FT_CBUS_OPTIONS
         {
             /// <summary>
-            /// FT232R CBUS EEPROM options - Tx Data Enable
+            /// FT232R CBUS EEPROM options - Tx Header Enable
             /// </summary>
             public const byte FT_CBUS_TXDEN = 0x00;
             /// <summary>
@@ -711,7 +711,7 @@ namespace Nitride.EE.FTDI
             /// </summary>
             public const byte FT_CBUS_IOMODE = 0x08;
             /// <summary>
-            /// FT232H CBUS EEPROM options - Tx Data Enable
+            /// FT232H CBUS EEPROM options - Tx Header Enable
             /// </summary>
             public const byte FT_CBUS_TXDEN = 0x09;
             /// <summary>
@@ -6085,7 +6085,7 @@ namespace Nitride.EE.FTDI
         //**************************************************************************
         // Intellisense comments
         /// <summary>
-        /// Asserts or de-asserts the Data Terminal Ready (DTR) line.
+        /// Asserts or de-asserts the Header Terminal Ready (DTR) line.
         /// </summary>
         /// <returns>FT_STATUS value from FT_SetDtr or FT_ClrDtr in FTD2XX.DLL</returns>
         /// <param name="Enable">If true, asserts DTR.  If false, de-asserts DTR.</param>

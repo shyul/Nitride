@@ -18,7 +18,7 @@ namespace Nitride.EE
 
     public class IntermediateFrequencyStage : IRfSignalSink, IRfSignalSource
     {
-        // Calibration Methods and Data
+        // Calibration Methods and Header
 
         // 
 
