@@ -18,7 +18,7 @@ namespace Nitride.EE
             SpectrumChannel = sch;
             InitializeComponent();
 
-            ComboBoxFftWindow.Items.Add<WindowsType>();
+            ComboBoxFftWindow.Items.Add<WindowType>();
             ComboBoxFftWindow.SelectedIndex = 9;
             ComboBoxDetectorType.Items.Add<TraceDetectorType>();
             ComboBoxDetectorType.SelectedIndex = 0;
@@ -73,7 +73,7 @@ namespace Nitride.EE
             sch.EnableHisto = CheckBoxEnableHisto.Checked;
             sch.PersistEnable = CheckBoxEnablePersist.Checked;
 
-            sch.WindowsType = ComboBoxFftWindow.Text.ParseEnum<WindowsType>();
+            sch.WindowsType = ComboBoxFftWindow.Text.ParseEnum<WindowType>();
             sch.TraceDetectorType = ComboBoxDetectorType.Text.ParseEnum<TraceDetectorType>();
 
             sch.TracePoint = TextBoxTracePoints.Text.ToInt32();

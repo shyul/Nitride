@@ -52,7 +52,7 @@ namespace Nitride.EE
             (HandleFFT_CancellationTokenSource is null || HandleFFT_CancellationTokenSource.IsCancellationRequested) &&
             (HandleFFT_Task is null || HandleFFT_Task.Status != TaskStatus.Running);
 
-        public void Configure(int length, double startFreq, double stopFreq, WindowsType winType) //, bool flip)
+        public void Configure(int length, double startFreq, double stopFreq, WindowType winType) //, bool flip)
         {
             Length = length;
             StartFreq = startFreq;

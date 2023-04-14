@@ -132,7 +132,7 @@ namespace Nitride.EE
             Receiver.ApplyConfig();
             SampleTable.SampleRate = Receiver.SampleRate;
             // SampleTable.ConfigureNumberOfPoints(SampleLength);
-            ApplyConfig_Spectrum();
+            // ApplyConfig_Spectrum();
         }
 
         // #3 Can be configured anytime

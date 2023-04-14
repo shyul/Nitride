@@ -7,12 +7,13 @@
 /// ***************************************************************************
 
 using System;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Nitride.EE
 {
     [Serializable, DataContract]
-    public enum WindowsType : int
+    public enum WindowType : int
     {
         Custom = 0,
         Rectangle = 1,
@@ -31,26 +32,31 @@ namespace Nitride.EE
 
     public static class WindowFunction
     {
-        public static void GetWindow(int N, WindowsType type, ref double[] data)
+        public static void GetWindow(int N, WindowType type, ref double[] data)
         {
             switch (type)
             {
-                case WindowsType.Rectangle:
+                case WindowType.Rectangle:
                     {
                         for (int i = 0; i < N; i++)
                             data[i] = 1;
                     }
                     break;
 
-                case WindowsType.Triangle:
+                case WindowType.Triangle:
                     {
-                        double N1 = N + 1;
+                        double N1 = N - 1;
                         for (int i = 0; i < N; i++)
-                            data[i] = 1D - Math.Abs((2 * i - N1)) / N;
+                            data[i] = 1D - Math.Abs((2 * i - N1)) / N1;
+                        /*
+                        double ofs = 1 - data.Max();
+
+                        for (int i = 0; i < N; i++)
+                            data[i] += ofs;*/
                     }
                     break;
 
-                case WindowsType.Hanning:
+                case WindowType.Hanning:
                     {
                         double a = Math.PI * 2 / (N - 1);
                         for (int i = 0; i < N; i++)
@@ -58,7 +64,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Hamming:
+                case WindowType.Hamming:
                     {
                         double a = Math.PI * 2 / (N - 1);
                         for (int i = 0; i < N; i++)
@@ -66,7 +72,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Nuttall:
+                case WindowType.Nuttall:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -81,7 +87,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Blackman:
+                case WindowType.Blackman:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -92,7 +98,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.BlackmanNuttall:
+                case WindowType.BlackmanNuttall:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -107,7 +113,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.BlackmanHarris:
+                case WindowType.BlackmanHarris:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -122,7 +128,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.FlatTop:
+                case WindowType.FlatTop:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -147,7 +153,7 @@ namespace Nitride.EE
 
         }
 
-        public static double[] GetWindow(int N, WindowsType type)
+        public static double[] GetWindow(int N, WindowType type)
         {
             double[] data = new double[N];
 
@@ -156,14 +162,14 @@ namespace Nitride.EE
             /*
             switch (type)
             {
-                case WindowsType.Rectangle:
+                case WindowType.Rectangle:
                     {
                         for (int i = 0; i < N; i++)
                             data[i] = 1;
                     }
                     break;
 
-                case WindowsType.Triangle:
+                case WindowType.Triangle:
                     {
                         double N1 = N + 1;
                         for (int i = 0; i < N; i++)
@@ -171,7 +177,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Hanning:
+                case WindowType.Hanning:
                     {
                         double a = Math.PI * 2 / (N - 1);
                         for (int i = 0; i < N; i++)
@@ -179,7 +185,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Hamming:
+                case WindowType.Hamming:
                     {
                         double a = Math.PI * 2 / (N - 1);
                         for (int i = 0; i < N; i++)
@@ -187,7 +193,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Nuttall:
+                case WindowType.Nuttall:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -202,7 +208,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.Blackman:
+                case WindowType.Blackman:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -213,7 +219,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.BlackmanNuttall:
+                case WindowType.BlackmanNuttall:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -228,7 +234,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.BlackmanHarris:
+                case WindowType.BlackmanHarris:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;
@@ -243,7 +249,7 @@ namespace Nitride.EE
                     }
                     break;
 
-                case WindowsType.FlatTop:
+                case WindowType.FlatTop:
                     {
                         double a0 = Math.PI * 2 / (N - 1);
                         double a1 = 2 * a0;

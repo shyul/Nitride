@@ -27,6 +27,18 @@ namespace Nitride.EE
             => (dielectricConst * VacuumPermitivity * area) / thickness;
 
 
+        public static double[] LinearSpace(double x1, double x2, int n) 
+        {
+            double[] result = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                result[i] = x1 + ((x2 - x1) * i / (n - 1));
+            }
+
+            return result;
+        }
+
 
     }
 }

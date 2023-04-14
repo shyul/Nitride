@@ -27,7 +27,7 @@ namespace Nitride.EE
             }
         }
 
-        public void Configure(int length, double startFreq, double stopFreq, WindowsType winType, bool flip)
+        public void Configure(int length, double startFreq, double stopFreq, WindowType winType, bool flip)
         {
             Length = length;
             StartFreq = startFreq;

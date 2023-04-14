@@ -143,7 +143,7 @@ namespace Nitride.EE
                 };
             }
             else
-                throw new Exception("VCO Frequency is too high: " + VcoFrequency);
+                throw new Exception("VCO Frequency is too high: " + VcoFrequency + " Reference.Frequency = " + Reference.Frequency);
         }
 
         public bool PowerDown

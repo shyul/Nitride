@@ -94,7 +94,7 @@ namespace Nitride.EE
 
         public SweepMode SweepMode => SpectrumControl.SweepMode;
 
-        public WindowsType WindowsType { get; set; } = WindowsType.FlatTop;
+        public WindowType WindowsType { get; set; } = WindowType.FlatTop;
 
         public bool EnableHisto { get; set; } = true;
 

@@ -25,7 +25,7 @@ namespace Nitride.EE
             Dsw = new Complex[length];
         }
 
-        public void UpdataConfiguration(int length, WindowsType type) //, bool flip)
+        public void UpdataConfiguration(int length, WindowType type) //, bool flip)
         {
             if (length > 4 && length <= WinF.Length && length.IsPowerOf2())
             {
