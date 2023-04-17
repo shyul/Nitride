@@ -174,15 +174,12 @@ namespace Nitride.EE
             }
             else
             {
-
-
                 sd.EnablePersist = false;
             }
 
             SpectrumChart.UpdateConfiguration(TickStep);
             SpectrumChart.ShowAll();
 
-            // SpectrumControl.Pause = false;
             SpectrumData.PauseUpdate = false;
         }
 

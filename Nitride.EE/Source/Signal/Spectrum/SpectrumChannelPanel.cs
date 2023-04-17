@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Nitride.EE
-{ 
-    public partial class SpectrumChannelForm : Form
+{
+    public partial class SpectrumChannelPanel : UserControl
     {
-        public SpectrumChannelForm(SpectrumChannel sch)
+        public SpectrumChannelPanel(SpectrumChannel sch)
         {
             SpectrumChannel = sch;
+
             InitializeComponent();
+            Location = new Point(0, 0);
+            Dock = DockStyle.Fill;
 
             ComboBoxFftWindow.Items.Add<WindowType>();
             ComboBoxFftWindow.SelectedIndex = 9;

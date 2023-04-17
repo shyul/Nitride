@@ -10,22 +10,24 @@ using System.Windows.Forms;
 
 namespace Nitride.EE
 {
-    public partial class SpectrumControlForm : Form
+    public partial class SpectrumControlPanel : UserControl
     {
-        public SpectrumControlForm(SpectrumControl sc)
+        public SpectrumControlPanel(SpectrumControl sc)
         {
             SpectrumControl = sc;
 
-            SpectrumChannelForms = new SpectrumChannelForm[sc.NumOfCh];
+            SpectrumChannelPanels = new SpectrumChannelPanel[sc.NumOfCh];
 
             for (int i = 0; i < sc.NumOfCh; i++)
             {
-                SpectrumChannelForm scf = SpectrumChannelForms[i] = new SpectrumChannelForm(sc.SpectrumChannel[i]);
+                SpectrumChannelPanel scf = SpectrumChannelPanels[i] = new SpectrumChannelPanel(sc.SpectrumChannel[i]);
                 scf.Text = "Ch" + i + " Spectrum Settings";
                 scf.Show();
             }
 
             InitializeComponent();
+            Location = new Point(0, 0);
+            Dock = DockStyle.Fill;
 
             ComboBoxSweepMode.Items.Add<SweepMode>();
             ComboBoxSweepMode.Text = SweepMode.FFT.ToString();
@@ -40,7 +42,7 @@ namespace Nitride.EE
 
         public SpectrumControl SpectrumControl { get; }
 
-        public SpectrumChannelForm[] SpectrumChannelForms { get; }
+        public SpectrumChannelPanel[] SpectrumChannelPanels { get; }
 
         public Action ConfigIsUpdated;
 
@@ -56,7 +58,7 @@ namespace Nitride.EE
             TextBoxSampleTime.Text = (sc.Receiver.SampleTime * 1000).ToString("0.###") + " ms";
 
             //SpectrumControl.ApplyConfig_Spectrum();
-            foreach (var ch in SpectrumChannelForms)
+            foreach (var ch in SpectrumChannelPanels)
             {
                 ch.UpdateControls();
             }
