@@ -88,17 +88,17 @@ namespace Nitride.EE
         {
             // CheckBoxPause.Checked = false;
             // SpectrumControl.Pause = false;
-            SpectrumControl.StartStream();
+            SpectrumControl.RunFetch();
         }
 
         private void BtnTrigSingle_Click(object sender, EventArgs e)
         {
-            SpectrumControl.GetSingle();
+            SpectrumControl.RunSingleFetch();
         }
 
         private void BtnAdcDataTrigStop_Click(object sender, EventArgs e)
         {
-            SpectrumControl.StopStream();
+            SpectrumControl.StopFetch();
         }
 
         private void CheckBoxPause_CheckedChanged(object sender, EventArgs e)

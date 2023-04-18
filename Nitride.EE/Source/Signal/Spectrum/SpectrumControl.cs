@@ -25,14 +25,11 @@ namespace Nitride.EE
 {
     public class SpectrumControl
     {
-        public SpectrumControl(WaveFormReceiver recv)
+        public SpectrumControl(IReceiver recv)
         {
             Receiver = recv;
             SampleLength = Receiver.MaxSampleLength;
-
-            SpectrumChannel = new SpectrumChannel[NumOfCh];
-
-            SampleTable = new(Receiver.MaxSampleLength);
+            SampleTable = new(SampleLength);
             SampleChart = new ChronoChart("Sample Chart", SampleTable)
             {
                 IndexCount = 500,
@@ -42,6 +39,7 @@ namespace Nitride.EE
                 Dock = DockStyle.Fill
             };
 
+            SpectrumChannel = new SpectrumChannel[NumOfCh];
             for (int i = 0; i < NumOfCh; i++)
             {
                 SpectrumChannel sch = SpectrumChannel[i] = new(this, "SCh" + i.ToString(), Receiver.PoolSize, Receiver.MaxSampleLength);
@@ -49,12 +47,22 @@ namespace Nitride.EE
             }
 
             EnableTimeDomain = true;
-            Receiver.WaveFormEnqueue += WaveFormEnqueue;
+            // Receiver.WaveFormEnqueue += WaveFormEnqueue;
         }
 
-        public WaveFormReceiver Receiver { get; }
+        public IReceiver Receiver { get; }
+
+        public int NumOfCh => Receiver.NumOfCh;
+
+        public SweepMode SweepMode { get; set; } = SweepMode.FFT;
 
         #region SampleChart
+
+        public bool EnableTimeDomain { get; set; } = true;
+
+        public int SampleLength { get => Receiver.SampleLength; set => Receiver.SampleLength = value; }
+
+        public double SampleRate => Receiver.SampleRate;
 
         public ChronoTable SampleTable { get; }
 
@@ -70,40 +78,42 @@ namespace Nitride.EE
 
         #region Properties
 
-        public int NumOfCh => Receiver.NumOfCh;
 
-        public bool EnableTimeDomain { get; set; } = true;
 
-        public int SampleLength { get; set; } = 8192;
 
-        public double SampleRate => Receiver.SampleRate;
 
-        public SweepMode SweepMode { get; set; } = SweepMode.FFT;
 
         public bool Pause
         {
-            get => m_Pause;
+            get => Receiver.IsFetchPause;
 
             set
             {
-                Receiver.IsPause = value;
+                bool setPause = true;
+
+                if (value)
+                {
+                    Receiver.PauseFetch();
+                }
+                else if (Receiver.IsFetchRunning)
+                {
+                    Receiver.ResumeFetch();
+                    setPause = false;
+                }
 
                 for (int i = 0; i < NumOfCh; i++)
                 {
                     SpectrumChannel sch = SpectrumChannel[i];
-                    sch.SpectrumData.PauseUpdate = value;
+                    sch.SpectrumData.PauseUpdate = setPause;
                 }
-
-                m_Pause = value;
             }
         }
 
-        private bool m_Pause = true;
 
         // #1 Configure the Sample Length must be done with everything stopped.
         public void ApplyConfig()
         {
-            if (Receiver.IsPause)
+            if (Receiver.IsFetchPaused)
             {
                 // Set the WaveFormGroup
                 if (SampleLength <= Receiver.MaxSampleLength && SampleLength.IsPowerOf2())
@@ -114,9 +124,13 @@ namespace Nitride.EE
                 {
                     throw new Exception("Invalid Sample Length: " + SampleLength);
                 }
-                SampleTable.ConfigureNumberOfPoints(SampleLength);
+              
 
-                ApplyConfig_Receiver();
+                Receiver.ApplyReceiverConfig();
+
+                SampleTable.ConfigureNumberOfPoints(SampleLength);
+                SampleTable.SampleRate = Receiver.SampleRate;
+
                 ApplyConfig_Spectrum();
             }
             else
@@ -125,23 +139,13 @@ namespace Nitride.EE
             }
         }
 
-        // #2 Can be configured anytime, must update the spectrum settings.
-        public void ApplyConfig_Receiver()
-        {
-            // Write DDC configuration...
-            Receiver.ApplyConfig();
-            SampleTable.SampleRate = Receiver.SampleRate;
-            // SampleTable.ConfigureNumberOfPoints(SampleLength);
-            // ApplyConfig_Spectrum();
-        }
-
         // #3 Can be configured anytime
         public void ApplyConfig_Spectrum()
         {
             for (int i = 0; i < NumOfCh; i++)
             {
                 SpectrumChannel sch = SpectrumChannel[i];
-                sch.DSP_Gain = Receiver.DSP_Gain[i];
+                // sch.DSP_Gain = Receiver.DSP_Gain[i];
                 sch.ApplyConfig();
             }
         }
@@ -150,28 +154,16 @@ namespace Nitride.EE
 
         #region Methods
 
-        public bool GetSingle() => Receiver.TrigSingle();
-
-        public bool StartStream()
-        {
-            if (!Receiver.TrigContinous()) return false;
-            /*
-            foreach (var sch in SpectrumChannel)
-            {
-               sch.
-            }*/
-
-            Pause = false;
-            return true;
+        public WaveFormGroup RunSingleFetch() 
+        { 
+            var wfg = Receiver.RunSingleFetch();
+            WaveFormEnqueue(wfg);
+            return wfg;
         }
 
-        public bool StopStream()
-        {
-            Receiver.TrigStop();
+        public bool RunFetch() => Receiver.RunFetch();
 
-            Pause = true;
-            return false;
-        }
+        public void StopFetch() => Receiver.StopFetch();
 
         #endregion Methods
 
@@ -188,7 +180,7 @@ namespace Nitride.EE
             {
                 WaveForm wf = wfg.WaveForms[i];
                 SpectrumChannel sch = SpectrumChannel[i];
-                double dsp_gain = sch.DSP_Gain;
+                // double dsp_gain = sch.DSP_Gain;
 
                 if (!sch.Enabled) // If the channel is disabled
                 {
@@ -202,7 +194,7 @@ namespace Nitride.EE
                     {
                         Complex c = wf.Data[j];
                         ChronoRow cr = ct[j];
-                        (cr[sch.Sample_I_Column], cr[sch.Sample_Q_Column]) = (c.Real / dsp_gain, c.Imaginary / dsp_gain);
+                        (cr[sch.Sample_I_Column], cr[sch.Sample_Q_Column]) = (c.Real, c.Imaginary);
 
                         // Console.WriteLine(c.ToString());
                     }
@@ -210,7 +202,6 @@ namespace Nitride.EE
 
                 if (SweepMode == SweepMode.FFT)
                 {
-                    // wf.IsUpdated = false;  // .
                     sch.SpectrumFFT.WaveFormEnqueue(wf);
                 }
                 else
@@ -222,7 +213,6 @@ namespace Nitride.EE
             if (EnableTimeDomain)
             {
                 ct.DataIsUpdated();
-                // Console.WriteLine("ct.DataIsUpdated()");
             }
 
         }

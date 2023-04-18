@@ -145,7 +145,7 @@ namespace Nitride.EE
 
         #region Configuration
 
-        public double DSP_Gain { get; set; } = 1;
+        // public double DSP_Gain { get; set; } = 1;
 
         public void ApplyConfig()
         {
@@ -172,7 +172,7 @@ namespace Nitride.EE
             {
                 SpectrumFFT.Configure(SampleLength, dsp_startFreq, dsp_stopFreq, WindowsType);
                 sd.EnablePersist = PersistEnable & EnableHisto;
-                double gain = 20 * Math.Log10(SpectrumFFT.Gain * DSP_Gain);
+                double gain = 20 * Math.Log10(SpectrumFFT.Gain); // * DSP_Gain);
                 sd.ConfigureCorrection(-gain, 20);
                 RBW = dsp_bw / SpectrumFFT.Length;
             }

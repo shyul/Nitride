@@ -14,11 +14,9 @@ namespace Nitride.EE
     {
         public SpectrumData()
         {
-            //GetScaledTraceTask = new(() => GetGetScaledTraceWorker());
-            GetPersistBitmapTask = new(() => GetPersistBitmapWorker());
-            GetFrameTask = new(() => GetFrameWorker());
+            GetPersistBitmapTask = new(() => GetPersistBitmapWorker(), GetFrameCancellationTokenSource.Token);
+            GetFrameTask = new(() => GetFrameWorker(), GetFrameCancellationTokenSource.Token);
 
-            //GetScaledTraceTask.Start();
             GetPersistBitmapTask.Start();
             GetFrameTask.Start();
         }

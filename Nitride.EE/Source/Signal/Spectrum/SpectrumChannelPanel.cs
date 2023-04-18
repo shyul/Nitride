@@ -54,7 +54,7 @@ namespace Nitride.EE
             ComboBoxDetectorType.Text = sch.TraceDetectorType.ToString();
             TextBoxTracePoints.Text = sch.TracePoint.ToString();
 
-            TextBoxDspGain.Text = sch.DSP_Gain.ToString();
+            TextBoxDspGain.Text = "Removed - NaN"; // sch.DSP_Gain.ToString();
             TextBoxFftGain.Text = sch.SpectrumFFT.Gain.ToString();
 
             TextBoxHistoDepth.Text = sch.HistoDepth.ToString();

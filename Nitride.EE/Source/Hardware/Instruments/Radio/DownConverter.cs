@@ -26,7 +26,7 @@ namespace Nitride.EE
 
         public Tunner LocalOscillator { get; set; }
 
-        public WaveFormReceiver Receiver { get; set; }
+        public IReceiver Receiver { get; set; }
 
 
 
