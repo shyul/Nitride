@@ -21,7 +21,7 @@ namespace Nitride
 
         public int Index { get; }
 
-        public string Text { get; }
+        public string Text { get; set; }
 
         public DockStyle Style { get; }
 

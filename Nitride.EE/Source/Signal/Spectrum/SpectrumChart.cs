@@ -75,6 +75,8 @@ namespace Nitride.EE
 
             };
 
+            MainLineSeries.TagColumns.Add(sd.CursorTagColumn);
+
             MainArea.AddSeries(MainLineSeries);
 
             ReadyToShow = true;

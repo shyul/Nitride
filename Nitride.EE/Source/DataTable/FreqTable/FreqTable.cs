@@ -14,7 +14,7 @@ using System.Numerics;
 
 namespace Nitride.EE
 {
-    public class FreqTable : DataTable, IComplexTable
+    public class FreqTable : DataTable, IComplexTable, IDatumTable
     {
         ~FreqTable() => Dispose();
 
@@ -102,12 +102,15 @@ namespace Nitride.EE
 
         public List<FreqRow> FreqRows { get; } = new();
 
+        public int GetIndex(double freq)
+        {
+            double d = (freq - StartFreq) * (Count - 1.0) / (StopFreq - StartFreq);
+            return Convert.ToInt32(Math.Round(d, MidpointRounding.AwayFromZero));
+        }
+
         protected Dictionary<double, int> FreqToIndex { get; } = new();
 
         public bool Contains(double freq) => FreqToIndex.ContainsKey(freq);
-
-
-
 
         public override int Count => FreqRows.Count;
 
@@ -138,6 +141,8 @@ namespace Nitride.EE
         public override double this[int i, NumericColumn column] => i >= Count || i < 0 ? double.NaN : FreqRows[i][column];
 
         public Complex this[int i, ComplexColumn column] => i >= Count || i < 0 ? double.NaN : FreqRows[i][column];
+
+        public IDatum this[int i, DatumColumn column] => i >= Count || i < 0 ? null : FreqRows[i][column];
 
         public override string GetXAxisLabel(int i)
         {

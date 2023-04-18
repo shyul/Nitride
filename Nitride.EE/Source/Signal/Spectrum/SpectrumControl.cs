@@ -154,10 +154,6 @@ namespace Nitride.EE
 
         public bool StartStream()
         {
-            // if ()
-
-            Pause = false;
-
             if (!Receiver.TrigContinous()) return false;
             /*
             foreach (var sch in SpectrumChannel)
@@ -165,7 +161,7 @@ namespace Nitride.EE
                sch.
             }*/
 
-
+            Pause = false;
             return true;
         }
 

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Nitride;
 
 namespace Nitride.EE
@@ -136,6 +137,40 @@ namespace Nitride.EE
         public FreqTable FreqTable { get; } = new();
 
         public double[] FreqPoints { get; private set; }
+
+        public Dictionary<int, double> Cursors { get; } = new();
+
+        public ColorTheme CursorTheme { get; } = new(Color.White, Color.Green, Color.DarkGreen);
+
+        public DatumColumn CursorTagColumn { get; } = new DatumColumn("Cursor", typeof(TagInfo));
+
+        public void AddCursor(double freq)
+        {
+            if (freq >= StartFreq && freq <= StopFreq)
+            {
+                // double d = (freq - StartFreq) * (FreqTable.Count - 1.0) / Span;
+                // int i = Convert.ToInt32(Math.Round(d, MidpointRounding.AwayFromZero));
+
+                int i = FreqTable.GetIndex(freq);
+
+                Console.WriteLine("AddCursor: freq = " + freq + " | index = " + i);
+
+                if (!Cursors.ContainsKey(i))
+                {
+                    Cursors.Add(i, double.NaN);
+                    FreqTable[i][CursorTagColumn] = new TagInfo(i, "NaN", DockStyle.Top, CursorTheme);
+                }
+            }
+        }
+
+        public void ClearCursors() 
+        {
+            foreach(var i in Cursors.Keys)
+            {
+                FreqTable[i][CursorTagColumn] = null;
+            }
+            Cursors.Clear();
+        }
 
         public void ConfigureFreqRange(double center, double span)
         {
@@ -373,6 +408,16 @@ namespace Nitride.EE
                 trace.IsUpdated = false;
 
                 det.Evaluate(this, frame);
+
+                foreach (int ci in Cursors.Keys) 
+                {
+                    double mag = Cursors[ci] = FreqTable[ci][frame.MagnitudeColumn];
+
+                    if (FreqTable[ci][CursorTagColumn] is TagInfo ti) 
+                    {
+                        ti.Text = mag.ToString("0.##");
+                    }
+                }
 
                 if (EnablePersist)
                 {

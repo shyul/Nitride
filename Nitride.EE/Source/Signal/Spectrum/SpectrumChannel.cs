@@ -164,6 +164,10 @@ namespace Nitride.EE
             sd.ConfigureLevel(Reference, Range);
             sd.ConfigureFreqRange(CenterFreq, FreqSpan);
 
+            sd.AddCursor(CenterFreq);
+            sd.AddCursor(CenterFreq + 10e6);
+            sd.AddCursor(CenterFreq - 10e6);
+
             if (SweepMode == SweepMode.FFT)
             {
                 SpectrumFFT.Configure(SampleLength, dsp_startFreq, dsp_stopFreq, WindowsType);

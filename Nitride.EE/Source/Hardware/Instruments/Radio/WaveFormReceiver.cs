@@ -77,7 +77,7 @@ namespace Nitride.EE
 
         protected abstract void HandleFetch();
 
-        protected abstract void HandleCopy();
+
 
         public abstract void ApplyConfig();
 

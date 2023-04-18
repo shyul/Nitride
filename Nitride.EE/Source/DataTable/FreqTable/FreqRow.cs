@@ -66,6 +66,21 @@ namespace Nitride.EE
             }
         }
 
+        private Dictionary<DatumColumn, IDatum> DatumColumnsLUT { get; } = new Dictionary<DatumColumn, IDatum>();
+
+        public IDatum this[DatumColumn column]
+        {
+            get => column is DatumColumn dc && DatumColumnsLUT.ContainsKey(dc) ? DatumColumnsLUT[dc] : null;
+
+            set
+            {
+                if (value is null && DatumColumnsLUT.ContainsKey(column))
+                    DatumColumnsLUT.Remove(column);
+                else
+                    DatumColumnsLUT[column] = value;
+            }
+        }
+
         public int CompareTo(FreqRow other)
         {
             if (Frequency > other.Frequency) return 1;
