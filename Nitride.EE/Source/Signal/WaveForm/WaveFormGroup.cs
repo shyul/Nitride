@@ -44,6 +44,8 @@ namespace Nitride.EE
 
         public WaveForm[] WaveForms { get; }
 
+        public WaveForm this[int i] => WaveForms[i];
+
         /// <summary>
         /// Copy from DataBuffer
         /// </summary>
@@ -53,6 +55,8 @@ namespace Nitride.EE
         /// <returns>Samples Copied</returns>
         public int CopyData(DataBuffer source, DataBufferFormat format, double gain, double shift, int offset = 0)
         {
+            HasUpdatedItem = true;
+
             int i, j;
             int pt = 0;
             int num = NumOfCh;
@@ -122,11 +126,11 @@ namespace Nitride.EE
                     }
                     break;
             }
-
+            /*
             for (j = 0; j < num; j++)
             {
                 WaveForms[j].IsUpdated = true;
-            }
+            }*/
 
             return pt;
         }
