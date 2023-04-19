@@ -25,7 +25,7 @@ namespace Nitride.EE
 
         int SampleLength { get; set; }
 
-        double SampleTime { get; }
+        double ReceiveTime { get; }
 
 
         bool ApplyReceiverConfig();

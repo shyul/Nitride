@@ -55,7 +55,7 @@ namespace Nitride.EE
             TextBoxSampleRate.Text = sc.Receiver.SampleRate.ToString();
             TextBoxBandwidth.Text = sc.Receiver.Bandwidth.ToString();
             CheckBoxEnableTimeDomain.Checked = sc.EnableTimeDomain;
-            TextBoxSampleTime.Text = (sc.Receiver.SampleTime * 1000).ToString("0.###") + " ms";
+            TextBoxSampleTime.Text = (sc.Receiver.ReceiveTime * 1000).ToString("0.###") + " ms";
 
             //SpectrumControl.ApplyConfig_Spectrum();
             foreach (var ch in SpectrumChannelPanels)

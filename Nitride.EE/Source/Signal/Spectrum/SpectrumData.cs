@@ -36,11 +36,13 @@ namespace Nitride.EE
 
             set
             {
-                Clear();
-                Enable = !value;
                 m_PauseUpdate = value;
-                //FreqTraceBuffer.Clear();
-                //FrameBuffer.Clear();
+                Clear();
+
+                if(!m_PauseUpdate)
+                {
+                    Enable = true;
+                }
             }
         }
 
@@ -283,6 +285,8 @@ namespace Nitride.EE
 
         public void Clear()
         {
+            bool toRecover = Enable;
+
             Enable = false;
 
             while (FreqTraceQueue.Count > 0)
@@ -312,6 +316,10 @@ namespace Nitride.EE
                         row[frame.LowPixColumn] = double.NaN;
                     });
                 }
+
+            if (toRecover)
+                Enable = true;
+
         }
 
         private CancellationTokenSource GetFrameCancellationTokenSource { get; } = new();
@@ -327,21 +335,16 @@ namespace Nitride.EE
             int cnt = 0;
             DateTime time = DateTime.Now;
 
-            while (true)
+            while (!GetFrameCancellationTokenSource.IsCancellationRequested)
             {
-                if (GetFrameCancellationTokenSource.IsCancellationRequested)
-                {
-                    CurrentTraceFrame = null;
-                    return;
-                }
-
-                if (FreqTraceQueue.Count > 0 && Enable && !PauseUpdate)
+                if (Enable && !PauseUpdate && !FreqTraceQueue.IsEmpty)
                 {
                     if (FrameBuffer.Count < 3)
                     {
                         FreqTraceQueue.TryDequeue(out var tr);
                         CurrentTraceFrame = GetFrame(tr);
                         FrameBuffer.Enqueue(CurrentTraceFrame);
+                        cnt++;
                     }
                     else if (FrameBuffer.Count > 2)
                     {
@@ -357,8 +360,6 @@ namespace Nitride.EE
                         time = DateTime.Now;
                         cnt = 0;
                     }
-                    else
-                        cnt++;
                 }
                 else
                 {
@@ -366,6 +367,8 @@ namespace Nitride.EE
                     Thread.Sleep(10);
                 }
             }
+
+            CurrentTraceFrame = null;
         }
 
         public bool IsLog { get; } = true;
@@ -505,12 +508,9 @@ namespace Nitride.EE
             int cnt = 0;
             DateTime time = DateTime.Now;
 
-            while (true)
+            while (!GetFrameCancellationTokenSource.IsCancellationRequested)
             {
-                if (GetFrameCancellationTokenSource.IsCancellationRequested)
-                    return;
-
-                if (CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) && Enable && EnablePersist && !PauseUpdate)
+                if (EnablePersist && Enable && !PauseUpdate && CurrentTraceFrame is TraceFrame frame && (!frame.PersistBitmapValid) )
                 {
                     GetPersistBitmap(frame);
                     PersistBitmapBuffer.Enqueue(frame);
