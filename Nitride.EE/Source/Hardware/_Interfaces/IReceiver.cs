@@ -11,7 +11,7 @@ namespace Nitride.EE
     {
         int NumOfCh { get; }
 
-        int PoolSize { get; }
+
 
 
 
@@ -36,7 +36,7 @@ namespace Nitride.EE
 
         bool IsFetchPaused { get; }
 
-        WaveFormGroup RunSingleFetch();
+        bool RunSingleFetch();
 
         bool RunFetch();
 

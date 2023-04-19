@@ -25,10 +25,18 @@ namespace Nitride.EE
 {
     public class SpectrumControl
     {
-        public SpectrumControl(IReceiver recv)
+        public SpectrumControl(IReceiver recv, int poolSize)
         {
             Receiver = recv;
             SampleLength = Receiver.MaxSampleLength;
+
+            for (int i = 0; i < poolSize; i++)
+            {
+                FetchWaveFormPool.Add(new WaveFormGroup(NumOfCh, SampleLength));
+            }
+
+            FetchWaveFormPool.ForEach(n => n.HasUpdatedItem = false);
+
             SampleTable = new(SampleLength);
             SampleChart = new ChronoChart("Sample Chart", SampleTable)
             {
@@ -42,12 +50,17 @@ namespace Nitride.EE
             SpectrumChannel = new SpectrumChannel[NumOfCh];
             for (int i = 0; i < NumOfCh; i++)
             {
-                SpectrumChannel sch = SpectrumChannel[i] = new(this, "SCh" + i.ToString(), Receiver.PoolSize, Receiver.MaxSampleLength);
+                SpectrumChannel sch = SpectrumChannel[i] = new(this, "SCh" + i.ToString(), PoolSize, Receiver.MaxSampleLength);
                 sch.ApplyConfig();
             }
 
             EnableTimeDomain = true;
             // Receiver.WaveFormEnqueue += WaveFormEnqueue;
+        }
+
+        ~SpectrumControl() 
+        {
+            FetchWaveFormPool.ForEach(n => n.HasUpdatedItem = false);
         }
 
         public IReceiver Receiver { get; }
@@ -78,10 +91,11 @@ namespace Nitride.EE
 
         #region Properties
 
+        private List<WaveFormGroup> FetchWaveFormPool { get; } = new();
 
+        public int PoolSize => FetchWaveFormPool.Count;
 
-
-
+        public WaveFormGroup CurrentFetchWaveFormGroup => FetchWaveFormPool.Where(n => !n.HasUpdatedItem).FirstOrDefault();
 
         public bool Pause
         {
@@ -109,7 +123,6 @@ namespace Nitride.EE
             }
         }
 
-
         // #1 Configure the Sample Length must be done with everything stopped.
         public void ApplyConfig()
         {
@@ -124,7 +137,8 @@ namespace Nitride.EE
                 {
                     throw new Exception("Invalid Sample Length: " + SampleLength);
                 }
-              
+
+                FetchWaveFormPool.ForEach(n => n.Configure(SampleLength, SampleRate, 0));
 
                 Receiver.ApplyReceiverConfig();
 
@@ -154,12 +168,7 @@ namespace Nitride.EE
 
         #region Methods
 
-        public WaveFormGroup RunSingleFetch() 
-        { 
-            var wfg = Receiver.RunSingleFetch();
-            WaveFormEnqueue(wfg);
-            return wfg;
-        }
+        public void RunSingleFetch() => Receiver.RunSingleFetch();
 
         public bool RunFetch() => Receiver.RunFetch();
 
