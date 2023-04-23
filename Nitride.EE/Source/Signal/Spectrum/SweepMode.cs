@@ -13,7 +13,7 @@ namespace Nitride.EE
     public enum SweepMode
     {
         FFT, // FFT Frame Length
-        Segment, // Points (dewelling time), FFT Detector Length
+        Segment, // Points (dewelling time), FFT PowerDetector Length
         Detector,
     }
 }
