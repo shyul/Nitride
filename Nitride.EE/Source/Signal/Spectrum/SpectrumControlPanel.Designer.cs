@@ -156,6 +156,7 @@
             // 
             // BtnApplyConfiguration
             // 
+            BtnApplyConfiguration.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             BtnApplyConfiguration.Location = new System.Drawing.Point(137, 241);
             BtnApplyConfiguration.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             BtnApplyConfiguration.Name = "BtnApplyConfiguration";

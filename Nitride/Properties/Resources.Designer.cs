@@ -1473,6 +1473,16 @@ namespace Nitride.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Excel_24 {
+            get {
+                object obj = ResourceManager.GetObject("Excel_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Exit_16 {
             get {
                 object obj = ResourceManager.GetObject("Exit_16", resourceCulture);

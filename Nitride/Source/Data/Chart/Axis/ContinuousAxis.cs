@@ -133,8 +133,16 @@ namespace Nitride.Chart
 
         public virtual int MinimumTickHeight { get; set; } = 30;
 
+        public double MinRange { get; set; } = double.NaN;
+
         public virtual void GenerateTicks()
         {
+            if (!double.IsNaN(MinRange))
+            {
+                Range.Insert(MinRange);
+                Range.Insert(-MinRange);
+            }
+
             //Console.WriteLine("GenerateTicks(): " + Range.Minimum);
             if (!double.IsNaN(Reference) && (!FixedRange))
             {
