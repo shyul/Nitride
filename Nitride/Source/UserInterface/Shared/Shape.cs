@@ -292,6 +292,24 @@ namespace Nitride
             g.FillRectangle(brush, new Rectangle(rectangle.Location, new Size(rectangle.Width + 1, rectangle.Height + 1)));
 
 
+        public static void DrawArc(this Graphics g, Pen pen, Point center, int radius, float startAngle, float sweepAngle)
+        {
+            if (radius > 0)
+            {
+                Rectangle rect = new(center.X - radius, center.Y - radius, 2 * radius, 2 * radius);
+                g.DrawArc(pen, rect, startAngle, sweepAngle);
+            }
+        }
+
+        public static void DrawArcF(this Graphics g, Pen pen, PointF center, float radius, float startAngle, float sweepAngle)
+        {
+            if (radius > 0)
+            {
+                RectangleF rect = new(center.X - radius, center.Y - radius, 2 * radius, 2 * radius);
+                g.DrawArc(pen, rect, startAngle, sweepAngle);
+            }
+        }
+
         #endregion
 
         #region Cursors

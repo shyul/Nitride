@@ -354,7 +354,7 @@ namespace Nitride.Chart
             }
         }
 
-        #endregion
+        #endregion Paint
 
         public void GetFocus() => OnGotFocus(new EventArgs());
     }
