@@ -7,6 +7,7 @@
 /// ***************************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -32,7 +33,7 @@ namespace Nitride.EE
             ComplexColumnsLUT.Clear();
         }
 
-        private Dictionary<ComplexColumn, Complex> ComplexColumnsLUT { get; } = new Dictionary<ComplexColumn, Complex>();
+        private ConcurrentDictionary<ComplexColumn, Complex> ComplexColumnsLUT { get; } = new ConcurrentDictionary<ComplexColumn, Complex>();
 
         public Complex this[ComplexColumn column]
         {
@@ -40,7 +41,7 @@ namespace Nitride.EE
             set
             {
                 if (value == double.NaN && ComplexColumnsLUT.ContainsKey(column))
-                    ComplexColumnsLUT.Remove(column);
+                    ComplexColumnsLUT.TryRemove(column, out _);
                 else
                     ComplexColumnsLUT[column] = value;
             }

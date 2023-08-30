@@ -60,9 +60,9 @@ namespace Nitride.Chart
 
         public bool Enabled { get; set; } = true;
 
-        public bool Visible { get => m_Visible && Series.Count() > 0; set => m_Visible = value; }
+        public virtual bool Visible { get => m_Visible && Series.Count() > 0; set => m_Visible = value; }
 
-        private bool m_Visible = true;
+        protected bool m_Visible = true;
 
         public int Order { get; set; }
 

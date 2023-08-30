@@ -220,7 +220,7 @@ namespace Nitride
             return GetGradient(DarkSkyColorVector, cnt);
         }
 
-        private static (double X, double A, double R, double G, double B)[] ThermalColorVector { get; } =
+        public static (double X, double A, double R, double G, double B)[] ThermalColorVector { get; } =
         {
             (0, 16, 5, 0, 255),
             (1, 32, 4, 0, 255),
