@@ -107,27 +107,30 @@ namespace Nitride
         {
             while (AsyncUpdateUITask_Cts.IsContinue())
             {
-                if (AsyncUpdateUI)
+                if (AsyncUpdateUI && IsHandleCreated)
                 {
+                    /*
                     try
+                    {*/
+
+
+                    CoordinateLayout();
+                    this?.Invoke(() =>
                     {
-                        CoordinateLayout();
-                        this?.Invoke(() =>
-                        {
-                            Invalidate(false);
-                   
-                        });
-                    }
-                    catch(Exception e) 
-                    {
-                        Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
-                    }
+                        Invalidate(false);
+                    });
+                    /*
+                }
+                catch(Exception e) 
+                {
+                    Console.WriteLine("DockForm AsyncUpdateUIWorker(): " + e.Message);
+                }*/
 
                     AsyncUpdateUI = false;
                     Thread.Sleep(AsyncUpdateDeley);
                 }
                 else
-                    Thread.Sleep(5);
+                    Thread.Sleep(2);
             }
         }
 
