@@ -135,7 +135,8 @@ namespace Nitride.Chart
 
         public double MinRange { get; set; } = double.NaN;
 
-        public virtual void GenerateTicks()
+
+        public virtual void GenerateTicks(ContinuousAxis axis) 
         {
             if (!double.IsNaN(MinRange))
             {
@@ -148,6 +149,30 @@ namespace Nitride.Chart
             {
                 Range.Insert(Reference);
                 TickList.CheckAdd(Reference, (Importance.Major, Reference.ToUnitPrefixNumber3String("0.##").String));
+            }
+
+            double rangeRatio = (Range.Maximum - Range.Minimum) / (axis.Range.Maximum - axis.Range.Minimum);
+
+            foreach (var ticks in axis.TickList) 
+            {
+                double tickVal = ticks.Key * rangeRatio;
+                TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
+            }
+        }
+
+        public virtual void GenerateTicks(string format = "0.##", string unit = "")
+        {
+            if (!double.IsNaN(MinRange))
+            {
+                Range.Insert(MinRange);
+                Range.Insert(-MinRange);
+            }
+
+            //Console.WriteLine("GenerateTicks(): " + Range.Minimum);
+            if (!double.IsNaN(Reference) && (!FixedRange))
+            {
+                Range.Insert(Reference);
+                TickList.CheckAdd(Reference, (Importance.Major, Reference.ToUnitPrefixNumber3String(format).String + unit));
             }
 
             int tickCount = (1.0 * HeightRatio * Area.Height / MinimumTickHeight).ToInt32(); // It needs at least 10 pixel for a tick
@@ -163,7 +188,7 @@ namespace Nitride.Chart
                         double tickVal = Reference;
                         while (tickVal >= Range.Minimum)
                         {
-                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String(format).String + unit));
                             tickVal -= tickStep;
                         }
 
@@ -172,7 +197,7 @@ namespace Nitride.Chart
                         tickVal = Reference;
                         while (tickVal <= Range.Maximum)
                         {
-                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String(format).String + unit));
                             tickVal += tickStep;
                         }
 
@@ -196,7 +221,7 @@ namespace Nitride.Chart
 
                         while (tickVal <= Range.Maximum)
                         {
-                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String("0.##").String));
+                            TickList.CheckAdd(tickVal, (Importance.Minor, tickVal.ToUnitPrefixNumber3String(format).String + unit));
                             tickVal += tickStep;
                         }
                     }
