@@ -22,12 +22,12 @@ namespace Nitride.EE
         Hanning = 3,
         Hamming = 4,
 
-        Nuttall,
-        Blackman,
-        BlackmanNuttall,
-        BlackmanHarris,
+        Nuttall = 5,
+        Blackman = 6,
+        BlackmanNuttall = 7,
+        BlackmanHarris = 8,
 
-        FlatTop
+        FlatTop = 9
     }
 
     public static class WindowFunction

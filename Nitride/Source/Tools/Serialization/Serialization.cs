@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Nitride
 {
@@ -275,6 +276,23 @@ namespace Nitride
             Marshal.Copy(bytes, 0, ptr, size);
             handle.Free();
             return size;
+        }
+
+        public static void PrintBytes<T>(this T source) where T : notnull
+        {
+            byte[] bytes = source.SerializeBytes();
+            int size = bytes.Length;
+
+            Console.WriteLine("\nBuffer Length: " + size);
+
+            for (int k = 0; k < size; k++)
+            {
+                Console.Write("0x" + bytes[k].ToString("X2") + " ");
+
+                if (k % 16 == 0) Console.Write("\n");
+            }
+
+            Console.Write("\n");
         }
     }
 }
