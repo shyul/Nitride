@@ -17,11 +17,11 @@ namespace Nitride
             DataConsumers.ForEach(n => n.DataIsUpdated(this));
         }*/
 
-        //List<IDataConsumer> DataConsumers { get; }
+        // List<IDataConsumer> DataConsumers { get; }
 
-        bool AddDataConsumer(IDataConsumer idk);// => DataConsumers.CheckAdd(idk);
+        bool AddDataConsumer(IDataConsumer idk); //=> DataConsumers.CheckAdd(idk);
 
-        bool RemoveDataConsumer(IDataConsumer idk);// => DataConsumers.CheckRemove(idk);
+        bool RemoveDataConsumer(IDataConsumer idk); // => DataConsumers.CheckRemove(idk);
 
         DateTime UpdateTime { get; } //set; }
     }

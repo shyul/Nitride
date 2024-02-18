@@ -19,6 +19,7 @@ using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.ComponentModel;
 
 namespace Nitride
 {
@@ -236,44 +237,44 @@ namespace Nitride
 
         #endregion Json Data
 
-        public static byte[] SerializeBytes<T>(this T source) where T : notnull
+        public static byte[] SerializeBytes<T>(this T source, int startPtr = 0) where T : notnull
         {
             int size = Marshal.SizeOf(source);
             byte[] bytes = new byte[size];
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(source, ptr, true);
-            Marshal.Copy(ptr, bytes, 0, size);
+            Marshal.Copy(ptr, bytes, startPtr, size);
             Marshal.FreeHGlobal(ptr);
             return bytes;
         }
 
-        public static int SerializeBytes<T>(this T source, byte[] bytes) where T : notnull
+        public static int SerializeBytes<T>(this T source, byte[] bytes, int startPtr = 0) where T : notnull
         {
             int size = Marshal.SizeOf(source);
-            if (size > bytes.Length) return 0;
+            if (size > (bytes.Length - startPtr)) return 0;
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(source, ptr, true);
-            Marshal.Copy(ptr, bytes, 0, size); // public static void Copy (IntPtr source, byte[] destination, int startIndex, int length);
+            Marshal.Copy(ptr, bytes, startPtr, size); // public static void Copy (IntPtr source, byte[] destination, int startIndex, int length);
             Marshal.FreeHGlobal(ptr);
             return size;
         }
 
-        public static T DeserializeBytes<T>(this byte[] bytes) where T : notnull 
+        public static T DeserializeBytes<T>(this byte[] bytes, int startPtr = 0) where T : notnull 
         {
             int size = Marshal.SizeOf(typeof(T));
             IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.Copy(bytes, 0, ptr, size); // Copy (byte[] source, int startIndex, IntPtr destination, int length);
+            Marshal.Copy(bytes, startPtr, ptr, size); // Copy (byte[] source, int startIndex, IntPtr destination, int length);
             T res = (T)Marshal.PtrToStructure(ptr, typeof(T));
             Marshal.FreeHGlobal(ptr);
             return res;
         }
 
-        public static int DeserializeBytes<T>(this T dest, byte[] bytes) where T : notnull
+        public static int DeserializeBytes<T>(this T dest, byte[] bytes, int startPtr = 0) where T : notnull
         {
             int size = Marshal.SizeOf(typeof(T));
             GCHandle handle = GCHandle.Alloc(dest);
             IntPtr ptr = (IntPtr)handle;
-            Marshal.Copy(bytes, 0, ptr, size);
+            Marshal.Copy(bytes, startPtr, ptr, size);
             handle.Free();
             return size;
         }

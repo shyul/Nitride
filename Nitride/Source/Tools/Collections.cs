@@ -310,6 +310,19 @@ namespace Nitride
             else return "Empty String Array";
         }
 
+        public static string ToStringWithIndex<T>(this ICollection<T> list, int length)
+        {
+            string s = string.Empty;
+            length = Math.Min(length, list.Count);
+            for (int i = 0; i < length; i++)
+            {
+                s += "(" + i.ToString() + ")\"" + list.ElementAt(i) + "\"-";
+            }
+
+            if (s.Length > 0) return s.TrimEnd('-');
+            else return "Empty String Array";
+        }
+
         public static T[] SubArray<T>(this T[] data, int index, int length)
         {
             T[] result = new T[length];
