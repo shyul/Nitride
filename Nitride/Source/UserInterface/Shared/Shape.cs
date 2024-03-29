@@ -668,6 +668,26 @@ namespace Nitride
             return path;
         }
 
+        public static void DrawTag(this Graphics g, string text, Font font, ColorTheme theme, Point location, int maxHeight = 16, int minWidth = 1, int corner = 1)
+        {
+            Size textSize = TextRenderer.MeasureText(text, font);
+
+            int height = textSize.Height;
+            if (height > maxHeight) height = maxHeight;
+
+            Size size = new(textSize.Width + 6, height);
+            if (size.Width < minWidth) size.Width = minWidth;
+
+            using (GraphicsPath gp = Tag(location, size, corner))
+            {
+                g.FillPath(theme.FillBrush, gp);
+                g.DrawPath(theme.EdgePen, gp);
+            }
+
+            Point textPt = new(location.X, location.Y + 1);
+            g.DrawString(text, font, theme.ForeBrush, textPt, AppTheme.TextAlignCenter);
+        }
+
         #endregion
     }
 }
