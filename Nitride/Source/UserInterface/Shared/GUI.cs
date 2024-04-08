@@ -12,7 +12,7 @@ using Nitride.WindowsNativeMethods;
 
 namespace Nitride
 {
-    public static class GUI
+    public static partial class GUI
     {
         /// <summary>
         /// 

@@ -60,7 +60,7 @@ namespace Nitride.EE
                 Length = (uint)length;
                 IsFFT = isFFT;
 
-                for (int i = 0; i < WinF.Length; i++) 
+                for (int i = 0; i < WinF.Length; i++)
                 {
                     WinF[i] = 1;
                 }
@@ -74,7 +74,7 @@ namespace Nitride.EE
 
         public bool IsFFT { get; private set; }
 
-        private void InitWn() 
+        private void InitWn()
         {
             uint n = Length / 2;
 
@@ -99,7 +99,7 @@ namespace Nitride.EE
 
         //public bool FileSaved = false;
 
-        public void Transform(Complex[] td, int startPt = 0) // List<FreqPoint> fd, 
+        public void TransformOld(Complex[] td, int startPt = 0) // List<FreqPoint> fd, 
         {
             uint l1 = Length;
             uint l2 = (l1 >> 1); //Length / 2;
@@ -190,7 +190,7 @@ namespace Nitride.EE
 
             M = m;
 
-            if (!IsFFT) 
+            if (!IsFFT)
             {
                 for (i = 0; i < Length; i++)
                 {
@@ -229,7 +229,7 @@ namespace Nitride.EE
             }*/
         }
 
-        public void Transform(Complex[] td)
+        public void Transform(Complex[] td, int offset = 0)
         {
             uint l1 = Length;
             uint l2 = (l1 >> 1);
@@ -241,7 +241,7 @@ namespace Nitride.EE
 
             for (i = 0; i < Length; i++)
             {
-                Dsw[i] = td[(int)(i)] * WinF[i];
+                Dsw[i] = td[(int)(i + offset)] * WinF[i];
             }
 
             // Transform Radix-2
