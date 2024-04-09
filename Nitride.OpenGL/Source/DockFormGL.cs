@@ -29,9 +29,9 @@ namespace Nitride.OpenGL
             DoubleBuffered = false;
         }
 
-        public abstract void InitShader();
+        public abstract void CreateBuffer();
 
-        public abstract void DeleteShader();
+        public abstract void DeleteBuffer();
 
         public abstract void Render();
 
@@ -108,7 +108,8 @@ namespace Nitride.OpenGL
 
                 // Console.WriteLine("NativeWindow Size = " + win.ClientRectangle + " | Location = " + win.Location);
             }
-            Coordinate();
+
+            // Coordinate();
             base.OnResize(e);
         }
 
@@ -318,7 +319,7 @@ namespace Nitride.OpenGL
             // Force the newly child-ified GLFW window to be resized to fit this control.
             ResizeNativeWindow();
 
-            InitShader();
+            CreateBuffer();
 
             // And now show the child window, since it hasn't been made visible yet.
             NativeWindow.IsVisible = true;
@@ -354,7 +355,7 @@ namespace Nitride.OpenGL
         {
             if (NativeWindow is NativeWindow win)
             {
-                DeleteShader();
+                DeleteBuffer();
                 win.Dispose();
                 NativeWindow = null!;
             }
@@ -363,5 +364,133 @@ namespace Nitride.OpenGL
         }
 
         #endregion GL Components
+
+        #region Font
+
+        private const string FontVertexShader = @"
+
+            #version 330 core
+            layout (location = 0) in vec3 aPosition;
+            layout (location = 1) in vec2 aTexCoord;
+
+            out vec2 TexCoord;
+
+            void main()
+            {
+                gl_Position = vec4(aPosition, 1.0);
+                TexCoord = aTexCoord;
+            }";
+
+        private const string FontFragShader = @"
+
+            #version 330 core
+            out vec4 FragColor;
+
+            in vec2 TexCoord;
+
+            uniform vec3 fontColor;
+            uniform sampler2D texture1;
+
+            void main()
+            {
+                vec4 texColor = texture(texture1, TexCoord);
+                FragColor = vec4 (fontColor, texColor.a);
+                // FragColor = vec4 (1.0f, 0.75f, 0f, texColor.a);
+            }";
+
+        private TextureVertex[] FontVertices = {
+
+            new TextureVertex(new Vector3 (-1.0f, 1.0f, 0.0f), new Vector2 (0.0f, 0.0f)),
+            new TextureVertex(new Vector3 (1.0f, 1.0f, 0.0f), new Vector2 (1.0f, 0.0f)),
+            new TextureVertex(new Vector3 (1.0f, -1.0f, 0.0f), new Vector2 (1.0f, 1.0f)),
+            new TextureVertex(new Vector3 (-1.0f, -1.0f, 0.0f), new Vector2 (0.0f, 1.0f)),
+        };
+
+        private int FontVerticesBufferHandle;
+        private int FontVerticesArrayHandle;
+        private int TextShaderProgramHandle;
+        private int TextShaderFontColorUniform;
+
+        protected void InitTextShader()
+        {
+            (FontVerticesBufferHandle, FontVerticesArrayHandle) = GLTools.CreateBuffer(FontVertices, FontVertices.Length, BufferUsageHint.StreamDraw);
+            TextShaderProgramHandle = GLTools.CreateProgram(FontVertexShader, FontFragShader);
+            TextShaderFontColorUniform = GL.GetUniformLocation(TextShaderProgramHandle, "fontColor");
+        }
+
+        public void DrawString(string s, GLFont font, Color color, float x, float y)
+        {
+            GL.UseProgram(TextShaderProgramHandle);
+            GL.Uniform3(TextShaderFontColorUniform, new Vector3(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f));
+            GL.BindTexture(TextureTarget.Texture2D, font.TextureID);
+            GL.Enable(EnableCap.Blend);
+            // GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            float half_width = (float)font.GlyphSize.Width * 1.0f / (float)ClientSize.Width;
+            float half_height = (float)font.GlyphSize.Height * 1.0f / (float)ClientSize.Height;
+            float text_step = half_width * 1.9f;
+            //Console.WriteLine("width = " + width + " | height = " + height);
+
+            x -= text_step * (s.Length - 1.0f) / 2.0f; // Center Alignment!
+
+            foreach (char c in s)
+            {
+                float glyphOffset = (c - 33) * font.U_Step;
+                FontVertices[0].TexCoord.X = FontVertices[3].TexCoord.X = glyphOffset;
+                FontVertices[1].TexCoord.X = FontVertices[2].TexCoord.X = glyphOffset + font.U_Step;
+
+                FontVertices[0].Position.X = FontVertices[3].Position.X = x - half_width;
+                FontVertices[1].Position.X = FontVertices[2].Position.X = x + half_width;
+
+                FontVertices[0].Position.Y = FontVertices[1].Position.Y = y + half_height;
+                FontVertices[2].Position.Y = FontVertices[3].Position.Y = y - half_height;
+
+                GLTools.UpdateBuffer(FontVerticesBufferHandle, FontVerticesArrayHandle, FontVertices, FontVertices.Length);
+                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+
+                x += text_step;
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.Disable(EnableCap.Blend);
+        }
+
+        #endregion Font
+
+        #region Draw WaveForm
+
+
+        #endregion Draw WaveForm
+
+        #region Mouse
+
+        protected Point MousePt = new Point(0, 0);
+
+        protected int MouseIndex = 0;
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            //Console.WriteLine("OnMouseMove: " + e.X + " | " + e.Y);
+
+            MousePt = e.Location;
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            //Console.WriteLine("OnMouseWheel: " + e.Delta);
+
+            if (e.Delta > 0)
+            {
+                MouseIndex++;
+            }
+            else
+            {
+                MouseIndex--;
+            }
+        }
+
+        #endregion Mouse
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using System.Drawing;
 using System.Windows.Forms;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Mathematics;
 
 namespace Nitride.OpenGL
 {
@@ -57,10 +53,14 @@ namespace Nitride.OpenGL
         private int VertexBufferHandle;
         private int VertexArrayHandle;
 
-        private WaveForm[] Waves = new WaveForm[10];
+        private ChartLine[] Waves = new ChartLine[10];
 
-        public override void InitShader()
+        public GLFont MainFont = new (new Font("Consolas", 50F, FontStyle.Regular, GraphicsUnit.Point, 0), true);
+
+        public override void CreateBuffer()
         {
+            InitTextShader();
+            MainFont.CreateTexture();
 
             VertexBuffer[0] = new ColorVertex(new Vector3(-0.5f, -0.5f, 0.0f), new Vector4(1, 0, 0, 1));
             VertexBuffer[1] = new ColorVertex(new Vector3(-0.5f, 0.5f, 0.0f), new Vector4(0, 1, 0, 1));
@@ -100,8 +100,8 @@ namespace Nitride.OpenGL
 
             for (int i = 0; i < Waves.Length; i++)
             {
-                Waves[i] = new(256   );
-                Waves[i].InitBuffer();
+                Waves[i] = new(256);
+                Waves[i].CreateBuffer();
             }
 
             Waves[0].LineColor = Color.Red;
@@ -117,6 +117,8 @@ namespace Nitride.OpenGL
             GL.ClearColor(new Color4(1f, 0.99215686f, 0.96078431f, 1f));
             // GL.ClearColor(Color4.Transparent);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            // ############################################################################################
 
             GL.LineWidth(5.0f);
             GLTools.UpdateBuffer(VertexBufferHandle, VertexArrayHandle, VertexBuffer, VertexBuffer.Length);
@@ -142,15 +144,17 @@ namespace Nitride.OpenGL
 
             for (int i = 0; i < Waves.Length; i++)
             {
-                Waves[i].DrawLine();
+                Waves[i].Render();
             }
 
             GL.Disable(EnableCap.Blend);
 
             // ############################################################################################
+
+            DrawString("Hello World! " + iTime.ToString("0.00") + " | " + MouseIndex, MainFont, Color.DimGray, 0.25f, 0.5f);
         }
 
-        public override void DeleteShader()
+        public override void DeleteBuffer()
         {
             GL.DeleteVertexArray(VertexArrayHandle);
             GL.DeleteBuffer(VertexBufferHandle);

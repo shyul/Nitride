@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Nitride\Nitride.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Source\Shader\" />
+  </ItemGroup>
+
 </Project>

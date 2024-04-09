@@ -32,4 +32,15 @@ namespace Nitride.OpenGL
         public Vector3 Position;
         public Vector2 TexCoord;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct VecPoint
+    {
+        public VecPoint(float x, float y)
+        {
+            Vec = new Vector2(x, y);
+        }
+
+        public Vector2 Vec;
+    }
 }
