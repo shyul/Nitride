@@ -124,8 +124,7 @@ namespace Nitride.OpenGL
         public virtual void Render()
         {
             // GL.Viewport(Chart.Margin.Left, Y_Pix_Min, Chart.X_Pix_Total, Y_Pix_Max - Y_Pix_Min);
-            GL.Enable(EnableCap.ScissorTest);
-            GL.Scissor(Chart.Margin.Left, Y_Pix_Min, Chart.X_Pix_Total, Y_Pix_Max - Y_Pix_Min);
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFuncSeparate(
                 BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, // For color channels
@@ -139,28 +138,17 @@ namespace Nitride.OpenGL
 
             GLTools.UpdateBuffer(AreaBoxBufferHandle, AreaBoxArrayHandle, AreaBox, AreaBox.Length);
 
-            GL.LineWidth(5f);
+            GL.LineWidth(3f);
             GL.DrawArrays(PrimitiveType.LineLoop, 0, AreaBox.Length);
-
-
-
-            /*
-            GL.Begin(PrimitiveType.LineLoop);
-            GL.Vertex3(Ratio_Left, Ratio_Bottom, 0f);
-            GL.Vertex3(Ratio_Left, Ratio_Bottom + Ratio_Height, 0f);
-            GL.Vertex3(Ratio_Left + Ratio_Width, Ratio_Bottom + Ratio_Height, 0f);
-            GL.Vertex3(Ratio_Left + Ratio_Width, Ratio_Bottom, 0f);
-            GL.End();
-
-            GL.PointSize(5f);
-            GL.Begin(PrimitiveType.Points);
-            GL.Vertex3(Ratio_Left, Ratio_Bottom, 0f);
-            GL.Vertex3(Ratio_Left, Ratio_Bottom + Ratio_Height, 0f);
-            GL.Vertex3(Ratio_Left + Ratio_Width, Ratio_Bottom + Ratio_Height, 0f);
-            GL.Vertex3(Ratio_Left + Ratio_Width, Ratio_Bottom, 0f);
-            GL.End();*/
+            GL.PointSize(3f);
+            GL.DrawArrays(PrimitiveType.Points, 0, AreaBox.Length);
 
             // ################
+
+            GL.Enable(EnableCap.ScissorTest);
+            GL.Scissor(Chart.Margin.Left, 0, Chart.X_Pix_Total, Chart.Height); //  + 30
+
+            // Console.WriteLine("Y_Pix_Min = " + Y_Pix_Min);
 
             GL.UseProgram(WaveFormShaderProgramHandle);
 

@@ -87,7 +87,7 @@ namespace Nitride.OpenGL
                 {
                     area = Areas[i];
 
-                    //Console.WriteLine("2# Y_Pix_Min = " + area.Y_Pix_Min + " | Y_Pix_Max = " + area.Y_Pix_Max);
+                    Console.WriteLine("2# Y_Pix_Min = " + area.Y_Pix_Min + " | Y_Pix_Max = " + area.Y_Pix_Max);
 
                     area.Ratio_Bottom = 1.0f - (area.Y_Pix_Max * 2.0f / (float)Height);
                     area.Ratio_Height = (area.Y_Pix * 2.0f / (float)Height);

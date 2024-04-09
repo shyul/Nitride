@@ -28,7 +28,11 @@ namespace Nitride.OpenGL
             X_Min = -0.8f;
             X_Max = 0.8f;
 
-            ChartArea area = new ChartArea(this);
+            ChartArea area = new (this)
+            { 
+                HasXAxisStrip = true
+            };
+
             area.Axis_Left.Range.Reset(-1.0f, 1.0f);
             area.Axis_Left.FixedRange = true;
 
@@ -39,13 +43,21 @@ namespace Nitride.OpenGL
 
             Areas.Add(area);
 
+            
+            ChartArea area2 = new (this)
+            {
+                HasXAxisStrip = true
+            };
+
+            Areas.Add(area2);
+
             _timer = new Timer();
             _timer.Tick += (sender, e) =>
             {
                 for (int i = 0; i < Lines.Length; i++)
                 {
                     Lines[i].UpdateBuffer();
-                    //CoordinateLayout();
+                    // CoordinateLayout();
                 }
 
                 AsyncUpdateUI = true;
