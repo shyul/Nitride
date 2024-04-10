@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Nitride.OpenGL
 {
@@ -115,10 +117,89 @@ namespace Nitride.OpenGL
             return textureId;
         }
 
+        public static float GetRatioX(this Control c, float pix_x) 
+        {
+            return (pix_x * 2.0f / c.Width) - 1.0f;
+        }
 
+        public static float GetRatioY(this Control c, float pix_y)
+        {
+            return 1.0f - (pix_y * 2.0f / c.Height);
+        }
 
+        public static VecPoint GetVector(this Control c, PointF pt, float x_offset, float y_offset)
+        {
+            return new VecPoint((pt.X * 2.0f / c.Width) + x_offset, (pt.Y * 2.0f / c.Height) + y_offset);
+        }
 
+        public static VecPoint[] GetVector(this Control c, PointF[] pt, float x_offset, float y_offset)
+        {
+            VecPoint[] axisLine = new VecPoint[pt.Length];
 
+            for (int i = 0; i < axisLine.Length; i++) 
+            {
+                axisLine[i] = GetVector(c, pt[i], x_offset, y_offset);
+            }
+
+            return axisLine;
+        }
+
+        public static VecPoint[] GetUpDownTag(this Control c, float x_offset, float y_offset, SizeF size, SizeF arrowSize, float corner)
+        {
+            float half_width = (size.Width / 2.0f);
+            float half_height = (size.Height / 2.0f);
+
+            PointF[] pts = new []
+            {
+                new PointF (-half_width, -(half_height - corner)),
+                new PointF (-(half_width - corner), -half_height),
+
+                //new PointF (-arrowSize.Width / 2.0f, -half_height),
+                //new PointF (0.0f, -half_height - arrowSize.Height),
+                //new PointF (arrowSize.Width / 2.0f, -half_height),
+                
+
+                new PointF (half_width - corner, -half_height),
+                new PointF (half_width, -(half_height - corner)),
+
+                //new PointF (half_width, -arrowSize.Width / 2),
+                //new PointF (half_width + arrowSize.Height, 0),
+                //new PointF (half_width, arrowSize.Width / 2),
+                
+                new PointF (half_width, half_height - corner),
+                new PointF (half_width - corner, half_height),
+                
+                new PointF (arrowSize.Width / 2.0f, half_height),
+                new PointF (0.0f, half_height + arrowSize.Height),
+                new PointF (-arrowSize.Width / 2.0f, half_height),
+
+                new PointF (-half_width + corner, half_height),
+                new PointF (-half_width, half_height - corner)
+            };
+
+            return c.GetVector(pts, x_offset, y_offset);
+        }
+
+        public static VecPoint[] GetRightCursor(this Control c, float x_offset, float y_offset, SizeF size, SizeF arrowSize, float corner) 
+        {
+            float width = size.Width;
+            float half_height = (size.Height / 2.0f);
+
+            PointF[] pts = new[]
+            {
+                new PointF (corner, half_height),
+                new PointF (-arrowSize.Width, 0),
+                new PointF (corner, -half_height),
+
+                new PointF (width - corner, -half_height),
+                new PointF (width, -(half_height - corner)),
+
+                new PointF (width, half_height - corner),
+                new PointF (width - corner, half_height)
+            };
+
+            return c.GetVector(pts, x_offset, y_offset);
+        }
     }
 
     /// <summary>

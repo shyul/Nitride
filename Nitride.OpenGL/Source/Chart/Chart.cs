@@ -23,26 +23,31 @@ namespace Nitride.OpenGL
         }
 
         public GLFont MainFont = new(new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point, 0), true);
+        public GLFont MainBoldFont = new(new Font("Consolas", 15F, FontStyle.Bold, GraphicsUnit.Point, 0), true);
 
         public const int XAxisStripHeight = 30;
         public const int MajorTickLength = 5;
         public const int MinorTickLength = 2;
         public const int AxisLabelOffset = 8;
 
-        // ################
+        // ###############################################################
 
         public float Ratio_AxisMin => Ratio_Left;
         public float Ratio_AxisRange => Ratio_Width;
         public int TotalAxisPix => X_Pix_Total;
         public Axis X_Axis { get; }
 
-        // ################
+        // ###############################################################
 
         private int X_Pix_Total = 0;
         private int Y_Pix_Total = 0;
 
         private float Ratio_Left = 0f;
+        private float Ratio_Right = 0f;
         private float Ratio_Width = 0f;
+
+        private float Ratio_Bottom = 0f;
+        private float Ratio_Top = 0f;
 
         private float RatioMajorTick_Left = 0f;
         private float RatioMajorTick_Right = 0f;
@@ -59,6 +64,14 @@ namespace Nitride.OpenGL
         {
             InitTextShader();
             MainFont.CreateTexture();
+            MainBoldFont.CreateTexture();
+
+            VecPoint[] axisLines = new VecPoint[2];
+            (AxisLinesBufferHandle, AxisLinesArrayHandle) = GLTools.CreateBuffer(axisLines, axisLines.Length);
+
+            LineShaderProgramHandle = GLTools.CreateProgram(LineVertexShader, ColorFragmentShader);
+            uni_line_intensity = GL.GetUniformLocation(LineShaderProgramHandle, "intensity");
+            uni_line_lineColor = GL.GetUniformLocation(LineShaderProgramHandle, "lineColor");
 
             for (int i = 0; i < Areas.Count; i++)
             {
@@ -68,6 +81,7 @@ namespace Nitride.OpenGL
 
         public override void CoordinateLayout()
         {
+            ReadyToShow = false;
             X_Pix_Total = Width - Margin.Left - Margin.Right;
             Y_Pix_Total = Height - (Areas.Where(n => n.HasXAxisStrip).Count() * XAxisStripHeight) - Margin.Top - Margin.Bottom;
 
@@ -75,23 +89,22 @@ namespace Nitride.OpenGL
 
             if (Y_Pix_Total > 0 && X_Pix_Total > 0)
             {
-                ReadyToShow = true;
-
                 //Console.WriteLine("Y_Pix_Total = " + Y_Pix_Total + " | bottom = " + bottom);
 
                 // ################
 
                 Ratio_Left = (Margin.Left * 2.0f / Width) - 1.0f;
                 Ratio_Width = (X_Pix_Total * 2.0f / Width);
+                Ratio_Right = Ratio_Left + Ratio_Width;
 
-                RatioMajorTick_Left = ((Margin.Left - MajorTickLength) * 2.0f / Width) - 1.0f;
-                RatioMajorTick_Right = ((Width - Margin.Right + MajorTickLength) * 2.0f / Width) - 1.0f;
+                RatioMajorTick_Left = this.GetRatioX(Margin.Left - MajorTickLength); // ((Margin.Left - MajorTickLength) * 2.0f / Width) - 1.0f;
+                RatioMajorTick_Right = this.GetRatioX(Width - Margin.Right + MajorTickLength); // ((Width - Margin.Right + MajorTickLength) * 2.0f / Width) - 1.0f;
 
-                RatioMinorTick_Left = ((Margin.Left - MinorTickLength) * 2.0f / Width) - 1.0f;
-                RatioMinorTick_Right = ((Width - Margin.Right + MinorTickLength) * 2.0f / Width) - 1.0f;
+                RatioMinorTick_Left = this.GetRatioX(Margin.Left - MinorTickLength); //((Margin.Left - MinorTickLength) * 2.0f / Width) - 1.0f;
+                RatioMinorTick_Right = this.GetRatioX(Width - Margin.Right + MinorTickLength); //((Width - Margin.Right + MinorTickLength) * 2.0f / Width) - 1.0f;
 
-                RatioAxisLabel_Left = ((Margin.Left - AxisLabelOffset) * 2.0f / Width) - 1.0f;
-                RatioAxisLabel_Right = ((Width - Margin.Right + AxisLabelOffset) * 2.0f / Width) - 1.0f;
+                RatioAxisLabel_Left = this.GetRatioX(Margin.Left - AxisLabelOffset); //((Margin.Left - AxisLabelOffset) * 2.0f / Width) - 1.0f;
+                RatioAxisLabel_Right = this.GetRatioX(Width - Margin.Right + AxisLabelOffset); //((Width - Margin.Right + AxisLabelOffset) * 2.0f / Width) - 1.0f;
 
                 // ################
 
@@ -103,6 +116,7 @@ namespace Nitride.OpenGL
                 for (int i = 0; i < Areas.Count; i++)
                 {
                     area = Areas[i];
+                    area.Index = i;
                     area.Y_Pix_Min = y_pix;
                     y_pix += Convert.ToInt32(area.Weight * Y_Pix_Total / total_weight);
                     area.Y_Pix_Max = y_pix;
@@ -111,28 +125,23 @@ namespace Nitride.OpenGL
 
                     if (area.HasXAxisStrip) 
                     {
-                        area.Y_Pix_XAxisStrip = y_pix + (XAxisStripHeight / 2);
                         y_pix += XAxisStripHeight;
-                    }
-                    else
-                    {
-                        area.Y_Pix_XAxisStrip = 0;
                     }
                 }
 
                 area = Areas.Last();
-                area.Y_Pix_Max = (area.HasXAxisStrip) ? bottom - XAxisStripHeight : bottom;
+                area.Y_Pix_Max = y_pix = (area.HasXAxisStrip) ? bottom - XAxisStripHeight : bottom;
 
                 for (int i = 0; i < Areas.Count; i++)
                 {
                     Areas[i].CoordinateLayout();
                 }
 
+                Ratio_Top = Areas.First().Ratio_Top;
+                Ratio_Bottom = Areas.Last().Ratio_Bottom;
+
                 X_Axis.GenerateTicks();
-            }
-            else
-            {
-                ReadyToShow = false;
+                ReadyToShow = true;
             }
         }
 
@@ -148,6 +157,30 @@ namespace Nitride.OpenGL
                 foreach (Area area in Areas)
                 {
                     area.Render();
+                }
+
+                if (MouseActive && MouseRatioX > Ratio_Left && MouseRatioX < Ratio_Right)
+                {
+                    VecPoint[] axisLine = new VecPoint[2];
+                    float mouse_x = MouseRatioX;
+
+                    GL.UseProgram(LineShaderProgramHandle);
+                    GL.Uniform1(uni_line_intensity, 1.0f);
+                    GL.Uniform3(uni_line_lineColor, new Vector3(0.2f, 0.4f, 0.45f)); //new Vector3(0.12549f, 0.27451f, 0.313725f));
+
+                    if (mouse_x > Ratio_Left && mouse_x < Ratio_Right)
+                    {
+                        (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (mouse_x, Ratio_Bottom);
+                        (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (mouse_x, Ratio_Top);
+                        GLTools.UpdateBuffer(AxisLinesBufferHandle, AxisLinesArrayHandle, axisLine, axisLine.Length);
+                        GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
+                    }
+
+
+                    foreach (Area area in Areas)
+                    {
+                        area.RenderCursor();
+                    }
                 }
             }
 

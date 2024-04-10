@@ -11,9 +11,9 @@ namespace Nitride.OpenGL
 {
     public class ExampleChart : Chart
     {
-        public ExampleChart(string name, int nr = 4096, int p = 32) : base(name)
+        public ExampleChart(string name, int nr = 1024, int p = 32) : base(name)
         {
-            Margin = new Padding(50, 20, 70, 20);
+            Margin = new Padding(50, 20, 100, 20);
 
             NR = nr;
             P = p;

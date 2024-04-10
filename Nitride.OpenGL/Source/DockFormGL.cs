@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Threading;
 using System.Runtime.InteropServices;
-using System.Reflection;
 using System.Windows.Forms;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
@@ -27,9 +25,6 @@ namespace Nitride.OpenGL
             SetStyle(ControlStyles.ResizeRedraw, true);
             Dock = DockStyle.Fill;
             DoubleBuffered = false;
-
-
-            
         }
 
         public abstract void CreateBuffer();
@@ -39,7 +34,7 @@ namespace Nitride.OpenGL
         public abstract void Render();
 
         int i = 0;
-        double opsTxed = 50;
+        double FpSpeed = 50;
         DateTime time = DateTime.Now;
 
         protected virtual void Draw()
@@ -52,12 +47,12 @@ namespace Nitride.OpenGL
                 EnsureCreated();
                 win.Context.SwapBuffers();
 
-                if (i >= opsTxed)
+                if (i >= FpSpeed)
                 {
                     TimeSpan ts = DateTime.Now - time;
-                    opsTxed = i / ts.TotalSeconds;
+                    FpSpeed = i / ts.TotalSeconds;
 
-                    Console.WriteLine("DockFormGL: " + opsTxed.ToString("0.##") + " FPS");
+                    Console.WriteLine("DockFormGL: " + FpSpeed.ToString("0.##") + " FPS");
                 
                     i = 0;
                     time = DateTime.Now;
@@ -65,9 +60,7 @@ namespace Nitride.OpenGL
                 else
                 {
                     i++;
-                    // opsTxed++;
                 }
-
             }
         }
 
@@ -499,30 +492,63 @@ namespace Nitride.OpenGL
 
         #endregion Font
 
-        #region Draw WaveForm
+        #region Draw Line
 
+        public int AxisLinesBufferHandle;
+        public int AxisLinesArrayHandle;
 
-        #endregion Draw WaveForm
+        protected const string LineVertexShader = @"
+
+            #version 330 core
+
+            in vec3 aPosition;
+
+            void main()
+            {
+                gl_Position = vec4(aPosition, 1.0f);
+            }";
+
+        protected const string ColorFragmentShader = @"
+
+            #version 330 core
+
+            uniform float intensity;
+            uniform vec3 lineColor;
+
+            out vec4 FragColor;
+
+            void main()
+            {
+                FragColor = vec4(lineColor, intensity);
+            }";
+
+        public int LineShaderProgramHandle = 0;
+        public int uni_line_intensity;
+        public int uni_line_lineColor;
+
+        #endregion Draw Line
 
         #region Mouse
 
-        protected Point MousePt = new Point(0, 0);
-
+        protected bool MouseActive = false;
+        protected Point MousePt = new(-1, -1);
+        protected float MouseRatioX = -2.0f;
+        protected float MouseRatioY = -2.0f;
         protected int MouseIndex = 0;
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-            //Console.WriteLine("OnMouseMove: " + e.X + " | " + e.Y);
-
             MousePt = e.Location;
+            MouseRatioX = this.GetRatioX(e.X); // (e.X * 2.0f / Width) - 1.0f;
+            MouseRatioY = this.GetRatioY(e.Y); // 1.0f - (e.Y * 2.0f / Height);
+            MouseActive = true;
+            // Console.WriteLine("OnMouseMove: " + e.X + " | " + e.Y);
+
+            AsyncUpdateUI = true;
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            base.OnMouseWheel(e);
-            //Console.WriteLine("OnMouseWheel: " + e.Delta);
-
             if (e.Delta > 0)
             {
                 MouseIndex++;
@@ -531,6 +557,17 @@ namespace Nitride.OpenGL
             {
                 MouseIndex--;
             }
+
+            // Console.WriteLine("OnMouseWheel: " + e.Delta);
+            AsyncUpdateUI = true;
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            MousePt = new Point(-1, -1);
+            MouseActive = false;
+
+            AsyncUpdateUI = true;
         }
 
         #endregion Mouse

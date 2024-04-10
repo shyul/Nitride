@@ -40,6 +40,11 @@ namespace Nitride.OpenGL
             private float Ratio_Min => Area.Ratio_AxisMin;
             private float Ratio_Range => Area.Ratio_AxisRange;
 
+            public float GetValue(float ratio)
+            {
+                float p_value = (ratio - Ratio_Min) / Ratio_Range;
+                return (p_value * (Range.Maximum - Range.Minimum)) + Range.Minimum;
+            }
 
             public float GetRatio(float value)
             {
