@@ -27,6 +27,9 @@ namespace Nitride.OpenGL
             SetStyle(ControlStyles.ResizeRedraw, true);
             Dock = DockStyle.Fill;
             DoubleBuffered = false;
+
+
+            
         }
 
         public abstract void CreateBuffer();
@@ -35,15 +38,36 @@ namespace Nitride.OpenGL
 
         public abstract void Render();
 
+        int i = 0;
+        double opsTxed = 50;
+        DateTime time = DateTime.Now;
+
         protected virtual void Draw()
         {
-            if (NativeWindow is NativeWindow win)
+            if (NativeWindow is NativeWindow win && IsBufferReady)
             {
                 EnsureCreated();
                 win.MakeCurrent();
                 Render();
                 EnsureCreated();
                 win.Context.SwapBuffers();
+
+                if (i >= opsTxed)
+                {
+                    TimeSpan ts = DateTime.Now - time;
+                    opsTxed = i / ts.TotalSeconds;
+
+                    Console.WriteLine("DockFormGL: " + opsTxed.ToString("0.##") + " FPS");
+                
+                    i = 0;
+                    time = DateTime.Now;
+                }
+                else
+                {
+                    i++;
+                    // opsTxed++;
+                }
+
             }
         }
 
@@ -280,6 +304,8 @@ namespace Nitride.OpenGL
             }
         }
 
+        private bool IsBufferReady = false;
+
         public void CreateNativeWindow()
         {
             NativeWindow = new(NativeWindowSettings);
@@ -325,6 +351,8 @@ namespace Nitride.OpenGL
             NativeWindow.IsVisible = true;
 
             // NativeWindow.Refresh
+
+            IsBufferReady = true;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -418,10 +446,10 @@ namespace Nitride.OpenGL
             TextShaderFontColorUniform = GL.GetUniformLocation(TextShaderProgramHandle, "fontColor");
         }
 
-        public void DrawString(string s, GLFont font, Color color, float x, float y)
+        public void DrawString(string s, GLFont font, Color4 color, float x, float y, AlignType align = AlignType.Center)
         {
             GL.UseProgram(TextShaderProgramHandle);
-            GL.Uniform3(TextShaderFontColorUniform, new Vector3(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f));
+            GL.Uniform3(TextShaderFontColorUniform, new Vector3(color.R, color.G, color.B)); //color.R / 255.0f, color.G / 255.0f, color.B / 255.0f));
             GL.BindTexture(TextureTarget.Texture2D, font.TextureID);
             GL.Enable(EnableCap.Blend);
             // GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -431,7 +459,21 @@ namespace Nitride.OpenGL
             float text_step = half_width * 1.9f;
             //Console.WriteLine("width = " + width + " | height = " + height);
 
-            x -= text_step * (s.Length - 1.0f) / 2.0f; // Center Alignment!
+            switch (align) 
+            {
+                case AlignType.Center:
+                    x -= text_step * (s.Length - 1.0f) / 2.0f; // Center Alignment!
+                    break;
+
+                case AlignType.Left:
+                    x += text_step / 2.0f; // Center Alignment!
+                    break;
+
+                case AlignType.Right:
+                    x -= text_step * (s.Length - 0.5f); // Center Alignment!
+                    break;
+            }
+            
 
             foreach (char c in s)
             {

@@ -9,7 +9,7 @@ using OpenTK.Mathematics;
 
 namespace Nitride.OpenGL
 {
-    public class Chart : DockFormGL
+    public partial class Chart : DockFormGL, IAxisArea
     {
         public Chart(string name) : base(name, true)
         {
@@ -17,25 +17,48 @@ namespace Nitride.OpenGL
             Btn_Pin.Enabled = true;
             Btn_Close.Enabled = true;
 
+            X_Axis = new Axis(this);
+
             // ResumeLayout(false);
         }
 
-        public int XAxisStripHeight { get; set; } = 30;
+        public GLFont MainFont = new(new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point, 0), true);
 
-        public float X_Min { get; set; }
-        public float X_Max { get; set; }
-        public int X_Pix_Total { get; set; }
-        public int Y_Pix_Total { get; set; }
+        public const int XAxisStripHeight = 30;
+        public const int MajorTickLength = 5;
+        public const int MinorTickLength = 2;
+        public const int AxisLabelOffset = 8;
 
-        public float Ratio_Left = 0f;
-        public float Ratio_Width = 0f;
+        // ################
 
-        public List<ChartArea> Areas { get; } = new();
+        public float Ratio_AxisMin => Ratio_Left;
+        public float Ratio_AxisRange => Ratio_Width;
+        public int TotalAxisPix => X_Pix_Total;
+        public Axis X_Axis { get; }
+
+        // ################
+
+        private int X_Pix_Total = 0;
+        private int Y_Pix_Total = 0;
+
+        private float Ratio_Left = 0f;
+        private float Ratio_Width = 0f;
+
+        private float RatioMajorTick_Left = 0f;
+        private float RatioMajorTick_Right = 0f;
+
+        private float RatioMinorTick_Left = 0f;
+        private float RatioMinorTick_Right = 0f;
+
+        private float RatioAxisLabel_Left = 0f;
+        private float RatioAxisLabel_Right = 0f;
+
+        public List<Area> Areas { get; } = new();
 
         public override void CreateBuffer()
         {
             InitTextShader();
-            // MainFont.CreateTexture();
+            MainFont.CreateTexture();
 
             for (int i = 0; i < Areas.Count; i++)
             {
@@ -61,12 +84,21 @@ namespace Nitride.OpenGL
                 Ratio_Left = (Margin.Left * 2.0f / Width) - 1.0f;
                 Ratio_Width = (X_Pix_Total * 2.0f / Width);
 
+                RatioMajorTick_Left = ((Margin.Left - MajorTickLength) * 2.0f / Width) - 1.0f;
+                RatioMajorTick_Right = ((Width - Margin.Right + MajorTickLength) * 2.0f / Width) - 1.0f;
+
+                RatioMinorTick_Left = ((Margin.Left - MinorTickLength) * 2.0f / Width) - 1.0f;
+                RatioMinorTick_Right = ((Width - Margin.Right + MinorTickLength) * 2.0f / Width) - 1.0f;
+
+                RatioAxisLabel_Left = ((Margin.Left - AxisLabelOffset) * 2.0f / Width) - 1.0f;
+                RatioAxisLabel_Right = ((Width - Margin.Right + AxisLabelOffset) * 2.0f / Width) - 1.0f;
+
                 // ################
 
                 float total_weight = Areas.Select(n => n.Weight).Sum();
                 int y_pix = Margin.Top;
 
-                ChartArea area;
+                Area area;
 
                 for (int i = 0; i < Areas.Count; i++)
                 {
@@ -75,9 +107,17 @@ namespace Nitride.OpenGL
                     y_pix += Convert.ToInt32(area.Weight * Y_Pix_Total / total_weight);
                     area.Y_Pix_Max = y_pix;
 
-                    //Console.WriteLine("1# Y_Pix_Min = " + area.Y_Pix_Min + " | Y_Pix_Max = " + area.Y_Pix_Max);
+                    // Console.WriteLine("1# Y_Pix_Min = " + area.Y_Pix_Min + " | Y_Pix_Max = " + area.Y_Pix_Max);
 
-                    if (area.HasXAxisStrip) y_pix += XAxisStripHeight;
+                    if (area.HasXAxisStrip) 
+                    {
+                        area.Y_Pix_XAxisStrip = y_pix + (XAxisStripHeight / 2);
+                        y_pix += XAxisStripHeight;
+                    }
+                    else
+                    {
+                        area.Y_Pix_XAxisStrip = 0;
+                    }
                 }
 
                 area = Areas.Last();
@@ -85,16 +125,10 @@ namespace Nitride.OpenGL
 
                 for (int i = 0; i < Areas.Count; i++)
                 {
-                    area = Areas[i];
-
-                    Console.WriteLine("2# Y_Pix_Min = " + area.Y_Pix_Min + " | Y_Pix_Max = " + area.Y_Pix_Max);
-
-                    area.Ratio_Bottom = 1.0f - (area.Y_Pix_Max * 2.0f / (float)Height);
-                    area.Ratio_Height = (area.Y_Pix * 2.0f / (float)Height);
-
-                    //Console.WriteLine("2# Ratio_Bottom = " + area.Ratio_Bottom + " | Ratio_Height = " + area.Ratio_Height);
-                    area.CoordinateLayout();
+                    Areas[i].CoordinateLayout();
                 }
+
+                X_Axis.GenerateTicks();
             }
             else
             {
@@ -109,10 +143,14 @@ namespace Nitride.OpenGL
 
             // #######################################################################
 
-            foreach (ChartArea area in Areas)
+            if (ReadyToShow)
             {
-                area.Render();
+                foreach (Area area in Areas)
+                {
+                    area.Render();
+                }
             }
+
 
         }
 

@@ -11,9 +11,9 @@ namespace Nitride.OpenGL
 {
     public class ExampleChart : Chart
     {
-        public ExampleChart(string name, int nr = 256, int p = 8) : base(name)
+        public ExampleChart(string name, int nr = 4096, int p = 32) : base(name)
         {
-            Margin = new Padding(50, 20, 50, 20);
+            Margin = new Padding(50, 20, 70, 20);
 
             NR = nr;
             P = p;
@@ -25,10 +25,11 @@ namespace Nitride.OpenGL
                 Lines[i].UpdateBuffer();
             }
 
-            X_Min = -0.8f;
-            X_Max = 0.8f;
+            X_Axis.Range.Reset(-0.8f, 0.8f);
+            X_Axis.FixedRange = true;
+            X_Axis.TickStep = 0.15f;
 
-            ChartArea area = new (this)
+            Area area = new (this)
             { 
                 HasXAxisStrip = true
             };
@@ -38,16 +39,23 @@ namespace Nitride.OpenGL
 
             area.Axis_Right.Range.Reset(-1.0f, 1.0f);
             area.Axis_Right.FixedRange = true;
+            area.Axis_Right.Reference = 0.0f;
+            area.Axis_Right.TickStep = 0.2f;
 
             area.Lines_Right.AddRange(Lines);
 
             Areas.Add(area);
 
             
-            ChartArea area2 = new (this)
+            Area area2 = new (this)
             {
                 HasXAxisStrip = true
             };
+
+            area2.Axis_Right.Range.Reset(-120.0f, 0f);
+            area2.Axis_Right.FixedRange = true;
+            // area2.Axis_Right.Reference = 0.0f;
+            area2.Axis_Right.TickStep = 10.0f;
 
             Areas.Add(area2);
 

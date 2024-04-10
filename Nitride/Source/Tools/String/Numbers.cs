@@ -345,7 +345,7 @@ namespace Nitride
                 num = d * 1e6;
                 return (num, num.ToNumber3String(format) + "μ");
             }
-            else if ((d > -1 && d <= -1e-3) || (d < 1 && d >= 1e-3))
+            else if ((d > -0.1 && d <= -1e-3) || (d < 0.1 && d >= 1e-3))
             {
                 num = d * 1e3;
                 return (num, num.ToNumber3String(format) + "m");

@@ -30,10 +30,7 @@ namespace Nitride.OpenGL
                 VertexBuffer[4].Position.X = -b;
                 VertexBuffer[4].Position.Y = -b;
 
-                for (int i = 0; i < Waves.Length; i++)
-                {
-                    Waves[i].UpdateBuffer();
-                }
+
 
                 AsyncUpdateUI = true;
             };
@@ -53,7 +50,7 @@ namespace Nitride.OpenGL
         private int VertexBufferHandle;
         private int VertexArrayHandle;
 
-        private ChartLine[] Waves = new ChartLine[10];
+     
 
         public GLFont MainFont = new (new Font("Consolas", 50F, FontStyle.Regular, GraphicsUnit.Point, 0), true);
 
@@ -98,16 +95,7 @@ namespace Nitride.OpenGL
             ShaderProgram1 = GLTools.CreateProgram(vertexShaderSource, fragmentShaderSource);
             (VertexBufferHandle, VertexArrayHandle) = GLTools.CreateBuffer(VertexBuffer, VertexBuffer.Length);
 
-            for (int i = 0; i < Waves.Length; i++)
-            {
-                Waves[i] = new(256);
-                Waves[i].CreateBuffer();
-            }
 
-            Waves[0].LineColor = Color.Red;
-            Waves[1].LineWidth = 10.0f;
-            Waves[1].LineColor = Color.OrangeRed;
-            Waves[3].LineColor = Color.Yellow;
 
         }
 
@@ -142,16 +130,13 @@ namespace Nitride.OpenGL
                 BlendingFactorSrc.One, BlendingFactorDest.SrcAlphaSaturate // For alpha channel
             );
 
-            for (int i = 0; i < Waves.Length; i++)
-            {
-                Waves[i].Render();
-            }
+
 
             GL.Disable(EnableCap.Blend);
 
             // ############################################################################################
 
-            DrawString("Hello World! " + iTime.ToString("0.00") + " | " + MouseIndex, MainFont, Color.DimGray, 0.25f, 0.5f);
+            DrawString("Hello World! " + iTime.ToString("0.00") + " | " + MouseIndex, MainFont, Color4.DimGray, 0.25f, 0.5f);
         }
 
         public override void DeleteBuffer()

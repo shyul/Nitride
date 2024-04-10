@@ -38,7 +38,7 @@ namespace Nitride.OpenGL
             for (int i = 0; i < PointList.Length; i++)
             {
 
-                PointList[i] = new VecPoint(x, (rnd.NextSingle() - 0.5f) * 2f);
+                PointList[i] = new VecPoint(x, (rnd.NextSingle() - 0.5f) * 2.0f);
                 x += x_wavestep;
             }
         }

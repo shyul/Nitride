@@ -43,4 +43,11 @@ namespace Nitride.OpenGL
 
         public Vector2 Vec;
     }
+
+    public interface IAxisArea
+    {
+        int TotalAxisPix { get; }
+        float Ratio_AxisMin { get; }
+        float Ratio_AxisRange { get; }
+    }
 }
