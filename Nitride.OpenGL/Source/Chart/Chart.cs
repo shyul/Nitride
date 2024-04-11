@@ -65,10 +65,7 @@ namespace Nitride.OpenGL
             MainFont.CreateTexture();
             MainBoldFont.CreateTexture();
 
-            for (int i = 0; i < Areas.Count; i++)
-            {
-                Areas[i].CreateBuffer();
-            }
+
         }
 
         public override void CoordinateLayout()

@@ -35,8 +35,6 @@ namespace Nitride.OpenGL
 
         public void UpdateBuffer(int length, float startValue, float stopValue)
         {
-            DeleteBuffer();
-
             if (PointList.Length != length)
                 PointList = new VecPoint[length];
 
@@ -49,8 +47,6 @@ namespace Nitride.OpenGL
                 PointList[i] = new VecPoint(x, 0.0f);
                 x += x_step;
             }
-
-            CreateBuffer();
         }
 
         Random rnd = new Random();
@@ -67,33 +63,5 @@ namespace Nitride.OpenGL
         }
 
         // ###############################################################
-
-        private int WaveBufferHandle = 0;
-        private int WaveArrayHandle = 0;
-
-        public void CreateBuffer()
-        {
-            (WaveBufferHandle, WaveArrayHandle) = GLTools.CreateBuffer(PointList, Length);
-            // Console.WriteLine("Create Line Buffer! " + WaveBufferHandle + " / " + WaveArrayHandle);
-        }
-
-        public void Render()
-        {
-            if (Enabled)
-            {
-                //GL.LineStipple(3, 0xF0F0);
-                //GL.Enable(EnableCap.LineStipple);
-                GLTools.UpdateBuffer(WaveBufferHandle, WaveArrayHandle, PointList, Length);
-                GL.LineWidth(LineWidth);
-                GL.DrawArrays(PrimitiveType.LineStrip, 0, Length);
-                //GL.Disable(EnableCap.LineStipple);
-            }
-        }
-
-        public void DeleteBuffer()
-        {
-            GL.DeleteBuffer(WaveBufferHandle);
-            GL.DeleteVertexArray(WaveArrayHandle);
-        }
     }
 }

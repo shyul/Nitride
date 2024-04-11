@@ -129,52 +129,6 @@ namespace Nitride.OpenGL
 
             // ###############################################################
 
-            protected const string ColorFragmentShader = @"
-
-            #version 330 core
-
-            uniform float intensity;
-            uniform vec3 lineColor;
-
-            out vec4 FragColor;
-
-            void main()
-            {
-                FragColor = vec4(lineColor, intensity);
-            }";
-
-            public void CreateBuffer()
-            {
-                //(AreaBoxBufferHandle, AreaBoxArrayHandle) = GLTools.CreateBuffer(AreaBox, AreaBox.Length);
-
-                WaveFormShaderProgramHandle = GLTools.CreateProgram(WaveFormVertexShader, ColorFragmentShader);
-                uni_waveform_x_min = GL.GetUniformLocation(WaveFormShaderProgramHandle, "x_min");
-                uni_waveform_x_range = GL.GetUniformLocation(WaveFormShaderProgramHandle, "x_range");
-                uni_waveform_y_min = GL.GetUniformLocation(WaveFormShaderProgramHandle, "y_min");
-                uni_waveform_y_range = GL.GetUniformLocation(WaveFormShaderProgramHandle, "y_range");
-                uni_waveform_left = GL.GetUniformLocation(WaveFormShaderProgramHandle, "left");
-                uni_waveform_width = GL.GetUniformLocation(WaveFormShaderProgramHandle, "width");
-                uni_waveform_bottom = GL.GetUniformLocation(WaveFormShaderProgramHandle, "bottom");
-                uni_waveform_height = GL.GetUniformLocation(WaveFormShaderProgramHandle, "height");
-                uni_waveform_intensity = GL.GetUniformLocation(WaveFormShaderProgramHandle, "intensity");
-                uni_waveform_lineColor = GL.GetUniformLocation(WaveFormShaderProgramHandle, "lineColor");
-
-                Console.WriteLine("WaveFormShaderProgramHandle = " + WaveFormShaderProgramHandle);
-
-                /*
-                for (int i = 0; i < Lines_Left.Count; i++)
-                {
-                    ChartLine line = Lines_Left[i];
-                    line.CreateBuffer();
-                }
-
-                for (int i = 0; i < Lines_Right.Count; i++)
-                {
-                    ChartLine line = Lines_Right[i];
-                    line.CreateBuffer();
-                }*/
-            }
-
             public virtual void Render()
             {
                 // GL.Viewport(Chart.Margin.Left, Y_Pix_Min, Chart.X_Pix_Total, Y_Pix_Max - Y_Pix_Min);
@@ -252,7 +206,24 @@ namespace Nitride.OpenGL
 
                 // ################################################################
 
-                GL.UseProgram(WaveFormShaderProgramHandle);
+                g.DrawWaveFormStart(Ratio_Left, Ratio_Right, Ratio_Bottom, Ratio_Top, X_Min, X_Max, Axis_Right.Range.Minimum, Axis_Right.Range.Maximum);
+
+                for (int i = 0; i < Lines_Right.Count; i++)
+                {
+                    ChartLine line = Lines_Right[i];
+                    g.DrawWaveForm(line);
+                }
+
+                g.DrawWaveFormStart(Ratio_Left, Ratio_Right, Ratio_Bottom, Ratio_Top, X_Min, X_Max, Axis_Left.Range.Minimum, Axis_Left.Range.Maximum);
+
+                for (int i = 0; i < Lines_Left.Count; i++)
+                {
+                    ChartLine line = Lines_Left[i];
+                    g.DrawWaveForm(line);
+                }
+
+                /*
+                    GL.UseProgram(WaveFormShaderProgramHandle);
 
                 // Area U and V
                 GL.Uniform1(uni_waveform_left, Ratio_Left); // - 1.0f);
@@ -290,7 +261,7 @@ namespace Nitride.OpenGL
                     line.Render();
 
                     // Console.WriteLine("Render Left Line " + i);
-                }
+                }*/
 
                 // ################################################################
 
@@ -300,47 +271,7 @@ namespace Nitride.OpenGL
 
             // ###############################################################
 
-            private const string WaveFormVertexShader = @"
 
-            #version 330 core
-
-            uniform float x_min;
-            uniform float x_range;
-            uniform float y_min;
-            uniform float y_range;
-
-            uniform float left;
-            uniform float width;
-            uniform float bottom;
-            uniform float height;
-            
-            in vec2 wave;
-
-            void main()
-            {
-                float p_x = (wave.x - x_min) / x_range;
-                float x = left + (p_x * width);
-
-                float p_y = (wave.y - y_min) / y_range;
-                float y = bottom + (p_y * height);
-
-                gl_Position = vec4(x, y, 0.0f, 1.0f);
-            }";
-
-            private int WaveFormShaderProgramHandle = 0;
-
-            private int uni_waveform_x_min;
-            private int uni_waveform_x_range;
-            private int uni_waveform_y_min;
-            private int uni_waveform_y_range;
-
-            private int uni_waveform_left;
-            private int uni_waveform_width;
-            private int uni_waveform_bottom;
-            private int uni_waveform_height;
-
-            private int uni_waveform_intensity;
-            private int uni_waveform_lineColor;
 
             // ###############################################################
 

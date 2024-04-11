@@ -6,6 +6,7 @@ using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using Microsoft.VisualBasic.Devices;
+using System.Runtime.InteropServices;
 
 namespace Nitride.OpenGL
 {
@@ -26,10 +27,27 @@ namespace Nitride.OpenGL
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, AxisLinesElementHandle);
                 GL.BufferData(BufferTarget.ElementArrayBuffer, Shapeindices.Length * sizeof(uint), Shapeindices, BufferUsageHint.StaticDraw);
 
+                // Line Shader
 
                 LineShaderProgramHandle = GLTools.CreateProgram(LineVertexShader, ColorFragmentShader);
                 uni_line_intensity = GL.GetUniformLocation(LineShaderProgramHandle, "intensity");
                 uni_line_lineColor = GL.GetUniformLocation(LineShaderProgramHandle, "lineColor");
+
+                // WaveForm Shader
+
+                WaveFormShaderProgramHandle = GLTools.CreateProgram(WaveFormVertexShader, ColorFragmentShader);
+                uni_waveform_x_min = GL.GetUniformLocation(WaveFormShaderProgramHandle, "x_min");
+                uni_waveform_x_range = GL.GetUniformLocation(WaveFormShaderProgramHandle, "x_range");
+                uni_waveform_y_min = GL.GetUniformLocation(WaveFormShaderProgramHandle, "y_min");
+                uni_waveform_y_range = GL.GetUniformLocation(WaveFormShaderProgramHandle, "y_range");
+                uni_waveform_left = GL.GetUniformLocation(WaveFormShaderProgramHandle, "left");
+                uni_waveform_width = GL.GetUniformLocation(WaveFormShaderProgramHandle, "width");
+                uni_waveform_bottom = GL.GetUniformLocation(WaveFormShaderProgramHandle, "bottom");
+                uni_waveform_height = GL.GetUniformLocation(WaveFormShaderProgramHandle, "height");
+                uni_waveform_intensity = GL.GetUniformLocation(WaveFormShaderProgramHandle, "intensity");
+                uni_waveform_lineColor = GL.GetUniformLocation(WaveFormShaderProgramHandle, "lineColor");
+
+                Console.WriteLine("WaveFormShaderProgramHandle = " + WaveFormShaderProgramHandle);
             }
 
             Control Control { get; }
@@ -437,6 +455,87 @@ namespace Nitride.OpenGL
             }
 
             #endregion Shape
+
+            #region WaveForm
+
+            private const string WaveFormVertexShader = @"
+
+            #version 330 core
+
+            uniform float x_min;
+            uniform float x_range;
+            uniform float y_min;
+            uniform float y_range;
+
+            uniform float left;
+            uniform float width;
+            uniform float bottom;
+            uniform float height;
+            
+            in vec2 wave;
+
+            void main()
+            {
+                float p_x = (wave.x - x_min) / x_range;
+                float x = left + (p_x * width);
+
+                float p_y = (wave.y - y_min) / y_range;
+                float y = bottom + (p_y * height);
+
+                gl_Position = vec4(x, y, 0.0f, 1.0f);
+            }";
+
+            private int WaveFormShaderProgramHandle = 0;
+
+            private int uni_waveform_x_min;
+            private int uni_waveform_x_range;
+            private int uni_waveform_y_min;
+            private int uni_waveform_y_range;
+
+            private int uni_waveform_left;
+            private int uni_waveform_width;
+            private int uni_waveform_bottom;
+            private int uni_waveform_height;
+
+            private int uni_waveform_intensity;
+            private int uni_waveform_lineColor;
+
+            // #####################################################
+
+            public void DrawWaveFormStart(float left, float right, float bottom, float top, float x_min, float x_max, float y_min, float y_max) 
+            {
+                GL.UseProgram(WaveFormShaderProgramHandle);
+
+                // Area U and V
+                GL.Uniform1(uni_waveform_left, left); // - 1.0f);
+                GL.Uniform1(uni_waveform_width, right - left); // 2.0f);
+                GL.Uniform1(uni_waveform_bottom, bottom); //  - 1.0f);
+                GL.Uniform1(uni_waveform_height, top - bottom); // 2.0f);
+
+                // Line value
+                GL.Uniform1(uni_waveform_x_min, x_min); // - 1.0f);
+                GL.Uniform1(uni_waveform_x_range, x_max - x_min); // 2.0f);
+                GL.Uniform1(uni_waveform_y_min, y_min); // Y_Min);
+                GL.Uniform1(uni_waveform_y_range, y_max - y_min); // Y_Range);
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, AxisLinesBufferHandle);
+                GL.BindVertexArray(AxisLinesArrayHandle);
+            }
+
+            public void DrawWaveForm(ChartLine line) 
+            {
+                if (line.Enabled) 
+                {
+                    GL.Uniform1(uni_waveform_intensity, line.Intensity);
+                    GL.Uniform3(uni_waveform_lineColor, new Vector3(line.LineColor.R / 255.0f, line.LineColor.G / 255.0f, line.LineColor.B / 255.0f));
+                    //GLTools.UpdateBuffer(AxisLinesBufferHandle, AxisLinesArrayHandle, line.PointList, line.Length);
+                    GL.BufferData(BufferTarget.ArrayBuffer, line.PointList.Length * Marshal.SizeOf(typeof(VecPoint)), line.PointList, BufferUsageHint.StreamDraw);
+                    GL.LineWidth(line.LineWidth);
+                    GL.DrawArrays(PrimitiveType.LineStrip, 0, line.Length);
+                }
+            }
+
+            #endregion WaveForm
         }
     }
 }
