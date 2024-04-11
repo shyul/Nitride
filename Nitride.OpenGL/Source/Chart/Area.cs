@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Nitride.OpenGL
 {
@@ -44,7 +45,7 @@ namespace Nitride.OpenGL
             private float X_Min => Chart.X_Axis.Range.Minimum;
 
             public int Y_Pix_XAxisStrip = 0;
-            private float Ratio_XAxisStrip;
+            public float Ratio_XAxisStrip;
             private float Ratio_XAxisTickHigh;
             private float Ratio_XAxisTickLow;
             private float Ratio_XAxisBottom;
@@ -58,9 +59,9 @@ namespace Nitride.OpenGL
             public Axis Axis_Left { get; }
             public Axis Axis_Right { get; }
 
-            private readonly VecPoint[] AreaBox = new VecPoint[4];
-            private int AreaBoxBufferHandle;
-            private int AreaBoxArrayHandle;
+            //private readonly VecPoint[] AreaBox = new VecPoint[4];
+            //private int AreaBoxBufferHandle;
+            //private int AreaBoxArrayHandle;
 
 
 
@@ -71,6 +72,8 @@ namespace Nitride.OpenGL
 
             public void CoordinateLayout()
             {
+                GLGraphics g = Chart.Graphics;
+
                 if (HasXAxisStrip) 
                 {
                     Ratio_XAxisStrip = 1.0f - (Y_Pix_XAxisStrip * 2.0f / (float)Chart.Height);
@@ -86,15 +89,15 @@ namespace Nitride.OpenGL
 
                
                 Ratio_Top = Ratio_Bottom + Ratio_Height;
-
+                /*
                 (AreaBox[0].Vec.X, AreaBox[0].Vec.Y) = (Ratio_Left, Ratio_Bottom);
                 (AreaBox[1].Vec.X, AreaBox[1].Vec.Y) = (Ratio_Left, Ratio_Top);
                 (AreaBox[2].Vec.X, AreaBox[2].Vec.Y) = (Ratio_Right, Ratio_Top);
                 (AreaBox[3].Vec.X, AreaBox[3].Vec.Y) = (Ratio_Right, Ratio_Bottom);
-
-                Ratio_XAxisTickHigh = Chart.GetRatioY(Y_Pix_Max + MajorTickLength); // 1.0f - ((Y_Pix_Max + MajorTickLength) * 2.0f / (float)Chart.Height);
-                Ratio_XAxisBottom = Chart.GetRatioY(Y_Pix_Max + XAxisStripHeight); // 1.0f - ((Y_Pix_Max + XAxisStripHeight) * 2.0f / (float)Chart.Height);
-                Ratio_XAxisTickLow = Chart.GetRatioY(Y_Pix_Max + XAxisStripHeight - MajorTickLength); // 1.0f - ((Y_Pix_Max + XAxisStripHeight - MajorTickLength) * 2.0f / (float)Chart.Height);
+                */
+                Ratio_XAxisTickHigh = g.GetRatioY(Y_Pix_Max + MajorTickLength); // 1.0f - ((Y_Pix_Max + MajorTickLength) * 2.0f / (float)Chart.Height);
+                Ratio_XAxisBottom = g.GetRatioY(Y_Pix_Max + XAxisStripHeight); // 1.0f - ((Y_Pix_Max + XAxisStripHeight) * 2.0f / (float)Chart.Height);
+                Ratio_XAxisTickLow = g.GetRatioY(Y_Pix_Max + XAxisStripHeight - MajorTickLength); // 1.0f - ((Y_Pix_Max + XAxisStripHeight - MajorTickLength) * 2.0f / (float)Chart.Height);
 
                 if (!Axis_Left.FixedRange)
                 {
@@ -126,9 +129,23 @@ namespace Nitride.OpenGL
 
             // ###############################################################
 
+            protected const string ColorFragmentShader = @"
+
+            #version 330 core
+
+            uniform float intensity;
+            uniform vec3 lineColor;
+
+            out vec4 FragColor;
+
+            void main()
+            {
+                FragColor = vec4(lineColor, intensity);
+            }";
+
             public void CreateBuffer()
             {
-                (AreaBoxBufferHandle, AreaBoxArrayHandle) = GLTools.CreateBuffer(AreaBox, AreaBox.Length);
+                //(AreaBoxBufferHandle, AreaBoxArrayHandle) = GLTools.CreateBuffer(AreaBox, AreaBox.Length);
 
                 WaveFormShaderProgramHandle = GLTools.CreateProgram(WaveFormVertexShader, ColorFragmentShader);
                 uni_waveform_x_min = GL.GetUniformLocation(WaveFormShaderProgramHandle, "x_min");
@@ -160,137 +177,66 @@ namespace Nitride.OpenGL
             public virtual void Render()
             {
                 // GL.Viewport(Chart.Margin.Left, Y_Pix_Min, Chart.X_Pix_Total, Y_Pix_Max - Y_Pix_Min);
+                GLGraphics g = Chart.Graphics;
 
-                GL.UseProgram(Chart.LineShaderProgramHandle);
-                GL.Uniform1(Chart.uni_line_intensity, 1.0f);
-                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.5f, 0.5f, 0.5f));
-                GLTools.UpdateBuffer(AreaBoxBufferHandle, AreaBoxArrayHandle, AreaBox, AreaBox.Length);
+                g.DrawRectangle(Ratio_Left, Ratio_Right, Ratio_Top, Ratio_Bottom, 3.0f, new Color4(0.5f, 0.5f, 0.5f, 1.0f));
+                g.DrawAxis(Axis_Right, Ratio_Left, Ratio_Right, Chart.RatioMajorTick_Right, Chart.MainFont, Chart.RatioAxisLabel_Right, 1.0f, true);
 
-                GL.LineWidth(3f);
-                GL.DrawArrays(PrimitiveType.LineLoop, 0, AreaBox.Length);
-                GL.PointSize(3f);
-                GL.DrawArrays(PrimitiveType.Points, 0, AreaBox.Length);
-
-                VecPoint[] axisLine = new VecPoint[2];
-
-                lock (Axis_Right.Ticks)
+                lock (Chart.X_Axis.Ticks)
                 {
-                    // Console.WriteLine("Axis_Right.Ticks.Count = " + Axis_Right.Ticks.Count);
-                    // Console.WriteLine("Axis_Left.Ticks.Count = " + Axis_Left.Ticks.Count);
-
-                    for (int i = 0; i < Axis_Right.Ticks.Count; i++)
-                    {
-                        AxisTick tick = Axis_Right.Ticks[i];
-
-                        (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (Ratio_Left, tick.Ratio);
-                        (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (Ratio_Right, tick.Ratio);
-                        GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-
-                        // Console.WriteLine(i + " Tick Y " + tick.AxisLine[0].Vec.Y);
-
-                        switch (tick.Importance)
-                        {
-                            case Importance.Minor:
-                                GL.LineWidth(1.2f);
-                                GL.LineStipple(3, 0x5555);
-                                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.5f, 0.5f, 0.5f));
-                                break;
-
-                            case Importance.Major:
-                                GL.LineWidth(1.8f);
-                                GL.LineStipple(2, 0xFF3C);// 0x7F38);
-                                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.3f, 0.3f, 0.3f));
-                                break;
-
-                            default:
-
-                                break;
-                        }
-
-                        GL.Enable(EnableCap.LineStipple);
-                        GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
-                        GL.Disable(EnableCap.LineStipple);
-
-                        // Draw Ticks!!
-                        GL.LineWidth(1.5f);
-                        (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (Chart.RatioMajorTick_Right, tick.Ratio);
-                        GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-                        GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
-                    }
-
                     for (int i = 0; i < Chart.X_Axis.Ticks.Count; i++)
                     {
                         AxisTick tick = Chart.X_Axis.Ticks[i];
-
+                        /*
                         (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (tick.Ratio, Ratio_Bottom);
                         (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (tick.Ratio, Ratio_Top);
                         GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-
+                        */
                         // Console.WriteLine(i + " Tick Y " + tick.AxisLine[0].Vec.Y);
 
                         switch (tick.Importance)
                         {
                             case Importance.Minor:
-                                GL.LineWidth(1.2f);
-                                GL.LineStipple(3, 0x5555);
-                                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.5f, 0.5f, 0.5f));
+                                g.DrawLine(tick.Ratio, Ratio_Bottom, tick.Ratio, Ratio_Top, 1.2f, new Vector3(0.5f, 0.5f, 0.5f), 1.0f, 3, 0x5555);
+
                                 break;
 
                             case Importance.Major:
-                                GL.LineWidth(1.8f);
-                                GL.LineStipple(2, 0xFF3C);// 0x7F38);
-                                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.3f, 0.3f, 0.3f));
+                                g.DrawLine(tick.Ratio, Ratio_Bottom, tick.Ratio, Ratio_Top, 1.8f, new Vector3(0.3f, 0.3f, 0.3f), 1.0f, 2, 0xFF3C);
                                 break;
 
                             default:
 
                                 break;
                         }
-
-                        GL.Enable(EnableCap.LineStipple);
-                        GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
-                        GL.Disable(EnableCap.LineStipple);
                     }
 
                     if (HasXAxisStrip)
                     {
-                        /*
-                        (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (Ratio_Left, Ratio_XAxisStrip);
-                        (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (Ratio_Right, Ratio_XAxisStrip);
-                        GL.LineWidth(1f);
-                        GLTools.UpdateBuffer(AxisLinesBufferHandle, AxisLinesArrayHandle, axisLine, axisLine.Length);
-                        GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);*/
-                        GL.LineWidth(1.5f);
-
                         for (int i = 0; i < Chart.X_Axis.Ticks.Count; i++)
                         {
                             AxisTick tick = Chart.X_Axis.Ticks[i];
-                            (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (tick.Ratio, Ratio_Bottom);
-                            (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (tick.Ratio, Ratio_XAxisTickHigh);
-                            GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-                            GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
+
+                            g.DrawLine(tick.Ratio, Ratio_Bottom, tick.Ratio, Ratio_XAxisTickHigh, 1.5f, new Vector3(0.5f, 0.5f, 0.5f));
 
                             if (Index < Chart.Areas.Count - 1)
                             {
-                                (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (tick.Ratio, Ratio_XAxisBottom);
-                                (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (tick.Ratio, Ratio_XAxisTickLow);
-                                GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-                                GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
+                                g.DrawLine(tick.Ratio, Ratio_XAxisBottom, tick.Ratio, Ratio_XAxisTickLow, 1.5f, new Vector3(0.5f, 0.5f, 0.5f));
                             }
                         }
 
                         for (int i = 0; i < Chart.X_Axis.Ticks.Count; i++)
                         {
                             AxisTick tick = Chart.X_Axis.Ticks[i];
-                            Chart.DrawString(tick.Label, Chart.MainFont, Color4.DimGray, tick.Ratio, Ratio_XAxisStrip, AlignType.Center);
+                            g.DrawString(tick.Label, Chart.MainFont, new Vector3(0.3f, 0.3f, 0.3f), tick.Ratio, Ratio_XAxisStrip, AlignType.Center);
                         }
                     }
 
-
+                    
                     for (int i = 0; i < Axis_Right.Ticks.Count; i++)
                     {
                         AxisTick tick = Axis_Right.Ticks[i];
-                        Chart.DrawString(tick.Label, Chart.MainFont, Color4.DimGray, Chart.RatioAxisLabel_Right, tick.Ratio, AlignType.Left);
+                        g.DrawString(tick.Label, Chart.MainFont, new Vector3(0.3f, 0.3f, 0.3f), Chart.RatioAxisLabel_Right, tick.Ratio, AlignType.Left);
                     }
                 }
 
@@ -300,12 +246,10 @@ namespace Nitride.OpenGL
                     BlendingFactorSrc.One, BlendingFactorDest.SrcAlphaSaturate // For alpha channel
                 );
 
-                // ################
-
                 GL.Enable(EnableCap.ScissorTest);
                 GL.Scissor(Chart.Margin.Left, Chart.Height - Y_Pix_Max, Chart.X_Pix_Total, TotalAxisPix); // Chart.Height); //  + 30
 
-                // Console.WriteLine("Y_Pix_Min = " + Y_Pix_Min);
+                // ################################################################
 
                 GL.UseProgram(WaveFormShaderProgramHandle);
 
@@ -345,12 +289,15 @@ namespace Nitride.OpenGL
                     // Console.WriteLine("Render Right Line " + i);
                 }
 
+                // ################################################################
+
                 GL.Disable(EnableCap.Blend);
                 GL.Disable(EnableCap.ScissorTest);
             }
 
             public virtual void RenderCursor()
             {
+                /*
                 float mouse_x = Chart.MouseRatioX;
                 float mouse_y = Chart.MouseRatioY;
                 VecPoint[] axisLine = new VecPoint[2];
@@ -404,6 +351,7 @@ namespace Nitride.OpenGL
 
                 // new Color4(0.3f, 0.6f, 0.7f, 1f)
                 Chart.DrawString(tagString, Chart.MainBoldFont, new Color4(0.2f, 0.4f, 0.45f, 1f), mouse_x, Ratio_XAxisStrip);
+                */
 
             }
 

@@ -25,7 +25,7 @@ namespace Nitride.OpenGL
                 Lines[i].UpdateBuffer();
             }
 
-            X_Axis.Range.Reset(-0.8f, 0.8f);
+            X_Axis.Range.Reset(-1f, 1f);
             X_Axis.FixedRange = true;
             X_Axis.TickStep = 0.15f;
 
@@ -36,17 +36,22 @@ namespace Nitride.OpenGL
 
             area.Axis_Left.Range.Reset(-1.0f, 1.0f);
             area.Axis_Left.FixedRange = true;
-
+            /*
             area.Axis_Right.Range.Reset(-1.0f, 1.0f);
             area.Axis_Right.FixedRange = true;
             area.Axis_Right.Reference = 0.0f;
-            area.Axis_Right.TickStep = 0.2f;
+            area.Axis_Right.TickStep = 0.2f;*/
+
+            area.Axis_Right.Range.Reset(-120.0f, 0f);
+            area.Axis_Right.FixedRange = true;
+            area.Axis_Right.Reference = 0.0f;
+            area.Axis_Right.TickStep = 10.0f;
 
             area.Lines_Right.AddRange(Lines);
 
             Areas.Add(area);
 
-            
+            /*
             Area area2 = new (this)
             {
                 HasXAxisStrip = true
@@ -71,7 +76,7 @@ namespace Nitride.OpenGL
                 AsyncUpdateUI = true;
             };
             _timer.Interval = 10;   // 1000 ms per sec / 50 ms per frame = 20 FPS
-            _timer.Start();
+            _timer.Start();*/
 
             ResumeLayout(false);
         }

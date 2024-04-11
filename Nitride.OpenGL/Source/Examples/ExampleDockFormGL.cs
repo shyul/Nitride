@@ -56,7 +56,7 @@ namespace Nitride.OpenGL
 
         public override void CreateBuffer()
         {
-            InitTextShader();
+            
             MainFont.CreateTexture();
 
             VertexBuffer[0] = new ColorVertex(new Vector3(-0.5f, -0.5f, 0.0f), new Vector4(1, 0, 0, 1));
@@ -136,7 +136,7 @@ namespace Nitride.OpenGL
 
             // ############################################################################################
 
-            DrawString("Hello World! " + iTime.ToString("0.00") + " | " + MouseIndex, MainFont, Color4.DimGray, 0.25f, 0.5f);
+            Graphics.DrawString("Hello World! " + iTime.ToString("0.00") + " | " + MouseIndex, MainFont, new Vector3(0.5f), 0.25f, 0.5f);
         }
 
         public override void DeleteBuffer()

@@ -16,7 +16,7 @@ namespace Nitride.OpenGL
         }
 
         public Color LineColor { get; set; } = Color.DarkGreen;
-        public float Intensity { get; set; } = 0.15f;
+        public float Intensity { get; set; } = 0.25f;
         public float LineWidth { get; set; } = 1.0f;
 
 

@@ -15,7 +15,7 @@ using NativeWindow = OpenTK.Windowing.Desktop.NativeWindow;
 namespace Nitride.OpenGL
 {
     [DesignerCategory("Code")]
-    public abstract class DockFormGL : DockForm
+    public abstract partial class DockFormGL : DockForm
     {
         public DockFormGL(string formName, bool enableUiUpdate = false) : base(formName, enableUiUpdate)
         {
@@ -26,6 +26,8 @@ namespace Nitride.OpenGL
             Dock = DockStyle.Fill;
             DoubleBuffered = false;
         }
+
+        public GLGraphics Graphics { get; private set; }
 
         public abstract void CreateBuffer();
 
@@ -297,7 +299,7 @@ namespace Nitride.OpenGL
             }
         }
 
-        private bool IsBufferReady = false;
+        protected bool IsBufferReady = false;
 
         public void CreateNativeWindow()
         {
@@ -335,17 +337,18 @@ namespace Nitride.OpenGL
                 Win32.SetWindowLongPtr(hWnd, Win32.WindowLongs.GWL_EXSTYLE, style);
             }
 
+            Graphics = new GLGraphics(this);
+            CreateBuffer();
+            IsBufferReady = true;
+
             // Force the newly child-ified GLFW window to be resized to fit this control.
             ResizeNativeWindow();
-
-            CreateBuffer();
+            CoordinateLayout();
 
             // And now show the child window, since it hasn't been made visible yet.
             NativeWindow.IsVisible = true;
 
             // NativeWindow.Refresh
-
-            IsBufferReady = true;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -386,161 +389,22 @@ namespace Nitride.OpenGL
 
         #endregion GL Components
 
-        #region Font
 
-        private const string FontVertexShader = @"
-
-            #version 330 core
-            layout (location = 0) in vec3 aPosition;
-            layout (location = 1) in vec2 aTexCoord;
-
-            out vec2 TexCoord;
-
-            void main()
-            {
-                gl_Position = vec4(aPosition, 1.0);
-                TexCoord = aTexCoord;
-            }";
-
-        private const string FontFragShader = @"
-
-            #version 330 core
-            out vec4 FragColor;
-
-            in vec2 TexCoord;
-
-            uniform vec3 fontColor;
-            uniform sampler2D texture1;
-
-            void main()
-            {
-                vec4 texColor = texture(texture1, TexCoord);
-                FragColor = vec4 (fontColor, texColor.a);
-                // FragColor = vec4 (1.0f, 0.75f, 0f, texColor.a);
-            }";
-
-        private TextureVertex[] FontVertices = {
-
-            new TextureVertex(new Vector3 (-1.0f, 1.0f, 0.0f), new Vector2 (0.0f, 0.0f)),
-            new TextureVertex(new Vector3 (1.0f, 1.0f, 0.0f), new Vector2 (1.0f, 0.0f)),
-            new TextureVertex(new Vector3 (1.0f, -1.0f, 0.0f), new Vector2 (1.0f, 1.0f)),
-            new TextureVertex(new Vector3 (-1.0f, -1.0f, 0.0f), new Vector2 (0.0f, 1.0f)),
-        };
-
-        private int FontVerticesBufferHandle;
-        private int FontVerticesArrayHandle;
-        private int TextShaderProgramHandle;
-        private int TextShaderFontColorUniform;
-
-        protected void InitTextShader()
-        {
-            (FontVerticesBufferHandle, FontVerticesArrayHandle) = GLTools.CreateBuffer(FontVertices, FontVertices.Length, BufferUsageHint.StreamDraw);
-            TextShaderProgramHandle = GLTools.CreateProgram(FontVertexShader, FontFragShader);
-            TextShaderFontColorUniform = GL.GetUniformLocation(TextShaderProgramHandle, "fontColor");
-        }
-
-        public void DrawString(string s, GLFont font, Color4 color, float x, float y, AlignType align = AlignType.Center)
-        {
-            GL.UseProgram(TextShaderProgramHandle);
-            GL.Uniform3(TextShaderFontColorUniform, new Vector3(color.R, color.G, color.B)); //color.R / 255.0f, color.G / 255.0f, color.B / 255.0f));
-            GL.BindTexture(TextureTarget.Texture2D, font.TextureID);
-            GL.Enable(EnableCap.Blend);
-            // GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-            float half_width = (float)font.GlyphSize.Width * 1.0f / (float)ClientSize.Width;
-            float half_height = (float)font.GlyphSize.Height * 1.0f / (float)ClientSize.Height;
-            float text_step = half_width * 1.9f;
-            //Console.WriteLine("width = " + width + " | height = " + height);
-
-            switch (align) 
-            {
-                case AlignType.Center:
-                    x -= text_step * (s.Length - 1.0f) / 2.0f; // Center Alignment!
-                    break;
-
-                case AlignType.Left:
-                    x += text_step / 2.0f; // Center Alignment!
-                    break;
-
-                case AlignType.Right:
-                    x -= text_step * (s.Length - 0.5f); // Center Alignment!
-                    break;
-            }
-            
-
-            foreach (char c in s)
-            {
-                float glyphOffset = (c - 33) * font.U_Step;
-                FontVertices[0].TexCoord.X = FontVertices[3].TexCoord.X = glyphOffset;
-                FontVertices[1].TexCoord.X = FontVertices[2].TexCoord.X = glyphOffset + font.U_Step;
-
-                FontVertices[0].Position.X = FontVertices[3].Position.X = x - half_width;
-                FontVertices[1].Position.X = FontVertices[2].Position.X = x + half_width;
-
-                FontVertices[0].Position.Y = FontVertices[1].Position.Y = y + half_height;
-                FontVertices[2].Position.Y = FontVertices[3].Position.Y = y - half_height;
-
-                GLTools.UpdateBuffer(FontVerticesBufferHandle, FontVerticesArrayHandle, FontVertices, FontVertices.Length);
-                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
-
-                x += text_step;
-            }
-
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            GL.Disable(EnableCap.Blend);
-        }
-
-        #endregion Font
-
-        #region Draw Line
-
-        public int AxisLinesBufferHandle;
-        public int AxisLinesArrayHandle;
-
-        protected const string LineVertexShader = @"
-
-            #version 330 core
-
-            in vec3 aPosition;
-
-            void main()
-            {
-                gl_Position = vec4(aPosition, 1.0f);
-            }";
-
-        protected const string ColorFragmentShader = @"
-
-            #version 330 core
-
-            uniform float intensity;
-            uniform vec3 lineColor;
-
-            out vec4 FragColor;
-
-            void main()
-            {
-                FragColor = vec4(lineColor, intensity);
-            }";
-
-        public int LineShaderProgramHandle = 0;
-        public int uni_line_intensity;
-        public int uni_line_lineColor;
-
-        #endregion Draw Line
 
         #region Mouse
 
         protected bool MouseActive = false;
         protected Point MousePt = new(-1, -1);
-        protected float MouseRatioX = -2.0f;
-        protected float MouseRatioY = -2.0f;
+
+        public float MouseRatioX = -2.0f;
+        public float MouseRatioY = -2.0f;
         protected int MouseIndex = 0;
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             MousePt = e.Location;
-            MouseRatioX = this.GetRatioX(e.X); // (e.X * 2.0f / Width) - 1.0f;
-            MouseRatioY = this.GetRatioY(e.Y); // 1.0f - (e.Y * 2.0f / Height);
+            MouseRatioX = Graphics.GetRatioX(e.X); // (e.X * 2.0f / Width) - 1.0f;
+            MouseRatioY = Graphics.GetRatioY(e.Y); // 1.0f - (e.Y * 2.0f / Height);
             MouseActive = true;
             // Console.WriteLine("OnMouseMove: " + e.X + " | " + e.Y);
 
