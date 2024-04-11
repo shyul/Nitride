@@ -161,6 +161,7 @@ namespace Nitride.OpenGL
 
                 Console.WriteLine("WaveFormShaderProgramHandle = " + WaveFormShaderProgramHandle);
 
+                /*
                 for (int i = 0; i < Lines_Left.Count; i++)
                 {
                     ChartLine line = Lines_Left[i];
@@ -171,7 +172,7 @@ namespace Nitride.OpenGL
                 {
                     ChartLine line = Lines_Right[i];
                     line.CreateBuffer();
-                }
+                }*/
             }
 
             public virtual void Render()
@@ -263,18 +264,7 @@ namespace Nitride.OpenGL
                 GL.Uniform1(uni_waveform_x_min, X_Min); // - 1.0f);
                 GL.Uniform1(uni_waveform_x_range, X_Max - X_Min); // 2.0f);
 
-                GL.Uniform1(uni_waveform_y_min, Axis_Left.Range.Minimum); // Y_Min);
-                GL.Uniform1(uni_waveform_y_range, Axis_Left.Range.Maximum - Axis_Left.Range.Minimum); // Y_Range);
 
-                for (int i = 0; i < Lines_Left.Count; i++)
-                {
-                    ChartLine line = Lines_Left[i];
-                    GL.Uniform1(uni_waveform_intensity, line.Intensity);
-                    GL.Uniform3(uni_waveform_lineColor, new Vector3(line.LineColor.R / 255.0f, line.LineColor.G / 255.0f, line.LineColor.B / 255.0f));
-                    line.Render();
-
-                    // Console.WriteLine("Render Left Line " + i);
-                }
 
                 GL.Uniform1(uni_waveform_y_min, Axis_Right.Range.Minimum); // Y_Min);
                 GL.Uniform1(uni_waveform_y_range, Axis_Right.Range.Maximum - Axis_Right.Range.Minimum); // Y_Range);
@@ -289,73 +279,24 @@ namespace Nitride.OpenGL
                     // Console.WriteLine("Render Right Line " + i);
                 }
 
+                GL.Uniform1(uni_waveform_y_min, Axis_Left.Range.Minimum); // Y_Min);
+                GL.Uniform1(uni_waveform_y_range, Axis_Left.Range.Maximum - Axis_Left.Range.Minimum); // Y_Range);
+
+                for (int i = 0; i < Lines_Left.Count; i++)
+                {
+                    ChartLine line = Lines_Left[i];
+                    GL.Uniform1(uni_waveform_intensity, line.Intensity);
+                    GL.Uniform3(uni_waveform_lineColor, new Vector3(line.LineColor.R / 255.0f, line.LineColor.G / 255.0f, line.LineColor.B / 255.0f));
+                    line.Render();
+
+                    // Console.WriteLine("Render Left Line " + i);
+                }
+
                 // ################################################################
 
                 GL.Disable(EnableCap.Blend);
                 GL.Disable(EnableCap.ScissorTest);
             }
-
-            public virtual void RenderCursor()
-            {
-                /*
-                float mouse_x = Chart.MouseRatioX;
-                float mouse_y = Chart.MouseRatioY;
-                VecPoint[] axisLine = new VecPoint[2];
-
-                GL.UseProgram(Chart.LineShaderProgramHandle);
-                GL.Uniform1(Chart.uni_line_intensity, 1.0f);
-                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.2f, 0.4f, 0.45f));
-
-                if (mouse_y > Ratio_Bottom && mouse_y < Ratio_Top)
-                {
-                    (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (Ratio_Left, mouse_y);
-                    (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (Ratio_Right, mouse_y);
-                    GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-                    GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);
-                }
-
-                string tagString = Chart.X_Axis.GetValue(mouse_x).ToString();//  "TEST";
-                float fontwidth = (tagString.Length + 1.0f) * Chart.MainBoldFont.GlyphSize.Width;
-
-                //Console.WriteLine(mouse_x);
-                //Console.WriteLine(Ratio_XAxisStrip);
-
-                VecPoint[] tagPt = GLTools.GetUpDownTag(Chart, mouse_x, Ratio_XAxisStrip, new SizeF(fontwidth, XAxisStripHeight), new SizeF(10, 5), 3);
-                GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, tagPt, tagPt.Length);
-
-                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.784314f, 0.929412f, 0.921568f));
-                GL.DrawArrays(PrimitiveType.Polygon, 0, tagPt.Length);
-                GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.2f, 0.4f, 0.45f));
-                GL.LineWidth(2f);
-                GL.DrawArrays(PrimitiveType.LineLoop, 0, tagPt.Length);
-                GL.PointSize(2f);
-                GL.DrawArrays(PrimitiveType.Points, 0, tagPt.Length);
-
-                if (mouse_y > Ratio_Bottom && mouse_y < Ratio_Top)
-                {
-                    string y_axis_string = Axis_Right.GetValue(mouse_y).ToString("0.00");
-                    fontwidth = (y_axis_string.Length + 1f) * Chart.MainBoldFont.GlyphSize.Width;
-                    tagPt = GLTools.GetRightCursor(Chart, Ratio_Right, mouse_y, new SizeF(fontwidth, 26), new SizeF(5, 5), 3);
-                    GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, tagPt, tagPt.Length);
-
-                    GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.784314f, 0.929412f, 0.921568f));
-                    GL.DrawArrays(PrimitiveType.Polygon, 0, tagPt.Length);
-                    GL.Uniform3(Chart.uni_line_lineColor, new Vector3(0.2f, 0.4f, 0.45f));
-                    GL.LineWidth(2f);
-                    GL.DrawArrays(PrimitiveType.LineLoop, 0, tagPt.Length);
-                    GL.PointSize(2f);
-                    GL.DrawArrays(PrimitiveType.Points, 0, tagPt.Length);
-
-                    Chart.DrawString(y_axis_string, Chart.MainBoldFont, new Color4(0.2f, 0.4f, 0.45f, 1f), Chart.RatioAxisLabel_Right, mouse_y, AlignType.Left);
-                }
-
-                // new Color4(0.3f, 0.6f, 0.7f, 1f)
-                Chart.DrawString(tagString, Chart.MainBoldFont, new Color4(0.2f, 0.4f, 0.45f, 1f), mouse_x, Ratio_XAxisStrip);
-                */
-
-            }
-
-
 
             // ###############################################################
 

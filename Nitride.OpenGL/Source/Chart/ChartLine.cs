@@ -10,6 +10,10 @@ namespace Nitride.OpenGL
 {
     public class ChartLine
     {
+        public ChartLine()
+        {
+        }
+
         public ChartLine(int length = 1024) 
         {
             PointList = new VecPoint[length];
@@ -18,9 +22,10 @@ namespace Nitride.OpenGL
         public Color LineColor { get; set; } = Color.DarkGreen;
         public float Intensity { get; set; } = 0.25f;
         public float LineWidth { get; set; } = 1.0f;
+        public bool Enabled { get; set; } = true;
 
 
-        public VecPoint[] PointList;
+        public VecPoint[] PointList = new VecPoint[2];
         public int Length => PointList.Length;
         public float this[int i] 
         {
@@ -28,40 +33,67 @@ namespace Nitride.OpenGL
             set => PointList[i].Vec.Y = value;
         }
 
-        Random rnd = new Random();
+        public void UpdateBuffer(int length, float startValue, float stopValue)
+        {
+            DeleteBuffer();
 
+            if (PointList.Length != length)
+                PointList = new VecPoint[length];
+
+            float valueRange = stopValue - startValue;
+            float x_step = valueRange / (length - 1);
+            float x = startValue;
+
+            for (int i = 0; i < Length; i++)
+            {
+                PointList[i] = new VecPoint(x, 0.0f);
+                x += x_step;
+            }
+
+            CreateBuffer();
+        }
+
+        Random rnd = new Random();
         public void UpdateBuffer()
         {
             float x_wavestep = 2.0f / (PointList.Length - 1);
             float x = -1.0f;
 
-            for (int i = 0; i < PointList.Length; i++)
+            for (int i = 0; i < Length; i++)
             {
-
                 PointList[i] = new VecPoint(x, (rnd.NextSingle() - 0.5f) * 2.0f);
                 x += x_wavestep;
             }
         }
 
-        private int WaveBufferHandle;
-        private int WaveArrayHandle;
-
         // ###############################################################
+
+        private int WaveBufferHandle = 0;
+        private int WaveArrayHandle = 0;
 
         public void CreateBuffer()
         {
-            (WaveBufferHandle, WaveArrayHandle) = GLTools.CreateBuffer(PointList, PointList.Length);
+            (WaveBufferHandle, WaveArrayHandle) = GLTools.CreateBuffer(PointList, Length);
             // Console.WriteLine("Create Line Buffer! " + WaveBufferHandle + " / " + WaveArrayHandle);
         }
 
-        public void Render() 
+        public void Render()
         {
-            //GL.LineStipple(3, 0xF0F0);
-            //GL.Enable(EnableCap.LineStipple);
-            GLTools.UpdateBuffer(WaveBufferHandle, WaveArrayHandle, PointList, PointList.Length);
-            GL.LineWidth(LineWidth);
-            GL.DrawArrays(PrimitiveType.LineStrip, 0, Length);
-            //GL.Disable(EnableCap.LineStipple);
+            if (Enabled)
+            {
+                //GL.LineStipple(3, 0xF0F0);
+                //GL.Enable(EnableCap.LineStipple);
+                GLTools.UpdateBuffer(WaveBufferHandle, WaveArrayHandle, PointList, Length);
+                GL.LineWidth(LineWidth);
+                GL.DrawArrays(PrimitiveType.LineStrip, 0, Length);
+                //GL.Disable(EnableCap.LineStipple);
+            }
+        }
+
+        public void DeleteBuffer()
+        {
+            GL.DeleteBuffer(WaveBufferHandle);
+            GL.DeleteVertexArray(WaveArrayHandle);
         }
     }
 }
