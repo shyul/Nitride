@@ -369,7 +369,7 @@ namespace Nitride.OpenGL
 
             #region Shape
 
-            public void DrawUpDownTag(string tagString, GLFont font, float offset_x, float offset_y, Vector3 foreColor, Vector3 backColor, bool isLast, float intensity = 1.0f, float lineWidth = 2.0f, float arrowSize = 5, float cornerSize = 3)
+            public void DrawXAxisTag(string tagString, GLFont font, float offset_x, float offset_y, Vector3 foreColor, Vector3 backColor, bool isLast, float intensity = 1.0f, float lineWidth = 2.0f, float arrowSize = 5, float cornerSize = 3)
             {
                 float tagWidth = (tagString.Length + 1.0f) * font.GlyphSize.Width;
                 float half_width = tagWidth / 2.0f;
@@ -420,7 +420,7 @@ namespace Nitride.OpenGL
                 DrawString(tagString, font, foreColor, offset_x, offset_y);
             }
 
-            public void DrawAxisCursor(Chart c, GLFont font, Vector3 foreColor, Vector3 backColor, float arrowSize = 5, float cornerSize = 3)
+            public void DrawRightAxisCursor(Chart c, GLFont font, Vector3 foreColor, Vector3 backColor, float arrowSize = 5, float cornerSize = 3)
             {
                 float mouse_x = c.MouseRatioX;
                 float mouse_y = c.MouseRatioY;
@@ -460,14 +460,14 @@ namespace Nitride.OpenGL
 
                     if (area.HasXAxisStrip)
                     {
-                        DrawUpDownTag(tagString, font, mouse_x, area.Ratio_XAxisStrip, foreColor, backColor, area == c.Areas.Last());
+                        DrawXAxisTag(tagString, font, mouse_x, area.Ratio_XAxisStrip, foreColor, backColor, area == c.Areas.Last());
                     }
                 }
             }
 
             public void DrawMarker(string s, GLFont font, Vector3 foreColor, float x, float y)
             {
-                float half_width = (s.Length - 0.5f) * font.GlyphSize.Width / 2.0f;
+                float half_width = (s.Length - 1.5f) * font.GlyphSize.Width / 2.0f;
                 float arrowSize = 5.0f;
                 float offset = 3.0f;
                 float line_y = arrowSize + offset;

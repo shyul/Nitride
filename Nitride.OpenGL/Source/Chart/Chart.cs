@@ -166,7 +166,7 @@ namespace Nitride.OpenGL
                     if (mouse_x > Ratio_Left && mouse_x < Ratio_Right)
                     {
                         Graphics.DrawLine(mouse_x, Ratio_Bottom, mouse_x, Ratio_Top, 1.0f, new Vector3(0.2f, 0.4f, 0.45f), 1.0f);
-                        Graphics.DrawAxisCursor(this, MainBoldFont, new Vector3(0.2f, 0.4f, 0.45f), new Vector3(0.784314f, 0.929412f, 0.921568f));
+                        Graphics.DrawRightAxisCursor(this, MainBoldFont, new Vector3(0.2f, 0.4f, 0.45f), new Vector3(0.784314f, 0.929412f, 0.921568f));
                     }
                 }
             }
