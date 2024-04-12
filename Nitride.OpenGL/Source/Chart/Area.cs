@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Nitride.OpenGL
 {
@@ -142,12 +141,6 @@ namespace Nitride.OpenGL
                     for (int i = 0; i < Chart.X_Axis.Ticks.Count; i++)
                     {
                         AxisTick tick = Chart.X_Axis.Ticks[i];
-                        /*
-                        (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (tick.Ratio, Ratio_Bottom);
-                        (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (tick.Ratio, Ratio_Top);
-                        GLTools.UpdateBuffer(Chart.AxisLinesBufferHandle, Chart.AxisLinesArrayHandle, axisLine, axisLine.Length);
-                        */
-                        // Console.WriteLine(i + " Tick Y " + tick.AxisLine[0].Vec.Y);
 
                         switch (tick.Importance)
                         {
@@ -221,47 +214,6 @@ namespace Nitride.OpenGL
                     ChartLine line = Lines_Left[i];
                     g.DrawWaveForm(line);
                 }
-
-                /*
-                    GL.UseProgram(WaveFormShaderProgramHandle);
-
-                // Area U and V
-                GL.Uniform1(uni_waveform_left, Ratio_Left); // - 1.0f);
-                GL.Uniform1(uni_waveform_width, Ratio_Width); // 2.0f);
-                GL.Uniform1(uni_waveform_bottom, Ratio_Bottom); //  - 1.0f);
-                GL.Uniform1(uni_waveform_height, Ratio_Height); // 2.0f);
-
-                // Line value
-                GL.Uniform1(uni_waveform_x_min, X_Min); // - 1.0f);
-                GL.Uniform1(uni_waveform_x_range, X_Max - X_Min); // 2.0f);
-
-
-
-                GL.Uniform1(uni_waveform_y_min, Axis_Right.Range.Minimum); // Y_Min);
-                GL.Uniform1(uni_waveform_y_range, Axis_Right.Range.Maximum - Axis_Right.Range.Minimum); // Y_Range);
-
-                for (int i = 0; i < Lines_Right.Count; i++)
-                {
-                    ChartLine line = Lines_Right[i];
-                    GL.Uniform1(uni_waveform_intensity, line.Intensity);
-                    GL.Uniform3(uni_waveform_lineColor, new Vector3(line.LineColor.R / 255.0f, line.LineColor.G / 255.0f, line.LineColor.B / 255.0f));
-                    line.Render();
-
-                    // Console.WriteLine("Render Right Line " + i);
-                }
-
-                GL.Uniform1(uni_waveform_y_min, Axis_Left.Range.Minimum); // Y_Min);
-                GL.Uniform1(uni_waveform_y_range, Axis_Left.Range.Maximum - Axis_Left.Range.Minimum); // Y_Range);
-
-                for (int i = 0; i < Lines_Left.Count; i++)
-                {
-                    ChartLine line = Lines_Left[i];
-                    GL.Uniform1(uni_waveform_intensity, line.Intensity);
-                    GL.Uniform3(uni_waveform_lineColor, new Vector3(line.LineColor.R / 255.0f, line.LineColor.G / 255.0f, line.LineColor.B / 255.0f));
-                    line.Render();
-
-                    // Console.WriteLine("Render Left Line " + i);
-                }*/
 
                 // ################################################################
 

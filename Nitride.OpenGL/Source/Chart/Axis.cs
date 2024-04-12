@@ -21,6 +21,14 @@ namespace Nitride.OpenGL
                 Importance = importance;
             }
 
+            public AxisTick(float value, float ratio, string label, Importance importance = Importance.Minor)
+            {
+                Value = value;
+                Ratio = ratio;
+                Label = label;
+                Importance = importance;
+            }
+
             public float Value;
             public float Ratio;
             public string Label;
@@ -56,12 +64,17 @@ namespace Nitride.OpenGL
             {
                 AxisTick tick = new(value, GetRatio(value), GetTickLabel, importance);
                 Ticks.Add(tick);
+            }
 
-                // Console.WriteLine("AddTick = " + value);
+            public void AddTick(float value, string label, Importance importance)
+            {
+                AxisTick tick = new(value, GetRatio(value), label, importance);
+                Ticks.Add(tick);
             }
 
             public bool FixedRange { get; set; } = false;
             public Range<float> Range { get; } = new Range<float>();
+            public float Delta => Range.Maximum - Range.Minimum;
             public float Reference { get; set; } = float.NaN;
             public float TickStep { get; set; } = float.NaN;
             public List<AxisTick> Ticks { get; } = new();

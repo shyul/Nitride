@@ -99,8 +99,5 @@ namespace Nitride.OpenGL
 
                 // FragColor = texture(texture1, TexCoord);
             }";
-
-
-
     }
 }

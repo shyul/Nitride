@@ -33,6 +33,17 @@ namespace Nitride.OpenGL
             set => PointList[i].Vec.Y = value;
         }
 
+        public void UpdateBuffer(float[] x_ticks) 
+        {
+            if (Length != x_ticks.Length)
+                PointList = new VecPoint[x_ticks.Length];
+
+            for (int i = 0; i < Length; i++)
+            {
+                PointList[i] = new VecPoint(x_ticks[i], 0.0f);
+            }
+        }
+
         public void UpdateBuffer(int length, float startValue, float stopValue)
         {
             if (PointList.Length != length)

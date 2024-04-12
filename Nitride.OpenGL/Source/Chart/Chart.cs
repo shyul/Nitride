@@ -39,8 +39,8 @@ namespace Nitride.OpenGL
 
         // ###############################################################
 
-        private int X_Pix_Total = 0;
-        private int Y_Pix_Total = 0;
+        protected int X_Pix_Total = 0;
+        protected int Y_Pix_Total = 0;
 
         public float Ratio_Left = 0f;
         public float Ratio_Right = 0f;
@@ -64,8 +64,6 @@ namespace Nitride.OpenGL
         {
             MainFont.CreateTexture();
             MainBoldFont.CreateTexture();
-
-
         }
 
         public override void CoordinateLayout()
@@ -115,7 +113,7 @@ namespace Nitride.OpenGL
 
                     // Console.WriteLine("1# Y_Pix_Min = " + area.Y_Pix_Min + " | Y_Pix_Max = " + area.Y_Pix_Max);
 
-                    if (area.HasXAxisStrip) 
+                    if (area.HasXAxisStrip)
                     {
                         y_pix += XAxisStripHeight;
                     }
@@ -132,9 +130,19 @@ namespace Nitride.OpenGL
                 Ratio_Top = Areas.First().Ratio_Top;
                 Ratio_Bottom = Areas.Last().Ratio_Bottom;
 
-                X_Axis.GenerateTicks();
+                GenerateXAxisTicks();
                 ReadyToShow = true;
             }
+        }
+
+        public virtual void GenerateXAxisTicks() 
+        {
+            X_Axis.GenerateTicks();
+        }
+
+        public virtual string GetCursorLabel()
+        {
+            return Convert.ToDouble(X_Axis.GetValue(MouseRatioX)).ToUnitPrefixNumber3String("0.##").String;
         }
 
         public override void Render()
@@ -153,37 +161,15 @@ namespace Nitride.OpenGL
 
                 if (MouseActive && MouseRatioX > Ratio_Left && MouseRatioX < Ratio_Right)
                 {
-                    //VecPoint[] axisLine = new VecPoint[2];
                     float mouse_x = MouseRatioX;
-                    /*
-                    GL.UseProgram(LineShaderProgramHandle);
-                    GL.Uniform1(uni_line_intensity, 1.0f);
-                    GL.Uniform3(uni_line_lineColor, new Vector3(0.2f, 0.4f, 0.45f)); //new Vector3(0.12549f, 0.27451f, 0.313725f));
-                    */
 
                     if (mouse_x > Ratio_Left && mouse_x < Ratio_Right)
                     {
-                        /*
-                        (axisLine[0].Vec.X, axisLine[0].Vec.Y) = (mouse_x, Ratio_Bottom);
-                        (axisLine[1].Vec.X, axisLine[1].Vec.Y) = (mouse_x, Ratio_Top);
-                        GLTools.UpdateBuffer(AxisLinesBufferHandle, AxisLinesArrayHandle, axisLine, axisLine.Length);
-                        GL.DrawArrays(PrimitiveType.LineStrip, 0, 2);*/
-
                         Graphics.DrawLine(mouse_x, Ratio_Bottom, mouse_x, Ratio_Top, 1.0f, new Vector3(0.2f, 0.4f, 0.45f), 1.0f);
-                        Graphics.DrawChartCursor(this, MainBoldFont, new Vector3(0.2f, 0.4f, 0.45f), new Vector3(0.784314f, 0.929412f, 0.921568f));
-                        /*
-                        foreach (Area area in Areas)
-                        {
-                            area.RenderCursor();
-                        }*/
+                        Graphics.DrawAxisCursor(this, MainBoldFont, new Vector3(0.2f, 0.4f, 0.45f), new Vector3(0.784314f, 0.929412f, 0.921568f));
                     }
-
-
-
                 }
             }
-
-
         }
 
         public override void DeleteBuffer()

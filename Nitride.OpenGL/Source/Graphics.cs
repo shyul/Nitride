@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
-using Microsoft.VisualBasic.Devices;
 using System.Runtime.InteropServices;
 
 namespace Nitride.OpenGL
@@ -245,6 +244,18 @@ namespace Nitride.OpenGL
                 GL.Disable(EnableCap.LineStipple);
             }
 
+            public void DrawLine(VecPoint[] shapeVec, Vector3 foreColor, float lineWidth = 2.0f, float intensity = 1.0f)
+            {
+                GL.UseProgram(LineShaderProgramHandle);
+                GL.Uniform1(uni_line_intensity, intensity);
+                GL.Uniform3(uni_line_lineColor, foreColor);
+                GLTools.UpdateBuffer(AxisLinesBufferHandle, AxisLinesArrayHandle, shapeVec, shapeVec.Length);
+                GL.LineWidth(lineWidth);
+                GL.DrawArrays(PrimitiveType.LineStrip, 0, shapeVec.Length);
+                GL.PointSize(lineWidth);
+                GL.DrawArrays(PrimitiveType.Points, 0, shapeVec.Length);
+            }
+
             public void DrawShape(VecPoint[] shapeVec, Vector3 foreColor, Vector3 backColor, float lineWidth = 2.0f, float intensity = 1.0f)
             {
                 GL.UseProgram(LineShaderProgramHandle);
@@ -366,26 +377,26 @@ namespace Nitride.OpenGL
 
                 PointF[] tagPts = new[]
                 {
-                new PointF (half_width - cornerSize, -half_height), // 0
-                new PointF (half_width, -(half_height - cornerSize)), // 1
+                    new PointF (half_width - cornerSize, -half_height), // 0
+                    new PointF (half_width, -(half_height - cornerSize)), // 1
 
-                new PointF (half_width, half_height - cornerSize), // 2
-                new PointF (half_width - cornerSize, half_height), // 3
+                    new PointF (half_width, half_height - cornerSize), // 2
+                    new PointF (half_width - cornerSize, half_height), // 3
 
-                new PointF (arrowSize, half_height), // 4
-                new PointF (0.0f, half_height + arrowSize), // 5
-                new PointF (-arrowSize, half_height), // 6
+                    new PointF (arrowSize, half_height), // 4
+                    new PointF (0.0f, half_height + arrowSize), // 5
+                    new PointF (-arrowSize, half_height), // 6
 
-                new PointF (-half_width + cornerSize, half_height), // 7
-                new PointF (-half_width, half_height - cornerSize), // 8
+                    new PointF (-half_width + cornerSize, half_height), // 7
+                    new PointF (-half_width, half_height - cornerSize), // 8
 
-                new PointF (-half_width, -(half_height - cornerSize)), // 9
-                new PointF (-(half_width - cornerSize), -half_height), // 10
+                    new PointF (-half_width, -(half_height - cornerSize)), // 9
+                    new PointF (-(half_width - cornerSize), -half_height), // 10
 
-                new PointF (-arrowSize, -half_height), // 11
-                new PointF (0.0f, -half_height - arrowSize), // 12
-                new PointF (arrowSize, -half_height) // 13
-            };
+                    new PointF (-arrowSize, -half_height), // 11
+                    new PointF (0.0f, -half_height - arrowSize), // 12
+                    new PointF (arrowSize, -half_height) // 13
+                };
 
                 VecPoint[] shapeVec = GetVector(tagPts, offset_x, offset_y);
 
@@ -409,12 +420,12 @@ namespace Nitride.OpenGL
                 DrawString(tagString, font, foreColor, offset_x, offset_y);
             }
 
-            public void DrawChartCursor(Chart c, GLFont font, Vector3 foreColor, Vector3 backColor, float arrowSize = 5, float cornerSize = 3)
+            public void DrawAxisCursor(Chart c, GLFont font, Vector3 foreColor, Vector3 backColor, float arrowSize = 5, float cornerSize = 3)
             {
                 float mouse_x = c.MouseRatioX;
                 float mouse_y = c.MouseRatioY;
 
-                string tagString = c.X_Axis.GetValue(mouse_x).ToString();
+                string tagString = c.GetCursorLabel(); // c.X_Axis.GetValue(mouse_x));//.ToString();
                 float half_height = Chart.XAxisStripHeight / 2.0f;
 
                 // X Cursor Line
@@ -429,20 +440,20 @@ namespace Nitride.OpenGL
 
                         string y_axis_string = area.Axis_Right.GetValue(mouse_y).ToString("0.00");
                         float cursorWidth = (y_axis_string.Length + 1f) * font.GlyphSize.Width;
-                        PointF[] rightCursorPts = new[]
+                        PointF[] cursorPts = new[]
                         {
-                        new PointF (cornerSize, half_height),
-                        new PointF (-arrowSize, 0),
-                        new PointF (cornerSize, -half_height),
+                            new PointF (cornerSize, half_height),
+                            new PointF (-arrowSize, 0),
+                            new PointF (cornerSize, -half_height),
 
-                        new PointF (cursorWidth - cornerSize, -half_height),
-                        new PointF (cursorWidth, -(half_height - cornerSize)),
+                            new PointF (cursorWidth - cornerSize, -half_height),
+                            new PointF (cursorWidth, -(half_height - cornerSize)),
 
-                        new PointF (cursorWidth, half_height - cornerSize),
-                        new PointF (cursorWidth - cornerSize, half_height)
-                    };
+                            new PointF (cursorWidth, half_height - cornerSize),
+                            new PointF (cursorWidth - cornerSize, half_height)
+                        };
 
-                        VecPoint[] cursorVec = GetVector(rightCursorPts, c.Ratio_Right, mouse_y);
+                        VecPoint[] cursorVec = GetVector(cursorPts, c.Ratio_Right, mouse_y);
                         DrawShape(cursorVec, foreColor, backColor);
                         DrawString(y_axis_string, font, foreColor, c.RatioAxisLabel_Right, mouse_y, AlignType.Left);
                     }
@@ -452,6 +463,29 @@ namespace Nitride.OpenGL
                         DrawUpDownTag(tagString, font, mouse_x, area.Ratio_XAxisStrip, foreColor, backColor, area == c.Areas.Last());
                     }
                 }
+            }
+
+            public void DrawMarker(string s, GLFont font, Vector3 foreColor, float x, float y)
+            {
+                float half_width = (s.Length - 0.5f) * font.GlyphSize.Width / 2.0f;
+                float arrowSize = 5.0f;
+                float offset = 3.0f;
+                float line_y = arrowSize + offset;
+
+                PointF[] cursorPts = new[]
+                {
+                    new PointF (-half_width, line_y),
+                    new PointF (-arrowSize, line_y),
+                    new PointF (0, offset),
+                    new PointF (arrowSize, line_y),
+                    new PointF (half_width, line_y),
+                };
+
+                VecPoint[] cursorVec = GetVector(cursorPts, x, y);
+                DrawLine(cursorVec, foreColor, 2.5f, 1.0f);
+
+                y += (line_y + 10.0f + font.GlyphSize.Height) / Height;
+                DrawString(s, font, foreColor, x, y);
             }
 
             #endregion Shape
@@ -502,7 +536,7 @@ namespace Nitride.OpenGL
 
             // #####################################################
 
-            public void DrawWaveFormStart(float left, float right, float bottom, float top, float x_min, float x_max, float y_min, float y_max) 
+            public void DrawWaveFormStart(float left, float right, float bottom, float top, float x_min, float x_max, float y_min, float y_max)
             {
                 GL.UseProgram(WaveFormShaderProgramHandle);
 
@@ -522,9 +556,9 @@ namespace Nitride.OpenGL
                 GL.BindVertexArray(AxisLinesArrayHandle);
             }
 
-            public void DrawWaveForm(ChartLine line) 
+            public void DrawWaveForm(ChartLine line)
             {
-                if (line.Enabled) 
+                if (line.Enabled)
                 {
                     GL.Uniform1(uni_waveform_intensity, line.Intensity);
                     GL.Uniform3(uni_waveform_lineColor, new Vector3(line.LineColor.R / 255.0f, line.LineColor.G / 255.0f, line.LineColor.B / 255.0f));
