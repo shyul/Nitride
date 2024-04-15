@@ -14,7 +14,7 @@ namespace Nitride.OpenGL
         {
         }
 
-        public ChartLine(int length = 1024) 
+        public ChartLine(int length = 1024)
         {
             PointList = new VecPoint[length];
         }
@@ -27,20 +27,20 @@ namespace Nitride.OpenGL
 
         public VecPoint[] PointList = new VecPoint[2];
         public int Length => PointList.Length;
-        public float this[int i] 
+        public float this[int i]
         {
             get => PointList[i].Vec.Y;
             set => PointList[i].Vec.Y = value;
         }
 
-        public void UpdateBuffer(float[] x_ticks) 
+        public void UpdateBuffer(float[] x_ticks, float defaultValue = float.MinValue)
         {
             if (Length != x_ticks.Length)
                 PointList = new VecPoint[x_ticks.Length];
 
             for (int i = 0; i < Length; i++)
             {
-                PointList[i] = new VecPoint(x_ticks[i], 0.0f);
+                PointList[i] = new VecPoint(x_ticks[i], defaultValue);
             }
         }
 
