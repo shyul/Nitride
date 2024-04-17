@@ -54,7 +54,7 @@ namespace Nitride.OpenGL
                     TimeSpan ts = DateTime.Now - time;
                     FpSpeed = i / ts.TotalSeconds;
 
-                    Console.WriteLine("DockFormGL: " + FpSpeed.ToString("0.##") + " FPS");
+                    Console.Write("\rDockFormGL: " + FpSpeed.ToString("0.00") + " FPS");
                 
                     i = 0;
                     time = DateTime.Now;
