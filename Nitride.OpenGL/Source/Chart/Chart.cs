@@ -22,7 +22,7 @@ namespace Nitride.OpenGL
             // ResumeLayout(false);
         }
 
-        public GLFont MainFont = new(new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point, 0), true);
+        public GLFont MainFont = new(new Font("Consolas", 10F, FontStyle.Regular, GraphicsUnit.Point, 0), true);
         public GLFont MainBoldFont = new(new Font("Consolas", 15F, FontStyle.Bold, GraphicsUnit.Point, 0), true);
 
         public const int XAxisStripHeight = 30;

@@ -68,6 +68,7 @@ namespace Nitride.OpenGL
 
             public List<ChartLine> Lines_Left { get; } = new();
             public List<ChartLine> Lines_Right { get; } = new();
+            public List<ChartColorMap> ColorMaps { get; } = new();
 
             public void CoordinateLayout()
             {
@@ -198,6 +199,16 @@ namespace Nitride.OpenGL
                 GL.Scissor(Chart.Margin.Left, Chart.Height - Y_Pix_Max, Chart.X_Pix_Total, TotalAxisPix); // Chart.Height); //  + 30
 
                 // ################################################################
+
+                for (int i =0; i < ColorMaps.Count; i++) 
+                {
+                    ChartColorMap map = ColorMaps[i];
+
+                    if (map.Data is not null && map.ColorPalette is not null) 
+                    {
+                        g.DrawColorMap(Ratio_Left, Ratio_Right, Ratio_Bottom, Ratio_Top, map.X, map.Y, map.Data, map.ColorPalette);
+                    }
+                }
 
                 g.DrawWaveFormStart(Ratio_Left, Ratio_Right, Ratio_Bottom, Ratio_Top, X_Min, X_Max, Axis_Right.Range.Minimum, Axis_Right.Range.Maximum);
 

@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
+
 namespace Nitride.OpenGL
 {
     public abstract partial class DockFormGL
@@ -47,6 +48,9 @@ namespace Nitride.OpenGL
                 uni_waveform_lineColor = GL.GetUniformLocation(WaveFormShaderProgramHandle, "lineColor");
 
                 Console.WriteLine("WaveFormShaderProgramHandle = " + WaveFormShaderProgramHandle);
+
+                InitColorMapShader();
+
             }
 
             Control Control { get; }
@@ -84,7 +88,7 @@ namespace Nitride.OpenGL
 
             #region Font
 
-            private const string FontVertexShader = @"
+            private const string TextureVertexShader = @"
 
             #version 330 core
             layout (location = 0) in vec3 aPosition;
@@ -131,7 +135,7 @@ namespace Nitride.OpenGL
             private void InitTextShader()
             {
                 (FontVerticesBufferHandle, FontVerticesArrayHandle) = GLTools.CreateBuffer(FontVertices, FontVertices.Length, BufferUsageHint.StreamDraw);
-                TextShaderProgramHandle = GLTools.CreateProgram(FontVertexShader, FontFragShader);
+                TextShaderProgramHandle = GLTools.CreateProgram(TextureVertexShader, FontFragShader);
                 TextShaderFontColorUniform = GL.GetUniformLocation(TextShaderProgramHandle, "fontColor");
             }
 
@@ -570,6 +574,104 @@ namespace Nitride.OpenGL
             }
 
             #endregion WaveForm
+
+            #region Color Map
+
+            private const string ColorMapFragShader = @"
+
+            #version 330 core
+            in vec2 TexCoord;
+
+            uniform sampler2D indexedTexture;
+            uniform vec4 colorPalette[100]; // Match the number of colors in your palette
+
+            out vec4 FragColor;
+
+            void main()
+            {
+                // Get the index from the texture
+                int index = int(texture(indexedTexture, TexCoord).r);
+
+                if (index > 100)
+                {
+                    FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+                }
+                else
+                {
+                    if (index < 0) index = 0;
+                    // Use the index to get the color from the palette
+                    FragColor = colorPalette[index];
+                }
+                
+                // FragColor = colorPalette[60];
+            }";
+
+            private int ColorMapTextureId;
+
+            private int ColorMapVerticesBufferHandle;
+            private int ColorMapVerticesArrayHandle;
+            private int ColorMapShaderProgramHandle;
+
+            private int ColorMapShaderPaletteUniform;
+            private int ColorMapShaderIndexTextureUniform;
+
+            private TextureVertex[] ColorMapVertices = {
+
+                new (new Vector3 (-1.0f, 1.0f, 0.0f), new Vector2 (1.0f, 0.0f)), // new Vector2 (0.0f, 0.0f)), // Left Top
+                new (new Vector3 (1.0f, 1.0f, 0.0f), new Vector2 (1.0f, 1.0f)), // new Vector2 (1.0f, 0.0f)), // Right Top
+                new (new Vector3 (1.0f, -1.0f, 0.0f), new Vector2 (0.0f, 1.0f)), // new Vector2 (1.0f, 1.0f)), // Right Bottom
+                new (new Vector3 (-1.0f, -1.0f, 0.0f), new Vector2 (0.0f, 0.0f)), // new Vector2 (0.0f, 1.0f)), // Left Bottom
+            };
+
+            private void InitColorMapShader()
+            {
+                ColorMapTextureId = GL.GenTexture();
+
+                GL.BindTexture(TextureTarget.Texture2D, ColorMapTextureId);
+                // Set texture parameters
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear); // Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear); // Nearest);
+
+                (ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle) = GLTools.CreateBuffer(ColorMapVertices, ColorMapVertices.Length, BufferUsageHint.StreamDraw);
+
+                ColorMapShaderProgramHandle = GLTools.CreateProgram(TextureVertexShader, ColorMapFragShader);
+                ColorMapShaderPaletteUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "colorPalette");
+                ColorMapShaderIndexTextureUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "indexedTexture");
+            }
+
+            public void DrawColorMap(float left, float right, float bottom, float top, int x, int y, float[] data, float[] colorPalette)
+            {
+                GL.UseProgram(ColorMapShaderProgramHandle);
+
+
+
+                GL.Uniform4(ColorMapShaderPaletteUniform, colorPalette.Length, colorPalette);
+                GL.Uniform1(ColorMapShaderIndexTextureUniform, 0);
+
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, ColorMapTextureId);
+
+                // Load the texture data into OpenGL
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R32f, x, y, 0, OpenTK.Graphics.OpenGL.PixelFormat.Red, PixelType.Float, data);
+
+                ColorMapVertices[0].Position = new Vector3(left, top, 0);
+                ColorMapVertices[1].Position = new Vector3(right, top, 0);
+                ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
+                ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
+
+                GL.Enable(EnableCap.Blend);
+
+                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
+                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+                GL.Disable(EnableCap.Blend);
+
+            }
+
+            #endregion Color Map
         }
     }
 }

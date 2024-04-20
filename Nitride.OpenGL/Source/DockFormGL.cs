@@ -49,7 +49,7 @@ namespace Nitride.OpenGL
                 EnsureCreated();
                 win.Context.SwapBuffers();
 
-                if (i >= FpSpeed)
+                if (i >= 100) // FpSpeed)
                 {
                     TimeSpan ts = DateTime.Now - time;
                     FpSpeed = i / ts.TotalSeconds;
