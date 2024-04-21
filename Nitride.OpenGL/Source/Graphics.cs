@@ -659,7 +659,7 @@ namespace Nitride.OpenGL
                 ColorMapShaderYmaxUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "y_max");
             }
 
-            public void DrawColorMapStart(float left, float right, float bottom, float top) 
+            public void DrawColorMapStart(float left, float right, float bottom, float top)
             {
                 GL.UseProgram(ColorMapShaderProgramHandle);
                 GL.Uniform1(ColorMapShaderIndexTextureUniform, 0);
@@ -700,10 +700,10 @@ namespace Nitride.OpenGL
                 */
             }
 
-            public void DrawColorMap(int x, int y, float[] data, float[] colorPalette)
+            public void DrawColorMap(int x, int y, float max, float min, float[] data, float[] colorPalette)
             {
-                GL.Uniform1(ColorMapShaderYminUniform, -75f);
-                GL.Uniform1(ColorMapShaderYmaxUniform, 0f);
+                GL.Uniform1(ColorMapShaderYminUniform, min); // - 75f);
+                GL.Uniform1(ColorMapShaderYmaxUniform, max); // 0f);
                 GL.Uniform4(ColorMapShaderPaletteUniform, colorPalette.Length, colorPalette);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R32f, x, y, 0, OpenTK.Graphics.OpenGL.PixelFormat.RedExt, PixelType.Float, data);
                 GL.DrawArrays(PrimitiveType.Quads, 0, 4);

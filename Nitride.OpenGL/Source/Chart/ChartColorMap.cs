@@ -16,18 +16,21 @@ namespace Nitride.OpenGL
         
         public float[] ColorPalette;
 
+        public float Max { get; private set; }
+        public float Min { get; private set; }
+
         public int X { get; private set; }
         public int Y { get; private set; }
-        public void UpdateSettings(int x, int y) 
+        public void UpdateSettings(int x, int y, float max, float min) 
         {
             X = x; 
             Y = y;
             Data = new float[x * y];
 
-            Color[] colorList = ColorTool.GetThermalGradient(100, 58);
+            Color[] colorList = ColorTool.GetThermalGradient(100, 62);
 
             ColorPalette = new float[colorList.Length * 4];
-
+                   
             for (int i =  0; i < colorList.Length; i++) 
             {
                 Color c = colorList[i]; // colorList[colorList.Length - i - 1];  // colorList[i]; // colorList.Length - i - 1];
@@ -37,6 +40,8 @@ namespace Nitride.OpenGL
                 ColorPalette[(4 * i) + 3] = c.A / 255.0f;
             }
 
+            Max = max;
+            Min = min;
         }
     }
 }

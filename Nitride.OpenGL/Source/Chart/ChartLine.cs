@@ -33,6 +33,8 @@ namespace Nitride.OpenGL
             set => PointList[i].Vec.Y = value;
         }
 
+        public float PeakValue => PointList.Select(n => n.Vec.Y).Max();
+
         public void UpdateBuffer(float[] x_ticks, float defaultValue = float.MinValue)
         {
             if (Length != x_ticks.Length)
