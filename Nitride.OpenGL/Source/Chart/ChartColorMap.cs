@@ -18,17 +18,13 @@ namespace Nitride.OpenGL
 
         public int X { get; private set; }
         public int Y { get; private set; }
-        public void UpdateSettings(int x, int y, float lowEnd = -100.0f) 
+        public void UpdateSettings(int x, int y) 
         {
             X = x; 
             Y = y;
             Data = new float[x * y];
 
-            int cnt = Convert.ToInt32(-lowEnd);
-
-            if (cnt < 0) cnt = 0;
-
-            Color[] colorList = ColorTool.GetThermalGradient(cnt, 58);
+            Color[] colorList = ColorTool.GetThermalGradient(100, 58);
 
             ColorPalette = new float[colorList.Length * 4];
 

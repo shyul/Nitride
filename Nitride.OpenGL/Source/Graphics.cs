@@ -7,7 +7,6 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-
 namespace Nitride.OpenGL
 {
     public abstract partial class DockFormGL
@@ -584,26 +583,40 @@ namespace Nitride.OpenGL
 
             uniform sampler2D indexedTexture;
             uniform vec4 colorPalette[100]; // Match the number of colors in your palette
+            uniform float y_min;
+            uniform float y_max;
 
             out vec4 FragColor;
 
             void main()
             {
-                // Get the index from the texture
-                int index = int(texture(indexedTexture, TexCoord).r);
 
-                if (index > 100)
+                float value = texture(indexedTexture, TexCoord).r;
+
+                if (value <= y_min) { FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f); }
+                else if (value >= y_max) { FragColor = colorPalette[99]; }
+                else
+                {
+                    float scale = (value - y_min) / (y_max - y_min);
+                    int index = int(100 * scale);
+                    FragColor = colorPalette[index];
+                }
+                
+
+                /*
+                int index = int(value);
+
+                if (index < 0)
                 {
                     FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
                 }
                 else
                 {
-                    if (index < 0) index = 0;
-                    // Use the index to get the color from the palette
+                    if (index > 99) index = 99;
                     FragColor = colorPalette[index];
-                }
-                
-                // FragColor = colorPalette[60];
+                }*/
+
+                // FragColor = colorPalette[int(y_max)]; // 99 = Red!
             }";
 
             private int ColorMapTextureId;
@@ -614,6 +627,9 @@ namespace Nitride.OpenGL
 
             private int ColorMapShaderPaletteUniform;
             private int ColorMapShaderIndexTextureUniform;
+
+            private int ColorMapShaderYminUniform;
+            private int ColorMapShaderYmaxUniform;
 
             private TextureVertex[] ColorMapVertices = {
 
@@ -639,36 +655,59 @@ namespace Nitride.OpenGL
                 ColorMapShaderProgramHandle = GLTools.CreateProgram(TextureVertexShader, ColorMapFragShader);
                 ColorMapShaderPaletteUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "colorPalette");
                 ColorMapShaderIndexTextureUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "indexedTexture");
+                ColorMapShaderYminUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "y_min");
+                ColorMapShaderYmaxUniform = GL.GetUniformLocation(ColorMapShaderProgramHandle, "y_max");
             }
 
-            public void DrawColorMap(float left, float right, float bottom, float top, int x, int y, float[] data, float[] colorPalette)
+            public void DrawColorMapStart(float left, float right, float bottom, float top) 
             {
                 GL.UseProgram(ColorMapShaderProgramHandle);
-
-
-
-                GL.Uniform4(ColorMapShaderPaletteUniform, colorPalette.Length, colorPalette);
                 GL.Uniform1(ColorMapShaderIndexTextureUniform, 0);
-
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, ColorMapTextureId);
-
-                // Load the texture data into OpenGL
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R32f, x, y, 0, OpenTK.Graphics.OpenGL.PixelFormat.Red, PixelType.Float, data);
+                GL.Enable(EnableCap.Blend);
 
                 ColorMapVertices[0].Position = new Vector3(left, top, 0);
                 ColorMapVertices[1].Position = new Vector3(right, top, 0);
                 ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
                 ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
+                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
 
-                GL.Enable(EnableCap.Blend);
+                /*
+                float middle = (top + bottom) / 2.0f;
 
+                ColorMapVertices[0].Position = new Vector3(left, top, 0);
+                ColorMapVertices[1].Position = new Vector3(right, top, 0);
+                ColorMapVertices[2].Position = new Vector3(right, middle, 0);
+                ColorMapVertices[3].Position = new Vector3(left, middle, 0);
+                ColorMapVertices[0].TexCoord = new Vector2(0.5f, 0.0f);
+                ColorMapVertices[1].TexCoord = new Vector2(0.5f, 1.0f);
+                ColorMapVertices[2].TexCoord = new Vector2(0.0f, 1.0f);
+                ColorMapVertices[3].TexCoord = new Vector2(0.0f, 0.0f);
                 GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
                 GL.DrawArrays(PrimitiveType.Quads, 0, 4);
 
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-                GL.Disable(EnableCap.Blend);
+                ColorMapVertices[0].Position = new Vector3(left, middle, 0);
+                ColorMapVertices[1].Position = new Vector3(right, middle, 0);
+                ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
+                ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
+                ColorMapVertices[0].TexCoord = new Vector2(1.0f, 0.0f);
+                ColorMapVertices[1].TexCoord = new Vector2(1.0f, 1.0f);
+                ColorMapVertices[2].TexCoord = new Vector2(0.5f, 1.0f);
+                ColorMapVertices[3].TexCoord = new Vector2(0.5f, 0.0f);
+                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
+                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+                */
+            }
 
+            public void DrawColorMap(int x, int y, float[] data, float[] colorPalette)
+            {
+                GL.Uniform1(ColorMapShaderYminUniform, -75f);
+                GL.Uniform1(ColorMapShaderYmaxUniform, 0f);
+                GL.Uniform4(ColorMapShaderPaletteUniform, colorPalette.Length, colorPalette);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R32f, x, y, 0, OpenTK.Graphics.OpenGL.PixelFormat.RedExt, PixelType.Float, data);
+                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+                GL.BindTexture(TextureTarget.Texture2D, 0);
             }
 
             #endregion Color Map

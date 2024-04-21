@@ -74,7 +74,7 @@ namespace Nitride.OpenGL
             {
                 GLGraphics g = Chart.Graphics;
 
-                if (HasXAxisStrip) 
+                if (HasXAxisStrip)
                 {
                     Ratio_XAxisStrip = 1.0f - (Y_Pix_XAxisStrip * 2.0f / (float)Chart.Height);
                     Y_Pix_XAxisStrip = Y_Pix_Max + (XAxisStripHeight / 2);
@@ -87,7 +87,7 @@ namespace Nitride.OpenGL
                 Ratio_Bottom = 1.0f - (Y_Pix_Max * 2.0f / (float)Chart.Height);
                 Ratio_Height = (TotalAxisPix * 2.0f / (float)Chart.Height);
 
-               
+
                 Ratio_Top = Ratio_Bottom + Ratio_Height;
                 /*
                 (AreaBox[0].Vec.X, AreaBox[0].Vec.Y) = (Ratio_Left, Ratio_Bottom);
@@ -181,7 +181,7 @@ namespace Nitride.OpenGL
                         }
                     }
 
-                    
+
                     for (int i = 0; i < Axis_Right.Ticks.Count; i++)
                     {
                         AxisTick tick = Axis_Right.Ticks[i];
@@ -200,13 +200,15 @@ namespace Nitride.OpenGL
 
                 // ################################################################
 
-                for (int i =0; i < ColorMaps.Count; i++) 
+                g.DrawColorMapStart(Ratio_Left, Ratio_Right, Ratio_Bottom, Ratio_Top);
+
+                for (int i = 0; i < ColorMaps.Count; i++)
                 {
                     ChartColorMap map = ColorMaps[i];
 
-                    if (map.Data is not null && map.ColorPalette is not null) 
+                    if (map.Data is not null && map.ColorPalette is not null)
                     {
-                        g.DrawColorMap(Ratio_Left, Ratio_Right, Ratio_Bottom, Ratio_Top, map.X, map.Y, map.Data, map.ColorPalette);
+                        g.DrawColorMap(map.X, map.Y, map.Data, map.ColorPalette);
                     }
                 }
 
