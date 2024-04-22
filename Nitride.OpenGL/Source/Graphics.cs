@@ -671,33 +671,6 @@ namespace Nitride.OpenGL
                 ColorMapVertices[1].Position = new Vector3(right, top, 0);
                 ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
                 ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
-                
-
-                /*
-                float middle = (top + bottom) / 2.0f;
-
-                ColorMapVertices[0].Position = new Vector3(left, top, 0);
-                ColorMapVertices[1].Position = new Vector3(right, top, 0);
-                ColorMapVertices[2].Position = new Vector3(right, middle, 0);
-                ColorMapVertices[3].Position = new Vector3(left, middle, 0);
-                ColorMapVertices[0].TexCoord = new Vector2(0.5f, 0.0f);
-                ColorMapVertices[1].TexCoord = new Vector2(0.5f, 1.0f);
-                ColorMapVertices[2].TexCoord = new Vector2(0.0f, 1.0f);
-                ColorMapVertices[3].TexCoord = new Vector2(0.0f, 0.0f);
-                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
-                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
-
-                ColorMapVertices[0].Position = new Vector3(left, middle, 0);
-                ColorMapVertices[1].Position = new Vector3(right, middle, 0);
-                ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
-                ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
-                ColorMapVertices[0].TexCoord = new Vector2(1.0f, 0.0f);
-                ColorMapVertices[1].TexCoord = new Vector2(1.0f, 1.0f);
-                ColorMapVertices[2].TexCoord = new Vector2(0.5f, 1.0f);
-                ColorMapVertices[3].TexCoord = new Vector2(0.5f, 0.0f);
-                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
-                GL.DrawArrays(PrimitiveType.Quads, 0, 4);
-                */
             }
 
             public void DrawColorMap(int width, int height, float area_x_min, float area_x_max, float x_min, float x_max, float z_min, float z_max, float[] data, float[] colorPalette)
@@ -724,3 +697,29 @@ namespace Nitride.OpenGL
         }
     }
 }
+
+/*
+float middle = (top + bottom) / 2.0f;
+
+ColorMapVertices[0].Position = new Vector3(left, top, 0);
+ColorMapVertices[1].Position = new Vector3(right, top, 0);
+ColorMapVertices[2].Position = new Vector3(right, middle, 0);
+ColorMapVertices[3].Position = new Vector3(left, middle, 0);
+ColorMapVertices[0].TexCoord = new Vector2(0.5f, 0.0f);
+ColorMapVertices[1].TexCoord = new Vector2(0.5f, 1.0f);
+ColorMapVertices[2].TexCoord = new Vector2(0.0f, 1.0f);
+ColorMapVertices[3].TexCoord = new Vector2(0.0f, 0.0f);
+GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
+GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+
+ColorMapVertices[0].Position = new Vector3(left, middle, 0);
+ColorMapVertices[1].Position = new Vector3(right, middle, 0);
+ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
+ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
+ColorMapVertices[0].TexCoord = new Vector2(1.0f, 0.0f);
+ColorMapVertices[1].TexCoord = new Vector2(1.0f, 1.0f);
+ColorMapVertices[2].TexCoord = new Vector2(0.5f, 1.0f);
+ColorMapVertices[3].TexCoord = new Vector2(0.5f, 0.0f);
+GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
+GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+*/
