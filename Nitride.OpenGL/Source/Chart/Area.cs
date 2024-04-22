@@ -208,7 +208,10 @@ namespace Nitride.OpenGL
 
                     if (map.Data is not null && map.ColorPalette is not null)
                     {
-                        g.DrawColorMap(map.X, map.Y, map.Max, map.Min, map.Data, map.ColorPalette);
+                        lock (map.ColorPalette)
+                        {
+                            g.DrawColorMap(map.Width, map.Height, X_Min, X_Max, map.X_Min, map.X_Max, map.Z_Min, map.Z_Max, map.Data, map.ColorPalette);
+                        }
                     }
                 }
 

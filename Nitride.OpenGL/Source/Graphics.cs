@@ -671,7 +671,7 @@ namespace Nitride.OpenGL
                 ColorMapVertices[1].Position = new Vector3(right, top, 0);
                 ColorMapVertices[2].Position = new Vector3(right, bottom, 0);
                 ColorMapVertices[3].Position = new Vector3(left, bottom, 0);
-                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
+                
 
                 /*
                 float middle = (top + bottom) / 2.0f;
@@ -700,12 +700,22 @@ namespace Nitride.OpenGL
                 */
             }
 
-            public void DrawColorMap(int x, int y, float max, float min, float[] data, float[] colorPalette)
+            public void DrawColorMap(int width, int height, float area_x_min, float area_x_max, float x_min, float x_max, float z_min, float z_max, float[] data, float[] colorPalette)
             {
-                GL.Uniform1(ColorMapShaderYminUniform, min); // - 75f);
-                GL.Uniform1(ColorMapShaderYmaxUniform, max); // 0f);
+                float txe_range = x_max - x_min;
+                float txe_left = (area_x_min - x_min) / txe_range;
+                float txe_right = (area_x_max - x_min) / txe_range;
+
+                ColorMapVertices[0].TexCoord = new Vector2(1.0f, txe_left);
+                ColorMapVertices[1].TexCoord = new Vector2(1.0f, txe_right);
+                ColorMapVertices[2].TexCoord = new Vector2(0.0f, txe_right);
+                ColorMapVertices[3].TexCoord = new Vector2(0.0f, txe_left);
+                GLTools.UpdateBuffer(ColorMapVerticesBufferHandle, ColorMapVerticesArrayHandle, ColorMapVertices, ColorMapVertices.Length);
+
+                GL.Uniform1(ColorMapShaderYminUniform, z_min); // - 75f);
+                GL.Uniform1(ColorMapShaderYmaxUniform, z_max); // 0f);
                 GL.Uniform4(ColorMapShaderPaletteUniform, colorPalette.Length, colorPalette);
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R32f, x, y, 0, OpenTK.Graphics.OpenGL.PixelFormat.RedExt, PixelType.Float, data);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R32f, height, width, 0, OpenTK.Graphics.OpenGL.PixelFormat.RedExt, PixelType.Float, data);
                 GL.DrawArrays(PrimitiveType.Quads, 0, 4);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
             }
