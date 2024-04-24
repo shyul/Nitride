@@ -590,7 +590,6 @@ namespace Nitride.OpenGL
 
             void main()
             {
-
                 float value = texture(indexedTexture, TexCoord).r;
 
                 if (value <= y_min) { FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f); }
@@ -601,22 +600,6 @@ namespace Nitride.OpenGL
                     int index = int(100 * scale);
                     FragColor = colorPalette[index];
                 }
-                
-
-                /*
-                int index = int(value);
-
-                if (index < 0)
-                {
-                    FragColor = vec4(0.0f, 0.0f, 0.0f, 0.0f);
-                }
-                else
-                {
-                    if (index > 99) index = 99;
-                    FragColor = colorPalette[index];
-                }*/
-
-                // FragColor = colorPalette[int(y_max)]; // 99 = Red!
             }";
 
             private int ColorMapTextureId;
