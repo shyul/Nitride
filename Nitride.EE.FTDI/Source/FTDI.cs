@@ -204,6 +204,45 @@ namespace Nitride.EE.FTDI
             Write_Buffer(pt);
         }
 
+        public void SPI_WRITE_A8D8(byte addr, byte value)
+        {
+            int pt = 0;
+            pt = SET_LE_HIGH(pt);
+            pt = SET_LE_LOW(pt);
+
+            TxBuffer[pt] = 0x11; // Header Out Only, Bytes, OUT Clock -VE
+            TxBuffer[pt + 1] = 2 - 1;
+            TxBuffer[pt + 2] = 0;
+            TxBuffer[pt + 3] = addr;
+            TxBuffer[pt + 4] = value;
+
+            pt += 5;
+            pt = SET_LE_HIGH(pt);
+
+            Write_Buffer(pt);
+        }
+
+        public byte SPI_READ_A8D8(byte addr)
+        {
+            int pt = 0;
+            pt = SET_LE_HIGH(pt);
+            pt = SET_LE_LOW(pt);
+
+            TxBuffer[pt] = 0x31; // Header Out Only, Bytes, OUT Clock -VE
+            TxBuffer[pt + 1] = 2 - 1;
+            TxBuffer[pt + 2] = 0;
+            TxBuffer[pt + 3] = addr;
+            TxBuffer[pt + 4] = 0;
+
+            pt += 5;
+            pt = SET_LE_HIGH(pt);
+
+            Write_Buffer(pt);
+            Read_Buffer(2);
+
+            return RxBuffer[1];
+        }
+
         private int SPI_READ_SINGLE_A8D16(int pt, byte addr) // data.Length
         {
             // 3 Bytes SPI Write Read
